@@ -1,0 +1,623 @@
+# Commands covered:  snmp				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-1998 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: snmp.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::snmp Tnm::mib
+}
+
+test snmp-1.1 {check general snmp syntax} {
+    list [catch {snmp} msg] $msg
+} {1 {wrong # args: should be "snmp option ?arg arg ...?"}}
+test snmp-1.2 {check general snmp syntax} {
+    list [catch {snmp foobar} msg] $msg
+} {1 {bad option "foobar": must be alias, delta, expand, find, generator, info, listener, notifier, oid, responder, type, value, wait, or watch}}
+
+test snmp-2.1 {snmp alias} {
+    foreach a [snmp alias] {
+	snmp alias $a ""
+    }
+    snmp alias 
+} {}
+test snmp-2.2 {snmp alias} {
+    snmp alias foo
+} {}
+test snmp-2.3 {snmp alias} {
+    snmp alias foo bar
+} {}
+test snmp-2.4 {snmp alias} {
+    snmp alias foo
+} {bar}
+test snmp-2.5 {snmp alias} {
+    snmp alias bar foo
+} {}
+test snmp-2.6 {snmp alias} {
+    lsort [snmp alias]
+} {bar foo}
+test snmp-2.7 {snmp alias} {
+    snmp alias foo ""
+    snmp alias bar ""
+    snmp alias
+} {}
+test snmp-2.8 {snmp alias} {
+    snmp alias foo "-read foo"
+    snmp alias local "-address 127.0.0.1"
+    snmp alias focal "-alias foo -alias local"
+    set s [snmp generator -alias focal]
+    set r [$s cget -read]
+    $s destroy
+    set r
+} {foo}
+test snmp-2.9 {snmp alias} {
+    snmp alias foo "-alias bar"
+    snmp alias bar "-alias foo"
+    list [catch {snmp generator -alias foo} msg] $msg
+} {1 {alias loop detected}}
+
+test snmp-X.1 {snmp Unsigned32 type} {
+    list [catch {snmp expand {{1.3 Unsigned32 4294967296}}} msg] $msg
+} {1 {unsigned value too large to represent}}
+test snmp-X.2 {snmp Unsigned32 type} {
+    snmp expand {{1.3 Unsigned32 4294967295}}
+} {{1.3 Unsigned32 4294967295}}
+test snmp-X.3 {snmp Unsigned32 type} {
+    list [catch {snmp expand {{1.3 Unsigned32 -1}}} msg] $msg
+} {1 {expected 32 bit unsigned but got "-1"}}
+test snmp-X.4 {snmp Unsigned32 type} {
+    snmp expand {{1.3 Unsigned32 0}}
+} {{1.3 Unsigned32 0}}
+test snmp-X.5 {snmp Unsigned32 type} {
+    list [catch {snmp expand {{1.3 Unsigned32 foo}}} msg ] $msg
+} {1 {expected 32 bit unsigned but got "foo"}}
+
+test snmp-X.6 {snmp Gauge32 type} {
+    list [catch {snmp expand {{1.3 Gauge32 4294967296}}} msg] $msg
+} {1 {unsigned value too large to represent}}
+test snmp-X.7 {snmp Gauge32 type} {
+    snmp expand {{1.3 Gauge32 4294967295}}
+} {{1.3 Gauge32 4294967295}}
+test snmp-X.8 {snmp Gauge32 type} {
+    list [catch {snmp expand {{1.3 Gauge32 -1}}} msg] $msg
+} {1 {expected 32 bit unsigned but got "-1"}}
+test snmp-X.9 {snmp Gauge32 type} {
+    snmp expand {{1.3 Gauge32 0}}
+} {{1.3 Gauge32 0}}
+test snmp-X.10 {snmp Gauge32 type} {
+    list [catch {snmp expand {{1.3 Gauge32 foo}}} msg ] $msg
+} {1 {expected 32 bit unsigned but got "foo"}}
+
+test snmp-X.11 {snmp Counter32 type} {
+    list [catch {snmp expand {{1.3 Counter32 4294967296}}} msg] $msg
+} {1 {unsigned value too large to represent}}
+test snmp-X.12 {snmp Counter32 type} {
+    snmp expand {{1.3 Counter32 4294967295}}
+} {{1.3 Counter32 4294967295}}
+test snmp-X.13 {snmp Counter32 type} {
+    list [catch {snmp expand {{1.3 Counter32 -1}}} msg] $msg
+} {1 {expected 32 bit unsigned but got "-1"}}
+test snmp-X.14 {snmp Counter32 type} {
+    snmp expand {{1.3 Counter32 0}}
+} {{1.3 Counter32 0}}
+test snmp-X.15 {snmp Counter32 type} {
+    list [catch {snmp expand {{1.3 Counter32 foo}}} msg ] $msg
+} {1 {expected 32 bit unsigned but got "foo"}}
+
+test snmp-X.16 {snmp TimeTicks type} {
+    list [catch {snmp expand {{1.3 TimeTicks 4294967296}}} msg] $msg
+} {1 {unsigned value too large to represent}}
+test snmp-X.17 {snmp TimeTicks type} {
+    snmp expand {{1.3 TimeTicks 4294967295}}
+} {{1.3 TimeTicks 4294967295}}
+test snmp-X.18 {snmp TimeTicks type} {
+    list [catch {snmp expand {{1.3 TimeTicks -1}}} msg] $msg
+} {1 {expected 32 bit unsigned but got "-1"}}
+test snmp-X.19 {snmp TimeTicks type} {
+    snmp expand {{1.3 TimeTicks 0}}
+} {{1.3 TimeTicks 0}}
+test snmp-X.20 {snmp TimeTicks type} {
+    list [catch {snmp expand {{1.3 TimeTicks foo}}} msg ] $msg
+} {1 {expected 32 bit unsigned but got "foo"}}
+
+test snmp-X.21 {snmp Counter64 type} {
+    list [catch {snmp expand {{1.3 Counter64 18446744073709551616}}} msg] $msg
+} {1 {unsigned value too large to represent}}
+test snmp-X.22 {snmp Counter64 type} {
+    snmp expand {{1.3 Counter64 18446744073709551615}}
+} {{1.3 Counter64 18446744073709551615}}
+test snmp-X.23 {snmp Counter64 type} {
+    list [catch {snmp expand {{1.3 Counter64 -1}}} msg] $msg
+} {1 {expected 64 bit unsigned but got "-1"}}
+test snmp-X.24 {snmp Counter64 type} {
+    snmp expand {{1.3 Counter64 0}}
+} {{1.3 Counter64 0}}
+test snmp-X.25 {snmp Counter64 type} {
+    list [catch {snmp expand {{1.3 Counter64 foo}}} msg ] $msg
+} {1 {expected 64 bit unsigned but got "foo"}}
+
+test snmp-X.26 {snmp ObjectIdentifier type} {
+    list [catch {snmp expand {1}} msg] $msg
+} {1 {invalid object identifier "1"}}
+test snmp-X.27 {snmp ObjectIdentifier type} {
+    snmp expand 1.3
+} {{1.3 NULL {}}}
+test snmp-X.28 {snmp ObjectIdentifier type} {
+    snmp expand 1.2.64678.78456.1123456789.4123456789
+} {{1.2.64678.78456.1123456789.4123456789 NULL {}}}
+test snmp-X.29 {snmp ObjectIdentifier type} {
+    set o "1"
+    for {set i 0} {$i < 127} {incr i} { append o .1 }
+    mib length [lindex [lindex [snmp expand $o] 0] 0]
+} {128}
+test snmp-X.30 {snmp ObjectIdentifier type} {
+    set o "1"
+    for {set i 0} {$i < 128} {incr i} { append o .1 }
+    list [catch {snmp expand $o} msg] $msg
+} {1 {invalid object identifier "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1"}}
+test snmp-X.31 {snmp ObjectIdentifier type} {
+    list [catch {snmp expand {!@#foo!@#} msg} ] $msg
+} {1 {invalid object identifier "!@#foo!@#"}}
+
+#test snmp-X.31 {snmp Integer32 type} {
+#    list [catch {snmp expand {{1.3 Integer32 2147483648}}} msg] $msg
+#} {1 {integer value too large to represent}}
+#test snmp-X.32 {snmp Integer32 type} {
+#    snmp expand {{1.3 Integer32 2147483647}}
+#} {{1.3 Integer32 2147483647}}
+#test snmp-X.33 {snmp Integer32 type} {
+#    list [catch {snmp expand {{1.3 Integer32 -2147483649}}} msg] $msg
+#} {1 {expected 32 bit integer but got "-2147483649"}}
+#test snmp-X.34 {snmp Integer32 type} {
+#    snmp expand {{1.3 Integer32 2147483648}}
+#} {{1.3 Integer32 2147483648}}
+#test snmp-X.35 {snmp Integer32 type} {
+#    list [catch {snmp expand {{1.3 Integer32 foo}}} msg ] $msg
+#} {1 {expected 32 bit unsigned but got "foo"}}
+
+test snmp-5.1 {snmp varbind list expansion} {
+    list [catch {snmp expand} msg] $msg
+} {1 {wrong # args: should be "snmp expand varBindList"}}
+test snmp-5.2 {snmp varbind list expansion} {
+    list [catch {snmp expand {} {}} msg] $msg
+} {1 {wrong # args: should be "snmp expand varBindList"}}
+test snmp-5.3 {snmp varbind list expansion} {
+    list [catch {snmp expand (!)} msg] $msg
+} {1 {invalid object identifier "(!)"}}
+test snmp-5.4 {snmp varbind list expansion} {
+    snmp expand {}
+} {}
+test snmp-5.5 {snmp varbind list expansion} {
+    snmp expand ifType
+} {{1.3.6.1.2.1.2.2.1.3 NULL {}}}
+test snmp-5.6 {snmp varbind list expansion} {
+    snmp expand {ifType}
+} {{1.3.6.1.2.1.2.2.1.3 NULL {}}}
+test snmp-5.7 {snmp varbind list expansion} {
+    snmp expand {{ifType 5}}
+} {{1.3.6.1.2.1.2.2.1.3 Integer32 5}}
+test snmp-5.8 {snmp varbind list expansion} {
+    snmp expand {{ifType Integer32 5}}
+} {{1.3.6.1.2.1.2.2.1.3 Integer32 5}}
+test snmp-5.9 {snmp varbind list expansion} {
+    snmp expand {{ifType TimeTicks 5}}
+} {{1.3.6.1.2.1.2.2.1.3 TimeTicks 5}}
+
+test snmp-6.1 {snmp delta computation} {
+    list [catch {snmp delta} msg] $msg
+} {1 {wrong # args: should be "snmp delta varBindList1 varBindList2"}}
+test snmp-6.2 {snmp delta computation} {
+    list [catch {snmp delta {}} msg] $msg
+} {1 {wrong # args: should be "snmp delta varBindList1 varBindList2"}}
+test snmp-6.3 {snmp delta computation} {
+    list [catch {snmp delta {} {} {}} msg] $msg
+} {1 {wrong # args: should be "snmp delta varBindList1 varBindList2"}}
+test snmp-6.4 {snmp delta computation} {
+    snmp delta {{1.3 Counter32 1}} {{1.3 Counter32 0}}
+} {{1.3 Delta32 4294967295}}
+test snmp-6.5 {snmp delta computation} {
+    snmp delta {{1.3 TimeTicks 1}} {{1.3 TimeTicks 0}}
+} {{1.3 DeltaTicks 4294967295}}
+test snmp-6.6 {snmp delta computation} {
+    snmp delta {{1.3 Counter64 1}} {{1.3 Counter64 0}}
+} {{1.3 Delta64 18446744073709551615}}
+test snmp-6.7 {snmp delta computation} {
+    snmp delta ifType ifType
+} {{1.3.6.1.2.1.2.2.1.3 Delta {}}}
+test snmp-6.8 {snmp delta computation} {
+    list [catch {snmp delta {{1.3 Counter64 1}} {{1.3 Counter32 0}}} msg] $msg
+} {1 {varbind lists do not match}}
+test snmp-6.9 {snmp delta computation} {
+    list [catch {snmp delta {{1.3 Counter32 1}} {{1.2 Counter32 0}}} msg] $msg
+} {1 {varbind lists do not match}}
+test snmp-6.10 {snmp delta computation} {
+    list [catch {snmp delta {{1.3 Counter32 1}} {}} msg] $msg
+} {1 {varbind lists do not match}}
+
+test snmp-7.1 {snmp info} {
+    list [catch {snmp info} msg] $msg
+} {1 {wrong # args: should be "snmp info subject ?pattern?"}}
+test snmp-7.2 {snmp info} {
+    list [catch {snmp info foo bar baz} msg] $msg
+} {1 {wrong # args: should be "snmp info subject ?pattern?"}}
+test snmp-7.3 {snmp info} {
+    list [catch {snmp info foo} msg] $msg
+} {1 {bad option "foo": must be errors, exceptions, pdus, security, types, or versions}}
+test snmp-7.4 {snmp info} {
+    snmp info errors no*
+} {noError noSuchName noAccess noCreation notWritable noResponse}
+test snmp-7.5 {snmp info} {
+    snmp info exceptions
+} {noSuchObject noSuchInstance endOfMibView}
+test snmp-7.6 {snmp info} {
+    snmp info pdus
+} {get getnext response set trap1 getbulk inform trap2 report}
+test snmp-7.7 {snmp info} {
+    snmp info security
+} {noAuth/noPriv md5/noPriv md5/des sha/noPriv sha/des}
+test snmp-7.8 {snmp info} {
+    snmp info types *32
+} {Integer32 Counter32 Unsigned32 Gauge32}
+test snmp-7.9 {snmp info} {
+    snmp info versions
+} {SNMPv1 SNMPv2c SNMPv3}
+
+test snmp-8.1 {snmp oid} {
+    list [catch {snmp oid} msg] $msg
+} {1 {wrong # args: should be "snmp oid varBindList ?index?"}}
+test snmp-8.2 {snmp oid} {
+    list [catch {snmp oid {} {} {}} msg] $msg
+} {1 {wrong # args: should be "snmp oid varBindList ?index?"}}
+test snmp-8.3 {snmp oid} {
+    snmp oid 1.3
+} {1.3}
+test snmp-8.4 {snmp oid} {
+    snmp oid {IF-MIB!ifType IF-MIB!ifName}
+} {1.3.6.1.2.1.2.2.1.3 1.3.6.1.2.1.31.1.1.1.1}
+
+test snmp-9.1 {snmp type} {
+    list [catch {snmp type} msg] $msg
+} {1 {wrong # args: should be "snmp type varBindList ?index?"}}
+test snmp-9.2 {snmp type} {
+    list [catch {snmp type {} {} {}} msg] $msg
+} {1 {wrong # args: should be "snmp type varBindList ?index?"}}
+test snmp-9.3 {snmp type} {
+    snmp type {{ifNumber Integer32 3}}
+} {Integer32}
+test snmp-9.4 {snmp type} {
+    snmp type {IF-MIB!ifType IF-MIB!ifName}
+} {NULL NULL}
+
+test snmp-10.1 {snmp value} {
+    list [catch {snmp value} msg] $msg
+} {1 {wrong # args: should be "snmp value varBindList ?index?"}}
+test snmp-10.2 {snmp value} {
+    list [catch {snmp value {} {} {}} msg] $msg
+} {1 {wrong # args: should be "snmp value varBindList ?index?"}}
+test snmp-10.3 {snmp value} {
+    snmp value {{ifNumber Integer32 3}}
+} {3}
+test snmp-10.4 {snmp value} {
+    snmp value {IF-MIB!ifType IF-MIB!ifName}
+} {{} {}}
+
+::tcltest::cleanupTests
+return
+
+test snmp-1.1 {snmp default SNMPv1 session} {
+    set s [snmp generator]
+    set c [$s configure]
+    $s destroy
+    set c
+} {-address 127.0.0.1 -port 161 -version SNMPv1 -read public -write private -timeout 5 -retries 3 -window 10 -delay 0 -tags {}}
+
+if { [catch {
+    set interp [interp create -safe]
+    set a [snmp responder -port 9876]
+    set s [snmp generator -port 9876]
+} ]} {
+    puts $::tcltest::outputChannel "can not setup agent -- skipping agent test"
+} {
+
+    $a instance ifIndex.1 ifIndex(1) 1
+    $a instance ifIndex.8 ifIndex(8) 8
+    
+    test snmp-2.1 {snmp get} {
+	global result
+	$s get sysDescr.0 {set result "%E %V"}
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.1.1.0 {OCTET STRING} {Tnm SNMP agent}}}
+    
+    test snmp-2.2 {snmp getnext} {
+	global result
+	$s getnext sysDescr {set result "%E %V"}
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.1.1.0 {OCTET STRING} {Tnm SNMP agent}}}
+    
+    test snmp-2.2.1 {snmp getnext} {
+	global result
+	$s getnext ifIndex {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.2.2.1.1.1 Integer32 1}}
+
+    test snmp-2.2.2 {snmp getnext} {
+	global result
+	$s getnext ifIndex.0 {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.2.2.1.1.1 Integer32 1}}
+
+    test snmp-2.2.3 {snmp getnext} {
+	global result
+	$s getnext ifIndex.0.1 {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.2.2.1.1.1 Integer32 1}}
+
+    test snmp-2.2.4 {snmp getnext} {
+	global result
+	$s getnext ifIndex.1 {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.2.2.1.1.8 Integer32 8}}
+
+    test snmp-2.2.5 {snmp getnext} {
+	global result
+	$s getnext ifIndex.1.1 {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.2.2.1.1.8 Integer32 8}}
+
+    test snmp-2.2.6 {snmp getnext} {
+	global result
+	$s getnext ifIndex.8 {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.11.1.0 Counter32 15}}
+
+    test snmp-2.2.7 {snmp getnext} {
+	global result
+	$s getnext ifIndex.8.1 {set result "%E %V"}
+        $s wait
+        set result
+    } {noError {1.3.6.1.2.1.11.1.0 Counter32 17}}
+
+    test snmp-2.3 {snmp getbulk} {
+	global result
+	$s getbulk 0 1 sysDescr {set result "%E %V"}
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.1.1.0 {OCTET STRING} {Tnm SNMP agent}}}
+    
+    test snmp-2.4 {snmp exchanges} {
+	global result
+	$s set {{sysLocation.0 here}} {}
+	$s wait
+	$s get sysLocation.0 {set result "%E %V"}
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.1.6.0 {OCTET STRING} here}}
+
+    test snmp-2.5 {snmp OID encoding} {
+	global result interp
+	$interp eval set tnm_system(sysObjectID) \
+		1.2.64678.78456.1123456789.4123456789
+	$s get sysObjectID.0 {set result "%E %V"}
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.1.2.0 {OBJECT IDENTIFIER} 1.2.64678.78456.1123456789.4123456789}}
+
+    test snmp-2.6 {snmp Integer32 encoding} {
+        global result a
+	mib walk x 1.3 {
+	    set syntax [mib syntax $x]
+	    set access [mib access $x]
+	    if {$syntax == "Integer32" && $access == "read-write"} {
+		set oid $x
+		break
+	    }
+	}
+	if {[info exists oid]} {
+	    $a instance $oid.42 alarm 42
+            $s set [list [list $oid.42 -88]] {
+		set result "%E [lindex %V 2]"
+	    }
+	    $s wait
+        } else {
+	    set result "noError -88"
+        }
+	set result
+    } {noError -88}
+
+    test snmp-2.7 {snmp wrong community name} {
+	global result
+	$s configure -read foobar
+	catch {$s get sysDescr.0 ""}
+	$s wait
+	$s configure -read public
+	$s get snmpInBadCommunityNames.0 {set result "%E %V"}
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.11.4.0 Counter32 4}}
+
+    test snmp-2.8 {snmp rollback processing} {
+	global result
+	$s set {{sysContact.0 "Bert Nase"}} {}
+	$s set {{sysContact.0 ga} {sysDescr.0 no}} {set result "%E@%I"}
+	$s get sysContact.0 { lappend result "%V" }
+	$s wait
+	set result
+    } {noSuchName@2 {{1.3.6.1.2.1.1.4.0 {OCTET STRING} {Bert Nase}}}}
+
+    test snmp-2.9 {snmp rollback processing} {
+	global result
+	$s set {{sysContact.0 "Bert Nase"}} {}
+	$s set {{sysContact.0 bi} {sysContact.0 bo} {sysDescr.0 no}} \
+	    {set result "%E@%I"}
+	$s get sysContact.0 { lappend result "%V" }
+	$s wait
+	set result
+    } {noSuchName@3 {{1.3.6.1.2.1.1.4.0 {OCTET STRING} {Bert Nase}}}}
+
+    test snmp-2.10 {snmp rollback processing} {
+	global tnmEvalStatus
+	$a bind tnmEvalStatus create {error wrongValue}
+	$s set {{tnmEvalStatus.42 2}} {}
+	$s wait
+	info exists tnmEvalStatus(42)
+    } {0}
+
+    test snmp-2.11 {snmp rollback processing} {
+	global tnmEvalStatus interp
+	$a bind tnmEvalStatus create ""
+	$s set {{tnmEvalStatus.42 2}} {}
+	$s wait
+	$interp eval info exists tnmEvalStatus(42)
+    } {1}
+
+    test snmp-2.12 {snmp substitutions} {
+	global result interp
+	$s set {{sysContact.0 donald}} {}
+	$s wait
+	$a bind sysContact check {set result "o=%o i=%i p=%p v=%v"}
+	$s set {{sysContact.0 duck}} {}
+	$s wait
+	$interp eval set result
+    } {o=1.3.6.1.2.1.1.4 i=0 p=donald v=duck}
+
+    test snmp-2.13 {snmp usec} {
+	global result
+	$a configure -user joe -password luser
+	$s configure -user joe -password luser
+	$s get sysDescr.0 { set result "%E %V" }
+	$s wait
+	set result
+    } {noError {1.3.6.1.2.1.1.1.0 {OCTET STRING} {Tnm SNMP agent}}}
+
+    test snmp-2.14 {snmp async destroys} {
+	rename [eval snmp session [$s configure]] x
+	x get sysDescr.0 { x configure; x destroy }
+	snmp wait
+	catch {x configure} msg
+	set msg
+    } {invalid command name "x"}
+
+    test snmp-2.15 {snmp instance creation} {
+	global result
+	set a [snmp responder -version SNMPv2c -port 1234]
+	set m [snmp generator -version SNMPv2c -port 1234]
+	$m set {{tnmEvalStatus createAndWait}} { set result "%E %V" }
+	$m wait
+	set result
+    } {noCreation {}}
+}
+
+test snmp-2.99 {snmp cleanup} {
+    foreach s [snmp find] {
+	$s destroy
+    }
+    snmp find
+} {}
+
+test snmp-4.1 {snmp session binding} {
+    set s [snmp listener]
+    set msg [$s bind trap]
+    $s destroy
+    set msg
+} {}
+
+test snmp-4.2 {snmp session binding} {
+    set s [snmp listener]
+    $s bind trap foobar
+    set msg [$s bind trap]
+    $s destroy
+    set msg
+} {foobar}
+
+test snmp-4.3 {snmp session binding} {
+    set s [snmp listener]
+    set msg [$s bind trap]
+    $s destroy
+    set msg
+} {}
+
+test snmp-4.4 {snmp session binding} {
+    set s [snmp listener]
+    set msg [$s bind inform]
+    $s destroy
+    set msg
+} {}
+
+test snmp-4.5 {snmp session binding} {
+    set s [snmp listener]
+    $s bind inform foobar
+    set msg [$s bind inform]
+    $s destroy
+    set msg
+} {foobar}
+
+test snmp-4.6 {snmp session binding} {
+    set s [snmp listener]
+    set msg [$s bind inform]
+    $s destroy
+    set msg
+} {}
+
+# test snmp-11.1 {snmp traps} {
+#     global result dummy
+#     set result ""
+#     set s [snmp session -port 162]
+#     $s bind "" trap {lappend result [lindex [lindex "%V" 1] 2]}
+#     $s trap coldStart ""
+#     $s trap warmStart ""
+#     $s trap linkDown ""
+#     $s trap linkUp ""
+#     $s trap authenticationFailure ""
+#     $s trap egpNeighborLoss ""
+#     after 5000 "set dummy foo"
+#     vwait dummy
+#     set result
+# } {coldStart warmStart linkDown linkUp authenticationFailure egpNeighborLoss}
+
+test snmp-13.1 {usm key localization} {
+    set s [snmp generator -version SNMPv3 \
+	    -readSecurity md5/noPriv \
+	    -authPassWord maplesyrup \
+	    -engineID [binary format H* 000000000000000000000002] ]
+    binary scan [$s cget -readAuthKey] H* foo
+    $s destroy
+    set foo
+} {526f5eed9fcce26f8964c2930787d82b}
+
+test snmp-13.2 {usm key localization} {
+    set s [snmp generator -version SNMPv3 \
+	    -readSecurity sha/noPriv \
+	    -authPassWord maplesyrup \
+	    -engineID [binary format H* 000000000000000000000002] ]
+    binary scan [$s cget -readAuthKey] H* foo
+    $s destroy
+    set foo
+} {8aa3d99e3e3056f2bfe3a9eef345d539}
+
+foreach s [snmp find] { $s destroy }
+
+::tcltest::cleanupTests
+return

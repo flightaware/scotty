@@ -1,0 +1,156 @@
+!
+! Configuration of tkined. The original ined version used the
+! X11 ressource format (xrdb) but unfortunately tk has no mechanism
+! to query the ressource database for this purpose. So tkined searches
+! $tkined_path for default files like this one.
+!
+tkined.width:			600
+tkined.height:			400
+tkined.confirmExit:		yes
+tkined.confirmClear:		yes
+tkined.optionShowToolbox:	yes
+tkined.optionLockEditor:	no
+tkined.optionStrictMotif:	no
+tkined.optionFlashIcon:		yes
+!
+tkined.node1:	pc.xbm		PC
+tkined.node2:	unixpc.xbm	UNIX-PC
+tkined.node3:	mac.xbm		Macintosh
+tkined.node4:	mx.xbm		MX-?00
+tkined.node5:	Xstation.xbm	X-Terminal
+tkined.node6:	SUN-Server.xbm	Sun:Sparc Server
+tkined.node7:	SparcStation.xbm Sun:Sparc Station
+tkined.node8:	IPC.xbm		Sun:Sparc IPC / IPX
+tkined.node9:	SLC.xbm		Sun:Sparc SLC / ELC
+tkined.node10:	SUN3.xbm	Sun:Sun 3
+tkined.node11:	HP.xbm		HP WS
+tkined.node12:	RS6000.xbm	RS 6000
+tkined.node13:	DEC.xbm		DEC System
+tkined.node14:	DEC-Server.xbm	DEC Server
+tkined.node15:	octane.xbm	SGI Octane
+tkined.node16:	locker.xbm	Host / Server
+tkined.node17:	hyper.xbm	Hyper Cube
+tkined.node18:	parsytec.xbm	Parsytec Xplorer
+tkined.node19:  SEPARATOR
+tkined.node20:	bridge.xbm	Network Device:Bridge
+tkined.node21:	concent.xbm	Network Device:Concentrator
+tkined.node22:	switch.xbm	Network Device:Switch
+tkined.node23:	router.xbm	Network Device:Router
+tkined.node24:	tserver.xbm	Network Device:Terminal Server
+tkined.node25:	cisco.xbm	Network Device:Cisco
+tkined.node26:	modem.xbm	Peripherals:Modem
+tkined.node27:	phone.xbm	Peripherals:Phone
+tkined.node28:  printer.xbm	Peripherals:Printer
+tkined.node29:  laser.xbm       Peripherals:Laser Printer
+tkined.node30:  pserver.xbm     Peripherals:Print Server
+tkined.node31:  HP7550.xbm      Peripherals:HP Plotter 7550
+tkined.node32:  HPdj.xbm        Peripherals:HP DeskJet
+tkined.node33:  HPsj.xbm        Peripherals:HP ScanJet
+tkined.node34:	smallBox.xbm	Misc:Small Box
+tkined.node35:	Box.xbm		Misc:Normal Box
+tkined.node36:	bigBox.xbm	Misc:Big Box
+tkined.node37:	connector.xbm	Misc:Connector
+tkined.node38:	clock.xbm	Misc:Clock
+tkined.node39:  SEPARATOR
+!
+tkined.group1:	ring.xbm	Topology:Ring
+tkined.group2:	bus.xbm		Topology:Bus
+tkined.group3:	backbone.xbm	Topology:Backbone
+tkined.group4:	text.xbm	Special:Text
+tkined.group5:	action.xbm	Special:Active Monitor
+tkined.group6:	world.xbm	Special:World
+tkined.group7:  SEPARATOR
+!
+tkined.network1:	1               SLIP / PPP
+tkined.network2:	2               4MB Token Ring
+tkined.network3:	3               10MB Ethernet
+tkined.network4:	4               16MB Token Ring
+tkined.network5:	5               FDDI
+tkined.network6:  SEPARATOR
+!
+tkined.reference1:  tkined.xbm	Tkined
+tkined.reference2:  SEPARATOR
+
+!
+tkined.font1:  Courier 8
+tkined.font2:  Courier 10
+tkined.font3:  Courier 12
+tkined.font4:  Courier 14
+tkined.font5:  Helvetica 8
+tkined.font6:  Helvetica 10
+tkined.font7:  Helvetica 12
+tkined.font8:  Helvetica 14
+tkined.font9:  Times-Roman 8
+tkined.font10: Times-Roman 10
+tkined.font11: Times-Roman 12
+tkined.font12: Times-Roman 14
+!
+tkined.color1:	white	White
+tkined.color2:	green3	Green
+tkined.color3:	red1	Red
+tkined.color4:	blue1	Blue
+tkined.color5:	brown3	Brown
+tkined.color6:	orange1	Orange
+tkined.color7:	yellow1	Yellow
+!
+tkined.dashes1:	2	S
+tkined.dashes2:	4	So
+tkined.dashes3:	6	Sol
+tkined.dashes4:	8	Soli
+!
+tkined.interpreter1:	manager.tcl
+!
+
+! Some additional entries in the Tools menu provided by manager.tcl.
+
+! manager.tool.Game:	game.tcl
+
+! Defaults for monitoring jobs:
+
+! monitor.interval:	10
+
+! ICMP related defaults:
+
+icmp.retries:			3
+icmp.timeout:			3
+icmp.delay:			5
+icmp.routelength:		16
+
+! SNMP related defaults:
+
+snmp.port:			161
+snmp.community:			public
+snmp.retries:			3
+snmp.timeout:			5
+! snmp.window:			10
+
+! Some example event filter definitions:
+
+! event.server:		moloch
+! event.port:		8567
+! event.file:		/var/log/syslog
+! event.use:		file
+
+! event.filter1.name:	Emergency Filter
+! event.filter1.level:	emergency
+! event.filter1.action:	play /usr/local/tar/sounds/crash.au
+
+! event.filter2.name:	Alert Filter
+! event.filter2.level:	alert
+! event.filter2.action:	play /usr/local/tar/sounds/alert.au
+
+! event.filter3.name:  	vmunix Filter
+! event.filter3.facility: vmunix
+! event.filter3.action:	play /usr/local/tar/sounds/dialtone.au
+
+! These definitions are used to configure commands provided by external
+! scripts that should appear in object specific popup menus. The syntax
+! is simple: Just define an attribute named like a menu and add a list
+! of commands that should appear in the popup menu when this script is
+! running.
+
+tkined.IP-Trouble:	Ssh Telnet Vnc Finger "Trace Route" "DNS Info" "Whois Info" "TCP Services" "RPC Services"
+tkined.IP-Layout:	"Set Name" "Set Address" "Set Icon" "Layout Network"
+tkined.SNMP-Trouble:	"System Information" "IF Status" "IF Parameter" "IP Addresses" "IP Routing Table" "TCP Connections" "UDP Listener"
+tkined.Host-MIB:	"Host Information" "Storage Information" "Device Information" "Filesystem Information" "Process Information"
+tkined.Script-MIB:	"List Scripts" "List Launch Buttons" "Press Launch Button" "List Running Scripts" "Abort Running Script"

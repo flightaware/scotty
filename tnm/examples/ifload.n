@@ -1,0 +1,32 @@
+.TH ifload 1L "May 95" "Tnm Example" "Tnm Tcl Extension"
+
+.SH NAME
+ifload \- show interface load of SNMP devices
+
+.SH SYNOPSIS
+.B ifload
+.I ip
+.I secs
+[
+.I community
+]
+
+.SH DESCRIPTION
+.B ifload
+shows the interface load by retrieving ifInOctets and ifOutOctets
+via SNMP using Leinwands formula. The interface load is retrieved
+via SNMPv1 from the agent at
+.I ip
+address every
+.I secs
+seconds.
+The default community is public. An alternate community can be specified
+by adding a
+.I community
+argument.
+
+.SH SEE ALSO
+scotty(1)
+
+.SH AUTHORS
+Juergen Schoenwaelder (schoenw@ibr.cs.tu-bs.de)

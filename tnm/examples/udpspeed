@@ -1,0 +1,136 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+namespace import Tnm::udp
+
+proc udp_send { file host delay } {
+
+    global msg stat size
+    
+    if {[catch {udp send $file $msg} err]} {
+	catch {
+	    udp close $file
+	}
+	return
+    }
+    
+    incr stat(send,$host) $size
+
+    if {$delay > 0} {    
+        after $delay "udp_send $file $host $delay"
+    } else {
+        after idle "udp_send $file $host $delay"
+    }
+}
+
+proc udp_receive { file host } {
+
+    global stat size
+    
+    if [catch {udp receive $file}] {
+	catch {
+	    udp close $file
+	}
+	return
+    }
+    incr stat(received,$host) $size
+}
+
+proc udp_summary { file host secs } {
+
+    global stat
+
+    catch {
+	udp close $file
+    }
+
+    set send $stat(send,$host)
+    set received $stat(received,$host)
+
+    set o_speed [expr $send * 8.0 / 1024 / 1024 / $secs]
+    set i_speed [expr $received * 8.0 / 1024 / 1024 / $secs]
+    set loss    [expr ($send-$received) / double($send) * 100]
+    
+    puts [format "%6.3f MBit/s send %6.3f MBit/s received %6.2f %% loss (%s)" \
+	  $o_speed $i_speed $loss $host ]
+}
+
+##
+## Connect a udp file handle to the echo port on host and send datagrams
+## to it. Calculate the throughput in kB per second and the loss rate.
+##
+
+proc udp_echo { host secs len delay } {
+
+    global msg stat size
+
+    set size $len
+
+    set msg ""
+    for {set len 0} {$len < $size} {incr len} {append msg "+"}
+
+    set stat(send,$host) 0
+    set stat(received,$host) 0
+
+    if {[catch {udp connect $host echo} f]} {
+	puts stderr "$host: $f"
+	return
+    }
+
+    udp bind $f readable "udp_receive $f $host"
+
+    after [expr $secs * 1000] "udp_summary $f $host $secs"
+
+    udp_send $f $host $delay
+}
+
+##
+## Parse the command line arguments and call udp_echo forevery
+## host given on the command line.
+##
+
+set secs 10
+set delay 10
+set bytes 1024
+
+set newargv ""
+set parsing_options 1
+while {([llength $argv] > 0) && $parsing_options} {
+    set arg [lindex $argv 0]
+    set argv [lrange $argv 1 end]
+    if {[string index $arg 0] == "-"} {
+        switch -- $arg  {
+            "-d" { set delay [lindex $argv 0]
+                   set argv  [lrange $argv 1 end]
+                 }
+            "-t" { set secs [lindex $argv 0]
+                   set argv [lrange $argv 1 end]
+                 }
+            "-s" { set bytes [lindex $argv 0]
+		   set argv  [lrange $argv 1 end]
+		 }
+            "--" { set parsing_options 0 }
+        }
+    } else {
+        set parsing_options 0
+        lappend newargv $arg
+    }
+}
+set argv [concat $newargv $argv]
+
+if {$argv == ""} { 
+    puts stderr {usage: udpspeed [-d delay] [-t seconds] [-s size] hosts}
+    exit 1
+} else {
+    set time 1
+    foreach host $argv {
+	after [expr {$time * 1000}] "udp_echo $host $secs $bytes $delay"
+	incr time $secs
+	incr time 1
+    }
+}
+
+vwait forever

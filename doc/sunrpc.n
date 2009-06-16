@@ -1,0 +1,102 @@
+'\"
+'\" Copyright (c) 1994-1996 Technical University of Braunschweig.
+'\" Copyright (c) 1996-1997 University of Twente.
+'\" Copyright (c) 1997-1999 Technical University of Braunschweig.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+.so man.macros
+.TH Tnm::sunrpc n "September 1999" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+Tnm::sunrpc \- Call and probe selected Sun RPC services.
+.BE
+
+.SH DESCRIPTION
+The Tnm::sunrpc command allows to call and probe selected Sun RPC
+(RFC 1831, RFC 1832) services.
+
+.SH SUNRPC COMMAND
+.TP
+.B Tnm::sunrpc info \fIhost\fR
+The \fBTnm::sunrpc info\fR command returns a list of all registered Sun RPC
+services on \fIhost\fR. Each list element contains the program number,
+the program version, the protocol name, the port number and the name
+of the RPC service. The command fails, if \fIhost\fR is unknown or if
+the portmapper does not respond to our request.
+.TP
+.B Tnm::sunrpc probe \fIhost\fR \fIprogram\fR \fIversion\fR \fIprotocol\fR
+The \fBTnm::sunrpc probe\fR command tests a Sun RPC service identified
+by \fIprogram\fR \fIversion\fR \fIprotocol\fR on \fIhost\fR by calling
+procedure 0. This command returns a list of two elements. The first
+element is the time needed to complete the RPC call (measures in
+milliseconds). The second list element is a string which describes if
+the probe was successful.
+.TP
+.B Tnm::sunrpc stat \fIhost\fR
+The \fBTnm::sunrpc stat\fR command makes an rstat RPC call to \fIhost\fR
+and returns a list of name type value triples describing the status of
+the remote machine. This command fails if \fIhost\fR is not reachable
+or does not support the rstat service.
+.TP
+.B Tnm::sunrpc mount \fIhost\fR
+The \fBTnm::sunrpc mount\fR command retrieves a list of all NFS file systems 
+currently mounted from \fIhost\fR. Each element of the list includes
+the directory name and the host which serves the directory.
+.TP
+.B Tnm::sunrpc exports \fIhost\fR
+The \fBTnm::sunrpc exports\fR command retrieves a list of all NFS file
+systems exported by \fIhost\fR. Each element of this list contains the
+exported directory name and the list of hosts that are allowed to
+mount the exported directory. An empty host list means that an
+exported directory can be mounted by everyone.
+.TP
+.B Tnm::sunrpc ether \fIhost\fR \fBopen
+.ns
+.TP
+.B Tnm::sunrpc ether \fIhost\fR \fBstat
+.ns
+.TP
+.B Tnm::sunrpc ether \fIhost\fR \fBclose
+The \fBTnm::sunrpc ether\fR command allows to query an etherd daemon
+for ethernet statistics. You first have to register at the remote
+etherd using the \fBopen\fR command option. Afterwards, you can query
+the etherd using the \fBstat\fR command option, which will return a
+list of name type value triples describing the packets counted since
+the last query. You should unregister at the remote etherd using the
+\fBclose\fR option once you are no longer interested in ethernet
+statistics.
+.TP
+.B Tnm::sunrpc pcnfs \fIhost\fB info \fR[\fIarray\fR]
+.ns
+.TP
+.B Tnm::sunrpc pcnfs \fIhost\fB list \fR[\fIarray\fR]
+.ns
+.TP
+.B Tnm::sunrpc pcnfs \fIhost\fB queue \fIprinter\fB \fR[\fIarray\fR]
+.ns
+.TP
+.B Tnm::sunrpc pcnfs \fIhost\fB status \fIprinter\fB \fIarray\fR
+The \fBTnm::sunrpc pcnfs\fR command allows to retrieve printer status
+information provided by the pcnfsd daemon. The first command retrieves
+the daemon identification. The optional \fIarray\fR variable will be
+filled with details about the supported procedures. The second command
+returns the list of all printer names known by the pcnsfd daemon on
+\fIhost\fR. The optional \fIarray\fR is indexed by printer name and
+contains additional information about each printer. The queue
+subcommand retrieves the \fIprinter\fR queue and returns the actual
+queue length. Information about queued print jobs is written to the
+\fIarray\fR variable if given. The array is indexed by the queue
+position and contains information about the print job in key value
+pairs. The last pcnfs command retrieves \fIprinter\fR specific status
+information about the printer itself. The status is written into the
+\fIarray\fR variable.
+
+.SH SEE ALSO
+scotty(1), Tnm(n), Tcl(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+.br

@@ -1,0 +1,88 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+namespace import Tnm::udp Tnm::job
+
+##
+## This is very simple. We send a message to the UDP echo service
+## and count the number of messages sent and received. The report
+## proc is called to write a short report to stdout.
+##
+
+proc recv {ip f} {
+    global stat
+    catch {udp receive $f}
+    incr stat(recv,$ip)
+}
+
+proc probe {ip f} {
+    global stat
+    catch {udp send $f "udp packet loss probing packet"}
+    incr stat(send,$ip)
+}
+
+proc report {ip} {
+    global stat
+    if {[info exists stat(s,$ip)] && [info exists stat(r,$ip)]} {
+	set send [expr $stat(send,$ip) - $stat(s,$ip)]
+	set recv [expr $stat(recv,$ip) - $stat(r,$ip)]
+	puts [format "%-30s %4d send %4d received %6.2f %% loss (%6.2f)" \
+		$ip $send $recv [expr 100-$recv/double($send)*100] \
+		[expr 100-$stat(recv,$ip)/double($stat(send,$ip))*100] ]
+    }
+    set stat(s,$ip) $stat(send,$ip)
+    set stat(r,$ip) $stat(recv,$ip)
+}
+
+proc start {ip delay secs} {
+    global stat
+    set f [udp connect $ip echo]
+    udp bind $f readable "recv $ip $f"
+    set stat(send,$ip) 0
+    set stat(recv,$ip) 0
+    job create -command "report $ip" -interval [expr int($secs * 1000)]
+    job create -command "probe $ip $f" -interval [expr int($delay * 1000)]
+}
+
+##
+## Some command line parsing stuff.
+##
+
+set delay 5
+set secs  60
+
+set newargv ""
+set parsing_options 1
+while {([llength $argv] > 0) && $parsing_options} {
+    set arg [lindex $argv 0]
+    set argv [lrange $argv 1 end]
+    if {[string index $arg 0] == "-"} {
+        switch -- $arg  {
+            "-d" { set delay [lindex $argv 0]
+                   set argv  [lrange $argv 1 end]
+                 }
+            "-t" { set secs [lindex $argv 0]
+                   set argv [lrange $argv 1 end]
+                 }
+            "--" { set parsing_options 0 }
+        }
+    } else {
+        set parsing_options 0
+        lappend newargv $arg
+    }
+}
+
+set argv [concat $newargv $argv]
+if {$argv == ""} { 
+    puts stderr {usage: udploss [-d delay] [-t seconds] hosts}
+    exit 1
+} else {
+    foreach host $argv {
+	start $host $delay $secs
+    }
+}
+
+vwait forever

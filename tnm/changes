@@ -1,0 +1,1759 @@
+8/12/01 (new feature) Added another optional argument to "udp open"
+which allows to bind the socket to a particular local address.
+
+8/12/01 (new feature) It is now possible to receive SNMP traps from
+arbitrary addresses. On Unix systems, the port 162 is still handled
+via nmtrapd to allow arbitrary user processes to receive traps.
+
+2/11/99 (bug fix) Make sure that remaining job times do not increase if
+the system clock moves backwards.
+
+11/9/99 (feature change) Changed the 'sunrpc ether' command to 'sunrpc
+ether stat' in order to simplify the overall syntax.
+
+11/9/99 (code cleanup) Modified several command parsers to use
+Tcl_Objs.  Added several new test cases for checking the command
+syntax. The test suite now uses the tcltest framework.
+
+25/6/99 (feature change) Removed the -write option and renamed -read
+and -notify back to -community.
+
+8/6/99 (new feature) The Tnm::mib description command now accepts an
+optional variable name for returning the result.
+
+8/6/99 (bug fix) Make sure that MIB files are not loaded twice so that
+we will not loose memory on every repeated attempt to load a file.
+
+17/5/99 (bug fix) Make sure that commands bound to a recv event are
+always evaluated.
+
+21/4/99 (new feature) Added a -ident option to the syslog command.
+
+2/12/98 (bug fix) Fixed some bugs in the code which receives traps
+via TCP from the nmtrapd daemon.
+
+10/12/98 (new feature) Added %C and %G substitutions in order to make
+the contextName and the contextEngineID of a scoped PDU accessible. On
+SNMPv1/SNMPv2c, we use the community string as the contextName.
+
+29/10/98 (bug fix) Finished code to use a TCP connection to receive
+traps from the nmtrapd daemon.
+
+12/10/98 (bug fix) Rewrote the code which interprets DISPLAY-HINTs in
+order to use Tcl_Objs. Updated the code to follow the new SMI rules
+with regard to negative numbers.
+
+12/10/98 (feature change) Replaced the `mib instance' command with the
+`mib split' command.
+*** POTENTIAL INCOMPATIBILITY ***
+
+12/10/98 (new feature) Added the `mib pack' command option.
+
+9/10/98 (bug fix) Several minor bug fixes in the Tnm::mib command.
+
+9/10/98 (new feature) Added a Tnm::mib member command. 
+
+17/9/98 (feature change) Changed the default value of tnm(cache)
+to ~/.tnm$tnm(version). Added an internal function TnmMkDir which
+is used to create a path of directories.
+
+17/9/98 (bug fix) Added a version number to .idy files which is
+checked at load times. This makes sure that we do not load old
+versions of .idy files.
+
+15/9/98 (bug fix) Added additional tests to calls to inet_addr in
+order to accept the value 255.255.255.255.
+
+24/7/98 (new feature) Changed the output of the TnmSnmp library
+procedures to make it more readable.
+
+10/7/98 (new feature) Added the `mib info files' command option.
+
+9/7/98 (bug fix) Make sure we return a Tcl error message when the
+MIB parser detects an error.
+
+8/7/98 (bug fix) Allow relative pathes in the tnm(mibs) variable so
+that one can write "vendor/file.mib" and scotty will search for the
+file in $tnm(library)/site/vendor/file.mib. (Suggestion and patch from
+Joe Rogers <joe@usf.edu>.)
+
+12/6/98 (new feature) Added the `mib unpack' command option. Changed
+the library functions in TnmSnmp.tcl to use this command and to
+optimize SNMP table accesses and table printing.
+
+4/4/98 (new feature) Added new commands to extract parts of a varbind
+list: snmp oid, snmp type and snmp value.
+
+3/4/98 (new feature) Added an octet string data type to the Tcl_Obj
+system.
+
+1/4/98 (code cleanup) The SNMPv3 code and the SNMPv2c code is now
+official part of the SNMP engine. The USEC code is ifdef'ed and will
+go away. I managed to exchange SNMPv3 noAuth/noPriv messages with the
+implementation from Bert Wijnen (IBM), David Levi (SNMP Research) and
+Shawn (Epilogue).
+
+29/3/98 (bug fix) Fixed the error message when creating a responder on
+a port that can't be opened. Added several test cases to the snmp test
+suite and made minor corrections while testing the test cases.
+
+29/3/98 (new feature) Added all of the SNMPv3 configuration options.
+
+29/3/98 (new feature) Added code to compute SNMPv3 authentication
+and privacy keys using MD5.
+
+28/3/98 (new feature) Added the `snmp delta' command which computes
+deltas for isomorphic varbind lists. Allows to work around Tcl's 
+platform dependent arithmetics.
+
+28/3/98 (bug fix) Added TnmUnsigned32 and TnmUnsigned64 data types
+and corresponding Tcl_Obj types.
+
+28/3/98 (new feature) Added an icon tree to the tnm distribution.
+Included several new icons.
+
+4/3/98 (feature change) Renamed -community to -read and
+-writecommunity to -write. Added -notify which is used to specify the
+notification community string.
+
+4/3/98 (new feature) Added the `netdb ip broadcast' command.
+
+27/2/98 (new feature) The MIB parser now recognizes VARIABLES clauses
+and OBJECTS clauses in TRAP-TYPE and NOTIFICATION-TYPE macros. Added
+a new Tnm::mib variables command to query the information.
+
+16/2/98 (bug fix) The MIB parser now maintains information about ASN.1
+type and value assignements.
+
+10/2/98 (new feature) Added a global tnm(cache) variable which is used
+when chaching files, like frozen MIB files. The default value for this
+variable is $tnm(tmp)/tnm-$tnm(version).
+
+2/2/98 (bug fix) Added additional checks for illegal object identifier
+values.
+
+30/1/98 (feature change) Removed the GDMO and CMIP support from the
+distribution.
+*** POTENTIAL INCOMPATIBILITY ***
+
+30/1/98 (code cleanup) Changes the names of the MIB files. We now use
+the module names so that IMPORTS are easier to follow. This also
+reduces the amount of work when MIB modules are updated.
+
+27/1/98 (bug fix) Fixed a memory bug in the SNMP walk commands.
+
+27/1/98 (bug fix) The MIB parser now recognizes the BITS construct. The
+base syntax is set to OCTET STRING and the labelled bits are handled like
+INTEGER enumerations.
+
+23/1/98 (bug fix) Fixed the initialization of the resolver library on
+Windows platforms.
+
+16/1/98 (code cleanup) Removed support for Borland C++ because we don't
+have the resources to maintain this. We only have access to MS VC++.
+
+14/1/98 (bug fix) The MIB parser read all the DESCRIPTION clauses in a
+MODULE-IDENTITY macro. Changed the parser to only honor the first clause.
+
+14/1/98 (code cleanup) New or renamed library packages: TnmTerm, TnmSnmp,
+TnmIetf.
+
+4/1/98 (bug fix) Added an endOfWalk pseudo error code which is used to
+signal the end of asynchronous walks.
+
+29/12/97 (bug fix) An incomplete last byte in plain OCTET STRING hex 
+data was silently discarded.
+
+8/12/97 (new feature) Added some experimental code to handle SNMPv3
+noAuth/noPriv messages. This caused several changes to the internal
+BER encoding/decoding API in order to simplify things.
+
+7/12/97 (bug fix) The snmp session commands accepted bogus types
+without complaining about it.
+
+7/12/97 (new feature) The MIB module now supports size and range
+restrictions, although the MIB parser extensions are still missing.
+Thanks to Michael J. Long <mjlong@Summa4.COM> for prototyping
+this code.
+
+7/12/97 (feature change) TimeTicks are no longer rendered into a
+human readable timestamp string.
+*** POTENTIAL INCOMPATIBILITY ***
+
+6/12/97 (code cleanup) Communities, contexts etc. are now stored in
+a Tcl_Obj which allows to use arbitrary bytes, including 0.
+
+20/11/97 (new feature) Added rfc2155.mib, rfc2206.mib, rfc2213.mib,
+rfc2214.mib, rfc2232.mib, rfc2233.mib, rfc2238.mib, and rfc2239.mib.
+
+25/9/97 (new feature) Added a -tags option to map instances and a map
+find command to search for map instances. All "object-based" commands
+of the Tnm extension now support tags and a find option.
+
+24/9/97 (new feature) Added a -tags option to snmp sessions. Replaced
+the snmp info command with an snmp find command, which allows to
+search for snmp session by tags. Added a new snmp info command which
+returns meta information about the SNMP engine itself.
+*** POTENTIAL INCOMPATIBILITY ***
+
+22/9/97 (code cleanup) The snmp command now uses Tcl_Obj's. Removed
+some experimental code to convert varbind lists into an internal
+format. I prefer to use Tcl_Objs.
+
+22/9/97 (bug fix) Fixed the mib description command to preserve empty
+lines and the indentation.
+
+17/9/97 (new feature) Added a -tags option to the 'job' command. Replaced
+the 'job info' command with a 'job find' command which allows to select
+a subset of tagged jobs.
+*** POTENTIAL INCOMPATIBILITY ***
+
+7/9/97 (new feature) Added a 'mib info' command which makes internal
+information accessible.
+
+5/9/97 (new feature) The 'mib description' command also works on MIB
+types.
+
+5/9/97 (new feature) Add a 'mib status' command to query the status of
+MIB defintions.
+
+30/8/97 (feature removed) Removed the http command from the Tnm extension.
+*** POTENTIAL INCOMPATIBILITY ***
+
+4/8/97 (code cleanup) The netdb command now uses Tcl_Obj's.
+
+3/8/97 (code cleanup) The job command now uses Tcl_Obj's to store the
+job commands. This makes sure that the command is not re-compiled for
+every job execution.
+
+3/8/97 (code cleanup) Converted the mib command to use Tcl_Objs. This
+rewrite uses Tcl_Obj's of type tnmOidObj to keep track of the internal
+object identifier representation wherever possible. The walk command
+has been rewritten so that the body is only compiled once.
+
+28/7/97 (bug fix) Plugged a memory leak in the function InedGets() in
+tnmIned.c. Thanks to Martin Knoll <martin.knoll@tikom.co.at>.
+
+27/7/97 (code cleanup) Added new functions TnmMibLoad, TnmMibLoadCore
+and TnmMibLoadFile to load and initialize the internal MIB tree.
+
+26/7/97 (code cleanup) Added a tnmOidObj object type which is used to
+map object identifier values between a string representation and the
+internal representation. The string representation is either in dotted
+format or in string format.
+
+24/7/97 (code cleanup) Simplified the initialization procedure.
+
+19/7/97 (code cleanup) Converted the map command to use Tcl_Obj's.
+
+18/7/97 (feature change) All the exported commands of the Tnm
+extension are now registered in and exported from the ::Tnm
+namespace. Scripts have to import these commands.
+*** POTENTIAL INCOMPATIBILITY ***
+
+18/7/97 (bug fix) Try to auto_load a definition for bgerror before
+defining our own version in init.tcl.
+
+13/7/97 (code cleanup) Converted the job command to use Tcl_Obj's.
+
+6/7/97 (code cleanup) Added a new function TnmGetHandle which generates
+Tcl command names for internal objects. It ensures that the new name
+is unique and not used.
+
+5/7/97 (feature change) The %I escape sequence in an SNMP callback now
+returns the Tcl list index of the varbind which caused the error instead
+of the SNMP varbind index.
+*** POTENTIAL INCOMPATIBILITY ***
+
+5/7/97 (code cleanup) Added a new dynamic TnmOid data type which will
+replace the old API which used static buffers and caused some strange
+copying actions.
+
+5/7/97 (new feature) Added the 'mib length' command.
+
+4/7/97 (bug fix) Fixed the handling of SNMP session names. Sessions
+can now be renamed without bogus substitutions or error messages.
+
+18/6/97 (new feature) Added an "aliases" option to the netdb commands.
+
+12/6/97 (new feature) Added rfc2108.mib, rfc2127.mib and rfc2128.mib.
+Removed xxx.mib and dvmrp.mib.
+
+11/6/97 (feature removed) Removed the 'mib tc' command because it is
+no longer needed.
+*** POTENTIAL INCOMPATIBILITY ***
+
+11/6/97 (feature change) The default personal Tnm initialization file
+is now called ~/.tnmrc. The old name ~/.scottyrc is still supported
+if ~/.tnmrc does not exist, but it is not documented anymore.
+
+9/6/97 (code cleanup) Added new test cases to the test suite for the
+mib command.
+
+9/6/97 (bug fix) The command procedure of the netdb sunrpc commands
+had an off by one bug, which caused it to fail. (Problem reported
+and fixed by Jim Pirzyk.)
+
+6/6/97 (feature change) Renamed the 'mib successor' command to 'mib
+children'. The old name is still accepted.
+
+6/6/97 (new feature) The mib command now accepts type names for some
+of the commands. Added new commands to retrieve details about a
+defined type. Added commands to split a MIB name into the label and
+the instance identifier portion.
+
+6/6/97 (new feature) The map command now supports group objects and
+port objects. Port objects are used to identify link endpoints so that
+it is possible to model interfaces as real objects.
+
+4/6/97 (bug fix) Fixed some broken MIB lookups. Removed some obscure
+optimizations in order to make lookups behave the same for all Tcl
+commands.
+
+3/6/97 (code cleanup) Rewrote most Tcl command procedures. They are
+now table-driven to make additions easier and less error prone.
+
+30/5/97 (feature change) Added a 'mib exists' command and removed the
+-exact option for all mib commands.
+*** POTENTIAL INCOMPATIBILITY ***
+
+30/5/97 (bug fix) Fixed the parser code which recognizes DEFVAL clauses.
+Added some conversion code to convert ASN.1 OCTET STRING constants into
+Tnm octet string format.
+
+30/5/97 (code cleanup) Added two new internal functions (TnmBadOption
+and TnmWrongNumArgs) which simplifies error handling.
+
+28/5/97 (bug fix) The MIB parser does not resolve AUGMENT clauses. We
+do it now in the query module, which is ugly but it works.
+
+28/5/97 (bug fix) The MIB parser now does a better job to translate
+SNMPv1 TRAP-TYPE macros into SNMPv2 TRAP object identifier. It now
+works correctly with SMICng converted SNMP2 MIBs.
+
+27/5/97 (bug fix) The MIB parser now accepts strings like { retix } in
+an ENTERPRISE clause.
+
+9/5/97 (code cleanup) Removed the cisco, wellfleet, ncd, hp-unix and
+synoptics MIBs because they are fat and outdated.
+
+7/5/97 (bug fix) Added the interfaces MIB (RFC 1573) to the list of
+default MIBs. This required to define the interfaces MIB node in
+compat.tc, because we need to load the interfaces MIB before RFC 1213,
+which normally defines the interfaces MIB node.
+
+2/5/97 (new feature) Lots of new features for the new map command.
+Events and bindings are accessible as Tcl objects, a health is
+computed for each item, the map ticks internally to expire old events
+and to calculate the health of each item and there is a library of
+procedures that convert maps into a set of HTML files.
+
+2/5/97 (new feature) Added the global tnm(url) variable which points to
+the home of the Tnm extension on the World Wide Web.
+
+24/4/97 (new feature) Added the -exit and -error options to the job
+object command.
+
+11/4/97 (bug fix) Added a sanity check which detects if we rename a
+command while loading the Tnm package.
+
+8/4/97 (bug fix) Added a new function to generate SNMP request ids
+that are guaranteed to be unique.
+
+6/3/97 (bug fix) nmicmpd now correctly discards packets received from
+non-target IP addresses for echo, timestamp and mask requests. This
+solves some problems with ICMP packets for broadcast addresses.
+
+6/3/97 (new feature) Added bind and raise command options to the
+network map system. Rewrote the TnmMonitor package to use these
+commands to raise events. Changed the ifload example script to
+demonstrate this new feature.
+
+5/3/97 (bug fix) Fixed a bug which messed up the test for fullduplex
+links.
+
+17/2/97 (bug fix) Fixed tnmMD5.c includes so that SIZEOF_LONG is
+defined while reading tnmMD5.h.
+
+14/2/97 (bug fix) Changed the MIB parser to allow signed values in
+enumerations.
+
+14/2/97 (bug fix) Fixed some checks for the STATUS clauses in the SNMP
+MIB parser.
+
+13/2/97 (bug fix) Asynchronous and synchronous SNMP messages are now
+send using two different sockets. This makes sure that asynchronous
+responses stay in the UDP queue while waiting for synchronous
+responses.
+
+22/1/97 (bug fix) Fixed a memory overrun problem in the sunrpc command.
+
+16/1/97 (bug fix) The clock of the SNMP agent now ticks in hundreds
+of seconds instead of seconds.
+
+8/1/97 (NT port) Add a proc Tnm_InetMail which allows to send email
+messages in a platform independent way.
+
+8/1/97 (code cleanup) Turned all the "useful" code in tnm/library into
+Tcl packages. Renamed all the Tcl procedures to use the Tnm prefix.
+
+7/1/97 (code cleanup) New package TnmInet (tnm/library/inet.tcl) which
+contains some basic Internet test and query procedures. This package
+exports an interface that allows to use these procedures in various
+applications.
+
+7/1/97 (code cleanup) Replaced the "ined fileselect" dialog with an
+"ined openfile" and an "ined savefile" dialog which uses the native
+fileselector.
+
+5/1/97 (bug fix) Fixed the conversion of object identifier values from
+string representation to the internal representation to detect length
+overflows.
+
+3/1/97 (new feature) Added the mib compare command option to compare
+two object identifier values in lexicographic order.
+
+3/1/97 (bug fix) Setting the -interval of a job to 0 is an error.
+The interval must be a positive number of milliseconds.
+
+30/12/96 (bug fix) Fixed the SNMP -window option to honor the window
+size 0 as documented.
+
+30/12/96 (new feature) The UNIX version searches for the Tnm and
+Tkined path using tcl_pkgPath if the build-in path does not match.
+
+2/12/96 (new feature) Added a new global tnm(tmp) variable which
+contains the path to a directory where temporary files can be created.
+
+20/11/96 (bug fix) nmtrapd and nmicmpd now report all error and debug
+messages to the system logger.
+
+20/11/96 (bug fix) Always use binary files instead of text files
+because otherwise Microsoft VC++ is not able to ftell() and fseek()
+correctly.
+
+20/11/96 (NT port) Added support for icmp trace routes on Windows.
+
+20/11/96 (NT port) Added code to initialize the default DNS domain
+from the Windows registry.
+
+18/11/96 (new feature) Added support for the global tnm(tclsh) and
+tnm(wish) Tcl variables.
+
+18/11/96 (NT port) Added code to pick the default DNS server on
+Windows NT and probably Windows 95 machines out of the registry.
+
+16/11/96 (new feature) Added code to search for tclsh and wish during
+the initialization and to save the path in the global tnm or tkined
+array.
+
+15/11/96 (code cleanup) Changed all scripts to either use tclsh or
+wish. There will be no platform independent scotty version.
+
+15/11/96 (new feature) Added the "netdb ip apply" and "netdb ip
+compare" command options.
+
+14/11/96 (bug fix) nmtrapd did not clean up file descriptors inherited
+from the parent process.
+
+13/11/96 (feature change) The icmp command now returns a flat list.
+Exceptions are always returned as an empty list element.
+*** POTENTIAL INCOMPATIBILITY ***
+
+12/11/96 (NT port) Moved the code that initializes the tnm(library)
+path to a platform specific function. This allows to use the registry
+to query installation parameters on Windows platforms.
+
+11/11/96 (new feature) Added rfc2006.mib, rfc2024.mib, rfc2037.mib and
+rfc2051.mib.
+
+7/11/96 (code cleanup) Changed the UNIX configure option
+--disable-multicast to --enable-multicast.
+
+4/11/96 (code cleanup) New version of nmicmpd.c which starts to follow
+the Tcl coding style and fixes some errors.
+
+3/11/96 (bug fix) Changed the -server option of the dns command to get
+and set a list of DNS resolver addresses. Fixed some error messages
+and cleaned up some prototypes to conform to bind 4.9.4.
+
+30/10/96 (code cleanup) Changed the mibtree script to use the grid
+geometry manager instead of the packer.
+
+29/10/96 (NT port) Replaced the nmicmpd implementation with a new
+version which allows to move more platform independent code into the
+core of the Tnm extension.
+*** POTENTIAL INCOMPATIBILITY ***
+
+29/10/96 (code cleanup) Removed the configure check for librpcsvc
+since it is not needed anymore.
+
+28/10/96 (code cleanup) Renamed straps to nmtrapd and ntping to
+nmicmpd. Moved the source of nmicmpd into the unix directory and
+removed the tnm/ntping directory. Renamed the environment variables
+TNM_STRAPS and TNM_NTPING to TNM_NMTRAPD and TNM_NMICMPD respectively.
+*** POTENTIAL INCOMPATIBILITY ***
+
+28/10/96 (bug fix) The straps daemon now forks itself. Otherwise, Tnm
+would wait for it to terminate when the Tcl process exits.
+
+26/10/96 (new feature) Added the map command which allows to
+manipulate network maps. It currently supports node, network and link
+objects.
+
+25/10/96 (code cleanup) The straps daemon now logs error messages to
+the system logger.
+
+25/10/96 (code cleanup) Changed the message format used by the straps
+daemon. The new format is 32 bit aligned and it contains a version
+number which will make it simpler to deal with protocol changes in the
+future.
+
+24/10/96 (NT port) Moved the code to receive SNMP traps into the
+platform specific modules tnmUnixSnmp.c and tnmWinSnmp.c.
+
+24/10/96 (code cleanup) Replaced all exec commands that deal with
+files with the new Tcl file command options.
+
+23/10/96 (feature removed) Removed support for msql since the new
+version of msqltcl can be installed as a Tcl package.
+
+----------------- Released 2.1.5, 23/10/96 -----------------------
+
+21/10/96 (new feature) Added rfc2020.mib.
+
+17/10/96 (bug fix) Rewrote the traceroute example to produce more
+readable output.
+
+8/10/96 (bug fix) Added a call to DnsInit() in tnmDns.c which makes
+sure that the result of `dns -server' is well defined even if this
+is the first dns command ever called.
+
+8/10/96 (NT port) Finished the Borland version of oncrpc.lib and
+resolv.lib. Note, the default resolver is 127.0.0.1 if you do not have
+a resolv.conf file on your Windows NT machine. This works fine if you
+have a local caching dns server running (strongly suggested).
+
+7/10/96 (NT port) Split tnmIcmp.c module into three modules:
+tnmIcmp.c, tnmUnixIcmp.c and tnmWinIcmp.c. Only the platform
+independent code is left in tnmIcmp.c.
+
+7/10/96 (new feature) The name of the user specific startup file is
+now read from the TNM_RCFILE environment variable is available.
+
+2/10/96 (NT port) Replaced the quick and dirty hack of the SUN RPC
+code with the NT port done by Martin F. Gergeleit which is available
+at http://set.gmd.de/RS/Mitarbeiter/gergeleit/oncrpc.html.
+
+2/10/96 (code cleanup) Replaced a call to callrpc() in tnmSunRpc.c
+with a call to clnt_call() for portability reasons.
+
+2/10/96 (code cleanup) Changed the Tnm_MibEnum structures to hold the
+integer value in an int instead of a char*. Note, this change affects
+the internal structure of compressed .idy files.
+
+27/9/96 (bug fix) The gdmo parser now returns all parsing error
+messages in the interpreter rather then writing them to stderr.
+
+27/9/96 (new feature) The gdmo parser is now able to recognize
+"SET-BY-CREATE" properties as defined in Amendment 1 to ITU-T
+Recommendation X.722.
+
+26/9/96 (bug fix) Fixed the implementation of -writecommunity.
+
+25/9/96 (NT port) Added some ugly hacks to the compat/rpc/*.[ch] files
+so that the SUN RPC code compiles and runs on Windows NT.
+
+----------------- Released 2.1.4, 20/9/96 -----------------------
+
+20/9/96 (feature removed) Disabled the -trapaddress, -trapport and
+-trapcommunity SNMP session options because they don't work well with
+mixed manager and agent sessions.
+
+19/9/96 (NT port) Added wrapper functions for the socket calls that
+make sure that the Tcl error code is set correctly. (They also fix
+some strange NT Windows Socket semantics.)
+
+13/9/96 (code cleanup) Cleanup of the tnmNetdb.c module to give better
+error responses. Changed the syntax of the netdb services command to
+get rid of the ugly list argument.
+*** POTENTIAL INCOMPATIBILITY ***
+
+13/9/96 (new feature) Added -trapaddress, -trapport and -trapcommunity
+SNMP session options. Changed straps to listen on other ports than 162.
+This is not working yet.
+
+12/9/96 (bug fix) Added two new functions TnmValidateIpHostName() and
+TnmValidateIpAddress() which are used to perform strict syntactic
+checks on IP host name and IP address arguments to work around bugs
+and security problems in some resolver libraries.
+
+11/9/96 (NT port) Added support for the netdb and udp commands. Needs
+some more work but it is basically running.
+
+9/9/96 (NT port) The following commands are now working on Windows NT
+machines: job, http, event, ntp, ined, syslog. All these commands pass
+their test suite (if available).
+
+6/9/96 (NT port) Moved the entry points of the loadable module to
+unix/tnmUnixInit.c and win/tnmWinInit.c. Rewrote win/makefile.bc to
+make it compatible with Tcl7.5 and Borland C++ 5.0.
+
+5/9/96 (bug fix) The netdb command returned reversed IP addresses on
+byte swapped hosts such as Intel PCs.
+
+5/9/96 (bug fix) The mib command failed to do ~ expansion when loading
+a MIB file.
+
+----------------- Released 2.1.3, 5/9/96 -----------------------
+
+3/9/96 (bug fix) Fixed the channel mode for sending HTTP documents.
+
+----------------- Released 2.1.2, 2/9/96 -----------------------
+
+29/8/96 (bug fix) The http now switches correctly between crlf and
+binary channel mode and handles read errors by returning a usable Tcl
+error result.
+
+28/8/96 (bug fix) SNMP sessions and request structures are now
+destroyed using Tcl_Preserve/Tcl_Release/Tcl_EventuallyFree to solve
+some nasty problems when processing events in a callback and
+destroying the session somewhere on the way.
+
+27/8/96 (bug fix) The job command now deletes the timer handler if
+an interpreter is destroyed. It also uses the Tcl_Preserve and
+Tcl_Release calls to protect the job structure while evaluating
+commands.
+
+27/8/96 (bug fix) Fixed a memory bug in the implementation of the
+sunrpc ether $host close command.
+
+6/8/96 (code cleanup) Rewrote the initialization procedure to search
+startup files in a platform independent way.
+
+6/8/96 (bug fix) Fixed a bug which caused a core dump while creating a
+machine specific directory to keep frozen MIB files. Rewrote the whole
+function that searches for MIB files to make it platform independent.
+
+5/8/96 (bug fix) The snmp# instance command did create bogus instances
+if you were using strange sub-identifier like negative numbers or
+arbitrary strings. This case is now handled by returning an error.
+
+4/8/96 (code cleanup) Rewrote the initialization procedure to support
+safe in addition to trusted Tcl interpreters.
+
+3/8/96 (bug fix) The job, ntp, icmp and dns commands now work with
+multiple interpreters such that every interpreter maintains its own
+internal state independent of others.
+
+2/8/96 (bug fix) The http command did not accept arbitrary documents.
+
+1/8/96 (bug fix) Some DNS errors were not reported correctly.
+
+1/8/96 (bug fix) Renaming job and snmp objects is now handled 
+correctly. (Previous versions did not return the new name in the
+snmp info or job info commands.)
+
+31/7/96 (code cleanup) Added a few casts to tnmSunRpc.c to avoid 
+some nasty compiler warnings.
+
+31/7/96 (code cleanup) Added functions to tnmUtil.c to lookup
+hostnames and to convert service names to port numbers. These
+functions are now used in all modules that need to do these
+conversions. The functions maintain a name to IP address cache.
+
+31/7/96 (code cleanup) Added functions to tnmUtil.c to simplify the
+parsing of frequently used arguments.
+
+31/7/96 (code cleanup) Added functions to tnmUtil.c to handle object
+configuration options in a more generic way. Changed tnmJob.c and
+tnmSnmpTcl.c to use these new functions.
+
+30/7/96 (new feature) Added a compile time option SNMP_BENCH to
+measure SNMP round trip times and message sizes.
+
+29/7/96 (code cleanup) Added a new module tnmUtil.c which implements
+the TnmTable structure. Changed a couple of modules to use the new
+TnmTable type to convert string to tokens and back.
+
+21/7/96 (bug fix) Removed support for the UInteger32 type which is
+no longer defined for SNMPv2.
+
+----------------- Released 2.1.1, 19/7/96 -----------------------
+
+17/7/96 (new feature) Added a -writecommunity session option to
+hold a community string for SNMP set requests (SNMPv1/SNMPv2C).
+
+17/7/96 (bug fix) Better handling of noResponse errors in the snmp
+scalars command.
+
+12/7/96 (bug fix) Scotty now recognizes standard traps defined using
+RFCC 1215 style TRAP-TYPE macros in addition to the traps defined in
+RFC 1907.
+
+10/7/96 (new feature) The set of core MIB/SMI files is now defined in 
+the global tnm(mibs:core) Tcl variable.
+
+5/7/96 (bug fix) Fixed the USEC authKey initialization of the SNMP 
+agent (added a USEC test to the test suite).
+
+5/7/96 (bug fix) Fixed the cleanup of trap sockets when destroying
+SNMP sessions.
+
+14/6/96 (bug fix) Changed the name of the Tnm package from scotty
+to Tnm to make it consistent with the Tcl naming conventions.
+
+----------------- Released 2.1.0, 10/6/96 -----------------------
+
+7/6/96 (feature removed) Removed the rpc command because it needs to
+be rewritten to use channels and I do not want to delay the release
+even further.
+
+6/6/96 (code cleanup) Restructed the example SNMP agent.
+
+6/6/96 (bug fix) SNMP instances of scalars with an instance identifier
+not equal to "0" are now rejected.
+
+6/6/96 (bug fix) Fixed the SNMP set processing code. Rollbacks bindings
+were evaluated for varbinds that did not trigger a set binding.
+
+2/6/96 (bug fix) Removed all previously allowed abbreviations for
+command options in order to avoid conflicts.
+
+30/5/96 (bug fix) Fixed a very general memory leak in tnmSnmRecv.c
+which affected asynchronous requests and errors/retries.
+
+29/5/96 (new feature) Accept 0x[0-9]+ hexadecimal subidentifer
+in a hexadecimal object identifier.
+
+26/5/96 (bug fix) Fixed a memory leak in LookupLabelOID().
+
+22/5/96 (feature removed) Removed the configuration option to enable
+TclX support since you can load extensions now.
+
+21/5/96 (bug fix) Processing of SNMP inform requests now follows the
+rules defined in RFC 1905.
+
+20/5/96 (feature change) Scotty now parses arguments like tclsh - the
+first parameter is usually the script name.
+*** POTENTIAL INCOMPATIBILITY ***
+
+20/5/96 (bug fix) Fixed the initialization in Tnm_SnmpDelay which
+caused very long delays on some systems.
+
+20/5/96 (feature change) Object identifier are now rendered into a
+readable string by using the module name and the label of the MIB
+node to make the string representation unique.
+
+19/5/96 (bug fix) Rewrote TrapRecv() to fix core dump which occured
+when killing straps.
+
+19/5/96 (bug fix) Rewrote some parts of tnmIned.c to use Tcl channels
+instead of C files. This avoids some deadlock problems.
+
+16/5/96 (feature change) The mib commands now accept the MIB module
+name as a prefix in object names, e.g. SNMPv2-MIB!sysDescr.0. This
+solves naming conflicts.
+
+16/5/96 (new feature) The mib module command returns the module name
+which includes the definition of a MIB object.
+
+15/5/96 (new feature) The mib commands now accept the MIB file name as
+a prefix in object names, e.g. rfc1907.mib!sysDescr.0. This helps to
+resolve naming conflicts.
+
+13/5/96 (new feature) Added the `$s scalars <scalar list> <arrayName>'
+command to retrieve scalars without worrying about details.
+
+13/5/96 (feature change) The `mib tc' now returns a list with an
+additional element containing the file name containing the TC
+definition.
+
+9/5/96 (performance improvement) Added some special code to make
+MIB lookups of the style sysDescr.0 much faster than before.
+
+8/5/96 (feature change) Handle inform requests automatically without
+requiring an agent session on the receiving entity.
+
+7/5/96 (new feature) Added a `mib macro' command to access the
+macro which was used to define a node in the MIB tree.
+
+25/4/96 (code cleanup) Merged the tkined and the scotty source trees.
+Reorganized all the source files.
+
+14/4/96 (feature removed) Removed the support for SNMPv2CLASSIC which
+is now a historic IETF protocol.
+*** POTENTIAL INCOMPATIBILITY ***
+
+1/4/96 (new feature) Added support for SNMPv2USEC based on RFC 1910.
+
+11/3/96 (code cleanup) Renamed all files to use the tnm prefix. I have
+also replaced the copyright message in each file with a pointer to
+license.terms. The header is now split into tnm.h, tnmInt.h, tnmPort.h
+to make ports to new platforms easier.
+
+5/3/96 (new feature) Added some code to parse RFC 1215 TRAP-TYPE
+macros. These trap definitions are converted to SNMPv2 style trap
+object identifier and registered in the MIB tree.
+
+2/12/95 (performance improvement) New functions to avoid sprintf
+calls in tnmMibQuery.c and tnmSnmpAsn1.c.
+
+5/2/96 (code cleanup) The implementation of the http command is now
+based on Tcl channels.
+
+5/2/96 (new feature) Added a new binding command as we can't use UDP
+handles with the Tcl fileevent command anymore.
+
+27/1/96 (code cleanup) Changes in tnmIcmp.c to use Tcl channels to
+talk to ntping.
+
+29/1/96 (feature removed) Removed the tcp command as TCP sockets are
+now supported in plain Tcl.
+*** POTENTIAL INCOMPATIBILITY ***
+
+27/1/96 (feature removed) Removed the getclock/getdate commands and
+the clock.c module as there is support for clocks in Tcl7.5 now.
+
+7/1/96 (feature change) Renamed all global scotty variables. We now
+keep all information in a global array named tnm.
+*** POTENTIAL INCOMPATIBILITY ***
+
+4/1/96 (feature change) The http head command returns the header as a
+flat list which will be accepted by the array set command.
+*** POTENTIAL INCOMPATIBILITY ***
+
+21/12/95 (bug fix) We now let Tcl quote the hinfo elements returned by
+the DNS command since some people put white spaces in the OS and CPU
+fields (even though white spaces are not allowed in these fields,
+RFC1700).
+
+7/12/95 (bug fix) The rpc command did not close all file handles when
+clients were destroyed.
+
+25/11/95 (code cleanup) Code re-organization to support multiple
+operating systems. There is only one big Makefile left for UNIX boxes
+which makes changes a lot easier.
+
+21/11/95 (feature change) The SNMP agent makes the previous value of
+the instance available as %p during binding evaluations to simplify
+SNMP set processing.
+
+17/11/95 (feature change) Instances created during SNMP set processing
+are now removed automatically if we do a rollback.
+
+16/11/95 (new feature) The example scripts are now installed in the
+scotty library so they are available in a standard place.
+
+15/11/95 (new feature) Added patches send by
+<Doug.Hughes@Eng.Auburn.EDU> to query pcnfs print servers. I edited
+them to be more portable and fixed some minor bugs.
+
+15/11/95 (performance improvement) The sunrpc commands now cache
+successful host name lookups.
+
+14/11/95 (feature change) Changed the delay option to use a delay
+since the last message send using any SNMP session.
+
+14/11/95 (feature change) Changed the window flow control option to
+use a single request queue. Should work better with multiple sessions
+to a single destination.
+
+14/11/95 (performance improvement) Cleaned up these utilities. Added a
+cache to keep track of resolved names to speed up frequent lookups.
+
+14/11/95 (performance improvement) SNMPv2CLASSIC now uses struct
+sockaddr_in to keep the address and port number.
+
+13/11/95 (new feature) Added a -delay option for SNMP sessions. It
+works similar to the -delay option of the icmp command and makes sure
+that there is a minimum delay between two successive SNMP packets.
+
+12/11/95 (new feature) Some changes to allow some basic flow control.
+Every session now has a -window option which limits the number of
+asynchronous requests on the wire.
+
+11/11/95 (new feature) New win directory to contain windows specific
+stuff.  It is not usable right now - wait til 7.5 gets stable.
+
+6/11/95 (bug fix) Added stricter checks for values of type IpAddress.
+
+1/11/95 (bug fix) The calculation of the length of the unix domain
+address should now work across different platforms.
+	
+29/10/95 (new feature) Made scotty a dynamic loadable extension
+(tested on SunOS, IRIX, Linux, FreeBSD).
+
+29/10/95 (new feature) Splitted the PDU processing into two procs.
+Set processing now supports an additional `check' binding and the old
+values are automatically restored if we have to rollback.
+
+28/10/95 (new feature) The SCOTTY_NTPING environment variable can be
+used to overwrite the compiled in location of ntping.
+
+28/10/95 (new feature) Added support for multicast traps. Very
+experimental but interesting stuff.
+
+28/10/95 (new feature) Compressed MIB files are now written in an
+machine specific directory. This allows to share the scotty library
+across multiple platforms.
+
+28/10/95 (new feature) The SCOTTY_STRAPS environment variable can be
+used to overwrite the compiled in location of straps.
+
+24/10/95 (bug fix) Added code to add snmpTrapEnterprise to the SNMP
+trap varbind if we convert a SNMPv1 trap into a SNMPv2 trap.
+
+23/10/95 (new feature) Added support for the upcoming SNMPv2C
+community based SNMPv2 "solution".
+
+23/10/95 (new feature) Added a -version option to configure SNMP sessions.
+
+20/10/95 (code cleanup) Removed the check for clnt_create() which is
+not used anymore.
+
+20/10/95 (bug fix) Replaced all uses of clnt_create() with
+clnttcp_create() or clntudp_create(). This is hopefully more portable.
+
+16/10/95 (feature change) Jobs that create Tcl errors are now removed
+automatically.  This is consistent with the fileevent command and
+avoids never ending error loops.
+
+16/10/95 (bug fix) Show the -agent session correctly.
+
+16/10/95 (bug fix) `snmp# bind label event' returns the script.
+
+21/9/95 (bug fix) There is now a default definition for tkerror
+in init.tcl.
+
+20/9/95 (new feature) Scotty reads the environment variable
+SCOTTY_LIBRARY to initialize the scotty_library variable.
+
+16/9/95 (code cleanup) Removed the stcl code as this is now part of
+tcl7.5*.  Get the latest Tcl/Tk version if you want to use the
+safe Tcl extension.
+
+14/9/95 (bug fix) Use a TCP connection to query the mount daemon. This
+allows to retrieve very large results.
+
+12/9/95 (bug fix) Changing the command bound to a job is now done in
+two parts: First accept the new command and then put the command in
+place inside of the scheduler. This fixes a race condition where the
+was changed which was currently evaluated.
+
+11/9/95 (bug fix) Various fixes/cleanups. Multicasts now work at least
+on SunOS 4.1.3, FreeBSD 2.0.5 and a bit on Linux 1.3.25.
+
+10/9/95 (bug fix) Tnm_MibFindNode() returns the offset to the trailer
+of the given name or object identifier, which is usually an instance
+identifier. This gives better performance and fixes the broken `mib
+name system.sysDescr.0' result.
+
+10/9/95 (bug fix) Fixed a problem where we used a char pointer that
+was already freed.
+
+9/9/95 (new feature) Added the `mib index' command, which returns
+the index variables (or better keys) of a conceptual table.
+
+3/9/95 (bug fix) Added yywrap() for those who do not use flex to compile
+the gdmo parser.
+
+25/8/95 (bug fix) Fixed Makefile dependencies to avoid unecessary
+linker runs and cache include and library paths between configure
+runs.
+
+14/8/95 (bug fix) Various changes in the Makefile to allow compilation
+in other directories using the VPATH and SRC_DIR variables.
+
+11/8/95 (new feature) Rewrote much of the authentication checking
+code. I also added support to send SNMPv2_REPORT PDUs for the USEC
+model. The SNMPv2 models CLASSIC and USEC are now optional, so that
+you can just remove them completely if you don't need them.
+
+9/8/95 (bug fix) Every attempt to configure a session handle will
+first wait until all pending requests have been handled. Otherwise, we
+could get into problems as we need to patch authentication bytes into
+packet before retransmission.
+
+----------------- Released 2.0.0, 6/8/95 -----------------------
+
+6/8/95 (code cleanup) Removed the --with-tcl*, --with-tk*
+options. Instead, we query for the right path interactively.
+
+6/8/95 (performance improvement) Added some static buffers to avoid
+malloc() calls while parsing / formatting OCTET STRINGs during PDU
+processing.
+
+6/8/95 (performance improvement) Some changes to reduce the number of
+malloc() calls for asynchronous requests. Merged the SNMP_Timeout
+structure with the SNMP_Request structure.
+
+5/8/95 (new feature) Various changes to support the new USEC SNMPv2
+authentication scheme. This is really cool compared to the P/P/C model.
+
+3/8/95 (performance improvement) Various changes to cleanup the
+handling of IP addresses and port numbers.
+
+2/8/95 (bug fix) Straps now reports the IP address and the port of the
+SNMP entity that send us the trap message.
+
+28/7/95 (bug fix) We are not calling Tcl_Eval() because of possible
+security holes with $ substitution and bracketed command evaluation.
+
+27/7/95 (bug fix) Fixed handling of instances that are deleted during
+binding evaluation. Scotty returns a generic error code in this case.
+
+27/7/95 (performance improvement) Some significant speed up if you
+find nodes by name which are at the end of the MIB tree by using the
+hash table.
+
+27/7/95 (bug fix) Fixed a silly byte-order bug by adding a htons for
+our Intel friends.
+
+26/7/95 (feature change) Changed the some commands to better support
+safe Tcl. All agent related commands are now bound to a session
+handle. There is now only one bind command for all kind of bindings.
+Bindings not associated with a particular instance require to use an
+empty label "".
+
+24/7/95 (feature change) The script argument for the session bind
+command is now optional. We return the current script if the argument
+is missing.
+
+24/7/95 (new feature) Added the ability to create an agent using a
+safe Tcl interpreter (based on stcl-0.1).
+
+24/7/95 (bug fix) Scotty did not stop to process options once there
+was a string that definitely was not an option.
+
+24/7/95 (new feature) Added the safe tcl extension (stcl-0.1) to the
+scotty sources until they are part of ordinary Tcl. See the file
+stcl-0.1/stcl.README for more details.
+
+21/7/95 (new feature) Added the snmp alias command and the -alias
+configure option.
+
+17/7/95 (new feature) Created a library directory which will contain a
+library of useful scotty procedures that can be used in various
+applications.
+
+23/6/95 (feature change) Update msqltcl to Hakan Soderstrom's 1.50
+version.
+
+17/6/95 (feature change) Major rewrite of the job command. We now use
+an object-oriented syntax. Added a wait option.
+*** POTENTIAL INCOMPATIBILITY ***
+
+14/6/95 (new feature) Added some code to extract the packets per
+protocol and the packet size distribution reported by the etherd.
+
+20/5/95 (bug fix) Changed the semantics of retries to actually mean
+retries and not tries.
+
+17/5/95 (bug fix) Some changes to handle Integer32 values.
+
+17/5/95 (bug fix) Added an error return if called without any
+arguments.
+
+15/5/95 (bug fix) Run CPP before we grep for struct rpcent in the
+configure file.
+
+14/5/95 (feature change) We do not accept multiple arguments for the
+icmp command anymore.
+*** POTENTIAL INCOMPATIBILITY ***
+
+14/5/95 (performance improvement) New and more efficient function to
+read reply from ntping.
+
+12/5/95 (feature change) The http get command now writes into a file
+instead of a Tcl variable thus allowing binary data transfer.
+*** POTENTIAL INCOMPATIBILITY ***
+
+12/5/95 (new feature) The snmp wait command now accepts a request
+identifier as an argument to wait for.
+
+12/5/95 (new feature) Renamed the trapsink option to `bind trap' and
+added a `bind inform' option.
+
+9/5/95 (bug fix) The auto_path variable was not initialized correctly
+as TKINED_PATH includes a colon separated list of directories.
+
+8/5/95 (bug fix) The check for integer overflow was broken as large
+unsigned integers are encoded in 5 bytes, where the first byte is 0.
+
+7/5/95 (bug fix) Michael Kernchen fixed a few minor gdmo related
+bugs. References to labels with incomplete definitions resulted in
+some error messages.
+
+4/5/95 (bug fix) Fixed two places where a ckfree(NULL) could happen if
+a broken SNMP packet was received.
+
+3/5/95 (bug fix) Once again fixed an off by one bug. Now we pass most
+of the SNMP test suite written by Marshall Rose.
+
+2/5/95 (bug fix) Added a missing check for unknown SNMP message versions.
+
+2/5/95 (bug fix) ASN1_INTEGER, ASN1_Counter, ASN1_Gauge and
+ASN1_UInteger32 were all encoded as an ASN1_INTEGER.
+
+2/5/95 (bug fix) Fixed the conversion of SNMPv2 error codes into
+SNMPv1 error codes.
+
+28/4/95 (performance improvement) We now return a pointer to some
+static buffer space to avoid some malloc/free polkas.
+
+28/4/95 (new feature) Encode/Decode Counter64 values as Integer values
+if we are on a 64 bit machine and as doubles if we are on a 32 bit
+machine. Two new functions added to encode counter values to/from
+doubles on machines that use based on 32 bit integers.
+
+26/4/95 (bug fix) Check for rpc/netdb.h added. Hans Bayle
+(hansb@aie.nl) reported that SCO uses this header for rpcent stuff.
+
+26/4/95 (bug fix) Include rpc/netdb.h if HAVE_RPC_NETDB_H is true in
+tnmNetdb.c and tnmSunRpc.c.
+
+26/4/95 (new feature) Functions to format and scan TimeTicks values.
+
+26/4/95 (bug fix) Fixed handling of unsigned TimeTick values.
+
+26/4/95 (bug fix) Fixed the check for noSuchName errors as pointed out
+by Louis A. Mamakos (louie@TransSys.COM).
+
+24/4/95 (bug fix) Correct handling of large unsigned subidentifer.
+
+21/4/95 (bug fix) Added a fix by Peter Reilly <peter@euristix.ie>
+where the code did not update the packet pointer after encoding an
+ipaddress.
+
+16/4/95 (new feature) Added new functions to split and merge Tcl
+varbind lists. They will sometimes be used internally to make multiple
+loops through a varbind less expensive.
+
+14/4/95 (bug fix) Added a check for potential packet overflow (tooBig).
+
+13/4/95 (bug fix) We now terminate the walk if we get an endOfMibView
+exception.
+
+13/4/95 (new feature) Created a cgi directory which contains our WWW
+scripts.
+
+6/4/95 (new feature) Added support for http binding. Needs more work.
+
+29/3/95 (new feature) A new function to retrieve the MIB file name.
+
+28/3/95 (bug fix) Changes to support tagged NULL values (used for
+exceptions).
+
+28/3/95 (bug fix) Fixed en-/decoding of object identifier with length
+1 or 2.
+
+28/3/95 (feature change) Convert Tcl error messages from evaluated
+bindings into snmp error types.
+
+27/3/95 (bug fix) Some hacks (calling it fixes would be a lie) to the
+parser to recognize SEQENCE and SEQUENCE OF syntax and to allow type
+definitions before a module header. Thanks Erik.
+
+27/3/95 (new feature) A list of SNMP_Binding structures is now used to
+hold bindings as we need a bigger set of events.
+
+26/3/95 (new feature) Added code to save the offset to the begin of the
+instance identifier.
+
+26/3/95 (new feature) Added three more arguments and some code to
+allow %l, %i and %v escapes for instance bindings.
+
+26/3/95 (bug fix) Multiple calls to create an agent on a snmp handle
+will now close the existing socket and reopen a new one.
+
+25/3/95 (bug fix) We now use Tcl_CreatePipeline() to fork the straps
+daemon.
+
+24/3/95 (bug fix) Reinitialize the PDU type to getbulk-request.
+Otherwise we send get-next requests with an error index != 0.
+
+24/3/95 (new feature) Two new functions by Erik to handle Integer
+textual conventions as defined in the latest SNMPv2 draft.
+
+23/3/95 (bug fix) The protocol of the sunrpc probe command was parsed
+from a wrong argv element (Thanks to Doug.Huges@End.Auburn.EDU).
+
+22/3/95 (bug fix) The inform option now requires an trapOid argument
+as defined in the new SNMPv2 draft.
+
+21/3/95 (feature change) Allow the subtyping of known Textual
+Conventions.
+
+19/3/95 (code cleanup) Moved msqltcl.c into the bones directory.
+
+10/3/95 (bug fix) Decoding zero length strings returned a NULL pointer
+instead of an empty string.
+
+10/3/95 (code cleanup) Moved most of the sources into the tcpip
+subdirectory.
+
+10/3/95 (code cleanup) Replaced all xmalloc() calls etc. with
+ckalloc() etc. which allows to use the Tcl memory debugger.
+
+8/3/95 (feature change) The loop variable now contains the label or
+the object identifier of the node depending on the argument which
+defines the starting node.
+
+8/3/95 (bug fix) The icmp command now accepts 0 retries as a default
+value.
+
+7/3/95 (new feature) Added a switch --with-gdmo to the configure
+script to enable the gdmo parser.  Moved the mib directory back to the
+snmp directory and created a mib repository in the gdmo directory.
+
+7/3/95 (new feature) Added the first version of the GDMO Tcl extension
+and started to clean it up. Removed the gdmo stat option as it can be
+done easily in Tcl.
+
+7/3/95 (new feature) New function to implement a walk along the leaf
+nodes of the MIB tree. Useful to count MIB objects or to build MIB browsers.
+
+7/3/95 (performance improvement) Various rewrites to handle textual
+conventions. We now use a Tcl hash table to lookup textual conventions
+which makes a difference if you use large MIB definitions.
+
+7/3/95 (bug fix) Fixed a bug which affected oids of length 1.
+
+23/2/95 (feature change) Removed the port argument from the snmp agent
+command. Use the -port configure option instead.
+*** POTENTIAL INCOMPATIBILITY ***
+
+23/2/95 (feature change) Bindings are now possible on any MIB object.
+They are processed from the instance to the root of the MIB tree.
+A break in a binding cancels further bindings.
+
+21/2/95 (new feature) New command to query for textual conventions.
+
+21/2/95 (bug fix) Fixed a bug reported by andy@is.net (Andy
+Shelley). An uninitialized last scheduling time was substracted if job
+list was called before the first job had a chance to run.
+
+21/2/95 (new feature) Added a cmip abort and a cmip wait command.
+
+20/2/95 (new feature) New wait option to wait for async. requests.
+
+20/2/95 (new feature) Implemented a cget option to query session
+options.
+
+19/2/95 (bug fix) Use SNMP_EvalCallback() to evaluate bindings which
+allows to use % escapes. Honours the break return. Added a call to
+Tk_BackgroundError() if an error occurs.
+
+19/2/95 (code cleanup) Created a doc directory to hold all manual
+pages etc.
+
+17/2/95 (bug fix) Do not try to encode something if the packet is
+already a NULL pointer because of an earlier error.
+
+17/2/95 (new feature) Added a new snmp command 'snmp bind' to define
+bindings on SNMP instances.
+
+14/2/95 (code cleanup) Centralized some includes to make ports easier.
+
+11/2/95 (bug fix) noSuchName errors mark the end of a MIB view and
+hence they are no real errors. So we ignore them during a walk.
+
+9/2/95 (new feature) Added a configure option for msqltcl. Cool stuff.
+
+7/2/95 (feature change) Search for the mib file in $scotty_lib/site
+and in $scotty_lib/mibs.
+
+6/2/95 (bug fix) Child nodes are now inserted in lexicographic order
+and already existing nodes are skipped when building the MIB tree.
+
+29/1/95 (new feature) Added new tkined object types HTML and DATA.
+
+24/1/95 (bug fix) Some additional code to handle MIB files that define
+more than one subtree. The solution is somewhat ugly, but at least it
+does what it should.
+
+23/1/95 (bug fix) More checks to get -lsocket, -lnsl, -lrpcsvc stuff
+right.  (Thanks to Ross Wakelin <r.wakelin@march.co.uk>). 
+
+22/1/95 (new feature) New function to query the textual convention
+that applies to a given object.
+
+20/1/95 (bug fix) Fixed the encoding of MD5 authenticated messages.
+
+19/1/95 (bug fix) Removed some hard wired quotings in tnmDns.c that
+are now done automatically by appending elements.
+
+14/1/95 (feature removed) Removed the syslogd and netguard
+sources. They are now available as netguard-0.1.tar.gz and
+syslogd-0.1.tar.gz from ftp.ibr.cs.tu-bs.de/pub/local/tkined/contrib.
+
+14/1/95 (bug fix) Stricter checks in den dns command for invalid
+arguments.
+*** POTENTIAL INCOMPATIBILITY ***
+
+14/1/95 (new feature) Added the patch by Sam Shen (sls@mh1.lbl.gov)
+which allows multicasts (tested on Solaris-2.3 and Linux-1.1.81).
+
+13/1/95 (new feature) Replaced the nslook command by a more general
+netdb command.
+
+13/1/95 (code cleanup) Changed the autoconfiguration to use config.h
+files.
+
+12/1/95 (feature change) Removed the error callback as it is a feature
+that is not really needed (simply check the error in the 	
+callback).
+*** POTENTIAL INCOMPATIBILITY ***
+
+9/1/95 (feature change) Rewrote the icmp argument parsing code so that
+you always must define the operation separated from the options.
+*** POTENTIAL INCOMPATIBILITY ***
+
+9/1/95 (feature change) Cleanup of the command parsing code of the dns
+and the ntp command. The option (-timeout, -retries, -server) keep
+their state now.
+*** POTENTIAL INCOMPATIBILITY ***
+
+8/1/95 (new feature) The install target now installs scotty.h and
+libscotty.a. Started to renamed C functions to follow the Tcl coding
+style.
+
+8/1/95 (code cleanup) Major scotty.c cleanup. I replaced the command
+processing with the code from tkMain.c. This makes the behaviour
+identical to tclsh and wish.
+
+6/1/95 (bug fix) Skip object identifier definition between the label
+and the DEFINITIONS keyword in the MIB parser.
+
+5/1/95 (bug fix) Fixed the MIB parser to skip all comments in the scanner.
+
+3/1/95 (feature change) Replaced the scottyerror error handling proc
+with tkerror as we now use the tk event loop.
+
+3/1/95 (feature change) A received ined command that is not processed
+imediately. We schedule a time event to flush the queue.
+ 
+29/12/94 (feature change) Upgraded to tk4.0. Replaced the
+addinput/removeinput commad with the new tk fileevent command and
+removed the select command since we now use the tk event loop. The
+sleep command is obsolete now since after can do the same thing. A
+sleep is defined in init.tcl for compatibility.
+*** POTENTIAL INCOMPATIBILITY ***
+
+21/12/94 (new feature) Added some code to accept hexadecimal
+components in an object identifier.
+
+----------------- Released 1.2.0, 19/12/94 -----------------------
+
+19/12/94 Use the global variable scotty_mibs to define the default set
+of SNMP mibs. This allows modifications using site/init.tcl.
+
+16/12/94 (bug fix) Added a missing call to shutdown().
+
+7/12/94 (feature change) Moved the ined initialization into inedCmd()
+so that it is possible to write scwish scripts for tkined by calling
+something like `catch {ined}' at the top of the script.
+
+7/12/94 (feature removed) Removed the -v option which seems to be
+unused.
+
+4/12/94 (code cleanup) Replaced all addinput/removeinput calls by an
+appropriate call to tcl C interface of the event handler.
+
+3/12/94 (new feature) Create a libscotty.a library which can be linked
+to different tcl interpreters.
+
+3/12/94 (new feature) Source $scotty_lib/site/init.tcl for site
+specific initializations. Added a check and a warning message if the
+after, addinput or removeinput command is missing.
+
+3/12/94 (new feature) New file init.c just containing Scotty_Init() to
+support hyper extended wishes. Added a target to build scwish binary.
+
+3/12/94 (bug fix) Fixed and added a couple of function prototypes.
+
+30/11/94 (bug fix) Only skip white spaces at the beginning of a line
+when retrieving a description from a MIB file.
+
+29/11/94 (bug fix) Fixed an off-by-one bug for length > 127.
+
+28/11/94 (bug fix) trapOid sometimes got freed from not malloced memory.
+
+24/11/94 (bug fix) Moved the mibs directory below the toplevel
+directory because ULTRIX install is brain damaged (sorry).
+
+23/11/94 (bug fix) Nodes with a subid smaller than all already
+existing nodes in a tree level were placed at the end.
+
+23/11/94 (bug fix) Fixed the parsing of authentication keys.
+
+22/11/94 (bug fix) Fixed the decoding of negative integers.
+
+20/11/94 (performance improvement) Merged the parser node structure
+with the tree structure to avoid unnecessary duplications.
+
+20/11/94 (code cleanup) Updated the configure stuff to autoconf-2.1.
+
+18/11/94 (feature removed) Removed the --with-snmp option as the snmp
+stack should run on almost any UNIX machine.
+
+18/11/94 (performance improvement) Rewrote the query interface to the
+MIB tree. Its much faster now, especially on lookups to instance
+identifiers.
+
+17/11/94 (new feature) Added some counters here and there to get some
+stats for the snmp statistics groups.
+
+17/11/94 (new feature) Eriks extensions to parse.c and query.c are
+here to handle textual conventions. Cool stuff. Thanks alot.
+
+17/11/94 (new feature) Calling scottyerror in ined.c when a command
+received from the tkined editor fails.
+
+16/11/94 (performance improvement) Rewrote walk() using calls to
+SNMP_Encode instead of Tcl_Eval() which makes it a little bit faster.
+
+15/11/94 (performance improvement) Changed the interface to
+SNMP_Encode() so that we can call it with an already assembled
+pdu. Allows me to move the argument parsing code to tcl_snmp.c and to
+call SNMP_Encode() directly from agent.c.
+
+15/11/94 (new feature) Erik has hacked parse.c to recognize
+enumerations and textual conventions. Both are written to *idx files
+and the mib format and mib scan commands can convert enumeration to
+integers and back.
+
+13/11/94 (new feature) Implemented an agent session command to create
+objects for an mid-level agent. It currently implements the system
+group.
+
+13/11/94 (feature change) Automatic loading of all mib definitions is
+only done when the first mib command is not a load command.
+
+11/11/94 (bug fix) Cleanup the configuration code in tcl_snmp.c and
+added Eriks hex_to_bin() and bin_to_hex(). Thanks.
+
+11/11/94 (performance improvement) Extended the session structure to
+keep an agent socket and changed SNMP_AgentRecv() to save the address
+from the sending entity in the session structure. V1 and V2 now use
+the same session structure.
+
+10/11/94 (performance improvement) Directly encode packets without
+setting up message structures first.
+
+9/11/94 (feature removed) Removed the -nomib option as it really does
+not make any sense to me.
+
+8/11/94 (bug fix) Initialize tcl_interactive before calling
+Tcl_AppInit().  Added some minor defines to better integrate with
+tclX.
+
+5/11/94 (performance improvement) Removed some mallocs by removing
+pointers to structures. The structures are now an element of the
+enclosing structure.
+
+2/11/94 (new feature) Implemented the snmp trapsink command which
+allows to install a trap handler, which gets called whenever a trap
+message is received.
+
+2/11/94 (feature change) Renamed snmp create session to snmp
+session. This is hopefully the final name... The old snmp session
+command is now names snmp info.
+*** POTENTIAL INCOMPATIBILITY ***
+
+2/11/94 (performance improvement) Moved the handling of outstanding
+request lists to the misc module. I also rewrote stuff to create an
+entry in a requests list only if it is really an async request.
+
+2/11/94 (performance improvement) Rewrote the varbind decode/encode
+functions to directly convert from/to a TCL DString.
+
+26/10/94 (new feature) Added some magic to init.tcl to load mib
+definitions only when the mib command is actually used.
+
+31/10/94 (performance improvement) Changed the request structure to
+contain the encoded packet instead of the message structure. This
+makes retransmits faster.
+
+28/10/94 (bug fix) Fixed a bug in the snmp walk code - one of those
+nasty things that clobber the interp handle. I now use eval to do
+things, even if it is slower it is much safer.
+
+23/10/94 (performance improvement) Implemented warp 4 in the walk
+command.
+
+23/10/94 (code cleanup)Moved the xmalloc() functions to xmalloc.c.
+
+22/10/94 (performance improvement) Fixed the handling of the callback
+tcl strings. We now avoid some strdup()s.
+
+21/10/94 (new feature) Added a synchronous walk subcommand to a
+session handle. This is just a loop around getbulk and currently uses
+max-repetitions == 1, which should be optimized.
+
+21/10/94 (new feature) Getbulk requests on SNMPv1 handles are now
+turned into getnext requests.
+
+21/10/94 (bug fix) Fixed a bug in event.c. Tk_DeleteFileHandler() did
+not close the FILE handle.
+
+16/10/94 (feature change) Renamed snmp create to snmp create session
+to allow more objects to be created (like trap handler or MIB
+instances).
+*** POTENTIAL INCOMPATIBILITY ***
+
+16/10/94 (bug fix) Fixed a minor bug that affected async requests that
+timed out. Now we invoke the error callback if we did not get an
+answer after all retries.
+
+15/10/94 (new feature) Added a response subcommand to the session
+commands. This is needed is some form to support the InformRequest
+messages send by cooperating managers.
+
+10/10/94 (new feature) The mib parser now saves the access status. You
+can query it using the `mib access' command.
+
+30/9/94 (new feature) The mib parser now accepts trap type macros as
+defined in RFC 1215.
+
+30/9/94 (new feature) Added the straps trap forwarding server.
+
+30/9/94 (new feature) Tilde substitution in the "mib load" command.
+
+13/9/94 (bug fix) The ASN.1 module now accepts zero length integers.
+I don't know if this is legal, but cisco's are sending them anyway.
+
+13/9/94 (feature change) Made all MIB lookups fuzzy. One has to use
+the -exact switch to get the previous behavior.
+
+12/9/94 (feature change) All snmp operations return always the object
+identifier in the varbind list. This makes output less readable, but
+makes programming much easier since you always know what you get. And
+it is easy to convert the oid back to a name using the mib command.
+
+9/9/94 (feature change) Removed the function handle_exception. This is
+now done using the callback escapes. In sync mode, we return the error
+name, the error index and the var bind list.
+
+9/9/94 (bug fix) Replaced all occurrences of long with int. This makes
+this code running on a 64 bit DEC ALPHA machine.
+
+9/9/94 (bug fix) Rewrote execute_callback (fixes memory leak and
+speeds it up) and removed error_callback. Use execute_callback
+instead.
+
+9/9/94 (feature removed) Removed the obscure null-instance and instance
+feature. Its easy to do it in TCL, so we don't clobber our SNMP code
+with it.
+
+7/9/94 (bug fix) Removed the scanf call from mib_parse.c to speed up
+loading times. Lots of minor memory leaks fixed. We also do not stop
+anymore just because we received an unexpected packet.  Automatically
+switch between synchronous and async. mode.
+
+6/9/94 (feature change) Changed the mib query module to return names
+or oids depending on the argument type. Made some smaller rewrites to
+make things slightly faster.
+
+6/9/94 (bug fix) Removed the memcpy call in ASN.1 which works not
+reliable on all systems if dealing with overlapping areas.
+
+6/9/94 (bug fix) Fixed the handling of ANSI prototypes using the tcl
+_ANIS_ARGS_ macro.
+
+6/9/94 (new feature) Added a -port option to set the destination port
+when using SNMPv1.
+
+5/9/94 (new feature) Added some code to mib_parse.c to allow
+incremental loading of MIB descriptions.
+
+3/9/94 (feature removed) Removed 'snmp clone'. I prefer a better
+output format of '<session> configure' so that I can simply write:
+'eval snmp create [join [$s configure]]'
+
+3/9/94 (new feature) Added an initialization file init.tcl that is
+expected to live in /usr/local/lib/scotty. It will be used to
+customize the SNMPv2 software.
+
+3/9/94 (bug fix) Replaced all bzero() and bcopy() functions with the
+ANSI memset() and memcpy() equivalents.
+
+2/9/94 (new feature) Changed Mib_Init() to accept a file name. A
+pointer to the file name is stored in struct tree and later reused to
+read the description of an object.
+
+29/8/94 (bug fix) Fixed a bug in event.c handler which did not allow
+to redefine an addinput handler.
+
+28/8/94 (bug fix) Fixed a bug in ined.c where I must have overlooked
+to rename a TOOL to a MENU object.
+
+----------------- Released 1.0, 26/8/94 -----------------------
+
+26/8/94 (bug fix) Some last minute updates in ntp.c to retrieve the
+offset to the ntp peer by Erik.
+
+14/8/94 (new feature) A new ntp command to query some network time
+protocol stats. Thanks Erik.
+
+12/8/94 (feature change) Updated ined.c to support the new strip- and
+barchart objects.
+
+8/8/94 (bug fix) Fixed a bug in event.c that caused core dumps on some
+machines (AIX, LINUX) when an event handler installed with
+Tk_CreateFileHandler() was invoked.
+
+2/8/94 (bug fix) Added code to close unused file descriptors after
+forking a new ntping process. Added a socketpair(2) replacement using
+pipe(2) for SCO based on a patch by Juergen Luksch (luksch@telenet.de).
+
+2/8/94 (bug fix) Added some new stuff to configure.in needed by SCO
+and some other ununsual OSs.
+
+2/8/94 (bug fix) Fixed a bug in scotty.c to remove the eventhandler
+for stdin when EOF is reached.
+
+26/7/94 (new feature) Changed the configure script to search for
+libgdbm.a since gdbm files have less holes than dbm files which is
+nice if you are using rdist.
+
+26/7/95 (code cleanup) Renamed gdmo anmd cmip files to follow the Tcl
+conventions and to avoid problems with name clashes.
+
+----------------- Released 0.9i, 26/8/94 -----------------------
+
+19/7/94 (code cleanup) Renamed the directory with the MIB files from
+scotty-mib to scotty. Please remove your old scotty-mib directory if
+you don't use older versions anymore.
+
+19/7/94 (new feature) Added an 'rcp info' command that is similar to
+the 'tcp info' and 'udp info' commands.
+
+17/7/94 (code cleanup) Rewrote the icmp command and the RPC mechanism
+to use read() and write() system calls instead of FILE operations.
+This makes scotty run correctly on HPUX machines.
+
+14/7/94 (bug fix) Made stdin unbuffered when running in ined
+mode. This makes the communication script running synchronous.
+
+7/6/94 (bug fix) Fixed a bug in the event / job handler which delayed
+job starts. This lead to a race condition in event.c.
+
+----------------- Released 0.9e, 2/6/94 -----------------------
+
+30/5/94 (feature change) Added the well known tk C interface to the
+event handler.  This is a hack that allows us to program async SNMP
+requests and will be changed when tk 4.0 comes out with an event
+mechanism that can be used without X11.
+
+16/5/94 (feature change) Changed 'sunrpc ether open sulu' to 'sunrpc
+ether sulu open'.  Corrected some wrong sunrpc error messages.
+*** POTENTIAL INCOMPATIBILITY ***
+
+----------------- Released 0.9d, 15/5/94 -----------------------
+
+15/5/94 (new feature) Added the extended syslogd sources to this
+package.
+
+15/5/94 (new feature) Split the tcp connect command in a tcp connect
+and a tcp listen command.
+*** POTENTIAL INCOMPATIBILITY ***
+
+15/5/94 (new feature) Started a test suite in the tests
+directory. Some of the tests assume a normal tcp/ip installation,
+mainly a correct definition of localhost, udp and tcp echo
+capabilities, a running portmapper etc. Should work on most systems.
+
+15/5/94 (feature change) Added the udp command and the tcp prefix to
+the tcp commands.  This enhances readability and makes udp and tcp
+commands look similar.
+*** POTENTIAL INCOMPATIBILITY ***
+
+26/4/94 (new feature) Added the getdate command and an argument to
+getclock.
+
+20/4/94 (feature change) Rewrote the job scheduler in C. See the job
+command for more details. This replaces the job scheduler which was
+part of ined.tcl. The interface is now cleaner and documented.
+*** POTENTIAL INCOMPATIBILITY ***
+
+10/4/94 (new feature) Integrated the access commands ined_id,
+ined_name etc.  into the ined command. Now its legal do use either
+`ined name $comp' on an external object representation or `ined name
+$id' using an object id.
+*** POTENTIAL INCOMPATIBILITY ***
+
+8/4/94 (new feature) Added round trip time to the sunrpc probe command
+and cleaned up the error messages a little bit.
+
+8/4/94 (code cleanup) Rewrote the ined command in C for speed
+improvements.
+
+----------------- Released 0.9, 9/3/94 -----------------------
+
+26/2/94 Moved ined.tcl from the tkined source to the scotty
+sources. The ined.tcl module now uses the event loop mechanism of
+scotty. This is needed to use the rpc mechanism in a tkined script.
+
+4/2/94 (new feature) A background error that occurs while evaluating
+event callbacks is now handled by the user defined proc scottyerror,
+which takes the error message as its argument.
+
+28/1/94 (bug fix) Added a check for the resolver library to
+configure.in.
+
+24/1/94 (code cleanup) Do not remove the output from rpcgen when
+making a distribution. This makes the compat directory obsolete.
+
+24/1/94 (bug fix) Included a Erik's patch for dns.c to make it
+compilable on AIX machines. Also added test for sys/select.h to
+configure.
+
+22/1/94 (new feature) Added the rpc command that lets us build
+communicating agents easily.
+
+22/1/94 (feature removed) Removed the support for GNU's readline
+library because we get trouble with the eventloop mechanism. Use ile
+instead.
+
+22/1/94 (feature change) Renamed the old rpc command to sunrpc to
+avoid confusion about which rpc service will be used.
+
+19/1/94 (new feature) Added an event-loop mechanism in event.c that
+allows us to run tcl scripts as server that receive commands, perform
+some action and return the results. Changed scotty so that it runs in
+this eventloop per default.
+
+14/1/94 (new feature) Added Poul-Henning Kamp's SNMP
+implementation. This will be removed when our own SNMP implementation
+is done. This will break things but lets us play with SNMP right now.
+
+----------------- Released 0.8, 9/1/94 -----------------------
+
+9/1/94 Option parsing is now done without getopt. This allows me to
+forward unrecognized options to the interpreter in the global argc and
+args variables.
+
+31/12/93 Scotty now uses GNU's autoconf program to create a configure
+command.
+
+21/12/93 (new feature) Added the syslog command.
+
+----------------- Released 0.7, 8/10/93 -----------------------
+
+27/9/93 (new feature) Added the select command from extended tcl
+distribution (tclXselect.c) to implement a small job scheduler.
+
+6/9/93 (feature change) Rewrote tcp.c (based on tclRawTCP) which uses
+the new file handling interface of tcl-7.0.
+
+4/9/93 (new feature) Tkined specific initialization option -i added.
+Changed the headers that Scotty compiles with non ANSI C compilers.
+
+----------------- Released 0.6, 31/8/93 -----------------------
+
+21/7/93 (new feature) Added the dns command written by Erik
+Schoenfelder.
+
+----------------- Released 0.5, 19/7/93 -----------------------

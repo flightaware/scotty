@@ -1,0 +1,87 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+namespace import Tnm::udp Tnm::icmp
+
+#
+# Send a udp datagram to the echo port of the destination host.
+# and wait for an answer. Get the time using tcl's time command.
+# There is some delay caused by the tcl commands in the measurement
+# loop. So it may report wrong result on fast (local area) networks.
+#
+
+proc udp_ping {host} {
+
+    global timeout reply
+
+    set file [udp open]
+    set reply ""
+    udp bind $file readable "set reply \[udp receive $file\]"
+    after [expr $timeout * 1000] "set reply {}"
+
+    set result [time {
+        if {! [catch {udp send $file $host 7 "hi"}]} {
+	    vwait reply
+	}
+    }]
+    after cancel "set reply {}"
+
+    set result [expr {$reply == "" ? -1 : [lindex $result 0]/1000}]
+
+    udp close $file
+
+    return [list $host $result]
+}
+
+proc usage {} {
+    puts stderr {usage: uiping [-t time] hostnames}
+    exit
+}
+
+##
+## Parse the command line options.
+##
+
+set timeout 5
+catch {icmp -timeout $timeout}
+
+if {$argc==0} usage
+
+while {$argv!=""} {
+    set argc [llength $argv]
+    case [lindex $argv 0] in {
+        {-t} {
+            if {$argc == 1} usage
+	    set timeout [lindex $argv 1]
+            if {[catch {icmp -timeout [lindex $argv 1]}]} usage
+            set argv [lrange $argv 2 end]
+        }
+        {default} break
+    }
+}
+
+if {[llength $argv] == 0} usage
+
+while {1} {
+    foreach arg $argv {
+        set urtt [lindex [udp_ping $arg] 1]
+	puts -nonewline [format "%-16s " $arg]
+	if {$urtt > 0} {
+	    puts -nonewline [format "%5d ms " $urtt]
+	} else {
+	    puts -nonewline [format "  *** ms "]
+	}
+	set irtt [lindex [icmp echo $arg] 1]
+	if {$irtt > 0} {
+            puts [format "%5d ms" $irtt]
+        } else {
+            puts "  *** ms"
+        }
+    }
+    after 1000
+}
+
+vwait forever

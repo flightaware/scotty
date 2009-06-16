@@ -1,0 +1,60 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+#
+# rstat --
+#
+#	This example shows how to use maps and monitoring procedures
+#	by setting up a map event binding.
+#
+# Copyright (c) 1995-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: rstat,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+
+package require Tnm 3.0
+package require TnmMonitor $tnm(version)
+
+namespace import Tnm::*
+
+# PrintResult --
+#
+#	This procedure is called whenever we receive new rstat data.
+#	The data is formatted and printed on stdout.
+#
+# Arguments:
+#	values	The keyed list of rstat data
+# Results:
+#       -	Results are written to stdout.
+
+proc PrintResult {rstatList} {
+    array set r $rstatList
+    puts [format "%2.2f %2.2f %2.2f  %3.0f %3.0f %3.0f %5.0f %5.0f %3.0f%3.0f%3.0f%3.0f %4.0f%4.0f%4.0f%4.0f %4.0f %4.0f" \
+	    $r(load1) $r(load5) $r(load15) $r(user) $r(system) $r(idle) \
+	    $r(swtch) $r(intr) \
+	    $r(disk0) $r(disk1) $r(disk2) $r(disk3) \
+	    $r(pgpgin) $r(pgpgout) $r(pswpin) $r(pswpout) \
+	    $r(ipackets) $r(opackets) \
+	 ]
+    return
+}
+
+# Check the commandline and start reporting.
+
+if {[llength $argv] != 2} { 
+    puts stderr "usage: rstat hostname interval"
+    exit
+}
+
+set node [[map create] create node -name [lindex $argv 0]]
+set interval [lindex $argv 1]
+set interval [expr {$interval < 1 ? 1 : $interval}]
+puts "    load            cpu         traps        disk         paging       netstat"
+puts "                 us  sy  id    in    cs  d0 d1 d2 d3   pi  po  si  so   in  out"
+
+Tnm_MonitorRstat $node $interval
+$node bind Tnm_MonitorRstat:Value { PrintResult "%A" }
+vwait forever

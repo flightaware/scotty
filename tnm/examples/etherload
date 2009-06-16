@@ -1,0 +1,79 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+##
+## Print the ethernet load monitored by an etherd.
+##
+
+proc print_load {host name} {
+    upvar $name ether
+    set mbits   [expr {$ether(bytes)*8/1000000.0}]
+    set time_s  [expr {$ether(time)/1000.0}]
+    puts [format "%-12s %8.5f MBit/s %8.2f Packets/s %8.2f Bytes/Packet" \
+	    $host [expr {$mbits/$time_s}] [expr {$ether(packets)/$time_s}] \
+	    [expr {$ether(bytes)*1.0/$ether(packets)}] ]
+}
+
+proc print_proto {host name} {
+    upvar $name ether
+    set time $ether(time)
+    foreach proto "nd icmp udp tcp arp other" {
+	puts [format "%-12s %8s: %8.2f Packets/s" \
+		$host $proto [expr $ether($proto) / ($time / 1000.0)]]
+    }
+}
+
+proc print_sizes {host name} {
+    upvar $name ether
+    set time $ether(time)
+    foreach name [array names ether] {
+	if {[string match {[0-9]*} $name]} {
+	    lappend sizes $name
+	}
+    }
+    foreach idx [lsort -integer $sizes] { 
+	puts [format "%-12s %7d-: %8.2f Packets/s" \
+		$host $idx [expr $ether($idx) / ($time / 1000.0)]]
+    }
+}
+
+proc ether {hostnames time} {
+    set okhosts ""
+    set badhosts ""
+    foreach host $hostnames {
+	if [catch {sunrpc ether $host open} err] {
+	    lappend badhosts $host
+	} else {
+	    lappend okhosts $host
+	}		
+    }
+    if {$badhosts != ""} {
+	puts stderr "Can not connect to $badhosts."
+    }
+    set hostnames $okhosts
+    while {[llength $hostnames] > 0} {
+        after [expr $time * 1000]
+        foreach host $hostnames {
+            set load [sunrpc ether $host]
+	    foreach elem $load {
+		set name [lindex [split [lindex $elem 0] -] 0]
+		set ether($name) [lindex $elem 2]
+	    }
+            print_load  $host ether
+	    print_sizes $host ether
+	    print_proto $host ether
+	    puts ""
+	    flush stdout
+        }
+    }
+}
+
+if {$argc<2} {
+    puts stderr "usage: etherload time hostnames"
+    exit
+}
+
+ether [lrange $argv 1 [expr {$argc-1}]] [lindex $argv 0]

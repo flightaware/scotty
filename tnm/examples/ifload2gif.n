@@ -1,0 +1,20 @@
+.TH ifload2gif 1L "May 95" "Tnm Example" "Tnm Tcl Extension"
+
+.SH NAME
+ifload2gif \- convert interface load file to gif pictures
+
+.SH SYNOPSIS
+.B ifload2gif
+.I files
+
+.SH DESCRIPTION
+.B ifload2gif
+converts interface load statistics gathered by ifload(1) into 3d gif images.
+The data files must have the format created by ifload(1). The resulting
+images will be named like the data file with an additional .gif extension.
+
+.SH SEE ALSO
+scotty(1), ifload(1)
+
+.SH AUTHORS
+Juergen Schoenwaelder (schoenw@ibr.cs.tu-bs.de)

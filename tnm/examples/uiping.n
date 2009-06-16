@@ -1,0 +1,19 @@
+.TH uiping 1L "April 94" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+uiping \- test the speed of udp connections
+.SH SYNOPSIS
+.B uiping
+[
+-t
+.I time
+]
+.I hosts
+.SH DESCRIPTION
+.B uiping
+(udp/icmp ping) sends udp datagrams to the echo port and icmp echo
+requests to each host given in \fIhosts\fR and records the round trip 
+times.
+.SH SEE ALSO
+scotty(1)
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de (Juergen Schoenwaelder)

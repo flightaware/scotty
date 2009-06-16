@@ -1,0 +1,185 @@
+# Commands covered:  udp				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-2003 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: udp.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::udp
+}
+
+foreach u [udp find] { $u destroy }
+
+test udp-1.1 {udp command} {
+    list [catch {udp} msg] $msg
+} {1 {wrong # args: should be "udp option ?arg arg ...?"}}
+test udp-1.2 {udp command} {
+    list [catch {udp foo} msg] $msg
+} {1 {bad option "foo": must be create or find}}
+
+foreach u [udp find] { $u destroy }
+
+test udp-2.1 {udp find} {
+    list [catch {udp find nase} msg] $msg
+} {1 {wrong # args: should be "udp find ?option value? ?option value? ..."}}
+test udp-2.2 {udp find} {
+    list [catch {udp find foo bar} msg] $msg
+} {1 {bad option "foo": must be -tags}}
+test udp-2.3 {udp find} {
+    udp find
+} {}
+test udp-2.4 {udp find} {
+    set result {}
+    rename [udp create -tags foo] _foo_
+    rename [udp create -tags {foo bar}] _foo_bar_
+    rename [udp create -tags bar] _bar_
+    lappend result [lsort [udp find -tags ?ar]]
+    lappend result [lsort [udp find -tags foo]]
+    lappend result [lsort [udp find -tags {?ar *oo}]]
+    foreach u [udp find] { $u destroy }
+    set result
+} {{_bar_ _foo_bar_} {_foo_ _foo_bar_} _foo_bar_}
+
+foreach u [udp find] { $u destroy }
+
+test udp-3.1 {udp create} {
+    set u [udp create]
+    string compare $u [udp find]
+} {0}
+test udp-3.2 {udp create} {
+    foreach u [udp find] { $u destroy }
+    rename [udp create] foo
+    string compare foo [udp find]
+} {0}
+test udp-3.3 {udp create} {
+    [udp create] configure
+} {-address 0.0.0.0 -port 0 -myaddress 0.0.0.0 -myport 0 -read {} -write {} -tags {}}
+test udp-3.4 {udp create} {
+    [udp create -myaddress 127.1.2.3 -myport 1234] configure
+} {-address 0.0.0.0 -port 0 -myaddress 127.1.2.3 -myport 1234 -read {} -write {} -tags {}}
+test udp-3.5 {udp create} {
+    [udp create -myaddress 127.1.2.3 -myport 1235] cget -myport
+} {1235}
+test udp-3.6 {udp create} {
+    [udp create -myaddress 127.1.2.3 -myport 1236] cget -myaddress
+} {127.1.2.3}
+
+foreach u [udp find] { $u destroy }
+
+test udp-4.1 {udp destroy} {
+    [udp create] destroy
+    udp find
+} {}
+test udp-4.2 {udp destroy} {
+    catch {[udp create] destroy foo}
+} {1}
+
+foreach u [udp find] { $u destroy }
+
+test udp-5.1 {udp connect} {
+    set u [udp create]
+    $u connect 127.0.0.1 7	;# echo port
+    $u configure
+} {-address 127.0.0.1 -port 7 -myaddress 0.0.0.0 -myport 0 -read {} -write {} -tags {}}
+
+foreach u [udp find] { $u destroy }
+
+test udp-6.1 {udp send} {
+    catch {rename u {}}
+    rename [udp create] u
+    u send 127.0.0.1 7 "nase"
+    u destroy
+} {}
+test udp-6.2 {udp send} {
+    catch {rename u {}}
+    rename [udp create] u
+    list [catch {u send "nase"} msg] $msg
+} {1 {wrong # args: should be "u send host port string"}}
+test udp-6.3 {udp send} {
+    catch {rename u {}}
+    rename [udp create] u
+    u connect 127.0.0.1 7
+    u send "nase"
+} {}
+test udp-6.3 {udp send} {
+    catch {rename u {}}
+    rename [udp create] u
+    u connect 127.0.0.1 7
+    list [catch {u send 127.0.0.1 7 "nase"} msg] $msg
+} {1 {wrong # args: should be "u send string"}}
+
+foreach u [udp find] { $u destroy }
+
+test udp-7.1 {udp receive} {
+    catch {rename u {}}
+    rename [udp create -myaddress 127.0.0.1 -myport 1234] u
+    u send 127.0.0.1 1234 "nase"
+    u receive
+} {127.0.0.1 1234 nase}
+test udp-7.2 {udp receive} {
+    catch {rename u {}}
+    rename [udp create -myaddress 127.0.0.1 -myport 1235] u
+    set s [udp create -myaddress 127.0.0.1 -myport 1236]
+    $s connect 127.0.0.1 1235
+    $s send "nase"
+    $s destroy
+    u receive
+} {127.0.0.1 1236 nase}
+test udp-7.3 {udp receive} {
+    catch {rename u {}}
+    rename [udp create -myaddress 127.0.0.1 -myport 1234] u
+    u send 127.0.0.1 1234 \
+	[binary format "H*" "000102030405060708090a0b0c0d0e0f"]
+    binary scan [lindex [u receive] 2] "H*" s
+    set s
+} {000102030405060708090a0b0c0d0e0f}
+
+foreach u [udp find] { $u destroy }
+
+test udp-8.1 {udp bind} {
+    global result
+    catch {rename u {}}
+    rename [udp create -myaddress 127.0.0.1 -myport 1234] u
+    set result ""
+    u configure -read {set result [u receive]}
+    u send 127.0.0.1 1234 "hi there"
+    after 100
+    update
+    set result
+} {127.0.0.1 1234 {hi there}}
+
+foreach u [udp find] { $u destroy }
+
+test udp-9.1 {udp says hello} {
+    global tnm
+    set date [clock format [clock seconds] -format "%b %d %T"]
+    set me "$tnm(user)@$tnm(host).$tnm(domain)"
+    set scotty "scotty-$tnm(version) on $tnm(arch)"
+    catch {
+	set u [udp create]
+	$u connect 134.169.34.12 syslog
+	$u send "<14>$date scotty: greetings from $me running $scotty"
+	$u destroy
+    }
+    concat
+} {}
+
+foreach u [udp find] { $u destroy }
+
+::tcltest::cleanupTests
+return

@@ -1,0 +1,6 @@
+
+
+# $Id: README.FreeBSD,v 1.1 2008/02/05 16:26:24 karl Exp $
+
+./configure --with-tcl=/usr/local/lib/tcl8.4 --with-tclinclude=/usr/local/include/tcl8.4 --enable-symbols
+

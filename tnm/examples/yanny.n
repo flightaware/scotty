@@ -1,0 +1,124 @@
+.TH yanny 1L "April 95" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+yanny \- checks if processes are still running
+.SH SYNOPSIS
+.B yanny
+[
+-y
+.I filename
+]
+
+.B yanny
+[
+-y 
+.I filename
+]
+[
+-p
+.I pidfilename
+]
+.B "<command>"
+
+.B yanny
+[
+-y
+.I filename
+]
+-k
+.I regex
+
+.SH DESCRIPTION
+The main purpose of the
+.B yanny
+script is to restart dying system daemons. The mach OS has a meta
+server called nanny that restarts dying system daemons automatically.
+The 
+.B yanny 
+script was motivated by the nanny server and is useful if you are 
+running daemons that stop working sometimes.
+
+.B yanny
+called without arguments checks the output of the ps(1) command against 
+the contents of /etc/yanny.conf. Missing daemons are restarted and a 
+message is written to the syslog facility.
+
+.B yanny
+called with arguments treats the arguments as a command that is
+started via the Tcl exec command. The pid of the new process and the
+command is added to /etc/yanny.conf.
+
+.SH OPTIONS
+.TP
+.BI "-y " filename
+Use
+.I filename
+instead of /etc/yanny.conf.
+.TP
+.BI "-p " pidfilename
+Use
+.I pidfilename
+to find out the process ID of the daemon (this file must contain the
+process ID as the first line).
+.TP
+.BI "-k " regex
+Search for command matching
+.I regex
+and kill them. A TERM signal will be send to every matching process
+and it will be removed from the configuration file.
+.TP
+.BI "-u " user
+Try to run the program under the access right of 
+.I user.
+This usually only works if you have root permissions.
+
+.SH USAGE
+To use 
+.B yanny,
+you must write the pids and the names of the system daemons to a file
+(usually /etc/yanny.conf) during bootup. 
+.B yanny 
+reads this file and tests if the daemons listed in /etc/yanny.conf 
+are still running.
+
+The easiest way to do this is to modify your /etc/rc* files to
+put the pids in a file like /etc/yanny.conf. Below is an example
+for the rpc.statd daemon.
+
+if [ -f /usr/etc/rpc.statd ]; then
+.br
+	yanny rpc.statd & echo -n ' statd'
+.br
+fi
+
+Optionally, one can also specify the name of a pid-file where
+the daemon stores its process id. Here is an example for the
+named:
+
+if [ -f /usr/local/etc/in.named -a -f /etc/named.boot ]; then
+.br
+	yanny -p /etc/named.pid /usr/local/etc/in.named
+.br
+	echo -n ' named(local)'
+.br
+fi
+
+To check whether all daemons are still running, you call 
+.B yanny 
+without any arguments. You will typically add a line to the crontab(1)
+facility so that the system will periodically check if all daemons are
+running.
+
+.SH BUGS
+Not all processes terminate when receiving a TERM signal.
+
+.SH FILES
+/etc/yanny.conf - yanny's database.
+
+.SH SEE ALSO
+scotty(1), Tcl(1), exec(n), ps(1), kill(2), crontab(1)
+
+.SH AUTHORS
+Initial version was written by Juergen Schoenwaelder
+(schoenw@ibr.cs.tu-bs.de). Patrick Weemeeuw
+(patrick.weemeeuw@kulnet.kuleuven.ac.be) provided patches for process
+ID file support and better option parsing.

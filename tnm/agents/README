@@ -1,0 +1,47 @@
+
+This directory contains some sample SNMP agent modules. This is
+experimental work, but it might give you some ideas how to do your own
+little agent with scotty.
+
+Note, the SNMP agent stuff in this directory is not meant to replace
+your standard MIB-2 SNMP agent. Instead, you should run this stuff as
+an additional SNMP agent using a different port number.
+
+The main script is snmpd. It includes the implementation of various
+MIB modules contained in separate files. The files currently available
+are:
+
+  snmpd-tnm.tcl	- Implements some very simple tnm specific MIB
+		  extensions - we use for debugging etc.
+
+  snmpd-nfs.tcl	- Implements access to NFS server and client statistics
+		  which are extracted by using the nfsstat program.
+
+  snmpd-proc.tcl - Implements access to a table of running processes
+		  and is based on the ps command.
+
+  snmpd-mlm.tcl - An attempt to implement a modified version of the
+		  MLM MIB (see draft-levi-snmp-mid-level-mgr-00.txt).
+		  Includes some scripts static that can be activated.
+
+*** WARNING !!! ***
+
+Implementing MIBS can be quite dangerous to your system security! For
+example, the tubs.tcl code contains a simple tclEvalTable which can
+store arbitrary Tcl commands which are executed by the agent. This can
+be used by everyone allowed to perform sets on your agent! So choose
+good community strings, or better use SNMPv2USEC with authentication
+or even better do not evaluate arbitrary commands!
+
+We recommend to make use of safe Tcl interpreters. Here is how you
+create a safe SNMP agent using safe Tcl:
+
+	set s [snmp session -port 8888 -user joe -password $cryptic]
+	$s configure -agent [interp create -safe]
+
+A simple programming error while exporting an alias to a safe Tcl
+interpreter can again introduce security problems. Thats why we still
+recommend to run the agent on an account that can't do harm to your
+system.
+
+*** YOU HAVE BEEN WARNED !!! ***

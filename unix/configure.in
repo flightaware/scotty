@@ -1,0 +1,405 @@
+dnl	This file is an input file used by the GNU "autoconf" program to
+dnl	generate the file "configure", which is run during installation
+dnl	to configure the system for the local environment.
+dnl
+dnl @(#) $Id: configure.in,v 1.2 2007/07/16 16:40:40 karl Exp $
+dnl
+AC_INIT(scotty.c)
+AC_CONFIG_HEADER(config.h)
+
+TNM_VERSION=3.0.0
+TKI_VERSION=1.5.0
+TCL_VERSION=8.4
+TK_VERSION=8.4
+
+#----------------------------------------------------------------------------
+#	Load the tcl configuration file.
+#----------------------------------------------------------------------------
+
+AC_PATH_PROG(tclsh,tclsh8.4)
+if test -n "$tclsh" ; then
+    tclsh_prefix=`dirname $tclsh`
+    tclsh_prefix=`dirname $tclsh_prefix`
+fi
+
+AC_ARG_WITH(tcl,
+        [  --with-tcl=DIR          path to the tcl configuration file],
+        tnm_path_tcl_config=$withval)
+
+dirs="$tnm_path_tcl_config"
+for f in $tclsh_prefix/lib $exec_prefix/lib $prefix/lib /usr/local/lib ; do
+    dirs="$dirs $f $f/tcl$TCL_VERSION"
+done
+
+found=0
+for f in $dirs ; do
+    AC_MSG_CHECKING(for tclConfig.sh in $f)
+    if test -f "$f/tclConfig.sh" ; then
+	tnm_cv_path_tcl_config=$f
+	found=1
+        AC_MSG_RESULT(yes)	
+	break
+    else
+        AC_MSG_RESULT(no)
+    fi
+done
+
+if test $found -eq 0 ; then
+    AC_MSG_ERROR([tclConfig.sh not found - use the --with-tcl option])
+fi
+
+. $tnm_cv_path_tcl_config/tclConfig.sh
+
+GENERIC_CFLAGS=
+SHLIB_CFLAGS=$TCL_SHLIB_CFLAGS
+SHLIB_LD=$TCL_SHLIB_LD
+SHLIB_SUFFIX=$TCL_SHLIB_SUFFIX
+DL_LIBS=$TCL_DL_LIBS
+LD_FLAGS=$TCL_LD_FLAGS
+LD_SEARCH_FLAGS=$TCL_LD_SEARCH_FLAGS
+TCL_EXEC_PREFIX=$TCL_EXEC_PREFIX
+TCL_INCLUDES="-I$TCL_PREFIX/include -I$TCL_PREFIX/include/tcl$TCL_VERSION"
+TK_EXEC_PREFIX=$TK_EXEC_PREFIX
+
+if test $TCL_SHARED_BUILD -ne 1 ; then
+    AC_MSG_ERROR([Tcl is not configured with --enable-shared])
+fi
+
+if test -z "$SHLIB_LD" ; then
+    AC_MSG_ERROR([no shared linker definition TCL_SHLIB_LD in tclConfig.sh])
+fi
+
+AC_MSG_CHECKING(for tcl version)
+AC_MSG_RESULT("$TCL_VERSION")
+if test "$TCL_VERSION" != "8.4" ; then
+    AC_MSG_ERROR("Tcl version 8.4 needed")
+fi
+
+BUILD_TARGETS="$BUILD_TARGETS scotty"
+INSTALL_TARGETS="$INSTALL_TARGETS tnm-install"
+
+#----------------------------------------------------------------------------
+#	Load the tk configuration file.
+#----------------------------------------------------------------------------
+
+AC_PATH_PROG(wish,wish8.4)
+if test -n "$wish" ; then
+    wish_prefix=`dirname $wish`
+    wish_prefix=`dirname $wish_prefix`
+fi
+
+AC_ARG_WITH(tk,
+        [  --with-tk=DIR           path to the tk configuration file],
+        tnm_path_tk_config=$withval)
+
+dirs="$tnm_path_tk_config"
+for f in $wish_prefix/lib $exec_prefix/lib $prefix/lib /usr/local/lib ; do
+    dirs="$dirs $f $f/tk$TK_VERSION"
+done
+
+found=0
+for f in $dirs ; do
+    AC_MSG_CHECKING(for tkConfig.sh in $f)
+    if test -f "$f/tkConfig.sh" ; then
+	tnm_cv_path_tk_config=$f
+	found=1
+        AC_MSG_RESULT(yes)	
+	break
+    else
+        AC_MSG_RESULT(no)
+    fi
+done
+
+if test "$found" -eq 0 ; then
+    AC_MSG_WARN("tkConfig.sh not found - use the --with-tk option")
+    AC_MSG_WARN("will not build tkined")
+else
+    . $tnm_cv_path_tk_config/tkConfig.sh
+    TK_INCLUDES="-I$TK_PREFIX/include -I$TK_PREFIX/include/tk$TK_VERSION"
+    if test "$TK_INCLUDES" = "$TCL_INCLUDES" ; then
+        TK_INCLUDES=""
+    fi
+
+    AC_MSG_CHECKING(for tk version)
+    AC_MSG_RESULT("$TK_VERSION")
+    if test "$TK_VERSION" != "8.4" ; then
+        AC_MSG_ERROR("Tk version 8.4 needed")
+    fi
+
+    BUILD_TARGETS="$BUILD_TARGETS tkined"
+    INSTALL_TARGETS="$INSTALL_TARGETS tki-install"
+fi
+
+#----------------------------------------------------------------------------
+#       Check for some basic stuff. We don't check for the compiler.
+#	Instead, we use whatever is written down in the Tcl configuration
+#	file. This should avoid incompatibilties between compilers.
+#----------------------------------------------------------------------------
+
+CC=$TCL_CC
+AC_PROG_CPP
+dnl AC_PROG_LEX
+dnl AC_PROG_YACC
+AC_PROG_INSTALL
+
+#--------------------------------------------------------------------
+#       Check for various system specific things.
+#--------------------------------------------------------------------
+
+AC_TYPE_SIZE_T
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(unsigned short)
+AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(unsigned int)
+AC_CHECK_SIZEOF(long)
+AC_CHECK_SIZEOF(unsigned long)
+AC_CHECK_SIZEOF(long long)
+AC_CHECK_SIZEOF(unsigned long long)
+AC_C_BIGENDIAN
+
+#----------------------------------------------------------------------------
+#	Check for some fixed sized int types. XXX need to respect the sizes
+#----------------------------------------------------------------------------
+
+if test $ac_cv_sizeof_short -eq 2 ; then
+    AC_SCOTTY_CHECK_TYPE(int16_t, short)
+else 
+    AC_MSG_ERROR(unable to define 16 bit int type)
+fi
+
+if test $ac_cv_sizeof_unsigned_short -eq 2 ; then
+    AC_SCOTTY_CHECK_TYPE(uint16_t, unsigned short)
+else
+    AC_MSG_ERROR(unable to define 16 bit unsigned int type)
+fi
+
+if test $ac_cv_sizeof_short -eq 4 ; then
+    AC_SCOTTY_CHECK_TYPE(int32_t, short)
+elif test $ac_cv_sizeof_int -eq 4 ; then
+    AC_SCOTTY_CHECK_TYPE(int32_t, int)
+elif test  $ac_cv_sizeof_long -eq 4 ; then
+    AC_SCOTTY_CHECK_TYPE(int32_t, long)
+else
+    AC_MSG_ERROR(unable to define 32 bit int type)
+fi
+
+if test $ac_cv_sizeof_unsigned_short -eq 4 ; then
+    AC_SCOTTY_CHECK_TYPE(uint32_t, unsigned short)
+elif test $ac_cv_sizeof_unsigned_int -eq 4 ; then
+    AC_SCOTTY_CHECK_TYPE(uint32_t, unsigned int)
+elif test  $ac_cv_sizeof_unsigned_long -eq 4 ; then
+    AC_SCOTTY_CHECK_TYPE(uint32_t, unsigned long)
+else
+    AC_MSG_ERROR(unable to define 32 bit unsigned int type)
+fi
+
+AC_SCOTTY_CHECK_TYPE(ipaddr_t, uint32_t)
+
+#----------------------------------------------------------------------------
+#	Check if rpcgen is available. If not, use the files in 
+#	$srcdir/../compat/.
+#----------------------------------------------------------------------------
+
+AC_CHECK_PROG(RPCGEN, rpcgen, rpcgen, echo)
+if test "$RPCGEN" = "echo" ; then
+    AC_WARN(couldn't find rpcgen. Will use precompiled files)
+    cp $srcdir/../compat/ether* .
+    cp $srcdir/../compat/mount* .
+    cp $srcdir/../compat/pcnfsd* .
+    cp $srcdir/../compat/rstat* .
+fi
+
+#----------------------------------------------------------------------------
+#	Check for the existence of various libraries.
+#----------------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+#       Check for the existence of various libraries.  The order here
+#       is important, so that then end up in the right order in the
+#       command line generated by make.  The -lsocket and -lnsl libraries
+#       require a couple of special tricks:
+#       1. Only use these libraries if they supply procedures that aren't
+#          already present in the normal libraries.  This is because
+#          IRIX 5.2 has libraries, but they aren't needed and they're
+#          bogus:  they goof up name resolution if used.
+#       2. On some SVR4 systems, can't use -lsocket without -lnsl too.
+#          To get around this problem, first check for both libraries
+#          together, and use them both if they're both needed.  If that
+#          isn't the case, then check for them individually.
+#--------------------------------------------------------------------
+
+tk_both=1
+AC_CHECK_FUNC(connect, tk_both=0)
+AC_CHECK_FUNC(gethostbyname, tk_both=0)
+tk_oldLibs=$LIBS
+LIBS="$LIBS -lsocket"
+AC_CHECK_LIB(nsl, main, , tk_both=0)
+LIBS=$tk_oldLibs
+if test "$tk_both" = 1; then
+    echo "need -lsocket and -lnsl together"
+    LIBS="$LIBS -lsocket -lnsl"
+    NM_LIBS="$NM_LIBS -lsocket -lnsl"
+else
+    AC_CHECK_LIB(socket, connect, [LIBS="$LIBS -lsocket";
+                                   NM_LIBS="$NM_LIBS -lsocket"])
+    AC_CHECK_LIB(nsl, gethostbyname, [LIBS="$LIBS -lnsl";
+				      NM_LIBS="$NM_LIBS -lnsl"])
+fi
+
+AC_CHECK_LIB(z, main, [LIBS="$LIBS -lz"])
+AC_CHECK_LIB(ieee, main, [LIBS="$LIBS -lieee"])
+AC_CHECK_LIB(rpc, main, [LIBS="$LIBS -lrpc"])
+dnl AC_CHECK_LIB(rpcsvc, main, [LIBS="$LIBS -lrpcsvc"])
+AC_CHECK_FUNC(res_mkquery, ,
+	AC_CHECK_LIB(resolv, res_mkquery, [LIBS="$LIBS -lresolv";
+					   NM_LIBS="$NM_LIBS -lresolv"]))
+
+#----------------------------------------------------------------------------
+#	Check for new socklen_t type which is not yet universally available.
+#	Check for sin_len field in struct sockaddr (BSD-ish).
+#----------------------------------------------------------------------------
+
+AC_CHECK_HEADERS([sys/socket.h])
+
+AC_CHECK_TYPE(socklen_t,AC_DEFINE(HAVE_SOCKLEN_T),, [
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+])
+
+AC_CACHE_CHECK([for 'sa_len' in 'struct sockaddr'], ac_cv_struct_sa_len, 
+[AC_TRY_COMPILE([#include <sys/types.h> 
+#include <sys/socket.h>], [struct sockaddr sa; sa.sa_len = 0; ], 
+        ac_cv_struct_sa_len=yes, ac_cv_struct_sa_len=no)]) 
+if test "$ac_cv_struct_sa_len" = yes; then 
+  AC_DEFINE(HAVE_SA_LEN) 
+fi 
+
+#----------------------------------------------------------------------------
+#	Checks for various IPv6 related functions.
+#----------------------------------------------------------------------------
+
+AC_CHECK_FUNCS(inet_pton inet_ntop getaddrinfo getnameinfo)
+
+#----------------------------------------------------------------------------
+#	Checks for various include files missing on some machines.
+#----------------------------------------------------------------------------
+
+AC_CHECK_HEADERS(stdlib.h unistd.h malloc.h sys/select.h zlib.h)
+
+#----------------------------------------------------------------------------
+#       Check for various Unix library functions that can be used.
+#----------------------------------------------------------------------------
+
+AC_CHECK_FUNC(strerror, AC_DEFINE(HAVE_STRERROR))
+AC_CHECK_FUNC(gethostent, AC_DEFINE(HAVE_GETHOSTENT))
+AC_CHECK_FUNC(getnetent, AC_DEFINE(HAVE_GETNETENT))
+AC_CHECK_FUNC(getprotoent, AC_DEFINE(HAVE_GETPROTOENT))
+AC_CHECK_FUNC(getservent, AC_DEFINE(HAVE_GETSERVENT))
+AC_CHECK_FUNC(getrpcent, AC_DEFINE(HAVE_GETRPCENT))
+
+#----------------------------------------------------------------------------
+#       Some older SUN RPC implementations are really ugly.
+#----------------------------------------------------------------------------
+
+AC_MSG_CHECKING(for struct rpcent)
+AC_EGREP_CPP([^struct * rpcent],[
+#include <netdb.h>
+#include <rpc/rpc.h>
+], AC_MSG_RESULT(yes); AC_DEFINE(HAVE_RPCENT), AC_MSG_RESULT(no))
+
+#----------------------------------------------------------------------------
+#       Checking for multicast options.
+#----------------------------------------------------------------------------
+
+AC_ARG_ENABLE(multicast, 
+	[  --enable-multicast      enable support for multicasts],
+	[mcast_ok=$enableval], [mcast_ok=no])
+if test "$mcast_ok" = "yes"; then
+    AC_MSG_CHECKING(for multicast support)
+    AC_TRY_COMPILE([#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>], [int i=IP_MULTICAST_TTL, j=IP_ADD_MEMBERSHIP;],
+    AC_MSG_RESULT(yes); AC_DEFINE(HAVE_MULTICAST), AC_MSG_RESULT(no))
+fi
+
+#----------------------------------------------------------------------------
+#       Checking for the libsmi library.
+#----------------------------------------------------------------------------
+
+AC_CHECK_HEADERS(smi.h)
+AC_CHECK_LIB(smi, smiInit, [LIBS="$LIBS -lsmi"])
+AC_MSG_CHECKING([whether to enable libsmi])
+        AC_TRY_RUN([ /* libsmi available check */
+#include <smi.h>
+main()
+{
+  int current, revision, age, n;
+  const int required = 2;
+  if (smiInit("")) 
+    exit(1);
+  if (strcmp(SMI_LIBRARY_VERSION, smi_library_version))
+    exit(2);
+  n = sscanf(smi_library_version, "%d:%d:%d", &current, &revision, &age);
+  if (n != 3)
+    exit(3);
+  if (required < current - age || required > current)
+    exit(4);
+  exit(0);
+}
+],
+[ AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_SMI_H)
+  AC_DEFINE(LIBSMI)
+  libsmi=yes],
+[ AC_MSG_RESULT(no)
+  libsmi=no],
+[ AC_MSG_RESULT(not when cross-compiling)
+  libsmi=no]
+)
+
+#----------------------------------------------------------------------------
+#       Some more libraries for OSes that want your attention.
+#----------------------------------------------------------------------------
+
+AC_FUNC_GETMNTENT
+
+#----------------------------------------------------------------------------
+#       The list of symbols to substitute.
+#----------------------------------------------------------------------------
+
+AC_SUBST(CC)
+AC_SUBST(GENERIC_CFLAGS)
+AC_SUBST(SHLIB_CFLAGS)
+AC_SUBST(SHLIB_LD)
+AC_SUBST(SHLIB_SUFFIX)
+AC_SUBST(DL_LIBS)
+AC_SUBST(LD_FLAGS)
+AC_SUBST(LD_SEARCH_FLAGS)
+AC_SUBST(LIBS)
+AC_SUBST(NM_LIBS)
+
+AC_SUBST(TNM_VERSION)
+AC_SUBST(TKI_VERSION)
+
+AC_SUBST(TCL_VERSION)
+AC_SUBST(TCL_EXEC_PREFIX)
+AC_SUBST(TCL_INCLUDES)
+AC_SUBST(TCL_LIB_SPEC)
+AC_SUBST(TCL_DBGX)
+
+AC_SUBST(TK_VERSION)
+AC_SUBST(TK_EXEC_PREFIX)
+AC_SUBST(TK_INCLUDES)
+AC_SUBST(TK_LIB_SPEC)
+AC_SUBST(TK_DBGX)
+AC_SUBST(TK_XINCLUDES)
+AC_SUBST(TK_XLIBSW)
+
+AC_SUBST(BUILD_TARGETS)
+AC_SUBST(INSTALL_TARGETS)
+
+AC_OUTPUT(Makefile)

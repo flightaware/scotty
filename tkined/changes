@@ -1,0 +1,709 @@
+11/2/2000 (bug fix) Delete the log object when the log output window
+is destroyed.
+
+21/4/99 (bug fix) The size of the canvas is now independent from the
+resolution of the display. Further, PostScript dumps should not fit
+on the selected page size.
+
+1/12/98 (bug fix) Fixed several bugs in the ip_discover.tcl script based
+on comments received by Viktor Dukhovni.
+
+29/11/98 (bug fix) Renamed trace() and notrace() to TkiTrace() and
+TkiNoTrace() in order to avoid name clashes with the ncurses library.
+
+29/10/98 (bug fix) Renamed falsh() to TkiFlash() in order to avoid name
+clashes on some systems.
+
+29/10/98 (new feature) Added two scripts (snmp_config.tcl, snmp_disman.tcl)
+for looking at SNMP remote configuration and disman MIBs. These MIBs need
+additional work.
+
+6/10/98 (bug fix) Changed the code to register channels in order to
+work around a bug introduced in Tcl8.0.3 which closes channels while
+processing events.
+
+23/1/98 (code cleanup) Changed the user interface of tkined so that
+the tool bar looks "windowish" and requires less space. The main
+window is now controlled by the grid geometry manager and dialogs
+should appear centered on the screen on non UNIX platforms. The menu
+bar now uses native menus and the fonts are defined by using readable
+non-X11 font names.
+
+5/3/97 (feature removed) Removed the man pages from the Help menu
+because the implementation was not portable across platforms.
+
+14/2/97 (bug fix) The scale widget was left on the canvas if the user
+used commands to remove the stripchart or barchart object.
+
+11/2/97 (NT port) Applications now use a TCP connection to exchange
+messages with tkined. This seems to work on all supported platforms.
+
+8/1/97 (feature removed) Removed the code that implemented remote
+access to remote tkineds from manager.tcl.
+
+7/1/97 (code cleanup) Changed the ip_trouble.tcl script to use the
+procedures exported by the TnmInet package.
+
+7/1/97 (code cleanup) Replaces the "ined fileselect" dialog with an
+"ined openfile" and an "ined savefile" dialog which uses the native
+fileselector.
+
+7/1/96 (feature removed) Removed the Save... option of the File menu
+because Save As... is more portable.
+
+30/12/96 (new feature) The UNIX version searches for the Tkined path
+using tcl_pkgPath if the build-in path does not match.
+
+2/12/96 (bug fix) Fixed a bug where Tcl allocated memory was passed to
+free() which will crash if you are using the memory debugger or it
+will leak memory on Windows platforms.
+
+2/12/96 (new feature) Added a new global tkined(tmp) variable which
+contains the path to a directory where temporary files can be created.
+
+21/11/96 (feature removed) Removed support for the TKINED_PATH
+environment variable.
+
+21/11/96 (NT port) Rewrote findfile() to search for files in a
+platform independent way.
+
+12/11/96 (NT port) Moved the code that initializes the tki(library)
+path to a platform specific function. This allows to use the registry
+to query installation parameters on Windows platforms. We honor the
+TKINED_LIBRARY environment variable if available.
+
+28/10/96 (code cleanup) Replaced all calls to our own file selector
+dialogs with calls to the selection dialogs provided by Tk.
+
+24/10/96 (code cleanup) Replaced all exec commands that deal with
+files with the new Tcl file command options.
+
+----------------- Released 1.1.5, 23/10/96 -----------------------
+
+22/10/96 (new feature) Added the new optionFlashIcon option so that
+people can control whether the icon of the application is allowed to
+flash or not.
+
+3/10/96 (code cleanup) Replaced the :: qualifier with __ to make sure
+that Tkined can be used with [incr tcl].
+
+----------------- Released 1.1.4, 20/9/96 -----------------------
+
+12/9/96 (code cleanup) Removed the ncc rotating icon. It is not needed
+anymore since nearly every piece of software nowadays wastes processor
+cycles in this way.
+
+12/9/96 (bug fix) Fixed the flashing icon and the handling of empty
+label strings.
+
+----------------- Released 1.4.3, 5/9/96 -----------------------
+
+5/9/96 (bug fix) Fixed a bug which made it impossible to delete menu
+objects if they do not have a tornoff menu.
+
+----------------- Released 1.4.2, 19/7/96 -----------------------
+
+2/9/96 (bug fix) All torn-off menus are now destroyed when the menu
+object is deleted.
+
+2/9/96 (new feature) Added a patch to implement an "ined eval" command
+which allows a script to play with internals from tkined.
+
+7/8/96 (bug fix) Fixed the computation of the bounding box for
+stripchart and barchart canvas items.
+
+30/7/96 (bug fix) Fixed a core dump which was triggered by removing
+flashing objects.
+
+----------------- Released 1.4.1, 19/7/96 -----------------------
+
+----------------- Released 1.4.0, 10/6/96 -----------------------
+
+6/12/95 (code cleanup) Moved all initialization stuff into tkiInit.c
+which makes dynamic loadable tkineds easier.
+
+18/11/95 (code cleanup) Complete reorganization of the source tree to
+support different platforms.
+
+23/10/95 (new feature) Added a new command to select object based on
+attribute values.
+
+22/9/95 (new feature) Added some tkined.defaults variables that
+control the options menu.
+
+14/9/5 Always display the color menu. This seems to work fine as Tk4.0
+maps all colors to black on a monochrome display.
+
+14/9/95 (bug fix) Added a INTERPRETER::delete proc to handle errors
+while a new interpreter object is created. <jaques@lsil.com>
+
+6/9/95 (new feature) You can now add attributes to LINK objects. John
+P. Rouillard <rouilj@dstar.iddis.com> requested this feature.
+
+28/8/95 (feature change) Links are now automatically removed from a
+group if the src or dst of the link is removed from a group.
+
+28/8/95 (new feature) Added a Close command proc. It will check for
+the confirmExit attribute and issue a dialog for people with slow
+machines.
+
+28/8/95 (new feature) Added a --with-blt configure option to avoid
+problems with broken or old blt libraries.
+
+25/8/95 (new feature) Various changes to define shortcuts to commands
+by adding them to the popup menu.
+
+25/8/95 (bug fix) Cache include and library paths between configure
+runs.
+
+22/8/95 (bug fix) Fixed a bug in the stripchart and barchart code
+where the first scale line was drawn below the bounding box. The
+solution is simple: Never draw the first scale line.
+
+14/8/95 (new feature) Various changes to allow compilation in other
+directories using the VPATH and SRC_DIR variables.
+
+9/8/95 (big fix) Fixed a bug in the SelectLabel proc. It did not find
+the label associated with an icon.
+
+27/7/95 (new feature) Button-2 on the canvas background now allows to
+move the whole map.
+
+18/7/95 (feature change) Changed the accelerater bindings to avoid any
+conflicts with standard emacs editing bindings.
+
+26/6/95 (bug fix) Fixed the code to not draw more striplines than can
+be displayed on the X server.
+
+16/6/95 (bug fix) We now use Tcl_CreatePipeline() to start
+applications.
+
+16/6/95 (bug fix) An ugly binding to process X11 destroy events.
+
+15/6/95 (new feature) Added a wrap option to the LOG object and make
+no wrap the default.
+
+4/6/95 (bug fix) Resizing strip- or barcharts is now working
+again. Reference objects can be opened in a new or in the current view.
+
+10/5/95 (bug fix) Empty groups are handled correctly now.
+
+7/5/95 (bug fix) Now always dump the complete map as PostScript (-x
+and -y options added).
+
+4/5/95 (code cleanup) Renamed all bitmaps from *.bm to *.xbm.
+
+4/5/95 (performance improvement) Turned the internally used Tcl lists
+into pointer arrays to make the C code faster and easier to write.
+
+4/5/95 (feature removed) Removed the code to alter the label on the
+canvas. Use the Edit Attributes command provided by the popup menu
+instead.
+
+4/5/95 (feature change) Started to change the default bindings on the
+canvas. I also turned the Alter tool into a Resize tool as the old
+alter functionality is now in the right mouse binding.
+
+3/4/95 (bug fix) Fixed Tool::Find to only accept items near the
+cursor.
+
+25/3/95 (code cleanup) Started to convert Tkined to the Tcl/Tk coding
+styles. Made Tkined compile with tk4.0b3.
+
+23/3/95 (bug fix) Added a call to parent_resize(). Otherwise, an
+expanded group wont be resized if a member is deleted.
+
+19/3/95 (bug fix) Fixed a free(NULL) problem in the stripchart
+and the barchart code.
+
+18/3/95 (code cleanup) Replaced all xmalloc() calls etc. with
+ckalloc() and friends.
+
+4/2/95 (new feature) Some initial code to display some basic
+html. Needs a lot of more work. Perhaps we should use one of
+the free HTML extensions to Tcl.
+
+4/2/95 (feature change) Flash all the parents of an object if an
+object is invisible. This makes collapsed groups flashing if one of
+its member is flashing.
+
+29/1/95 (bug fix) Text views now save the current directory in the
+filename attribute.
+
+29/1/95 (performance improvement) The command buffer is now
+dynamically allocated. This saves about 200 bytes for most tkined
+objects.
+
+29/1/95 (new feature) Renamed the view menu to an option menu and
+added a locking mode that allows to protect a map agains modifications.
+
+28/1/95 (new feature) Added HTML and DATA objects. HTML objects will
+replace the LOG object and DATA objects will be used to replace
+STRIPCHART, BARCHART and GRAPH objects.
+
+7/1/95 (new feature) Added expand/collapse to the group alter popup
+menu.
+
+5/1/95 (feature change) Reworked some menus to make them more uniform
+and replaced the button on the LOG windows with a menu bar.
+
+5/1/95 (code cleanup) Ported most stuff to tk4.0. Removed the compat
+directory, removed the em_bind.tcl code and rewrote many pieces of Tcl
+code to work with tk4.0.
+
+4/1/95 (bug fix) Fixed the fclose bug which caused some core dumps.
+
+----------------- Released 1.2.0, 19/12/94 -----------------------
+
+19/12/94 (feature change) Moved the initialization tcl code into
+init.tcl which load site/init.tcl to allow site specific
+customization.
+
+8/12/94 (feature change) Changed the dialogs to show the default
+button on the left side (where most people expect it ...)
+
+8/12/94 (bug fix) Interpreter started while loading a saved maps are
+destroyed when the view is cleared.
+
+8/12/94 (new feature) Added the history command to the File menu as I
+was tired of typing file names or using the ugly file selector.
+
+4/12/94 (feature change) Read tkined.defaults from
+/usr/local/lib/tkined/ and /usr/local/lib/tkined/site/ to allow site
+specific definitions.
+
+3/12/94 (code cleanup) Changed the installation procedure: bitmaps
+files are copied to /usr/local/lib/tkined/bitmaps and applications are
+searched in /usr/local/lib/tkined/apps.
+
+20/11/94 (code cleanup) Updated the configure scripts to autoconf-2.1.
+
+1/11/94 (code cleanup) Added a --with-auto-load option which will
+setup a Makefile that builds a tkined binary which loads the *.tcl
+files during startup. Useful for tkined hackers.
+
+27/10/94 (new feature) Added a new object type called GRAPH. A GRAPH
+object is shown using the BLT extension (required to use GRAPH
+objects) to draw xy graphs in a diagram window.
+
+27/10/94 (bug fix) Fixed a quoting bug that killed labels with "
+characters. There were also some error returns missing. This may
+break scripts that expect that ined commands never return an
+error. These scripts may need some fixing, sorry.
+
+26/10/94 (bug fix) Fixed the initialization of a new interpreter
+object so that exiting processes that do not talk to tkined at all are
+handled correctly.
+
+7/10/94 (bug fix) Added a terminal server icon that was listed in
+tkined.defaults but not really available.
+
+29/9/94 (new feature) Added a join and leave command to the structure
+menu to allow modifications of the group member relationship.
+
+29/9/94 (new feature) Added m_parent() and a parent command.
+
+29/9/94 (bug fix) Fixed the handling of the TKINED_PATH search path.
+
+23/9/94 (new feature) Hacked m_member to add and remove objects to an
+existing group. Needs some speed up and some Tk code to be usable.
+
+6/9/94 (bug fix) Replaced the 'random placement' proc tkined_makemenu
+in Editor.tcl for creating submenus with a working version.
+
+1/9/94 (bug fix) Fixed the broken dialog in tkined_print.
+
+1/9/94 (bug fix) Check the header of saved tkined files for the magic
+words tkined version to make sure we load something reasonable.
+
+1/9/94 (bug fix) Fixed the LOG::save method. The dialog asking how to
+handle existing files did not appear. I also added an option to append
+to an existing file.
+
+29/8/94 (bug fix) Always initialize the color attribute with black and
+the font attribute to fixed. Some applications got confused with empty
+colors.
+
+28/8/94 (bug fix) Fixed a race condition in flash.c that stopped
+flashing sometimes.
+
+27/8/94 (bug fix) Changed the icon flash code to use the color of an
+object if running on a color display.
+
+27/8/94 (bug fix) Overlapping icons were not handled correctly in the
+Alter and Link tools. I rewrote the code to find the topmost object on
+the canvas.
+
+27/8/94 (bug fix) Fixed a bug in Editor::postscript. The postscript
+proc tried to set the outline color of a text instead of the clipbox.
+
+----------------- Released 1.0, 26/8/94 -----------------------
+
+25/8/94 (bug fix) Changing colors on strip- and barchart now
+works. This allows me to flash strip- and barcharts.
+
+24/8/94 (new feature) Added dialogs to the alter tool that can be used
+to create, edit or delete attributes for an object.
+
+22/8/94 (feature change) Renamed the ida and idb link attributes to
+src and dst.
+
+12/8/94 (code cleanup) Rewrote Objects.tcl which is now much smaller
+and at least as fast as the old version.
+
+12/8/94 (code cleanup) Changed tkined to always use X11 font name, X11
+color names and bitmap file names internally. This makes saved maps
+independent of user defined menus.
+*** POTENTIAL INCOMPATIBILITY ***
+
+12/8/94 (code cleanup) Removed the 'ined text' command for all objects
+other than text objects. Use the generic attribute commmand instead.
+*** POTENTIAL INCOMPATIBILITY ***
+
+12/8/94 (feature change) Converted strip- and barcharts to real
+objects. They can't be linked anymore.
+*** POTENTIAL INCOMPATIBILITY ***
+
+12/8/94 (new feature) Added a flash command to let tkined flash
+icons. This can be used by applications to indicate error state on
+color and monochrome displays.
+
+12/8/94 (new feature) Added a generic attribute command to let
+applications define any attribute they need.
+
+5/8/94 (feature change) Renamed TOOL objects to MENU to get rid of the
+old naming convention that was a little bit crazy.
+
+5/8/94 (bug fix) Fixed a bug that affected links with one fixed point.
+
+4/8/94 (bug fix) Fixed some minor bugs which make multi line labels
+work.
+
+4/8/94 (code cleanup) Renamed the procs in tkined_tool.tcl. All tool
+names conform to the format Tool::<toolname> which increases
+readability.
+
+4/8/94 (new feature) Added an 'ined text' command to set the text
+attribute of node, group, network and reference objects. I also
+changed the 'ined label' command to not accept a text argument
+anymore.
+*** POTENTIAL INCOMPATIBILITY ***
+
+4/8/94 (feature change) Moved the Label submenu to the structure menu
+and the grid commands from the structure to the edit menu.
+
+2/8/94 (bug fix) Added code to close unused file descriptors after
+forking a new process.
+
+2/8/94 (code cleanup) Added a socketpair(2) replacement using pipe(2)
+for SCO based on a patch by Juergen Luksch (luksch@telenet.de).
+
+2/8/94 (feature change) Changed the syntax of the ined request
+command. The last argument is now a list of buttons that should appear
+below the text given by the other args. This makes dialogs more
+flexible. I also added support for check button.
+*** POTENTIAL INCOMPATIBILITY ***
+
+2/8/94 (feature change) Changed the syntax of the ined list
+command. The last argument is now a list of buttons that should appear
+below the text given by the other args. This makes dialogs more
+flexible.
+*** POTENTIAL INCOMPATIBILITY ***
+
+1/8/94 (feature change) Changed the syntax of the ined confirm
+command. The last argument is now a list of buttons that should appear
+below the text given by the other args. This makes dialogs more
+flexible.
+*** POTENTIAL INCOMPATIBILITY ***	  
+
+30/7/94 (code cleanup) Renamed the commands to conform to the format
+Command::<cmdname>, which increases readability.
+
+25/7/94 (new feature) Added an 'ined stripchart <id> jump <num>'
+command to set how much pixels are scrolled. Fixed a bug that did not
+allow to put objects on the border of the page.
+
+22/7/94 (new feature) Added a new `ined postscript' command. This
+allows an application to retrieve the current map in graphical format
+and to convert it to something like gif using ghostscript. The
+implementation add a new method e_postscript() to an editor object.
+
+18/7/94 (bug fix) For every trace written to an interpreter we call
+Tk's update command to process incoming ined queue messages.  This is
+*very* slow but I don't know how to fix this problem without changing
+the protocol.
+
+18/7/94 (bug fix) Added a check to expand() to ignore unnecessary
+calls to methods that won't change anything.
+
+14/7/94 (code cleanup) Removed trace_s() and trace_sl() and rewrote
+the trace() function. This is the generic solution.
+
+14/7/94 (code cleanup) Added some new functions trace_s and trace_sl
+to write trace messages with appended strings and appended lists
+correctly by using DStrings.
+
+12/7/94 (bug fix) Labels written to the text attribute of objects are
+stored when a map is dumped.
+
+12/7/94 (bug fix) Changed some dump functions to append proper list
+elements. This solves some problems with strings containing quote
+characters.
+
+12/7/94 (new feature) Changed the dump functions to save the data
+stored in strip- or barcharts. This allows me to connect to a tkined
+editor and download the current status.
+
+8/7/94 (new feature) Objects can now be alligned on a grid using two
+new commands: 'Set Grid Spacing' and 'Align to Grid'.  (I can't
+remember how I lived without them :-)
+
+8/7/94 (new feature) Added a width and height attribute to
+tkined.defaults that defines the initial size of the tkined window.
+
+6/7/94 (new feature) There is a new ined command that generates a
+sequence of tcl statements to rebuild an arbitrary object. The syntax
+is `ined dump <id>' and returns a single line. The contents is the
+same as used to write tkined map files.
+
+6/7/94 (new feature) Added a -notrace option to the ined commands.
+
+6/7/94 (performance improvement) Replaced some calls to Tcl_Eval by
+calling the C function directly. Also added lappend() and ldelete() to
+make list handling of object references faster.
+
+4/7/94 (feature change) The semantic of the ined send command was
+broken. If called without further arguments, e.g. ined send foobar,
+tkined appended the list of currently selected objects automatically.
+This is not what we expect from it.
+*** POTENTIAL INCOMPATIBILITY ***   
+
+4/7/94 (bug fix) Added a wrapper xwrite() to replace write() calls
+with a more fail save version needed by some ugly machines.
+
+24/6/94 (new feature) Added a scale command to the edit menu to set
+the scale factor used by strip- and barcharts. Also fixed a bug in the
+scale tool which scaled always down to the maximum value of a strip-
+or barchart.
+
+20/5/94 (feature change) Chanced the ined restart command. New
+commands will be replaced instead of appending them. A call without
+any arguments returns the current list. This allows an application to
+add and remove entries as it prefers.
+*** POTENTIAL INCOMPATIBILITY ***
+
+21/5/94 (new feature) Added hierarchical menus to external tools using
+the same syntax, e.g. "ined create TOOL foo bar:cmd1 bar:cmd2" will
+create a submenu bar with containg the commands cmd1 and cmd2.
+
+21/5/94 (feature change) Renamed the file select dialog to make it
+accessible for applications that talk to tkined. There is now an easy
+way to see and go back the directory path.
+
+21/5/94 (new feature) Added a button to freeze/melt a log window and
+replace a call to regexp with something faster in C.
+
+1/5/94 (new feature) Set the scale factor in the scale dialog
+dynamically.
+
+17/4/94 (new feature) Added hierarchical menus to the icon, font and
+color menus.
+
+10/4/94 (code cleanup) Renamed the procs that implement the dialogs to
+Dialog::<type>. Additional dialogs can now be defined by simply
+writing another Dialog::<type> proc.
+
+9/4/94 (code cleanup) Rearranged the code that dumps objects into
+asccii strings. This makes the dump methods smaller.
+
+25/3/94 (new feature) Added the new object type REFERENCE.
+
+24/3/94 (new feature) Accept URL file names. A simple ftp interface
+allows me to retrieve files via ftp and put it into tkined.
+
+24/3/94 (new feature) Added a new command to bind commands to text
+strings in a LOG window.
+
+24/3/94 (feature change) The ined append command does not append a
+newline character automatically anymore.
+*** POTENTIAL INCOMPATIBILITY ***
+
+----------------- Released 0.9, 9/3/94 -----------------------
+
+26/2/94 (code cleanup) Removed ined.tcl from the tkined sources. It is
+now part of scotty since it uses the scotty event loop. Hence there
+is no reason to distribute it with tkined.
+
+24/2/94 (bug fix) Added some code to check some buffer overflow
+conditions. This should make tkined save even when used with very
+large groups or while processing ined command with extremely large
+arguments.
+
+22/2/94 (feature change) Changed the name of the default entries in
+tkined.defaults. Node icons are now set using tkined.node entries and
+group icons are set using tkined.group entries.
+*** POTENTIAL INCOMPATIBILITY ***
+
+----------------- Released 0.8, 19/2/94 -----------------------
+
+18/2/94 (bug fix) The delete command on a group object now really
+deletes the whole group. Previous versions simply ungrouped the
+object, which is an error.
+
+18/2/94 (bug fix) Any object can be a member of exactly one
+group. Previous versions allowed to put one object into more than one
+group, but they did not handle them correctly. Now tkined enforces a
+strict hierarchy.
+*** POTENTIAL INCOMPATIBILITY ***
+
+16/2/94 (bug fix) Fixed a bug in ined.tcl that sometimes delayed
+command processing. The command buffer was not flushed after a tkined
+command was received while the interpreter was waiting for an ined ok
+or ined error message.
+
+16/2/94 (new feature) Added a new ined command: ined restart <args>
+writes a command string to tkined. Tkined creates code to reinstall
+running scripts when saving a configuration. The args will be send to
+a restarted tkined interpreter to reinitialize it. See the
+ip_monitor.tcl script on how to make use of this feature.
+
+16/2/94 (new feature) Networks with one segment are now resizable
+using the alter tool.
+
+15/2/94 (new feature) Added a select by label command.
+
+11/2/94 (code cleanup) Rewrote the clipboard handling. Now the editor
+has a function to evaluate the clipboard. This mechanism is also used
+to load a saved tkined map file.
+
+8/2/94 (new feature) Some minimal support for legal and letter page
+sizes.
+
+8/2/94 (feature change) Moved all menus provided by external
+interpreters into the menu bar. Rearranged some menus in a new way to
+reduce the amount of space occupied in the menu bar.  And I added a
+command to hide and show the complete toolbox.
+
+6/2/94 (bug fix) The editor does not allow to move objects outside of
+the canvas anymore. But it is still possible to loose objects when
+reducing the page size.
+
+4/2/94 (code cleanup) Changed the naming convention: All Tk procs that
+implement methods of tkined objects are named using the convention
+<TYPE>::<OPERATION>, e.g. the move operation is implemented using
+NODE::move, GROUP::move, etc.
+
+2/2/94 (code cleanup) All tools and commands are called with an editor
+argument. This makes coding of editor specific commands in C
+straightforward.
+
+2/2/94 (feature change) Renamed the label tool. Now it is called alter
+tool and supports altering of text objects and resizing of strip- or
+barchart objects.
+
+2/2/94 (bug fix) Updated the stripchart and barchart canvas items
+written by Guntram Hueske (hueske@ibr.cs.tu-bs.de).
+
+----------------- Released 0.7, 9/1/94 -----------------------
+
+9/1/94 (performance improvement) Rewrote the m_group_move() and the
+m_collapse() methods to speed things up.
+
+30/12/93 (feature removed) Removed the piechart. It was never useful
+since you had to guess the meaning of a slide. Better use barcharts.
+*** POTENTIAL INCOMPATIBILITY ***
+
+30/12/93 (new feature) Added the new stripchart and barchart canvas
+item written by Guntram Hueske (hueske@ibr.cs.tu-bs.de).
+
+28/12/1993 (new feature) Added a log object that creates a new top
+level window which may be used to log information. The contents can be
+saved or send via email to someone you love.
+
+6/12/93 (code cleanup) The Tcl part of tkined is now compiled into the
+binary. This allows us to have multiple versions around and hopefully
+solves some installation problems.
+
+23/11/93 (feature change) The open command of the file menu now clears
+the current map. The merge command can be used to add objects of
+another map.
+
+----------------- Released 0.6, 8/10/93 -----------------------
+
+4/8/93 (new feature) ined trace command added.
+
+3/8/93 (feature change) Changed the ined browse command to interpret
+the first lines as headings. The text to browse must be contained in
+the list of the last argument.
+*** POTENTIAL INCOMPATIBILITY ***
+
+3/8/93 (bug fix) Tools of exiting interpreters are silently removed.
+
+30/9/93 (new feature) Support for scale and radio button in a request
+dialog.
+
+23/9/93 (new feature) Print command added to the file menu.
+
+22/9/93 (code cleanup) Most commands of utils.tcl are now in the
+tkined core.
+
+----------------- Released 0.5, 31/8/93 -----------------------
+
+31/8/93 (feature change) The text of a text label is not saved
+anymore. This seems useful to get rid of status messages generate by
+external tools.
+
+23/8/93 (new feature) Added the size command. It reports the size even
+if the object is currently invisible. This is needed by the network
+layout algorithms to allocate space for the object.
+
+23/8/93 (feature change) Changed the ined select command. There is now
+a select and an unselect command. This is much easier to use then a
+single command that toggles the selection state. The command ined
+select clear is no longer allowed.
+*** POTENTIAL INCOMPATIBILITY ***
+
+21/8/93 (feature change) The ined commands retrieve, select and delete
+are now restricted to accept only a single argument.
+*** POTENTIAL INCOMPATIBILITY ***
+
+20/8/93 (performance improvement) Move the proc's to compute the link
+position to C. This makes tkined_misc obsolete. I took the time to
+change the algorithm a little bit. Links connected to networks with
+fixed points now guess if they really should use horizontal or
+vertical lines.
+
+20/8/93 (new feature) Menus defined in the tkined.defaults file now
+support separators. This makes large menus more readable.
+
+19/8/93 (feature change) 'ined create TOOL ...' now returns an id for
+the new tool. To delete the tool, you now have to use the standard
+command 'ined delete <id>'.
+*** POTENTIAL INCOMPATIBILITY ***
+
+16/8/93 (new feature) Hacked an ined procedure that is used when
+loading saved images. It uses a global variable and a guess for
+setting the canvas right. Ugly - but it works.
+
+16/8/93 (performance improvement) Rewrote tkined_mark_item in C to
+speed things up. (Still slow on large selections but mainly because I
+add so many new objects.)
+
+15/8/93 (new feature) group, ungroup, expand and collapse are finished.
+
+15/8/93 (feature change) New NODE, NETWORK and GROUP objects always
+get a label.
+
+15/8/93 (bug fix) The text tool now uses the correct color and font
+when you type text.
+
+15/8/93 (performance improvement) Finished the re-implementation of
+the object handling stuff as ordinary C code. This major step provides
+some improvements: 1)
+tkined does not need the addinput patch anymore
+2) implementation of grouped objects is much easier since objects save
+their state even if they are invisible 3) speed up. Moving critical
+parts (like computation of the link position) to C code is now very
+easy.
+
+----------------- Released 0.4, 16/7/93 -----------------------

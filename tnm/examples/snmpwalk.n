@@ -1,0 +1,24 @@
+.TH snmpwalk 1L "October 93" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+snmpwalk \- walk a snmp MIB tree
+.SH SYNOPSIS
+.B snmpwalk 
+.I host
+.I label
+.SH DESCRIPTION
+.B snmpwalk
+retrieves a MIB subtree from a SNMP agent and shows the
+instance names with their values. The agent is given by the
+\fIhost\fR argument. Note, \fIhost\fR should be a known SNMP alias
+defined in the users ~/.scottyrc or in the system wide /usr/local/lib/scotty/site/init.tcl file. If no alias definition exists, a SNMPv1 session
+on port 161 and community public is used. The \fIlabel\fR
+argument defines the top node of the MIB used to start the walk.
+All variables in the subtree below the given node are queried
+and their values presented to the user.
+.SH ALIAS DEFINITIONS
+SNMP aliases are used to handle SNMP parameters needed to talk to SNMP
+agents. Please read the scotty(1) man page for details. 
+.SH SEE ALSO
+scotty(1)
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de

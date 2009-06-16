@@ -1,0 +1,51 @@
+
+This directory contains a set of evolving scripts for scotty that can
+be used with the Tkined editor. They turn Tkined into a small network
+management system. The script files implement various tools grouped by
+functionality:
+
+manager.tcl	- Some commands to start new tools from within Tkined.
+event.tcl	- Filter events reported by the syslog daemon.
+ip_trouble.tcl	- Some small trouble shooting commands.
+ip_monitor.tcl	- Simple monitoring of round trip times etc.
+ip_discover.tcl	- Discovering ip nodes and networks.
+ip_layout.tcl 	- These commands help you to layout your network.
+ip_world.tcl	- Show hosts on world maps.
+
+The following scripts use the SNMP extension provided by scotty:
+
+snmp_trouble.tcl - SNMP based trouble shooting commands.
+snmp_monitor.tcl - SNMP based monitoring commands.
+snmp_browser.tcl - SNMP based MIB browser.
+snmp_host.tcl	 - SNMP script to browse the Host Resources MIB
+snmp_cisco.tcl   - SNMP script for cisco systems.
+snmp_hp.tcl	 - SNMP script for HPUX systems.
+
+Not very serious:
+
+game.tcl	- A very simple game. (In fact the first tool for Tkined)
+clock.tcl	- A very simple script showing GMT time.
+movie.tcl	- A little script to create gifs from a running tkind.
+		  We use it to create mpegs of what happens to our network.
+
+All these scripts are started by Tkined. Tkined parses its tkined.defaults
+file for interpreter<x> lines (where <x> is a number) and starts every
+script listed there whenever a new view is opened. The default entry
+in tkined.defaults is:
+
+tkined.interpreter1:    manager.tcl
+
+This way manager.tcl gets started. If something fails, you will get an
+error message in your xterm where you started Tkined. If everything is
+ok, a new entry will show up in the menu bar of Tkined. Clicking on the
+new entry will allow you to select one of the new commands provided by
+the script. The manager.tcl script is only used to start the other
+scripts found in this directory.
+
+Some sample default definitions are in the file tkined.defaults.
+These examples should tell you how to set SNMP parameters for your
+network etc.
+
+If you start one of these scripts directly, you will see something
+like 'ined size'. This is correct since these scripts communicate with
+Tkined via stdin and stdout.

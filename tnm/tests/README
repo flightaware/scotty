@@ -1,0 +1,19 @@
+Tnm Test Suite
+--------------
+
+This directory contains a set of validation tests for the Tnm Tcl
+extension. Each of the files whose name ends in ".test" is intended to
+fully exercise one or a few Tnm features. The features tested by a
+given file are listed in the first line of the file. The test suite is
+nowhere near complete yet. Contributions of additional tests would be
+most welcome.
+
+You can run the tests by typing "make test" in the platform dependent
+directory; this will run all of the tests.
+
+In either case no output will be generated if all goes well, except
+for a listing of the tests.  If there are errors then additional
+messages will appear.
+
+For more details on the testing environment, see the README file in
+the Tcl test directory.

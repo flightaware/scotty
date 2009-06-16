@@ -1,0 +1,39 @@
+.TH udploss 1L "April 94" "Tnm Example" "Tnm Tcl Extension"
+
+.SH NAME
+udploss \- test the packet loss on udp connections
+
+.SH SYNOPSIS
+.B udploss
+[
+-d
+.I delay
+]
+[
+-t
+.I seconds
+]
+.I hosts
+
+.SH DESCRIPTION
+.B udploss
+sends datagrams to the echo port on
+.I hosts.
+udploss counts the number of send and received packets and writes
+the packet loss rate to stdout.
+
+.SH OPTIONS
+.TP
+.BI "-d " delay
+This option defines the delay between two packets send to a host.
+The delay is given in seconds with a default of 5 seconds.
+.TP
+.BI "-t " seconds
+This option defines the frequency with which reports are written to
+stdout. The default test interval is 60 seconds.
+
+.SH SEE ALSO
+scotty(1)
+
+.SH AUTHORS
+Juergen Schoenwaelder (schoenw@ibr.cs.tu-bs.de)

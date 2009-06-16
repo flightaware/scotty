@@ -1,0 +1,210 @@
+# Commands covered:  icmp				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-1998 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: icmp.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::icmp
+}
+
+test icmp-1.1 {icmp echo} {
+    expr {[lindex [icmp echo 127.0.0.1] 1] > 0}
+} {1}
+test icmp-1.1.2 {icmp echo} {
+    icmp echo {192.168.173.173}
+} {192.168.173.173 {}}
+test icmp-1.1.3 {icmp multiple echo} {
+    set result [icmp echo {127.0.0.1 127.0.0.1}]
+    expr {[lindex $result 1] > 0 && [lindex $result 3] > 0}
+} {1}
+test icmp-1.1.4 {icmp multiple echo} {
+    set arg ""
+    for {set i 0} {$i < 500} {incr i} { lappend arg 127.0.0.1 }
+    set result [icmp echo $arg]
+    set rc 1
+    for {set i 0} {$i < 10} {incr i} {
+	set rc [expr $rc && [lindex $result [expr $i * 2 + 1]] > 0] 
+    }
+    set rc
+} {1}
+
+test icmp-1.2 {icmp timeout} {
+    expr {[lindex [icmp -timeout 5 echo 127.0.0.1] 1] > 0}
+} {1}
+test icmp-1.2.1 {icmp timeout timing} {
+    expr {[lindex [time {icmp -timeout 2 echo 192.169.173.173}] 0] > 2000000}
+} {1}
+test icmp-1.2.2 {icmp timeout timing} {
+    expr {[lindex [time {icmp -timeout 2 echo 192.169.173.173}] 0] < 3000000}
+} {1}
+test icmp-1.3 {icmp retries} {
+    expr {[lindex [icmp -retries 5 echo 127.0.0.1] 1] > 0}
+} {1}
+test icmp-1.4 {icmp delay} {
+    expr {[lindex [icmp -delay 50 echo 127.0.0.1] 1] > 0}
+} {1}
+test icmp-1.4.1 {icmp delay timing} {
+    expr {[lindex [time {icmp -delay 255 echo 127.0.0.1}] 0] < 200000}
+} {1}
+test icmp-1.4.2 {icmp delay timing} {
+    set tim [time {icmp -delay 255 echo {127.0.0.1 127.0.0.1}}]
+    expr {[lindex $tim 0] > 255000 && [lindex $tim 0] < 750000}
+} {1}
+test icmp-1.4.3 {icmp delay timing} {
+    set tim [time {icmp -delay 255 echo {127.0.0.1 127.0.0.1 127.0.0.1}}]
+    expr {[lindex $tim 0] > 500000 && [lindex $tim 0] < 900000}
+} {1}
+
+test icmp-1.5 {icmp size} {
+    expr {[lindex [icmp -size 800 echo 127.0.0.1] 1] > 0}
+} {1}
+
+test icmp-2.0 {icmp mask} {
+    set mask [lindex [icmp mask 127.0.0.1] 1]
+    expr [string match "*.0.0.0" $mask] || [string length $mask] == 0
+} {1}
+test icmp-2.1 {icmp timestamp} {
+    regexp "\[-0-9]\[0-9]*" [lindex [icmp timestamp 127.0.0.1] 1]
+} {1}
+test icmp-2.2 {icmp ttl} {
+    expr {[lindex [icmp ttl 1 127.0.0.1] 1] > 0}
+} {1}
+
+test icmp-2.2.1 {icmp ttl check} {
+    list [catch {icmp ttl 0 127.0.0.1} msg] $msg
+} {1 {expected integer between 1 and 255 but got "0"}}
+test icmp-2.2.2 {icmp ttl check} {
+    list [catch {icmp ttl 1000000 127.0.0.1} msg] $msg
+} {1 {expected integer between 1 and 255 but got "1000000"}}
+
+test icmp-2.3 {icmp trace} {
+    expr {[lindex [icmp trace 1 127.0.0.1] 1] > 0}
+} {1}
+test icmp-2.3.1 {icmp trace} {
+    set r1 [lindex [icmp trace 1 134.169.34.1] 0]
+    set r2 [lindex [icmp trace 1 130.89.16.108] 0]
+    set r3 [lindex [icmp trace 1 194.45.135.2] 0]
+    expr {$r1 == $r2 || $r1 == $r3 || $r2 == $r3}
+} {1}
+
+test icmp-2.4.1 {icmp window size} {
+    set echoarg 192.168.173.173
+    set tim [time {icmp -timeout 1 -window 1 echo $echoarg}]
+    expr {[lindex $tim 0] > 1000000}
+} {1}
+test icmp-2.4.2 {icmp window size} {
+    set echoarg {192.168.173.173 192.168.173.173}
+    set tim [time {icmp -timeout 1 -window 1 echo $echoarg}]
+    expr {[lindex $tim 0] > 2000000}
+} {1}
+test icmp-2.4.3 {icmp window size} {
+    set echoarg {192.168.173.173 192.168.173.173 192.168.173.173}
+    set tim [time {icmp -timeout 1 -window 1 echo $echoarg}]
+    expr {[lindex $tim 0] > 3000000}
+} {1}
+test icmp-2.4.3 {icmp window size} {
+    set echoarg {192.168.173.173 192.168.173.173 192.168.173.173}
+    set tim [time {icmp -timeout 1 -window 2 echo $echoarg}]
+    expr {[lindex $tim 0] < 3000000}
+} {1}
+test icmp-2.4.4 {icmp window size} {
+    set echoarg {192.168.173.173 192.168.173.173 192.168.173.173}
+    set tim [time {icmp -timeout 1 -window 3 echo $echoarg}]
+    expr {[lindex $tim 0] < 2000000}
+} {1}
+
+test icmp-3.0 {icmp timeout option} {
+    icmp -timeout 42
+    icmp -timeout
+} {42}
+test icmp-3.1 {icmp retries option} {
+    icmp -retries 44
+    icmp -retries
+} {44}
+test icmp-3.2 {icmp size option} {
+    icmp -size 46
+    icmp -size
+} {46}
+test icmp-3.3 {icmp delay option} {
+    icmp -delay 48
+    icmp -delay
+} {48}
+test icmp-3.31 {icmp window option} {
+    icmp -window 0
+    icmp -window
+} {0}
+test icmp-3.32 {icmp window option} {
+    icmp -window 49
+    icmp -window
+} {49}
+test icmp-3.33 {icmp window option} {
+    list [catch { icmp -window 100000 } msg] $msg
+} {1 {expected integer between 0 and 65535 but got "100000"}}
+test icmp-3.4 {icmp bad timeout option} {
+   list [catch {icmp -timeout nase} msg] $msg
+} {1 {expected positive integer but got "nase"}}
+test icmp-3.5 {icmp bad retries option} {
+   list [catch {icmp -retries nase} msg] $msg
+} {1 {expected unsigned integer but got "nase"}}
+test icmp-3.6 {icmp bad size option} {
+   list [catch {icmp -size nase} msg] $msg
+} {1 {expected integer between 44 and 65515 but got "nase"}}
+test icmp-3.7 {icmp bad delay option} {
+   list [catch {icmp -delay nase} msg] $msg
+} {1 {expected integer between 0 and 255 but got "nase"}}
+test icmp-3.8 {icmp bad timeout option} {
+   list [catch {icmp -timeout -1} msg] $msg
+} {1 {expected positive integer but got "-1"}}
+test icmp-3.9 {icmp bad retries option} {
+   list [catch {icmp -retries -1} msg] $msg
+} {1 {expected unsigned integer but got "-1"}}
+test icmp-3.10 {icmp bad size option} {
+   list [catch {icmp -size -1} msg] $msg
+} {1 {expected integer between 44 and 65515 but got "-1"}}
+test icmp-3.11 {icmp bad delay option} {
+   list [catch {icmp -delay -1} msg] $msg
+} {1 {expected integer between 0 and 255 but got "-1"}}
+test icmp-3.11.1 {icmp bad delay option} {
+   list [catch {icmp -delay 1000000} msg] $msg
+} {1 {expected integer between 0 and 255 but got "1000000"}}
+test icmp-3.12 {icmp bad window option} {
+   list [catch {icmp -window -1} msg] $msg
+} {1 {expected integer between 0 and 65535 but got "-1"}}
+test icmp-3.13 {icmp bad window option} {
+   list [catch {icmp -window aa} msg] $msg
+} {1 {expected integer between 0 and 65535 but got "aa"}}
+
+# list tests
+
+# combined tests
+
+# echo '-size 120 localhost' | ./ntping -b
+# echo '-size 60 -delay 30 -mask localhost' | ./ntping -b
+# echo '-retries 2 -timeout 1 -ttl 1 localhost' | ./ntping -b
+# echo '-size 400 -delay 10 -trace 1 localhost' | ./ntping -b
+# echo '-tstamp localhost' | ./ntping -b
+
+# echo '-size 120 -delay 1 sol.ibr.cs.tu-bs.de prep.ai.mit.edu' | ./ntping -b
+# echo '-size 60 -mask -delay 10 sol.ibr.cs.tu-bs.de prep.ai.mit.edu' | ./ntping -b
+# echo '-retries 2 -timeout 1 -delay 100 -ttl 2 sol.ibr.cs.tu-bs.de prep.ai.mit.edu' | ./ntping -b
+# echo '-size 400 -trace 2 sol.ibr.cs.tu-bs.de prep.ai.mit.edu' | ./ntping -b
+# echo '-tstamp sol.ibr.cs.tu-bs.de prep.ai.mit.edu' | ./ntping -b
+
+::tcltest::cleanupTests
+return

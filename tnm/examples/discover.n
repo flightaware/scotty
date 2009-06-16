@@ -1,0 +1,74 @@
+.TH discover 1L "October 96" "Tnm Example" "Tnm Tcl Extension"
+
+.SH NAME
+discover \- find devices on a IP network
+
+.SH SYNOPSIS
+.B discover
+[
+-d
+.I delay
+]
+[
+-w
+.I window
+]
+[
+-t
+.I timeout
+]
+[
+-r
+.I retries
+]
+[
+-icmp
+]
+[
+-snmp
+]
+.I address mask
+
+.SH DESCRIPTION
+The \fBdiscover\fR script sends icmp echo requests or SNMP get
+requests to all IP addresses that belong to an IP network address
+space. The network address space is defined by the IP network
+\fIaddress\fR and the address \fImask\fR of the network. The discover
+script lists all IP addresses that respond to our probe.
+
+.SH OPTIONS
+.TP
+.BI "-d " delay
+This option defines the delay between two packets send.
+The delay is given in milli seconds with a default of 10 ms.
+.TP
+.BI "-w " window
+This option defines the maximum number of SNMP packets on the wire.
+The default window size is 255.
+.TP
+.BI "-t " timeout
+This option defines the timeout interval in seconds in which we expect 
+an answer. The default timeout interval is 5 seconds.
+.TP
+.BI "-r " retries
+This option defines the number of retries. The default is 2 retries, which
+means that the request is send 3 times in the timeout interval.
+.TP
+.B -icmp
+Use icmp echo request to find IP devices. This is most likely to
+find all devices currently in use.
+.TP
+.B -snmp
+Use a SNMPv1 get request on sysDescr.0 with community public. This is
+the default but requires that the devices run SNMP agents that respond
+to SNMPv1 request.
+
+.SH SEE ALSO
+scotty(1), Tnm(n)
+
+.SH BUGS
+This discover script has the power to flood networks with ICMP or SNMP
+packets. Use with care.
+
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de

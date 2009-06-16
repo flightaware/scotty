@@ -1,0 +1,21 @@
+
+This directory contains some example scripts. The purpose of this
+scripts if to show how you can program your own management solutions
+with Tcl/Tk/Scotty. Most of them are small and hopefully easy to
+understand, although the mibtree script has grown to a more complete
+MIB browser.
+
+This directory also contains sample CGI scripts we have written to
+make our SNMP MIB parser and the GDMO mib parser available through the
+WWW. The files are:
+
+    sbrowser.cgi	- This is the experimental SNMP WWW browser.
+
+    gbrowser.cgi	- This is the experimental GDMO WWW browser.
+
+To install these services on your http server, you have to edit the
+path to the scotty executable (if it is not in /usr/local/bin) and you
+have to adjust the cgi path to your local convention. You will also
+need to adjust the bitmap paths to meet your local server
+configuration. To use the GDMO browser, you must configure scotty with
+the --enable-gdmo option.

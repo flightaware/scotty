@@ -1,0 +1,279 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+##
+## Test if we can resolve a given email address. This script contacts
+## the appropriate SMTP server and issues a verfy command. It is not
+## foolproof but a first step to automate this kind of tasks.
+##
+
+set last_email ""
+set max_level 12
+
+##
+## Print messages if running in debug mode.
+##
+
+proc debug {args} {
+    global debug
+
+    if {![info exists debug]} return
+
+    foreach arg $args {
+        puts stderr $arg
+    }
+}
+
+##
+## Print n spaces to stdout.
+##
+
+proc space {n} {
+    for {set i 0} {$i < $n} {incr i} { puts -nonewline "  " }
+}
+
+##
+## Read an answer from an SMTP server and return the whole stuff
+## in from of a tcl list (with all newline characters removed).
+##
+
+proc read_answer {f} {
+    set line [string trim [gets $f] "\r"]
+    set answer [list $line]
+    while {[string index $line 3] == "-"} {
+        set line [string trim [gets $f] "\r"]
+	lappend answer $line
+	flush stdout
+    }
+    return $answer
+}
+
+##
+## Contact the smtp daemon at a given host and check if it
+## can verify the given user.
+##
+
+proc test_user_host {user host level} {
+
+    global tnm
+
+    if {$level > 20} {
+        space $level; puts "-> a loop? aborting after 20 hops"
+	return 0
+    }
+
+    if {[catch {socket $host smtp} f]} {
+	space $level; puts "-> unable to connect to $host"
+	return 0
+    }
+    if {[catch {read_answer $f}]} {
+	return 0
+    }
+
+    if {![catch {dns name [netdb host address $tnm(host)]} hostname]} {
+	puts $f "helo $hostname"
+	if {[catch {read_answer $f}]} {
+	    return 0
+	}
+    }
+
+    if {[catch {puts $f "vrfy $user"}]} {
+	space $level; puts "-> unable to write to $host"
+	return 0
+    }
+
+    if {[catch {read_answer $f} answer]} {
+	return 0
+    }
+    foreach addr $answer {
+
+	set code [string range $addr 0 2]
+	if {$code != 250} {
+	    space $level; puts "$user@$host"
+	    space $level; puts "-> $addr"
+	    set ok 0
+	    continue
+	}
+
+	# split addr into an email address and an optional name
+
+	regexp -nocase {<.*>} $addr email
+	if {![info exist email]} { set email [string range $addr 4 end] }
+	set email [string trim $email "<>"]
+	regexp -nocase {\(.*\)} $email name
+	regsub -nocase {\(.*\)} $email "" email
+	set email [string trim $email]
+
+	debug "** got email address $email"
+
+	if {![info exists name]} {
+	    set name [string range $addr 4 end]
+	    regsub -nocase {<.*>} $name "" name
+	}
+	set name [string trimleft  $name " ("]
+	set name [string trimright $name " )"]
+
+	# Check for host names that contain dots.
+	if {[string match {*@*.*} $email]} {
+	    set ok [test_email $email [expr {$level+1}] $name]
+
+	# Hostnames without dots get expanded magically.
+	} elseif {[string match {*@*} $email]} {
+	    set us [lindex [split $email @] 0]
+            set nl [split [lindex [split $email @] 1] .]
+            set ol [split $host .]
+
+	    set len [llength $ol]
+	    set ok 0
+	    for {set i 0}  {($i <= $len) && ($ok == 0)} { incr i} {
+		set hn "$nl [lrange $ol $i end]"
+		set hn [join $hn "."]
+
+		# Do we have a A or a MX record for this?
+
+		if {[catch {dns address $hn} res]} {
+		    if {[catch {dns mx $hn} res]} continue
+		}
+		if {$res == ""} continue
+
+		set email "$us@$hn"
+		debug "** expanding with domain name extensions to $email"
+		set ok [test_email $email [expr {$level+1}] $name]
+	    }
+
+	# OK, no @. We believe that we have found it.
+	} else {
+	    space [expr {$level+1}]
+	    if {$name != ""} {
+		puts "$email ($name)"
+	    } else {
+		puts "$email"
+	    }
+	    space [expr {$level+1}]; puts "-> ok"
+	    set ok 1
+	}
+
+	unset name
+    }
+
+    close $f
+
+    return $ok
+}
+
+##
+## Test a given email. First, split it in the user and host part.
+## See if we have a local address or if we can resolve the hostname
+## to an IP address. If this fails, check if we can get an MX record
+## for the address.
+##
+
+proc test_email {email {level 0} {name ""}} {
+
+    global last_email max_level
+
+    # Loop detection.
+    if {($last_email == $email) || ($level > $max_level)} {
+	space $level
+	if {$name != ""} {
+	    puts "$email ($name)"
+	} else {
+	    puts "$email"
+	}
+	space $level; puts "-> ok (possible loop detected)"
+	return 0
+    }
+    set last_email $email
+
+    # Say where we are.
+    space $level
+    if {$name != ""} {
+	puts "$email ($name)"
+    } else {
+	puts "$email"
+    }
+
+    set email [split  $email @]
+    set user  [lindex $email 0]
+    set host  [lindex $email 1]
+
+    ## Use localhost if we operate local.
+    if {$host == ""} { 
+	debug "** testing localhost"
+	return [test_user_host $user localhost $level]
+    }
+
+    ## expand the host if we get an MX record for it
+    if {![catch {dns mx $host} res]} {
+	set ok 0
+	set skip 0
+	foreach mx $res {
+	    if {[lindex $mx 0] == $host} {
+		debug "** found identical MX record for $host (deferred)"
+		set skip 1
+		continue
+	    }
+	    debug "** expanding based on MX record to [lindex $mx 0]"
+	    set ok [test_email "$user@[lindex $mx 0]" [expr {$level+1}]]
+	    if {$ok} break
+	}
+	if {! $skip} {
+	    return $ok
+	}
+    }
+
+    ## check if we have a real host name. convert it back into
+    ## a fully qualified hostname if possible.
+    if {![catch {dns address $host} res]} {
+	if {$res != ""} {
+	    set ok 0
+	    foreach aa $res {
+		if {![catch {dns name $aa} aa]} { set host $aa }
+		debug "** testing fully qualified host address $aa"
+		set ok [test_user_host $user $host $level]
+		if {$ok} break
+	    }
+	    return $ok
+        }
+    }
+
+    space $level; puts "-> probably a bad email address"
+    return 0
+}
+
+proc usage {} {
+    puts stderr "usage: emok -- \[-d\] \[-m max_level\] user\[@hostname\]"
+    exit
+}
+
+##
+## Here is the main routine.
+##
+
+if {$argc == 0} {
+    usage
+    exit 42
+}
+
+while {$argv != ""} {
+    set argc [llength $argv]
+    case [lindex $argv 0] in {
+	{-d} {
+	    set debug on
+	    set argv [lrange $argv 1 end]
+	}
+	{-m} {
+	    if {$argc == 1} usage
+	    set max_level [lindex $argv 1]
+	    set argv [lrange $argv 2 end]
+	}
+	{default} break
+    }
+}
+
+foreach arg $argv {
+    test_email $arg
+}

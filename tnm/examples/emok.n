@@ -1,0 +1,39 @@
+.TH emok 1L "December 93" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+emok \- check if an email address is ok
+.SH SYNOPSIS
+.B emok
+[
+-d
+]
+[
+-m
+.I max_level
+]
+.I email-addresses
+.SH DESCRIPTION
+.B emok
+tests if an email address is valid. It first resolves any MX records
+before it connects to SMTP daemons to verify an email address. The
+whole process is done recursively.
+.SH OPTIONS
+.TP
+.B "-d"
+Print debugging output. The format is ugly but it helps to understand
+what emok is doing and why.
+.TP
+.BI "-m " max_level
+Set the maximum length of a email address chain to
+.I maxlevel.
+The default is 12.
+.SH SEE ALSO
+scotty(1)
+.SH BUGS
+Since UUCP connections can not be traced directly, there may be
+answers like `user unknown' although the email address is a good one.
+Ideas how to handle this case are very welcome.
+
+Checking addresses of mailing lists is time consuming and very expensive.
+Use with care.
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de (Juergen Schoenwaelder)

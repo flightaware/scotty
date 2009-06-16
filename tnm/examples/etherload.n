@@ -1,0 +1,21 @@
+.TH etherload 1L "October 93" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+etherload \- show the load of an ethernet
+.SH SYNOPSIS
+.B etherload
+.I time
+.I hosts
+.SH DESCRIPTION
+.B etherload
+queries Sun's etherd for ethernet statistics and displays them
+periodically. The
+.I time
+argument specifies the interval between two updates.
+.I hosts
+is a list of hosts that must run an etherd daemon.
+.SH SEE ALSO
+etherd(1), traffic(1), scotty(1)
+.SH BUGS
+The sunrpc Tcl command does not allow to set filter expressions.
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de

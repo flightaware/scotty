@@ -1,0 +1,95 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+##
+## Create the gnuplot data input file.
+##
+
+proc data { file data } {
+    global label
+    set in [open $file r]
+    set out [open $data w+]
+    set last 0
+    while {![eof $in]} {
+	gets $in line
+	if {$line == "" || [string match #* $line]} continue
+	scan $line "%d %d %f %*c %*s %s" clock ifIndex ifLoad ifDescr
+	set label($ifIndex) $ifDescr
+	if {$last+2 < $clock} {
+	    set last $clock
+	    puts $out ""
+	}
+	puts $out $ifLoad
+    }
+    close $in
+    close $out
+}
+
+##
+## Create the gnuplot control file for data. Gnuplot will write
+## its output to file.
+##
+
+proc plot { file data } {
+    global label
+    set gp [open "| gnuplot" r+]
+    puts $gp "set xlabel \"interface\""
+    puts $gp "set ylabel \"time\""
+    puts $gp "set zlabel \"interface load\""
+    #puts $gp "set hidden3d"
+    puts $gp "set nocontour"
+    puts $gp "set surface"
+    puts $gp "set view 30, 120, 1.0, 1.2"
+    puts $gp "set border"
+    puts $gp "set nokey"
+    puts $gp "set size 1.1,1.2"
+    puts $gp "set data style lines"
+    puts $gp "set ticslevel 0.1"
+
+#   puts $gp "set zrange \[0:100\]"
+#   foreach a [lsort [array names label]] {
+#       puts $gp "set label \"$label($a)\" at $a,200,0"
+#   }
+
+    puts $gp "set terminal pbm color"
+    puts $gp "set output \"$file\""
+
+    puts $gp "splot \"$data\" using 1"
+
+    flush $gp
+    close $gp
+}
+
+##
+## Create a gif file foreach file name given in argv.
+##
+
+set data $tnm(tmp)/ifload[pid].data
+set ppm  $tnm(tmp)/ifload[pid].ppm
+set tmp	 $tnm(tmp)/ifload[pid].tmp
+
+foreach file $argv {
+    if {![file readable $file]} {
+	puts stderr "File $file is not readable - skipped."
+	continue
+    }
+    data $file $data
+    if {[catch "plot $ppm $data" msg]} {
+	puts stderr "Creating plot failed: $msg"
+	continue
+    }
+    if {[catch "exec pnmcrop $ppm > $tmp" msg]} {
+	puts stderr "Cropping image failed: $msg"
+    } else {
+	file rename $tmp $ppm
+    }
+    if {[catch "exec ppmtogif $ppm > $file.gif" msg]} {
+	puts stderr "Converting to gif image failed: $msg"
+	continue
+    }
+}
+
+catch {file delete $tmp $ppm $data}

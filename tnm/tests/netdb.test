@@ -1,0 +1,310 @@
+# Commands covered:  netdb				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-1998 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: netdb.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::netdb
+}
+
+test netdb-1.1 {check general netdb syntax} {
+    list [catch {netdb} msg] $msg
+} {1 {wrong # args: should be "netdb option query ?arg arg ...?"}}
+test netdb-1.2 {check general netdb syntax} {
+    list [catch {netdb foobar} msg] $msg
+} {1 {bad option "foobar": must be hosts, ip, networks, protocols, services, or sunrpcs}}
+
+test netdb-2.1 {check "netdb hosts" command} {
+    netdb hosts address localhost
+} {127.0.0.1}
+test netdb-2.2 {check "netdb hosts" command} {
+    netdb hosts name 127.0.0.1
+} {localhost}
+test netdb-2.3 {check "netdb hosts" command} {
+    list [catch {netdb hosts foo 127.0.0.1} msg] $msg
+} {1 {bad option "foo": must be address, aliases, or name}}
+test netdb-2.4 {check "netdb hosts" command} {
+    list [catch {netdb hosts name} msg] $msg
+} {1 {wrong # args: should be "netdb hosts name address"}}
+test netdb-2.5 {check "netdb hosts" command} {
+    list [catch {netdb hosts address} msg] $msg
+} {1 {wrong # args: should be "netdb hosts address name"}}
+test netdb-2.6 {check "netdb hosts" command} {
+    list [catch {netdb hosts aliases} msg] $msg
+} {1 {wrong # args: should be "netdb hosts aliases address"}}
+test netdb-2.7 {check "netdb hosts" command} {
+    set result ""
+    foreach {name address} [join [netdb hosts]] {
+	foreach alias [netdb hosts aliases $address] {
+	    if {[netdb hosts address $alias] != $address} {
+		lappend result $alias
+	    }
+	}
+    }
+    set result
+} {}
+
+test netdb-3.1 {check "netdb services" command} {
+    list [catch {netdb services name} msg] $msg
+} {1 {wrong # args: should be "netdb services name number protocol"}}
+test netdb-3.2 {check "netdb services" command} {
+    list [catch {netdb services number} msg] $msg
+} {1 {wrong # args: should be "netdb services number name protocol"}}
+test netdb-3.3 {check "netdb services" command} {
+    list [catch {netdb services aliases} msg] $msg
+} {1 {wrong # args: should be "netdb services aliases number protocol"}}
+test netdb-3.4 {check "netdb services" command} {
+    list [catch {netdb services foo} msg] $msg
+} {1 {bad option "foo": must be aliases, name, or number}}
+test netdb-3.5 {check "netdb services" command} {
+    netdb services name 21 tcp
+} {ftp}
+test netdb-3.6 {check "netdb services" command} {
+    netdb services number ftp tcp
+} {21}
+test netdb-3.7 {check "netdb services" command} {
+    netdb services aliases 21 tcp
+} {}
+test netdb-3.8 {check "netdb services" command} {
+    set result ""
+    foreach {name number protocol} [join [netdb services]] {
+	if {$protocol != "udp" && $protocol != "tcp"} continue
+	if {[netdb services name $number $protocol] != $name} {
+	    set result "[netdb services name $number $protocol] != $name"
+	    break
+	}
+	if {[netdb services number $name $protocol] != $number} {
+	    set result "[netdb services number $name $protocol] != $number"
+	    break
+	}
+    }
+    set result
+} {}
+test netdb-3.9 {check "netdb services" command} {
+    set result ""
+    foreach {name number protocol} [join [netdb services]] {
+	foreach alias [netdb services aliases $number $protocol] {
+	    if {[netdb services number $alias $protocol] != $number} {
+		lappend result $alias
+	    }
+	}
+    }
+    set result
+} {}
+
+test netdb-4.1 {check for illegal IP host names} {
+    list [catch {netdb hosts address ""} msg] $msg
+} {1 {illegal IP host name ""}}
+test netdb-4.2 {check for illegal IP host names} {
+    list [catch {netdb hosts address "foo."} msg] $msg
+} {1 {illegal IP host name "foo."}}
+test netdb-4.3 {check for illegal IP host names} {
+    list [catch {netdb hosts address "foo-"} msg] $msg
+} {1 {illegal IP host name "foo-"}}
+test netdb-4.4 {check for illegal IP host names} {
+    list [catch {netdb hosts address "1.2.3.4"} msg] $msg
+} {1 {illegal IP host name "1.2.3.4"}}
+test netdb-4.5 {check for illegal IP host names} {
+    list [catch {netdb hosts address "-foo.com"} msg] $msg
+} {1 {illegal IP host name "-foo.com"}}
+test netdb-4.6 {check for illegal IP host names} {
+    list [catch {netdb hosts address ".foo.com"} msg] $msg
+} {1 {illegal IP host name ".foo.com"}}
+
+test netdb-5.1 {check for illegal IP addresses} {
+    list [catch {netdb hosts name "1.2.3"} msg] $msg
+} {1 {illegal IP address "1.2.3"}}
+test netdb-5.2 {check for illegal IP addresses} {
+    list [catch {netdb hosts name "1.2.3.4.5"} msg] $msg
+} {1 {illegal IP address "1.2.3.4.5"}}
+test netdb-5.3 {check for illegal IP addresses} {
+    list [catch {netdb hosts name "1.2.321.3"} msg] $msg
+} {1 {illegal IP address "1.2.321.3"}}
+test netdb-5.4 {check for illegal IP addresses} {
+    list [catch {netdb hosts name "1.A.3.4"} msg] $msg
+} {1 {illegal IP address "1.A.3.4"}}
+
+test netdb-6.1 {check "netdb ip" command} {
+    netdb ip class 18.159.0.42
+} {A}
+test netdb-6.2 {check "netdb ip" command} {
+    netdb ip class 134.169.1.1
+} {B}
+test netdb-6.3 {check "netdb ip" command} {
+    netdb ip class 194.45.135.65
+} {C}
+test netdb-6.4 {check "netdb ip" command} {
+    netdb ip class 234.0.0.1
+} {D}
+test netdb-6.5 {check "netdb ip" command} {
+    netdb ip class 127.0.0.1
+} {loopback}
+test netdb-6.6 {check "netdb ip" command} {
+    llength [netdb ip range 134.169.34.0 255.255.255.0]
+} {254}
+test netdb-6.7 {check "netdb ip" command} {
+    netdb ip range 134.169.34.0 255.255.255.248
+} {134.169.34.1 134.169.34.2 134.169.34.3 134.169.34.4 134.169.34.5 134.169.34.6}
+test netdb-6.8 {check "netdb ip" command} {
+    netdb ip apply 134.169.34.12 255.255.255.0
+} {134.169.34.0}
+test netdb-6.9 {check "netdb ip" command} {
+    netdb ip broadcast 134.169.34.12 255.255.255.0
+} {134.169.34.255}
+test netdb-6.10 {check "netdb ip" command} {
+    netdb ip compare 255.255.255.0 255.255.255.192
+} {-1}
+test netdb-6.11 {check "netdb ip" command} {
+    netdb ip compare 255.255.255.192 255.255.255.192
+} {0}
+test netdb-6.12 {check "netdb ip" command} {
+    netdb ip compare 255.255.255.192 255.255.255.0
+} {1}
+test netdb-6.13 {check "netdb ip" command} {
+    list [catch {netdb ip} msg] $msg
+} {1 {wrong # args: should be "netdb ip option arg"}}
+test netdb-6.14 {check "netdb ip" command} {
+    list [catch {netdb ip class} msg] $msg
+} {1 {wrong # args: should be "netdb ip class address"}}
+test netdb-6.15 {check "netdb ip" command} {
+    list [catch {netdb ip range} msg] $msg
+} {1 {wrong # args: should be "netdb ip range address mask"}}
+test netdb-6.16 {check "netdb ip" command} {
+    list [catch {netdb ip range 134.169.1.1} msg] $msg
+} {1 {wrong # args: should be "netdb ip range address mask"}}
+test netdb-6.17 {check "netdb ip" command} {
+    list [catch {netdb ip foo} msg] $msg
+} {1 {bad option "foo": must be apply, broadcast, class, compare, or range}}
+
+test netdb-7.1 {check "netdb networks" command} {
+    list [catch {netdb networks name} msg] $msg
+} {1 {wrong # args: should be "netdb networks name address"}}
+test netdb-7.2 {check "netdb networks" command} {
+    list [catch {netdb networks address} msg] $msg
+} {1 {wrong # args: should be "netdb networks address name"}}
+test netdb-7.3 {check "netdb networks" command} {
+    list [catch {netdb networks aliases} msg] $msg
+} {1 {wrong # args: should be "netdb networks aliases address"}}
+test netdb-7.4 {check "netdb networks" command} {
+    list [catch {netdb networks foo} msg] $msg
+} {1 {bad option "foo": must be address, aliases, or name}}
+test netdb-7.5 {check "netdb networks" command} {
+    set result ""
+    foreach {name address} [join [netdb networks]] {
+	if {[string compare $address "0.0.0.0"] == 0} continue
+	if {[netdb networks name $address] != $name} {
+	    set result "[netdb networks name $address] != $name"
+	    break
+	}
+	if {[netdb networks address $name] != $address} {
+	    set result "[netdb networks address $name] != $address"
+	    break
+	}
+    }
+    set result
+} {}
+test netdb-7.6 {check "netdb networks" command} {
+    set result ""
+    foreach {name address} [join [netdb networks]] {
+	if {[string compare $address "0.0.0.0"] == 0} continue
+	foreach alias [netdb networks aliases $address] {
+	    if {[netdb networks address $alias] != $address} {
+		lappend result $alias
+	    }
+	}
+    }
+    set result
+} {}
+
+test netdb-8.1 {check "netdb protocols" command} {
+    list [catch {netdb protocols name} msg] $msg
+} {1 {wrong # args: should be "netdb protocols name number"}}
+test netdb-8.2 {check "netdb protocols" command} {
+    list [catch {netdb protocols number} msg] $msg
+} {1 {wrong # args: should be "netdb protocols number name"}}
+test netdb-8.3 {check "netdb protocols" command} {
+    list [catch {netdb protocols aliases} msg] $msg
+} {1 {wrong # args: should be "netdb protocols aliases number"}}
+test netdb-8.4 {check "netdb protocols" command} {
+    list [catch {netdb protocols foo} msg] $msg
+} {1 {bad option "foo": must be aliases, name, or number}}
+test netdb-8.5 {check "netdb protocols" command} {
+    set result ""
+    foreach {name number} [join [netdb protocols]] {
+	if {[netdb protocols name $number] != $name} {
+	    set result "[netdb protocols name $number] != $name"
+	    break
+	}
+	if {[netdb protocols number $name] != $number} {
+	    set result "[netdb protocols number $name] != $number"
+	    break
+	}
+    }
+    set result
+} {}
+test netdb-8.6 {check "netdb protocols" command} {
+    set result ""
+    foreach {name number} [join [netdb protocols]] {
+	foreach alias [netdb protocols aliases $number] {
+	    if {[netdb protocols number $alias] != $number} {
+		lappend result $alias
+	    }
+	}
+    }
+    set result
+} {}
+
+test netdb-9.1 {check "netdb sunrpcs" command} {
+    list [catch {netdb sunrpcs name} msg] $msg
+} {1 {wrong # args: should be "netdb sunrpcs name number"}}
+test netdb-9.2 {check "netdb sunrpcs" command} {
+    list [catch {netdb sunrpcs number} msg] $msg
+} {1 {wrong # args: should be "netdb sunrpcs number name"}}
+test netdb-9.3 {check "netdb sunrpcs" command} {
+    list [catch {netdb sunrpcs aliases} msg] $msg
+} {1 {wrong # args: should be "netdb sunrpcs aliases number"}}
+test netdb-9.4 {check "netdb sunrpcs" command} {
+    list [catch {netdb sunrpcs foo} msg] $msg
+} {1 {bad option "foo": must be aliases, name, or number}}
+test netdb-9.5 {check "netdb sunrpcs" command} {
+    set result ""
+    foreach {name number} [join [netdb sunrpcs]] {
+	if {[string compare [netdb sunrpcs number $name] $number] != 0} {
+	    set result "[netdb sunrpcs number $name] != $number"
+	}
+	if {[string compare [netdb sunrpcs name $number] $name] != 0} {
+	    set result "[netdb sunrpcs name $number] != $name"
+	}
+    }
+    set result
+} {}
+test netdb-9.6 {check "netdb sunrpcs" command} {
+    set result ""
+    foreach {name number} [join [netdb sunrpcs]] {
+	foreach alias [netdb sunrpcs aliases $number] {
+	    if {[netdb sunrpcs number $alias] != $number} {
+		lappend result $alias
+	    }
+	}
+    }
+    set result
+} {}
+
+::tcltest::cleanupTests
+return

@@ -1,0 +1,66 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+##
+## Walk a MIB subtree starting by label using the SNMP session s.
+##
+
+proc walk { s label } {
+    $s walk vbl $label {
+	foreach oid [Tnm::snmp oid $vbl] value [Tnm::snmp value $vbl] {
+	    puts [format "%-31s: %s" [Tnm::mib name $oid] $value]
+	}
+    }
+}
+
+##
+## Walk a MIB subtree starting by label. We try to use the host argument
+## as an SNMP alias. This allows us to talk with the correct parameters
+## needed to various SNMPv1/SNMPv2 agents.
+##
+
+proc start { host label } {
+
+    if {[lsearch [Tnm::snmp alias] $host] >= 0} {
+	puts stderr "Trying SNMP alias $host..."
+	set s [Tnm::snmp generator -alias $host]
+    } 
+    if [info exists s] {
+	if [catch {walk $s $label} msg] {
+	    puts stderr $msg
+	}
+	$s destroy
+	return
+    }
+
+    foreach version [Tnm::snmp info versions] {
+	puts stderr "trying default $version session on $host..."
+	if {[catch {Tnm::snmp generator -address $host -version $version} s]} {
+	    puts stderr $s
+	    continue
+	}
+	if [catch {walk $s $label} msg] {
+	    $s destroy
+	    puts stderr $msg
+	    continue
+	}
+	$s destroy
+	return
+    }
+}
+
+##
+## Check the command line and start the MIB walk.
+##
+
+proc usage {} {
+    puts stderr "usage: snmpwalk host subtree"
+    exit
+}
+
+if {[llength $argv] != 2} { usage } else {
+    start [lindex $argv 0] [lindex $argv 1]
+}

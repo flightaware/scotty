@@ -1,0 +1,25 @@
+'\" Copyright (c) 1995-1996 Technical University of Braunschweig.
+'\" Copyright (c) 1996-1997 University of Twente.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+'\" @(#) $Id: mibtree.n,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+'\" 
+.TH mibtree 1L "September 97" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+mibtree \- display and query SNMP MIB trees
+.SH SYNOPSIS
+.B mibtree
+.SH DESCRIPTION
+\fBmibtree\fR shows an SNMP MIB tree graphically as a tree drawn on a
+Tk canvas widget. You can use the left and right mouse buttons to
+inspect MIB tree nodes or to select subtrees. The button in the middle
+can be used to scroll the canvas.
+
+Command contained in popup menus allow retrieve MIB values by sending
+SNMP queries to SNMP agents.
+.SH SEE ALSO
+wish(1), Tnm(n), mib(n), snmp(n)
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de (Juergen Schoenwaelder)

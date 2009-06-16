@@ -1,0 +1,94 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+package require TnmMonitor $tnm(version)
+
+namespace import Tnm::mib Tnm::snmp Tnm::job Tnm::map Tnm::netdb
+
+##
+## IfLoadEventProc is called whenever an ifLoad event is received.
+##
+
+proc IfLoadEventProc {node args} {
+    global out
+    array set v $args
+    puts $out [format "%s %3d %6.2f %% %6s (%s)" \
+	[clock seconds] $v(ifIndex) $v(ifLoad) $v(ifOperStatus) $v(ifDescr)]
+    flush $out
+}
+
+##
+## The following proc takes samples of one day and writes them to
+## a file which contains the starting date of the sample.
+##
+
+proc MonitorIfLoadDaily { node interval } {
+
+    global tnm out
+
+    set clock [clock seconds]
+    set s [TnmMapGetSnmpSession $node]
+    set file "[$s cget -address]-[clock format $clock -format "%b-%d"]"
+    set out [open $file w+]
+    set secs [expr ((($clock / 86400) + 1) * 86400) - $clock]
+    set iterations [expr ($secs / $interval) + 1]
+    
+    puts $out "# Interface load (based on scotty $tnm(version))"
+    puts $out "#"
+    puts $out "# Node:			$node"
+    puts $out "# Name:			[$node cget -name]"
+    puts $out "# Address:		[$s cget -address]"
+    puts $out "# Start:		[clock format [clock seconds]]"
+    puts $out "# Interval:		$interval"
+    puts $out "# Iterations:		$iterations"
+    puts $out "#"
+    puts $out "# Description of the columns in this file:"
+    puts $out "#"
+    puts $out "# 1:	Seconds since 1970."
+    puts $out "# 2:	Interface index."
+    puts $out "# 3:	Interface load."
+    puts $out "# 4:	%"
+    puts $out "# 5:	Interface status (either up or down)."
+    puts $out "# 6:	Interface description."
+    puts $out ""
+
+    Tnm_MonitorIfLoad $node $interval $iterations
+    $node bind Tnm_MonitorIfLoad:Value { IfLoadEventProc $node %A }
+    job wait
+    close $out
+}
+
+##
+## Some examples to set up monitoring jobs. Make sure to use IP
+## addresses as this will make more readable output.
+##
+
+mib load RFC1213-MIB
+
+if {$argc < 2 || $argc > 3} {
+    puts stderr {usage: ifload agent seconds}
+    exit 1
+}
+
+set host [lindex $argv 0]
+set interval [lindex $argv 1]
+set map [map create]
+set node [$map create node]
+$node configure -name $host
+$node configure -address [netdb hosts address $host]
+
+if {[lsearch [snmp alias] $host] >= 0} {
+    $node attribute snmp:alias $host
+}
+
+while 1 {
+    set code [catch {MonitorIfLoadDaily $node $interval} msg]
+    if $code {	
+	puts stderr $msg
+	exit 1
+    }
+}
+
+vwait forever

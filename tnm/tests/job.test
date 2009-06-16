@@ -1,0 +1,213 @@
+# Commands covered:  job				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-1998 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: job.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::job
+}
+
+foreach job [job find] { $job destroy }
+
+test job-1.1 {job command} {
+    list [catch {job} msg] $msg
+} {1 {wrong # args: should be "job option ?arg arg ...?"}}
+test job-1.2 {job command} {
+    list [catch {job foo} msg] $msg
+} {1 {bad option "foo": must be create, current, find, schedule, or wait}}
+
+test job-2.1 {job find} {
+    list [catch {job find nase} msg] $msg
+} {1 {wrong # args: should be "job find ?option value? ?option value? ..."}}
+test job-2.2 {job find} {
+    list [catch {job find foo bar} msg] $msg
+} {1 {bad option "foo": must be -status or -tags}}
+test job-2.3 {job find} {
+    job find
+} {}
+test job-2.4 {job find} {
+    set result {}
+    rename [job create -tags foo -status suspended] _foo_
+    rename [job create -tags {foo bar}] _foo_bar_
+    rename [job create -tags bar -status suspended] _bar_
+    lappend result [lsort [job find -tags ?ar]]
+    lappend result [lsort [job find -status suspended]]
+    lappend result [lsort [job find -status suspended -tags foo]]
+    lappend result [lsort [job find -tags {?ar *oo}]]
+    foreach j [job find] { $j destroy }
+    job schedule
+    set result
+} {{_bar_ _foo_bar_} {_bar_ _foo_} _foo_ _foo_bar_}
+
+test job-3.1 {job object command} {
+    global j s
+    set j [job create -interval 1000 -tags test \
+	    -command {set s [[job current] cget -status]}]
+    string compare $j [job find]
+} {0}
+test job-3.2 {job object command} {
+    global j
+    $j cget -interval
+} {1000}
+test job-3.3 {job object command} {
+    global j
+    $j configure -interval 500
+    $j cget -interval
+} {500}
+test job-3.5 {job object command} {
+    global j
+    list [catch {$j configure -interval foo} msg] $msg
+} {1 {expected positive integer but got "foo"}}
+test job-3.6 {job object command} {
+    global j
+    $j cget -iterations
+} {0}
+test job-3.7 {job object command} {
+    global j
+    $j configure -iterations 9876
+    $j cget -iterations
+} {9876}
+test job-3.9 {job object command} {
+    global j
+    list [catch {$j configure -iterations foo} msg] $msg
+} {1 {expected unsigned integer but got "foo"}}
+test job-3.10 {job object command} {
+    global j
+    $j cget -status
+} {waiting}
+test job-3.11 {job object command} {
+    global j s
+    vwait s
+    set s
+} {running}
+test job-3.12 {job object command} {
+    global j
+    $j configure -status suspended
+    $j cget -status
+} {suspended}
+test job-3.13 {job object command} {
+    global j
+    $j configure -status running
+    $j cget -status
+} {waiting}
+test job-3.15 {job object command} {
+    global j
+    list [catch {$j configure -status foo} msg] $msg
+} {1 {unknown status "foo": should be suspended, waiting, running, or expired}}
+test job-3.16 {job object command} {
+    global j
+    $j configure -tags {some tags here}
+    $j cget -tags
+} {some tags here}
+test job-3.17 {job object command} {
+    global j
+    $j configure -tags {}
+    $j cget -tags
+} {}
+test job-3.18 {job object command} {
+    global j
+    $j configure -status expired
+    job schedule
+    job find
+} {}
+
+
+test job-4.1 {many jobs} {
+    global cnt
+    set cnt 0
+    for {set i 0} {$i < 372} {incr i} {
+	job create -command "incr cnt" -interval 2 -iterations 2
+    }
+    job wait
+    list $cnt [job find]
+} {744 {}}
+
+
+test job-5.1 {jobs and multiple Tcl interpreters} {
+    interp create foo
+    foo eval { 
+	package require Tnm
+	namespace import Tnm::job
+	job create
+	job create
+	job create
+    }
+    list [llength [job find]] [llength [foo eval {job find}]]
+} {0 3}
+test job-5.2 {jobs and multiple Tcl interpreters} {
+    foo eval {
+	foreach j [job find] {
+	    $j destroy
+	}
+    }
+    update
+    list [llength [job find]] [llength [foo eval job find]]
+} {0 0}
+test job-5.3 {jobs and multiple Tcl interpreters} {
+    foo eval {
+	job create
+	job create
+    }
+    interp delete foo
+    llength [job find]
+} {0}
+
+
+test job-6.1 {renaming jobs} {
+    set j [job create]
+    rename $j hugo
+    job find
+} {hugo}
+test job-6.2 {renaming jobs} {
+    hugo cget -interval
+} {1000}
+test job-6.3 {renaming jobs} {
+    hugo destroy
+    update
+    job find
+} {}
+
+test job-7.1 {exit handler} {
+    set j [job create -exit {set result done} -iterations 3]
+    set result [$j cget -exit]
+} {set result done}
+test job-7.2 {exit handler} {
+    global result
+    set result ""
+    set j [job create -exit {set result done} -iterations 3]
+    $j wait
+    set result
+} {done}
+
+test job-8.1 {error handler} {
+    set j [job create -error {set result done} -iterations 3]
+    set result [$j cget -error]
+} {set result done}
+test job-8.2 {error handler} {
+    global result
+    set result ""
+    set j [job create -error {set result done} -iterations 3 -command "!@#$"]
+    $j wait
+    set result
+} {done}
+
+foreach job [job find] { $job destroy }
+
+::tcltest::cleanupTests
+return

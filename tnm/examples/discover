@@ -1,0 +1,113 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+namespace import Tnm::mib Tnm::snmp Tnm::icmp Tnm::netdb
+
+##
+## Send a snmp request to all ip addresses on a class C like
+## network. Use with care as this script floods you network! It is
+## just an example how fast asynchronous SNMP operations can work.
+##
+
+proc SnmpDiscover {hosts delay window retries timeout} {
+    foreach ip $hosts {
+	set s [snmp generator -address $ip -delay $delay -window $window \
+	       -retries $retries -timeout $timeout]
+	$s get sysDescr.0 {
+	    if {"%E" == "noError"} {
+		set d [lindex [lindex {%V} 0] 2]
+		regsub -all "\[\n\r\]" $d "" d
+		puts "[%S cget -address]\t$d"
+	    }
+	    %S destroy
+	}
+	update
+    }
+    snmp wait
+}
+
+##
+## Send an icmp echo request to all ip addresses on a class C like
+## network. Use with care as this script floods you network! 
+## It is just an example how fast our icmp command can work.
+##
+
+proc IcmpDiscover {hosts delay window retries timeout} {
+    if {[catch {icmp -delay $delay -window $window \
+	    -retries $retries -timeout $timeout echo $hosts} result]} {
+	puts stderr $result
+	continue
+    }
+    foreach {ip rtt} $result {
+	if {$rtt >= 0} {
+	    puts "$ip\ticmp echo $rtt ms"
+	}
+    }
+}
+
+##
+## Command line processing.
+##
+
+proc usage {} {
+    puts stderr {usage: discover [-d delay] [-r retries] [-t timeout] [-w window] [-snmp] [-icmp] network mask}
+    exit 42
+}
+
+if {$argv == ""} usage
+
+mib load RFC1213-MIB
+
+set discover SnmpDiscover
+set delay 10
+set window 255
+set retries 2
+set timeout 5
+
+set newargv ""
+set parsing_options 1
+while {([llength $argv] > 0) && $parsing_options} {
+    set arg [lindex $argv 0]
+    set argv [lrange $argv 1 end]
+    if {[string index $arg 0] == "-"} {
+	switch -- $arg  {
+	    "-d"    {
+		        set delay [lindex $argv 0]
+		        set argv  [lrange $argv 1 end]
+                    }
+	    "-r"    {
+		        set retries [lindex $argv 0]
+		        set argv    [lrange $argv 1 end]
+                    }
+	    "-t"    {
+		        set timeout [lindex $argv 0]
+		        set argv    [lrange $argv 1 end]
+                    }
+	    "-w"    {
+		        set window [lindex $argv 0]
+		        set argv   [lrange $argv 1 end]
+                    }
+	    "-snmp" { set discover SnmpDiscover }
+	    "-icmp" { set discover IcmpDiscover }
+	    "--"    { set parsing_options 0 }
+	}
+    } else {
+	set parsing_options 0
+	lappend newargv $arg
+    }
+}
+set argv [concat $newargv $argv]
+if {[llength $argv]/2 == 0} usage
+
+foreach {network mask} $argv {
+    if {[catch {netdb ip range $network $mask} hosts]} {
+	puts stderr "$network ($mask) ignored: $hosts"
+	exit 42
+    }
+    $discover $hosts $delay $window $retries $timeout
+}
+
+exit

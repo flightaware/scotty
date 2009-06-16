@@ -1,0 +1,394 @@
+The files in this directory contain Internet MIB definitions (MIB
+modules) extracted from RFC files. Below is a list describing the
+contents of these files. A machine readable index is provided by the
+TnmIetf package of this distribution. The following list is generated
+by calling the TnmIetf::PrintModuleList procedure:
+
+RFC3055	[proposed]	PINT-MIB
+	Management Information Base for the PINT Services Architecture
+RFC3014 [proposed]	NOTIFICATION-LOG-MIB
+	Notification Log MIB
+RFC2983	[proposed]	DISMAN-EXPRESSION-MIB
+	Distributed Management Expression MIB
+RFC2982	[proposed]	DISMAN-EVENT-MIB
+	Event MIB
+RFC2959	[proposed]	RTP-MIB
+	Real-Time Transport Protocol Management Information Base
+RFC2955	[proposed]	FR-ATM-PVC-SERVICE-IWF-MIB
+	Definitions of Managed Objects for Monitoring and Controlling 
+	the Frame Relay/ATM PVC Service Interworking Function
+RFC2954	[proposed]	FRNETSERV-MIB
+	Definitions of Managed Objects for Frame Relay Service
+RFC2940	[proposed]	COPS-CLIENT-MIB
+	Definitions of Managed Objects for Common Open Policy Service 
+	(COPS) Protocol Clients
+RFC2934	[experimental]	PIM-MIB
+	Protocol Independent Multicast MIB for IPv4
+RFC2933	[proposed]	IGMP-STD-MIB
+	Internet Group Management Protocol MIB
+RFC2932	[proposed]	IPMROUTE-STD-MIB
+	IPv4 Multicast Routing MIB
+RFC2925	[proposed]	DISMAN-PING-MIB DISMAN-TRACEROUTE-MIB DISMAN-NSLOOKUP-MIB
+	Definitions of Managed Objects for Remote Ping, Traceroute, 
+	and Lookup Operations
+RFC2922	[informational]	PTOPO-MIB
+	Physical Topology MIB
+RFC2864	[proposed]	IF-INVERTED-STACK-MIB
+	The Inverted Stack Table Extension to the Interfaces Group MIB
+RFC2863	[draft]		IF-MIB 
+	The Interfaces Group MIB
+RFC2856	[proposed]	HCNUM-TC
+	Textual Conventions for Additional High Capacity Data Types
+RFC2851	[proposed]	INET-ADDRESS-MIB
+	Textual Conventions for Internet Network Addresses
+RFC2837	[proposed]	FIBRE-CHANNEL-FE-MIB
+	Definitions of Managed Objects for the Fabric Element in 
+	Fibre Channel Standard
+RFC2819	[standard]	RMON-MIB
+	Remote Network Monitoring Management Information Base
+RFC2790	[draft]		HOST-RESOURCES-MIB HOST-RESOURCES-TYPES
+	Host Resources MIB
+RFC2787	[proposed]	VRRP-MIB
+	Definitions of Managed Objects for the Virtual Router 
+	Redundancy Protocol
+RFC2786	[experimental]	SNMP-USM-DH-OBJECTS-MIB
+	Diffie-Helman USM Key Management Information Base and 
+	Textual Convention
+RFC2758	[experimental]	SLAPM-MIB
+	Definitions of Managed Objects for Service Level Agreements 
+	Performance Monitoring
+RFC2742 [proposed]	AGENTX-MIB
+	Definitions of Managed Objects for Extensible SNMP Agents
+RFC2737	[proposed]      ENTITY-MIB 
+	Entity MIB (Version 2)
+RFC2707	[informational]	Job-Monitoring-MIB
+	Job Monitoring MIB - V1.0
+RFC2720	[proposed]      FLOW-METER-MIB
+	Traffic Flow Measurement: Meter MIB
+RFC2677	[proposed]      NHRP-MIB 
+	Definitions of Managed Objects for the NBMA Next Hop
+	Resolution Protocol (NHRP)
+RFC2674	[proposed]      P-BRIDGE-MIB Q-BRIDGE-MIB 
+	Definitions of Managed Objects for Bridges with Traffic
+	Classes, Multicast Filtering and Virtual LAN Extensions
+RFC2670	[proposed]      DOCS-IF-MIB 
+	Radio Frequency (RF) Interface Management Information
+	Base for MCNS/DOCSIS compliant RF interfaces
+RFC2669	[proposed]      DOCS-CABLE-DEVICE-MIB 
+	Cable Device Management Information Base for DOCSIS
+	compliant Cable Modems and Cable Modem Termination 
+	Systems
+RFC2668	[proposed]      MAU-MIB 
+	Definitions of Managed Objects for IEEE 802.3 Medium
+	Attachment Units (MAUs) using SMIv2
+RFC2667	[proposed]      TUNNEL-MIB 
+	IP Tunnel MIB
+RFC2666	[informational]  ETHER-CHIPSET-MIB 
+	Definitions of Object Identifiers for Identifying Ethernet
+	Chip Sets
+RFC2665	[proposed]      EtherLike-MIB 
+	Definitions of Managed Objects for the Ethernet-like
+	Interface Types
+RFC2662	[proposed]      ADSL-TC-MIB ADSL-LINE-MIB 
+	Definitions of Managed Objects for the ADSL Lines
+RFC2621	[informational]  RADIUS-ACC-SERVER-MIB 
+	RADIUS Accounting Server MIB
+RFC2620	[informational]  RADIUS-ACC-CLIENT-MIB 
+	RADIUS Accounting Client MIB
+RFC2619	[proposed]      RADIUS-AUTH-SERVER-MIB 
+	RADIUS Authentication Server MIB
+RFC2618	[proposed]      RADIUS-AUTH-CLIENT-MIB 
+	RADIUS Authentication Client MIB
+RFC2613	[proposed]      SMON-MIB 
+	Remote Network Monitoring MIB Extensions for Switched
+	Networks Version 1.0
+RFC2605	[proposed]      DIRECTORY-SERVER-MIB 
+	Directory Server Monitoring MIB
+RFC2594	[proposed]      WWW-MIB 
+	Definitions of Managed Objects for WWW Services
+RFC2592	[proposed]      DISMAN-SCRIPT-MIB 
+	Definitions of Managed Objects for the Delegation of
+	Management Scripts
+RFC2591	[proposed]      DISMAN-SCHEDULE-MIB 
+	Definitions of Managed Objects for Scheduling Management
+	Operations
+RFC2584	[proposed]      HPR-IP-MIB 
+	Definitions of Managed Objects for APPN/HPR in IP Networks
+RFC2580	[standard]      SNMPv2-CONF 
+	Conformance Statements for SMIv2
+RFC2579	[standard]      SNMPv2-TC 
+	Textual Conventions for SMIv2
+RFC2578	[standard]      SNMPv2-SMI 
+	Structure of Management Information Version 2 (SMIv2)
+RFC2575	[proposed]      SNMP-VIEW-BASED-ACM-MIB 
+	View-based Access Control Model (VACM) for the Simple
+	Network Management Protocol (SNMP)
+RFC2574	[proposed]      SNMP-USER-BASED-SM-MIB 
+	User-based Security Model (USM) for version 3 of the
+	Simple Network Management Protocol (SNMPv3)
+RFC2573	[proposed]      SNMP-TARGET-MIB SNMP-NOTIFICATION-MIB SNMP-PROXY-MIB 
+	SNMP Applications
+RFC2572	[proposed]      SNMP-MPD-MIB 
+	Message Processing and Dispatching for the Simple Network
+	Management Protocol (SNMP)
+RFC2571	[proposed]      SNMP-FRAMEWORK-MIB 
+	An Architecture for Describing SNMP Management Frameworks
+RFC2564	[proposed]      APPLICATION-MIB 
+	Application Management MIB
+RFC2562	[proposed]      TN3270E-RT-MIB 
+	Definitions of Protocol and Managed Objects for TN3270E
+	Response Time Collection Using SMIv2
+RFC2561	[proposed]      TN3270E-MIB 
+	Base Definitions of Managed Objects for TN3270E Using
+	SMIv2
+RFC2558	[proposed]      SONET-MIB 
+	Definitions of Managed Objects for the SONET/SDH Interface
+	Type
+RFC2515	[proposed]      ATM-MIB 
+	Definitions of Managed Objects for ATM Management
+RFC2514	[proposed]      ATM-TC-MIB 
+	Definitions of Textual Conventions and OBJECT-IDENTITIES
+	for ATM Management
+RFC2513	[proposed]      ACCOUNTING-CONTROL-MIB 
+	Managed Objects for Controlling the Collection and 
+	Storage of Accounting Information for Connection-Oriented
+	Networks
+RFC2512	[proposed]      ATM-ACCOUNTING-INFORMATION-MIB 
+	Accounting Information for ATM Networks
+RFC2496	[proposed]      DS3-MIB 
+	Definitions of Managed Objects for the DS3/E3 Interface
+	Type
+RFC2495	[proposed]      DS1-MIB 
+	Definitions of Managed Objects for the DS1, E1, DS2
+	and E2 Interface Types
+RFC2494	[proposed]      DS0-MIB DS0BUNDLE-MIB 
+	Definitions of Managed Objects for the DS0 and DS0 
+	Bundle Interface Type
+RFC2493	[proposed]      PerfHist-TC-MIB 
+	Textual Conventions for MIB Modules Using Performance
+	History Based on 15 Minute Intervals
+RFC2466	[proposed]      IPV6-ICMP-MIB 
+	Management Information Base for IP Version 6: ICMPv6
+	Group
+RFC2465	[proposed]      IPV6-TC IPV6-MIB 
+	Management Information Base for IP Version 6: Textual
+	Conventions and General Group
+RFC2457	[proposed]      EBN-MIB 
+	Definitions of Managed Objects for Extended Border 
+	Node
+RFC2456	[proposed]      APPN-TRAP-MIB 
+	Definitions of Managed Objects for APPN TRAPS
+RFC2455	[proposed]      APPN-MIB 
+	Definitions of Managed Objects for APPN
+RFC2454	[proposed]      IPV6-UDP-MIB 
+	IP Version 6 Management Information Base for the User
+	Datagram Protocol
+RFC2452	[proposed]      IPV6-TCP-MIB 
+	IP Version 6 Management Information Base for the Transmission
+	Control Protocol
+RFC2417	[proposed]      IPATM-IPMC-MIB 
+	Definitions of Managed Objects for Multicast over UNI
+	3.0/3.1 based ATM Networks
+RFC2320	[proposed]      IPOA-MIB 
+	Definitions of Managed Objects for Classical IP and
+	ARP Over ATM Using SMIv2 (IPOA-MIB)
+RFC2287	[proposed]      SYSAPPL-MIB 
+	Definitions of System-Level Managed Objects for Applications
+RFC2266	[proposed]      DOT12-RPTR-MIB 
+	Definitions of Managed Objects for IEEE 802.12 Repeater
+	Devices
+RFC2249	[proposed]      MTA-MIB 
+	Mail Monitoring MIB
+RFC2248	[proposed]      NETWORK-SERVICES-MIB 
+	Network Services Monitoring MIB
+RFC2238	[proposed]      HPR-MIB 
+	Definitions of Managed Objects for HPR using SMIv2
+RFC2232	[proposed]      APPN-DLUR-MIB 
+	Definitions of Managed Objects for DLUR using SMIv2
+RFC2214	[proposed]      INTEGRATED-SERVICES-GUARANTEED-MIB 
+	Integrated Services Management Information Base Guaranteed
+	Service Extensions using SMIv2
+RFC2213	[proposed]      INTEGRATED-SERVICES-MIB 
+	Integrated Services Management Information Base using
+	SMIv2
+RFC2206	[proposed]      RSVP-MIB 
+	RSVP Management Information Base using SMIv2
+RFC2128	[proposed]      DIAL-CONTROL-MIB 
+	Dial Control Management Information Base using SMIv2
+RFC2127	[proposed]      ISDN-MIB 
+	ISDN Management Information Base using SMIv2
+RFC2115	[draft]         FRAME-RELAY-DTE-MIB 
+	Management Information Base for Frame Relay DTEs Using
+	SMIv2
+RFC2108	[proposed]      SNMP-REPEATER-MIB 
+	Definitions of Managed Objects for IEEE 802.3 Repeater
+	Devices using SMIv2
+RFC2096	[proposed]      IP-FORWARD-MIB 
+	IP Forwarding Table MIB
+RFC2051	[proposed]      APPC-MIB 
+	Definitions of Managed Objects for APPC using SMIv2
+RFC2024	[proposed]      DLSW-MIB 
+	Definitions of Managed Objects for Data Link Switching
+	using SMIv2
+RFC2021	[proposed]      RMON2-MIB 
+	Remote Network Monitoring Management Information Base
+	Version 2 using SMIv2
+RFC2020	[proposed]      DOT12-IF-MIB 
+	Definitions of Managed Objects for IEEE 802.12 Interfaces
+RFC2013	[proposed]      UDP-MIB 
+	SNMPv2 Management Information Base for the User Datagram
+	Protocol using SMIv2
+RFC2012	[proposed]      TCP-MIB 
+	SNMPv2 Management Information Base for the Transmission
+	Control Protocol using SMIv2
+RFC2011	[proposed]      IP-MIB 
+	SNMPv2 Management Information Base for the Internet
+	Protocol using SMIv2
+RFC2006	[proposed]      MIP-MIB 
+	The Definitions of Managed Objects for IP Mobility 
+	Support using SMIv2
+RFC1910	[experimental]  SNMPv2-USEC-MIB 
+	User-based Security Model for SNMPv2
+RFC1907	[draft]         SNMPv2-MIB 
+	Management Information Base for Version 2 of the Simple
+	Network Management Protocol (SNMPv2)
+RFC1906	[draft]         SNMPv2-TM 
+	Transport Mappings for Version 2 of the Simple Network
+	Management Protocol (SNMPv2)
+RFC1850	[draft]         OSPF-MIB OSPF-TRAP-MIB 
+	OSPF Version 2 Management Information Base
+RFC1792	[experimental]  TCPIPX-MIB 
+	TCP/IPX Connection Mib Specification
+RFC1759	[proposed]      Printer-MIB 
+	Printer MIB
+RFC1749	[proposed]      TOKENRING-STATION-SR-MIB 
+	IEEE 802.5 Station Source Routing MIB using SMIv2
+RFC1748	[draft]         TOKENRING-MIB 
+	IEEE 802.5 MIB using SMIv2
+RFC1747	[proposed]      SNA-SDLC-MIB 
+	Definitions of Managed Objects for SNA Data Link Control
+	(SDLC) using SMIv2
+RFC1742	[proposed]      APPLETALK-MIB 
+	AppleTalk Management Information Base II
+RFC1724	[draft]         RIPv2-MIB 
+	RIP Version 2 MIB Extension
+RFC1697	[proposed]      RDBMS-MIB 
+	Relational Database Management System (RDBMS) Management
+	Information Base (MIB) using SMIv2
+RFC1696	[proposed]      Modem-MIB 
+	Modem Management Information Base (MIB) using SMIv2
+RFC1694	[draft]         SIP-MIB 
+	Definitions of Managed Objects for SMDS Interfaces 
+	using SMIv2
+RFC1666	[proposed]      SNA-NAU-MIB 
+	Definitions of Managed Objects for SNA NAUs using SMIv2
+RFC1660	[draft]         PARALLEL-MIB 
+	Definitions of Managed Objects for Parallel-printer
+	-like Hardware Devices using SMIv2
+RFC1659	[draft]         RS-232-MIB 
+	Definitions of Managed Objects for RS-232-like Hardware
+	Devices using SMIv2
+RFC1658	[draft]         CHARACTER-MIB 
+	Definitions of Managed Objects for Character Stream
+	Devices using SMIv2
+RFC1657	[draft]         BGP4-MIB 
+	Definitions of Managed Objects for the Fourth Version
+	of the Border Gateway Protocol (BGP-4) using SMIv2
+RFC1628	[proposed]      UPS-MIB 
+	UPS Management Information Base
+RFC1612	[proposed]      DNS-RESOLVER-MIB 
+	DNS Resolver MIB Extensions
+RFC1611	[proposed]      DNS-SERVER-MIB 
+	DNS Server MIB Extensions
+RFC1573	[proposed]      IANAifType-MIB 
+	Evolution of the Interfaces Group of MIB-II
+RFC1567	[proposed]      DSA-MIB 
+	X.500 Directory Monitoring MIB
+RFC1559	[draft]         DECNET-PHIV-MIB 
+	DECnet Phase IV MIB Extensions
+RFC1525	[proposed]      SOURCE-ROUTING-MIB 
+	Definitions of Managed Objects for Source Routing Bridges
+RFC1513	[proposed]      TOKEN-RING-RMON-MIB 
+	Token Ring Extensions to the Remote Network Monitoring
+	MIB
+RFC1512	[proposed]      FDDI-SMT73-MIB 
+	FDDI Management Information Base
+RFC1493	[draft]         BRIDGE-MIB 
+	Definitions of Managed Objects for Bridges
+RFC1474	[proposed]      PPP-BRIDGE-NCP-MIB 
+	The Definitions of Managed Objects for the Bridge Network
+	Control Protocol of the Point-to-Point Protocol
+RFC1473	[proposed]      PPP-IP-NCP-MIB 
+	The Definitions of Managed Objects for the IP Network
+	Control Protocol of the Point-to-Point Protocol
+RFC1472	[proposed]      PPP-SEC-MIB 
+	The Definitions of Managed Objects for the Security
+	Protocols of the Point-to-Point Protocol
+RFC1471	[proposed]      PPP-LCP-MIB 
+	The Definitions of Managed Objects for the Link Control
+	Protocol of the Point-to-Point Protocol
+RFC1461	[proposed]      MIOX25-MIB 
+	SNMP MIB extension for Multiprotocol Interconnect over
+	X.25
+RFC1414	[proposed]      RFC1414-MIB 
+	Identification MIB
+RFC1407	[proposed]      RFC1407-MIB 
+	Definitions of Managed Objects for the DS3/E3 Interface
+	Type
+RFC1406	[proposed]      RFC1406-MIB 
+	Definitions of Managed Objects for the DS1 and E1 Interface
+	Types
+RFC1382	[proposed]      RFC1382-MIB 
+	SNMP MIB Extension for the X.25 Packet Layer
+RFC1381	[proposed]      RFC1381-MIB 
+	SNMP MIB Extension for X.25 LAPB
+RFC1269	[proposed]      RFC1269-MIB 
+	Definitions of Managed Objects for the Border Gateway
+	Protocol (Version 3)
+RFC1238	[experimental]  CLNS-MIB 
+	CLNS MIB for use with Connectionless Network Protocol
+	(ISO 8473) and End System to Intermediate System (ISO
+	9542)
+RFC1213	[standard]      RFC1213-MIB 
+	Management Information Base for Network Management 
+	of TCP/IP-based internets: MIB-II
+RFC1155	[standard]      RFC1155-SMI 
+	Structure and Identification of Management Information
+	for TCP/IP-based Internets
+
+MIB modules and OID assignements maintained by the Internet Assigned
+Numbers Authority (IANA):
+
+[IANA]	[]		IANAifType-MIB
+	Defines the interface types used by the IF-MIB and other
+	MIBs. The latest version is usually available from:
+	ftp://ftp.iana.org/mib/ianaiftype.mib
+[IANA]	[]		IANATn3270eTC-MIB
+	Defines a set of textual conventions for use by the
+	TN3270E-MIB and the TN3270E-RT-MIB.
+	ftp://ftp.iana.org/mib/ianatn3270etc.mib
+[IANA]	[]		IANA-LANGUAGE-MIB
+	Defines a set of OIDs for some well known programmin languages.
+	ftp://ftp.iana.org/mib/ianalanguage.mib
+[IANA]	[]		IANA-ADDRESS-FAMILY-NUMBERS-MIB
+	Defines a textual convention for IANA address families.
+	ftp://ftp.iana.org/mib/ianaaddressfamilynumbers.mib
+
+Some additional MIB modules are distributed with this package that
+were defined at the Technical University of Braunschweig:
+
+[TUBS]	[]		TUBS-SMI
+	Registration of the OID space registered for the
+	Technical University of Braunschweig.
+[TUBS]	[]		TUBS-IBR-TNM-MIB
+	A Tnm MIB used to demonstrate the Tnm SNMP agent.
+[TUBS]	[]		TUBS-IBR-LINUX-MIB
+	The private MIB for the LINUX CMU SNMP agent.
+[TUBS]	[]		TUBS-IBR-NFS-MIB
+	An example MIB used to access NFS statistics.
+[TUBS]	[]		TUBS-IBR-PROC-MIB
+	An example MIB used to access information about running
+	processes.
+[TUBS]	[]		TUBS-IBR-TEST-MIB
+	A MIB module which uses to test the SMI parser and the
+	agent implementation.

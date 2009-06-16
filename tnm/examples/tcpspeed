@@ -1,0 +1,59 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+##
+## Connect to a discard port on a host and send a data stream
+## to it. Calculate the throughput in kB per second.
+##
+## NOTE: It would be much more interesting to test the echo
+## port like udpspeed, but scotty's tcp command puts the tcp 
+## file handle into nonbuffered mode so that we measure how 
+## fast this machine can read single bytes and not how fast
+## the network connection is.
+##
+
+proc discard { host secs } {
+
+    set msg ""
+    for {set len 0} {$len < 10240} {incr len} {append msg "+"}
+
+    if {[catch {socket $host discard} f]} {
+	puts "$host: $f"
+	return
+    }
+
+    set start [clock seconds]
+    set d 0
+    set count 0
+    while {$d < $secs} {
+	if {[catch {
+	    puts $f $msg
+	    flush $f
+	} err]} {
+	    puts "$host: $err"
+	    return
+	}
+        set end [clock seconds]
+        incr count 10240
+	set d [expr {$end-$start}]
+    }
+    close $f
+
+    set speed [expr $count * 8.0 / 1024 / 1024 / $secs]
+    puts [format "%6.3f MBit/s discarded in %d seconds by %s" \
+	$speed $secs $host ]
+}
+
+proc usage {} {
+    puts stderr "usage: tcpspeed hosts"
+    exit
+}
+
+if {$argv == ""} { usage } else {
+    foreach host $argv {
+        discard $host 10
+    }
+}

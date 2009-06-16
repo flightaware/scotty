@@ -1,0 +1,324 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+
+package require Tnm 3.0
+
+##
+## This script checks if a list of process is still running.
+## See the man page yanny(8) for more details about its use.
+##
+
+##
+## Get the list of running processes. This proc must guess which
+## ps command to use. Running processes are stored in the global
+## array processes indexed by the pid and containing the process 
+## name.
+##
+
+proc read_ps_ax {} {
+    global processes
+    catch {unset processes}
+    set ps [open "| ps -axc"]
+    gets $ps line
+    while {![eof $ps]} {
+	set pid [lindex $line 0]
+	regsub {^[^:]*:[0-9][0-9]} $line "" cmd
+	set processes($pid) [string trim $cmd]
+	gets $ps line
+    }
+}
+
+proc read_ps_e {} {
+    global processes
+    catch {unset processes}
+    set ps [open "| ps -e"]
+    gets $ps line
+    while {![eof $ps]} {
+	set pid [lindex $line 0]
+        regsub {^[^:]*:[0-9][0-9]} $line "" cmd
+        set processes($pid) [string trim $cmd]
+        gets $ps line
+    }
+}
+
+proc read_ps {} {
+    global processes
+
+    read_ps_ax
+    if {![info exists processes]} {
+        read_ps_e
+        if {![info exists processes]} {
+	    puts stderr "yanny: unable to get process status"
+	    exit 1
+        }
+    }
+}
+
+##
+## Read the list of pids and daemon names from a file.
+## Ignore comment lines starting with #.
+##
+
+proc read_daemons {fname} {
+    global daemons
+    if {![file exists $fname]} {
+	return 0
+    }
+    if {![file readable $fname]} {
+	puts stderr "yanny: unable to open $fname"
+	exit
+    }
+    set cnt 0
+    set fh [open $fname]
+    while {![eof $fh]} {
+	gets $fh line
+	if {($line == "") || ([string index $line 0] == "#")} continue
+	set user ""
+	set n [scan $line "%d:%\[^:\]:%\[^:\]:%\[^:\]:%s" \
+		pid name pidfile cmd user]
+	if {$n < 4 || $n > 5} {
+	    write_logger "failed to split yanny.conf line $line"
+	    continue
+	}
+	set daemons(pid,$pid) $pid
+	set daemons(name,$pid) $name
+	set daemons(pidfile,$pid) $pidfile
+	set daemons(cmd,$pid) $cmd
+	set daemons(user,$pid) $user
+	incr cnt
+    }
+    close $fh
+    return $cnt
+}
+
+##
+## Write the pids and daemon names to a file.
+##
+
+proc write_daemons {fname} {
+    global daemons count tnm
+    if {[catch {open $fname w} fh]} {
+	puts stderr "yanny: unable to open $fname"
+	exit
+    }
+    puts $fh "# yanny.conf\t\t\t\t\t(scotty version $tnm(version))"
+    puts $fh "#"
+    puts $fh "# <pid>:<program name>:<pid file>:<command>:<user>"
+    puts $fh ""
+    if {[info exists daemons]} {
+	foreach pid [array names daemons pid,*] {
+	    set pid [lindex [split $pid ,] 1]
+	    puts $fh [format "%s:%s:%s:%s:%s" $pid $daemons(name,$pid) \
+		$daemons(pidfile,$pid) $daemons(cmd,$pid) $daemons(user,$pid)]
+	}
+    }
+    close $fh
+}
+
+##
+## Write the result to the syslog if available.
+##
+
+proc write_logger {text} {
+    syslog warning "yanny: $text"
+    puts stderr $text
+}
+
+##
+## Restart a daemon.
+##
+
+proc restart {pidfname cmd user} {
+    global daemons
+    if {$cmd == ""} return
+    if {$user == ""} {
+	write_logger "restarting $cmd"
+	if {[catch {exec /bin/sh -c "exec $cmd" &} pid]} {
+	    write_logger "restart failed: $pid"
+	    return
+	}
+    } else {
+	write_logger "restarting $cmd for user $user"
+	if {[catch {exec /bin/su $user -c "exec $cmd" &} pid]} {
+            write_logger "restart failed: $pid"
+            return
+        }
+    }
+    set daemons(pid,$pid) $pid
+    set daemons(name,$pid) [file tail [lindex $cmd 0]]
+    set daemons(pidfile,$pid) $pidfname
+    set daemons(cmd,$pid) $cmd
+    set daemons(user,$pid) $user
+}
+
+##
+## Check if the pids of the daemons really exist.
+##
+
+proc check_daemon {fname} {
+    global daemons processes debug
+    if {[read_daemons $fname] == 0} return
+    read_ps
+    foreach pid [array names daemons pid,*] {
+	set pid [lindex [split $pid ,] 1]
+	set name $daemons(name,$pid)
+	set pid [update_pid $pid]
+	if {$debug} {
+	    puts "checking $name $pid"
+	}
+	if {![info exists processes($pid)]} {
+	    write_logger "$name ($pid) gone away"
+	    restart $daemons(pidfile,$pid) $daemons(cmd,$pid) $daemons(user,$pid)
+            unset daemons(pid,$pid) daemons(name,$pid)
+	    unset daemons(pidfile,$pid) daemons(cmd,$pid)
+	    unset daemons(user,$pid)
+	    continue
+	}
+	if {![regexp $name $processes($pid)]} {
+	    write_logger "$name ($pid) gone away (pid recycled)"
+	    restart $daemons(pidfile,$pid) $daemons(cmd,$pid) $daemons(user,$pid)
+            unset daemons(pid,$pid) daemons(name,$pid)
+	    unset daemons(pidfile,$pid) daemons(cmd,$pid)
+	    unset daemons(user,$pid)
+	}
+    }
+
+    write_daemons $fname
+}
+
+##
+## Add a daemon to the list of daemons to care about.
+## Start it from here and save its pid.
+##
+
+proc add_daemon {fname pidfname user cmd} {
+    read_daemons $fname
+    restart $pidfname $cmd $user
+    write_daemons $fname
+}
+
+##
+## Kill an entry from the config file.
+##
+
+proc kill_daemon {fname reg} {
+    global daemons
+    if {[read_daemons $fname] == 0} {
+	puts "yanny: file $fname does not exist or is empty."
+	return
+    }
+    foreach pid [array names daemons pid,*] {
+	set pid [lindex [split $pid ,] 1]
+	if {[regexp $reg $daemons(cmd,$pid)]} {
+	    set pid [update_pid $pid]
+	    puts "removing $pid $daemons(cmd,$pid)"
+	    if {[catch {exec /bin/kill $pid} msg]} {
+		write_logger "attempt to kill $pid failed: $msg"
+	    }
+            unset daemons(pid,$pid) daemons(name,$pid)
+	    unset daemons(pidfile,$pid) daemons(cmd,$pid)
+	    unset daemons(user,$pid)
+	}
+    }
+    
+    write_daemons $fname
+}
+
+##
+## If the daemon has a pidfile, check whether the pid is still accurate.
+## If not, return the new pid, and update the daemons array.
+##
+
+proc update_pid {pid} {
+    global daemons
+    set pid_fname $daemons(pidfile,$pid)
+    if { [string compare $pid_fname /dev/null] } {
+	set newpid [read_pid $pid_fname]
+	if {$newpid != $pid} {
+	    if {[info exists daemons(pid,$newpid)]} {
+		## if $newpid is already in use by another daemon,
+		## we lost track ==> give up.
+		## (this is rather unlikely).
+		write_logger "lost track of process ids ($pid $newpid)" 
+		exit 
+	    }
+	    set daemons(pid,$newpid)     $daemons(pid,$pid)
+	    set daemons(name,$newpid)    $daemons(name,$pid)
+	    set daemons(pidfile,$newpid) $daemons(pidfile,$pid)
+	    set daemons(cmd,$newpid)     $daemons(cmd,$pid)
+            unset daemons(pid,$pid) daemons(name,$pid)
+	    unset daemons(pidfile,$pid) daemons(cmd,$pid)
+	    unset daemons(user,$pid)
+	    set pid $newpid
+	}
+    }
+    return $pid
+}
+
+##
+## Extract the process ID from the pid-file
+##
+
+proc read_pid {fname} {
+    if {![file exists $fname] || ![file readable $fname]} {
+	puts stderr "yanny: unable to open $fname"
+	exit
+    }
+    set fh [open $fname]
+    gets $fh line
+    if {![regexp {^[0-9]+$} $line]} {
+	write_logger "unexpected format in $fname: $line"
+    }
+    close $fh
+    return $line
+}
+
+##
+## The main program. Check the options and decide if we 
+## add a new daemon or if we check the actual listing.
+##
+
+set fname /etc/yanny.conf
+set pidfname /dev/null
+set user ""
+
+set kill 0
+set debug 0
+
+set newargv ""
+set parsing_options 1
+while {([llength $argv] > 0) && $parsing_options} {
+    set arg [lindex $argv 0]
+    set argv [lrange $argv 1 end]
+    if {[string index $arg 0] == "-"} {
+	switch -- $arg  {
+	    "-d" { set debug 1 }
+	    "-y" { set fname [lindex $argv 0]
+	    	   set argv [lrange $argv 1 end]
+		 }
+	    "-p" { set pidfname [lindex $argv 0]
+		   set argv [lrange $argv 1 end]
+		 }
+	    "-u" { set user [lindex $argv 0]
+		   set argv [lrange $argv 1 end]
+	         }
+	    "-k" { set kill 1 }
+	    "--" { set parsing_options 0 }
+	}
+    } else {
+	set parsing_options 0
+	lappend newargv $arg
+    }
+}
+set argv [concat $newargv $argv]
+
+if {[llength $argv] == 0} {
+    check_daemon $fname
+} else {
+    if {$kill} {
+	kill_daemon $fname [join $argv]
+    } else {
+	add_daemon $fname $pidfname $user [join $argv]
+    }
+}

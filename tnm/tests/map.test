@@ -1,0 +1,235 @@
+# Commands covered:  map				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-1998 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: map.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::map
+}
+
+test map-1.1 {map command} {
+    list [catch {map} msg] $msg
+} {1 {wrong # args: should be "map option ?arg arg ...?"}}
+test map-1.2 {map command} {
+    list [catch {map foo} msg] $msg
+} {1 {bad option "foo": must be create, find, or info}}
+
+test map-2.1 {map create} {
+    set m [map create]
+    string compare $m [map info maps]
+} {0}
+test map-2.2 {map create} {
+    rename [map create] foo
+    map info maps foo
+} {foo}
+test map-2.3 {map create} {
+    [map create] configure
+} {-expire 3600 -height 0 -name {} -path {} -store {} -tags {} -tick 60 -width 0}
+test map-2.4 {map create} {
+    [map create -name noname] cget -name
+} {noname}
+test map-2.5 {map create} {
+    [map create -path /tmp/nono] cget -path
+} {/tmp/nono}
+test map-2.6 {map create} {
+    [map create -store *] cget -store
+} {*}
+test map-2.7 {map create} {
+    list [catch {map create -expire -1} msg] $msg
+} {1 {expected unsigned integer but got "-1"}}
+test map-2.8 {map create} {
+    list [catch {map create -tick -1} msg] $msg
+} {1 {expected unsigned integer but got "-1"}}
+test map-2.9 {map create} {
+    list [catch {map create -height -1} msg] $msg
+} {1 {expected unsigned integer but got "-1"}}
+test map-2.10 {map create} {
+    list [catch {map create -width -1} msg] $msg
+} {1 {expected unsigned integer but got "-1"}}
+test map-2.10 {map create} {
+    list [catch {map create -width} msg] $msg
+} {1 {wrong # args: should be "map create ?option value? ?option value? ..."}}
+test map-2.11 {map create} {
+    list [catch {map create -width 1 -height} msg] $msg
+} {1 {wrong # args: should be "map create ?option value? ?option value? ..."}}
+test map-2.12 {map create} {
+    list [catch {map create -foo bar} msg] $msg
+} {1 {unknown option "-foo": should be -expire, -height, -name, -path, -store, -tags, -tick, or -width}}
+
+foreach m [map info maps] { $m destroy }
+
+test map-3.1 {map info} {
+    list [catch {map info} msg] $msg
+} {1 {wrong # args: should be "map info subject ?pattern?"}}
+test map-3.2 {map info} {
+    list [catch {map info foo bar baz} msg] $msg
+} {1 {wrong # args: should be "map info subject ?pattern?"}}
+test map-3.3 {map info} {
+    list [catch {map info foo} msg] $msg
+} {1 {bad option "foo": must be maps or types}}
+test map-3.4 {map info} {
+    map info types
+} {group link network port node}
+test map-3.5 {map info} {
+    map info types *o*
+} {group network port node}
+test map-3.6 {map info} {
+    map info maps
+} {}
+
+foreach m [map info maps] { $m destroy }
+
+###########
+
+if 0 {
+
+
+test map-2.1 {map configure} {
+    rename [map create] tm
+    tm configure
+} {-expire 3600 -height 0 -name {} -path {} -store {} -tick 60 -width 0}
+test map-2.2 {map configure} {
+    tm configure -width 42 -height 24 -name tm.map
+} {-expire 3600 -height 24 -name tm.map -path {} -store {} -tick 60 -width 42}
+test map-2.3 {map configure} {
+    catch {tm configure -width -1} msg
+    set msg
+} {expected unsigned integer but got "-1"}
+
+test map-1.7 {map dump} {
+    list [catch {tm dump foo} msg] $msg
+} {1 {wrong # args: should be "tm dump"}}
+
+test map-1.8 {map dump} {
+    tm dump
+    concat ""
+} {}
+
+test map-2.1 {map create items} {
+    lsort [map info types]
+} {group link network node port}
+
+test map-2.2 {map create node} {
+    set node0 [tm create node]
+} {node0}
+
+test map-2.2 {map create network} {
+    set network0 [tm create network]
+} {network0}
+
+test map-2.3 {map create link} {
+    tm create link -src $node0 -dst $network0
+} {link0}
+
+test map-3.1 {save maps} {
+    tm clear
+    list [catch {tm save} msg] $msg
+} {1 {wrong # args: should be "tm save channel"}}
+
+test map-3.2 {save maps} {
+    tm clear
+    list [catch {tm save foo bar} msg] $msg
+} {1 {wrong # args: should be "tm save channel"}}
+
+test map-3.3 {save maps} {
+    tm clear
+    list [catch {tm save foo} msg] $msg
+} {1 {can not find channel named "foo"}}
+
+test map-3.4 {load & save maps} {
+    tm clear
+    list [catch {tm save stdin} msg] $msg
+} {1 {channel "stdin" not writable}}
+
+test map-3.5 {save maps} {
+    tm clear
+    list [catch {tm load} msg] $msg
+} {1 {wrong # args: should be "tm load channel"}}
+
+test map-3.6 {save maps} {
+    tm clear
+    list [catch {tm load foo bar} msg] $msg
+} {1 {wrong # args: should be "tm load channel"}}
+
+test map-3.7 {save maps} {
+    tm clear
+    list [catch {tm load foo} msg] $msg
+} {1 {can not find channel named "foo"}}
+
+test map-3.8 {load & save maps} {
+    tm clear
+    list [catch {tm load stdout} msg] $msg
+} {1 {channel "stdout" not readable}}
+
+test map-4.0 {map events} {
+    tm bind
+} {}
+
+test map-4.1 {map events} {
+    tm bind foo
+} {}
+
+test map-4.2 {map events} {
+    tm bind foo bar
+} {}
+
+test map-4.3 {map events} {
+    tm bind foo 
+} {bar}
+
+test map-4.4 {map events} {
+    tm bind foo rab
+    tm bind foo
+} {rab}
+
+test map-4.5 {map events} {
+    tm bind foo {}
+    tm bind
+} {}
+
+test map-4.10 {map events} {
+    global cnt total
+    set cnt 0
+    set total 0
+    tm bind incr {incr cnt}
+    tm bind decr {incr cnt -1}
+    tm bind * {incr total}
+    tm raise incr
+    tm raise bar
+    tm raise decr
+    format "%d %d" $total $cnt
+} {3 0}
+
+test map-4.11 {map events} {
+    global cnt total
+    set cnt 0
+    set total 0
+    set n [tm create node]
+    $n bind incr {incr cnt}
+    tm raise incr
+    tm raise bar
+    tm raise decr
+    $n raise incr
+    format "%d %d" $total $cnt
+} {4 2}
+
+}
+
+::tcltest::cleanupTests
+return

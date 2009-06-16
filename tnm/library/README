@@ -1,0 +1,6 @@
+This directory contains Tcl packages written for the Tnm Tcl
+extension. These packages provide a library of useful procedures
+that can be easily embedded into management applications.
+
+The packages are documented in their manual pages. Please consult
+the manuals for more details about these packages.

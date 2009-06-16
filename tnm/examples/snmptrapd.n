@@ -1,0 +1,14 @@
+.TH snmptrapd 1L "November 94" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+snmptrapd \- log all SNMP traps to syslog
+.SH SYNOPSIS
+.B snmptrapd
+.SH DESCRIPTION
+.B snmptrapd
+is simple scotty(1) script that creates a connection to the straps
+SNMP trap forwarder and logs SNMP traps into human readable form to
+the syslog facility.
+.SH SEE ALSO
+scotty(1), straps(1)
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de (Juergen Schoenwaelder)

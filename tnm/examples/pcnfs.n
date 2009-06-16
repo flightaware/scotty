@@ -1,0 +1,21 @@
+.TH pcnfs 1L "November 95" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+pcnfs \- show status information about pcnfs print server
+.SH SYNOPSIS
+.B pcnfs 
+.I hostname
+.SH DESCRIPTION
+.B pcnfs
+displays status information about the printers accessible via
+PCNFS on the remote system 
+.I hostname.
+.SH SEE ALSO
+pcnfsd(8), scotty(1)
+.SH BUGS
+We'll see.
+.SH AUTHORS
+The sunrpc extension to query pcnfs daemons was suggested and 
+implemented by Doug Hughes <Doug.Hughes@Eng.Auburn.EDU>. I took
+some of his ideas and created this script just to test the 
+sunrpc pcnfs Tcl command. 
+schoenw@ibr.cs.tu-bs.de (Juergen Schoenwaelder)

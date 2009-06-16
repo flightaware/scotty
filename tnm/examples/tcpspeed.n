@@ -1,0 +1,16 @@
+.TH tcpspeed 1L "April 93" "Tnm Example" "Tnm Tcl Extension"
+.SH NAME
+tcpspeed \- test the speed of tcp connections
+.SH SYNOPSIS
+.B tcpspeed
+.I hosts
+.SH DESCRIPTION
+.B tcpspeed
+connects to the discard port of each host given in
+.I hosts.
+If successful, tcpspeed send a stream of data during a period of 
+10 seconds and calculate the throughput in kB per second.
+.SH SEE ALSO
+scotty(1)
+.SH AUTHORS
+schoenw@ibr.cs.tu-bs.de (Juergen Schoenwaelder)

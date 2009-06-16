@@ -1,0 +1,708 @@
+22/11/96 (bug fix) Some updates and additions to the ip_world script
+and related files (sometimes it pays of to have an open day :-).
+
+22/11/96 (bug fix) The snmp_monitor.tcl script did not accept Gauge32
+or Unsigned32 types when monitoring variables.
+
+7/11/96 (bug fix) The SnmpOpen command did not properly handle
+defaults read from a tkined.defaults file.
+
+17/10/96 (bug fix) Rewrote the "Trace Route" command of the
+ip_monitor.tcl script to produce more readable output.
+
+12/9/96 (code cleanup) Removed all scripts that were written for
+internal test purposes since they are not really meant for public
+consumption.
+
+9/9/96 (bug fix) Etherned code list updated in snmp_trouble.tcl.
+
+30/8/96 (bug fix) Changes in library.tcl to get rid of old SNMPv2
+P/P/C code. Added a new MoJoParameter procedure so that SNMP monitor
+and trouble shooting scripts can use the same SnmpParameter procedure.
+
+29/8/96 (bug fix) Rewrote the rstat related code in ip_monitor.tcl.
+It does not rely on the order of the list elements anymore and it uses
+the time contained in the rstat messages as a time base which is more
+accurate.
+
+28/8/96 (new feature) Rewrote the rstat and etherstat commands of the
+ip_trouble.tcl script to display output with periodic updates.
+
+6/3/96 (feature change) Get the sysDescr.0 variable via SNMP to guess
+the icon in the ip_layout.tcl script.
+
+30/10/95 (new feature) Added a simple trap sink command to
+snmp_monitor.tcl which allows to receive SNMPv1 traps. This needs more
+work to become really useful.
+
+12/10/95 (new feature) Save the SNMP session configuration as an
+attribute for bar- or stripcharts.
+
+15/9/95 (new feature) SNMP Monitor Variable and Interface Load are now
+running asynchronously.
+
+12/9/95 (bug fix) Fixed a bug where SNMP monitor on variables that
+cease to exist or becoming unreadable caused a lot of error messages.
+
+5/9/95 (bug fix) Fixed the tcp service user script: The scale value is
+not overwritten and the port number / service name is now shown in the
+label.
+
+3/9/95 (new feature) Added an attribute SNMP-Monitor:IfSpeed to set
+the interface speed in case the value reported by the agent is
+wrong. Idea originally from Timothy Newsham (newsham@aloha.net).
+
+Mon Aug 28 11:10:08 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl, ip_monitor.tcl, snmp_monitor.tcl: 
+	  Changes to implement monitoring attributes: 
+	  Monitor:RisingThreshold, Monitor:FallingThreshold and 
+	  Monitor:ThresholdAction.
+
+	* library.tcl:
+	  Changed the attribute `SNMP alias' to SNMP:Alias in
+	  order to use a uniform naming scheme.
+
+	* snmp_trouble.tcl:
+	  Convert port numbers to names using the netdb command.
+
+Thu Aug 24 19:00:23 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_discover.tcl (discover_snmp):
+	  Just some basic code to discover devices that respond to
+	  SNMPv1 public messages.
+
+Tue Aug 22 16:29:18 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_monitor.tcl (restart), snmp_monitor.tcl (restart):
+	  Accept interval times given as a floating point value.
+
+	* snmp_monitor.tcl (monitor_variable):
+	  Additional check to handle noSuchInstance exceptions.
+
+	* library.tcl (CloneNode):
+	  We make a copy of the `SNMP alias' attribute to make sure 
+	  that we can talk to the cloned node via SNMP.
+
+Sun Jul 30 13:31:50 1995  Juergen Schoenwaelder  (schoenw at sulu)
+
+	* snmp_monitor.tcl:
+	  Fixed monitor_variable to accept instance identifier.
+
+Fri Jul 28 20:17:30 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl, snmp_*.tcl:
+	  Added support for snmp aliases. Now you can store your
+	  favorite alias in the "SNMP alias" attribute.
+
+Mon Jul 17 21:28:15 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl, *.tcl:
+	  Removed the following procs (which are now supported by 
+	  some similar scotty library procs):
+	  SnmpWalk, SnmpShowTable, SnmpShowScalars, SnmpClose,
+	  SnmpGet, SnmpGetBulk
+
+Mon Jun 26 21:50:38 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_monitor.tcl (show_ifload):
+	  Fixed an integer overflow condition by converting to floating
+	  point arithmetic if it happened. Ugly Tcl arithmetic.
+
+Tue Jun 20 01:24:28 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl, snmp_monitor.tcl, ip_monitor.tcl, clock.tcl,
+	  movie.tcl:
+	  Changed all these script files to accept the new job
+	  command syntax.
+
+Thu Jun 15 11:16:20 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl (SnmpShowTable):
+	  Corrected ordering of the columns of the table. Removed the
+	  code to split the table into many smaller tables as Tk4.0
+	  supports horizontal scrolling of text widgets.
+
+Mon May 15 12:33:52 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_monitor.tcl:
+	  The tcp service user implementation has been changed to scan 
+	  only those entries in the tclConnTable that 
+
+Sun May 14 15:09:32 1995  Juergen Schoenwaelder  (schoenw at sulu)
+
+	* ip_trouble.tcl, ip_discover.tcl:
+	  Minor changes as the icmp command only accepts a host list.
+
+Mon May  8 17:59:14 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_monitor.tcl:
+	  Added some code to use sysUpTime.0 instead of local time.
+	  This allow to handle counter discontinuities caused by
+	  agent restarts.
+
+Mon Mar 27 12:37:01 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_monitor.tcl:
+	  Changes the active users script to store the user list
+	  in an attribute. This makes restarts working.
+
+Thu Feb 16 00:07:06 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_trouble.tcl:
+	  Fixed the IP Addresses command, result now sorted by ifIndex.
+
+Sat Feb 11 16:38:35 1995  Juergen Schoenwaelder  <schoenw@bayes>
+
+	* library.tcl:
+	  Added try procedure to make error handling easier.
+
+Sat Feb 11 11:41:04 1995  Juergen Schoenwaelder  (schoenw at sulu)
+
+	* snmp_trouble.tcl:
+	  Moved the IP Addresses command to the IP section.
+
+Sat Jan 14 07:08:00 1995  Juergen Schoenwaelder  (schoenw at sulu)
+
+	* library.tcl (IpService), ip_discover.tcl (Show RPC Server),
+	  ip_trouble.tcl (TCP Services):
+	  Changed to use the netdb command.
+
+Wed Jan 11 13:43:51 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl (SnmpOpen):
+	  Added missing timeout and retry parameter for SNMPv2.
+
+Mon Jan  9 19:11:34 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_world.tcl, ip_trouble.tcl, ip_monitor.tcl, ip_discover.tcl:
+	  Updated to the new syntax of the icmp command.
+
+Wed Jan  4 11:55:31 1995  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_host.tcl:
+	  Script to access the Host Resources MIB (RFC1514)
+
+	* cmip_trouble.tcl, library.tcl, snmp_monitor.tcl, snmp_tubs.tcl:
+	  Renamed the scottyerror proc to tkerror.
+
+Sat Dec 10 00:33:51 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_tubs.tcl:
+	  Updated the script to the evolving MLM MIB definition.
+
+	* snmp_monitor.tcl:
+	  Made TCP Service User restartable.
+
+Fri Dec  9 11:58:44 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_monitor.tcl:
+	  Fixed the computation of the interface load for full
+	  duplex interfaces.
+
+	* Changed the order of the button in all dialogs so that
+	  the default action is the leftmost button.
+
+Thu Dec  8 16:45:40 1994  Juergen Schoenwaelder  <schoenw@kastor>
+
+	* snmp_trouble.tcl:
+	  Added an Interface->IP Address command.
+
+Fri Nov 18 15:38:10 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_browser.tcl:
+	  Implemented basic set operations.
+
+	* library.tcl: 
+	  Finished a first version of SnmpEditTable.
+
+Wed Nov 16 01:13:08 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_tubs.tcl: 
+	  Added some simple support for the MLM MIB to inspect the
+	  compile table and start scripts manually.
+
+Sun Nov 13 12:29:14 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_trouble.tcl:
+	  Added a SNMPv2 menu to access frequently (?) used config
+	  information.
+
+	* snmp_trouble.tcl, snmp_hp.tcl, snmp_cisco.tcl: 
+	  Explicitely load the mibs needed by these scripts.
+
+Tue Nov  8 23:30:00 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl:
+	  Fixed broken SnmpShowTable. I added some code to layout
+	  the table. Still not perfect, but at least a step forward.
+
+Mon Nov  7 17:05:53 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_monitor.tcl:
+	  Added the `Active Users' command which displays the users
+	  as reported by the finger daemon.
+
+Sat Nov  5 15:47:30 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* snmp_cisco.tcl:
+	  Added a command to list active terminal server session.
+
+	* snmp_trouble.tcl, snmp_monitor.tcl, snmp_browser.tcl:
+	  Replaced most calls to SnmpGetBulk with the corresponding
+	  walk command.
+
+Fri Oct 28 12:33:37 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_world.tcl: 
+	  Routes are drawn when traced and guessed locations are 
+	  cached to make placing nodes faster.
+
+Wed Oct 26 12:01:55 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* ip_monitor.tcl, snmp_monitor.tcl:
+	  Added support for the new GRAPH object of tkined-1.1.
+
+Fri Oct 21 22:01:56 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* library.tcl:
+	  Rewrote SnmpGetBulk, SnmpShowTable, SnmpWalk to use the
+	  new snmp walk command.
+
+Sat Oct  8 20:58:22 1994  Juergen Schoenwaelder  <schoenw@data>
+
+	* bones.tcl:
+	  Dynamically create instance and definitions menus with
+	  apropriate procs. Hyperlinks are used to link class 
+	  definitions together.
+
+	* ip_world.tcl:
+	  Cleaned up some code and now we can load different maps
+	  by creating a bitmap file and defining appropriate
+	  translations.
+
+Fri Oct  7 18:37:24 1994  Juergen Schoenwaelder  <schoenw@sol>
+
+	* ip_world.tcl:
+	  This new script was motivated by the geotraceman program
+	  (which is far more superior). A typical Friday hack.
+
+Fri Oct  7 16:40:08 1994  Juergen Schoenwaelder  <schoenw@orpheus>
+
+	* ip_layout.tcl:
+	  Added a regexp that should match for Macintoshes.
+
+Wed Sep  7 10:36:57 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* library.tcl, snmp_trouble.tcl, ip_trouble.tcl:
+	  Added a ForeachIpNode loop command that makes most command
+	  proc's much smaller.
+
+Tue Sep  6 23:11:04 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* snmp_trouble.tcl:
+	  Converted to Sven's new tcl snmp interface. This will
+	  need some more work, but after writing some generic stuff
+	  (see below), I find some good formatted standard queries
+	  quite nice.
+
+	* snmp_browser.tcl:
+	  Converted to Sven's new tcl snmp interface. Added some 
+	  magic code to create a MIB menu hierarchy automatically.
+
+Thu Sep  1 22:52:57 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* event.tcl:
+	  A running event script is now automatically restarted when
+	  a saved tkined map is reloaded.
+
+Mon Aug 29 22:33:05 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* event.tcl:
+	  Added an option to define if a matching event will be included
+	  or excluded from the list of interesting events.
+
+	* event.tcl:
+	  Replaced the pipe to tail -1f with my own job to read syslog
+	  messages from the end of a file. This step was necessary since 
+	  close on pipe to tail caused scotty to hang until the next
+	  time the pipe gets readable.
+
+	* library.tcl:
+	  MoJoInfo now displays all hosts associated with a monitoring
+	  job. MoJoSelect converts node ids to node names.
+
+Sun Aug 28 19:39:48 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* event.tcl:
+	  Wrapped the dns call with a catch to allow events from 
+	  unofficial hosts. Changed the format of the event messages
+	  to take care of missing fields.
+
+Fri Aug 26 16:23:27 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* ip_monitor.tcl:
+	  A new command to watch ntp offsets in a stripchart.
+
+Wed Aug 24 20:05:09 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* library.tcl, ip_monitor.tcl, snmp_monitor.tcl:
+	  Added a threshold mechanism for monitoring jobs. A user
+	  can define a threshold value that is checked by
+	  MoJoCheckThreshold. The current default action is to
+	  send a syslog message which can be logged by the event
+	  script.
+
+Mon Aug 22 13:40:15 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* Added a first version of bones light to the scotty
+	  distribution. The rgdbm directory contains the RPC
+	  server to access GNU gdbm files. The bones directory
+	  contains the C and tcl interface to the bones server.
+
+	* ip_layout.tcl, ip_discover.tcl, manager.tcl:
+	  Changed all calls to `ined ida' or `ined idb' to
+	  `ined src' or `ined dst'.
+
+Sun Aug 14 18:34:08 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* ip_trouble.tcl:
+	  Added the ntp info command.
+
+	* library.tcl ip_monitor.tcl snmp_monitor.tcl:
+	  Lots of changes to use the new stripchart and barchart
+	  objects. IpFlash now uses the tkined flash command.
+
+Thu Aug 11 10:17:45 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* snmp_monitor.tcl:
+	  Added a script to monitor the number of established tcp
+	  connections on a given tcp port.
+
+	* event.tcl:
+	  A new feature that allows us to write the output of
+	  different event filter into different windows.
+
+Mon Aug  8 20:48:04 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* ip_monitor.tcl, snmp_monitor.tcl:
+	  Interval times of running jobs are now saved and restored.
+
+Fri Aug  5 10:26:53 1994  Juergen Schoenwaelder  (schoenw at sulu)
+
+	* Changed all ined create TOOL command to the new
+	  ined create MENU command.
+
+Thu Aug  4 12:31:17 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* Changed all ined request dialogs to take care of the
+          new syntax (see tkined change log for details).
+
+Tue Aug  2 17:48:11 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* clock.tcl, event.tcl, ip_discover.tcl, manager.tcl,
+	  snmp_monitor.tcl, ip_monitor.tcl:
+	  Changed all ined list dialogs to take care of the
+	  new syntax (see tkined change log for details).
+
+Mon Aug  1 15:53:53 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* ip_monitor.tcl, ip_discover.tcl, manager.tcl,
+	  testsuite.tcl, snmp_monitor.tcl, snmp_cisco.tcl:
+	  Changed these scripts to take care of the new ined confirm
+	  command (see tkined change log for details).
+
+Fri Jul 29 19:54:35 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* event.tcl:
+	  It is now possible to read events from a syslog file.
+	  I also cleaned up some dialogs.
+
+Tue Jul 26 21:41:25 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* manager.tcl:
+	  Added 'Kill Interpreter' which can be used to shut off
+	  looping applications (bye ps -ux | grep ...).
+
+	* manager.tcl:
+	  Accept manager.tool.<name>: <script> defaults that allow users
+	  to add new menu entries without modifying manager.tcl.
+
+Wed Jul  6 22:33:24 1994  Juergen Schoenwaelder  (schoenw@logic)
+
+	* manager.tcl:
+	  Merged the usable contents of comm.tcl to manager.tcl and
+	  removed comm.tcl. I also cleaned up the communication code
+	  to allow downloading of maps.
+
+Sat Jun 25 13:28:52 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* snmp_browser.tcl, snmp_monitor.tcl, snmp_trouble.tcl:
+	  Merged the two MIB browsers in snmp_monitor.tcl and
+	  snmp_trouble.tcl back to a single one. Selecting a
+	  variable for monitoring just starts a news snmp monitor
+	  and starts the variable on all selected hosts.
+
+Mon Jun 20 20:13:24 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* snmp_monitor.tcl, ip_monitor.tcl:
+	  Added a proc save that appends a new command to the
+	  restart command list of tkined.
+
+Thu Jun 16 12:25:20 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* snmp_trouble.tcl:
+	  Changed the ping command to write all nodes that answer to
+	  snmp requests in the log window similar to the find commands
+	  of ip_discover.tcl.
+
+	* ip_discover.tcl:
+	  Fixed another bug in the gateway merge phase. We now prefer
+	  the gateway record with the most interfaces.
+
+Tue Jun  7 22:39:23 1994  Juergen Schoenwaelder  (schoenw@janus)
+
+	* library.tcl:
+	  Added two new procs SnmpGet and SnmpGetBulk as a replacement
+	  to snmp get and snmp getbulk. The idea is to replace all 
+	  direct snmp calls with library calls that will make
+	  transition to snmpV2 easy.
+
+	* snmp_trouble.tcl:
+	  Added "Udp Listener" command and added the ipRouteMask
+	  to the "Routing Table" command (thanks to Erik).
+
+Wed Jun  1 12:53:42 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* library.tcl:
+	  Started putting the most common used proc's into a library
+	  that is autoloaded from the scripts. This makes maintenace
+	  easier and the scripts shorter.
+
+	* snmp_monitor.tcl:
+	  Integrated the MIB browser into the monitor script.
+	  Now you can select monitor variables using the browser.
+
+	* snmp_trouble.tcl, snmp_monitor.tcl:
+	  Added a generic mechanism to read defaults for tkined 
+	  applications. This allows you to set port, community, 
+	  retries or timeouts in the tkined.defaults file.
+
+Fri May 27 18:17:29 1994  Juergen Schoenwaelder  (schoenw@bayes)
+
+	* snmp_trouble.tcl:
+	  Added a verbose switch to suppress MIB description and
+	  to create shorter MIB dump output.
+
+Thu May 26 17:08:18 1994  Juergen Schoenwaelder  (schoenw@data)
+
+	* snmp_trouble.tcl:
+	  Added a MIB browser based on ideas by Reto Beeler
+	  (beeler@tech.ascom.ch). This version uses the hyperlinks
+	  to let the user navigate through the MIB tree.
+
+Sun May  8 22:14:33 1994  Juergen Schoenwaelder  (schoenw@ra)
+
+	* event.tcl:
+	  Added proc flash, a generic proc to periodically flash
+	  icons based on their IP address.
+
+Thu May  5 18:11:18 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* event.tcl:
+	  This script connects to our TCP syslogd and allows you
+	  to filter log messages and bind actions to your filters.
+
+Wed May  4 19:02:51 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* proc Get_IP_Address
+	  Accept node names containing valid IP addresses.
+
+	* ip_discover.tcl, ip_trouble.tcl:
+	  Added hyperlinks to the output of the find and trace commands
+	  to let the user klick on an address an flush corresponding
+	  icons in the tkined editor.
+
+Tue May  3 20:42:37 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* ip_discover.tcl:
+	  Added a check to check whether an already existing node
+	  is a stripchart or barchart and should be ignored.
+
+Wed Apr 20 00:25:06 1994  Juergen Schoenwaelder  (schoenw@helios)
+
+	* ip_monitor.tcl, snmp_monitor.tcl, monitor_client.tcl:
+	  Changed these scripts to take care of the new job
+	  scheduler.
+
+Fri Mar 11 03:56:50 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* ip_trouble.tcl:
+	  Added an interface to the whois server. This allows you
+	  to query whois.internic.net for information about most
+	  registered networks.
+
+Wed Mar  9 11:04:52 1994  Juergen Schoenwaelder  (schoenw@bayes)
+
+	* monitor_client.tcl:
+	  This is the client interface to the monitor server
+	  written by Stefan Schoek. The server will hopefully
+	  become part of the scotty package once Stefan has
+	  finished his work.
+
+	* ip_layout.tcl:
+	  The graph layout algorithm written by Sascha Bengsch
+	  is now part of the layout script.
+
+Sat Feb 26 18:25:40 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* snmp_monitor.tcl:
+	  Added some code to restart running monitors for simple
+	  SNMP variables.
+
+Thu Feb 24 18:59:46 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* ip_trouble.tcl:
+	  The output of the trace command is now more like the 
+	  original traceroute program.
+
+Wed Feb 16 17:20:28 1994  Juergen Schoenwaelder  (schoenw@helios)
+
+	* ip_monitor.tcl:
+	  Added a restart proc that will get called when a saved
+	  tkined maps wishes to reinitialize a monitor job. There
+	  are some simple modifications to the commands that create
+	  jobs to save restart information in the tkined editor.
+
+Sat Feb 12 15:14:28 1994  Juergen Schoenwaelder  (schoenw@helios)
+
+	* testsuite.tcl:
+	  Started a simple test suite. It helps me to test 
+	  my scripts, scotty and tkined on different platforms.
+
+Mon Feb  7 12:39:57 1994  Juergen Schoenwaelder  (schoenw@helios)
+
+	* snmp_monitor:
+	  Added code to generate readable labels for stripcharts
+	  created by the monitor variable command.
+
+	* snmp_trouble:
+	  Added more statistics to the "interface statistic"
+	  command and added the command "interface parameter"
+	  to show the speed, MTU and Address of an interface.
+
+Fri Feb  4 12:28:32 1994  Juergen Schoenwaelder  (schoenw@helios)
+
+	* snmp_trouble:
+	  Added the ethernet address maintained by Michael A. Patton, 
+	  MIT as of 8-Apr-93 to convert up ethernet addresses to
+	  vendor names.
+
+Sat Jan 22 15:13:50 1994  Juergen Schoenwaelder  (schoenw@bayes)
+
+	* ip_trouble.tcl, ip_monitor.tcl, ip_discover.tcl:
+	  Changed the calls to the old rpc command to call
+	  to the new sunrpc command.
+
+Fri Jan 14 16:31:24 1994  Juergen Schoenwaelder  (schoenw@sol)
+
+	* ip_discover.tcl:
+	  Added a command to discover hosts that transport
+	  email to a given address (very interesting for 
+	  mailing lists).
+
+	* snmp_trouble.tcl, snmp_monitor.tcl, snmp_cisco.tcl:
+	  Added these scripts now that we have the SNMP code
+	  written by P.H. Kamp in the scotty interpreter.
+
+Thu Dec 30 02:23:27 1993  Juergen Schoenwaelder  (schoenw@sol)
+
+	* ip_trouble.tcl:
+	  The output of most troubleshooting commands is now
+	  written into the log window.
+
+Wed Dec 29 00:06:42 1993  Juergen Schoenwaelder  (schoenw@sol)
+
+	* trouble.tcl, monitor.tcl, layout.tcl, discover.tcl:
+	  Added the prefix ip_ to the filenames. This naming
+	  convention is also used by the SNMP tools and lets
+	  me better understand what is where.
+
+Tue Dec 28 18:29:15 1993  Juergen Schoenwaelder  (schoenw@sol)
+
+	* discover.tcl:
+	  The optional log of the discovering process is now 
+	  written into a log window.
+
+	* discover.tcl:
+	  Added a command to locate TCP server on a given map.
+
+8/10/93 (code cleanup) Rewrote the monitor.tcl script. It now uses the
+job scheduler. The old blocking version of monitor.tcl is in the file
+monitor-noselect.tcl.
+
+4/10/93 (new feature) The comm.tcl script handles a communication
+channel between two tkined instances. This needs more work but shows
+how to use tkined's trace command.
+
+1/10/93 (new feature) Added a new script called clock.tcl which simply
+displays a clock. A nice demonstration of the job scheduler.
+
+1/10/93 (new feature) The discover.tcl script now reuses grouped
+objects correctly when downloading discovered devices.
+
+1/10/93 (code cleanup) Lots of small modifications in trouble.tcl to
+beautify the dialogs.
+
+22/9/93 (code cleanup) Most commands of utils.tcl are now in the
+tkined core.
+
+31/8/93 (code cleanup) The discover script has been updated. It should
+now be able to handle any subnet masks and to combine interfaces that
+belong to a single gateway.
+
+23/8/93 (feature change) The rstat RPC based commands now report the
+status of the whole selection in the given interval. The old version
+used an interval for each single node.
+
+21/8/93 (code cleanup) Fixed the scripts to work correctly with
+tkined-0.5.
+
+20/8/93 (new feature) Added a command to the layout tool which throws
+all nodes connected to a network into a group. Nodes with more than
+one link (gateways) are excluded.
+
+20/8/93 (new feature) A new menu entry in the manager.tcl script
+allows the user to interactively specify which script should be
+started.
+
+19/8/93 (new feature) The RPC based monitoring tools check the
+reach-ability of the nodes using icmp. This reduces the RPC timeout
+for inactive hosts.
+
+19/8/93 (bug fix) The select member command allows you to select all
+members of an expanded group.
+
+28/7/93 (new feature) Unknown icon mappings are now shown at the end
+of the layout process.
+
+28/7/93 (new feature) Discovering routes is now implemented in the
+same way a whole network is discovered. This allows us to mix both
+operations.
+
+27/7/93 (new feature) Added the ability to add new discovered nodes to
+an existing map. An existing node or a network is recognized based on
+its address attribute.
+
+27/7/93 (new feature) The check reach-ability and round trip time
+commands now use the ability to send all icmp requests in parallel.
+
+26/7/93 (new feature) Discover Route command added that traces a route
+to the current selection and adds all intermediate nodes to the
+current map.
+
+22/7/93 (new feature) Added the dns info command to ip_trouble.tcl
+that displays dns information.
+
+21/7/93 (new feature) The dns command written by Erik Schoenfelder is
+now used to get hinfo records.

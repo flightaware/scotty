@@ -1,0 +1,49 @@
+.TH udpspeed 1L "April 94" "Tnm Example" "Tnm Tcl Extension"
+
+.SH NAME
+udpspeed \- test the speed of udp connections
+
+.SH SYNOPSIS
+.B udpspeed
+[
+-d
+.I delay
+]
+[
+-t
+.I seconds
+]
+[
+-s
+.I size
+]
+.I host
+
+.SH DESCRIPTION
+.B udpspeed
+sends datagrams to the echo port on
+.I host.
+udpspeed sends as much data as possible during a period of 
+10 seconds and calculates the throughput in kB per second.
+It also keeps track on the loss rate.
+
+.SH OPTIONS
+.TP
+.BI "-d " delay
+This option defines the delay between two packets send to a host.
+The delay is given in milli seconds with a default of 10 ms.
+.TP
+.BI "-t " seconds
+This option sets the time this test is running. A short test interval
+will produce inaccurate results while a long interval may disturb other
+activities on the network. The default test interval is 10 seconds.
+.TP
+.BI "-s " size
+Send UDP packets of size \fIsize\fR bytes. The default packet size is 
+1024 bytes.
+
+.SH SEE ALSO
+scotty(1)
+
+.SH AUTHORS
+Juergen Schoenwaelder (schoenw@ibr.cs.tu-bs.de)

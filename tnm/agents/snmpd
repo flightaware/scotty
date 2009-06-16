@@ -1,0 +1,141 @@
+#!/bin/sh
+# the next line restarts using tclsh -*- tcl -*- \
+exec tclsh "$0" "$@"
+#
+# snmpd --
+#
+#	Simple SNMP Agent. This file does only the startup. All MIB
+#	implementations are done in extra files that are sourced from
+#	this file.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
+package require Tnm 3.0
+
+unset tnm(mibs)
+
+##
+## Report all errors to standard error and write a message to
+## the system logger.
+##
+
+proc bgerror { msg } {
+    global errorInfo
+    syslog error $msg
+    puts stderr $errorInfo
+}
+
+##
+## Create an agent session for SNMPv1, SNMPv2c or SNMPv2u. 
+##
+
+proc CreateAgent { version port {interp {}} } {
+    global tnm
+    set s [Tnm::snmp responder -port $port]
+    if {[catch {$s configure -version $version} msg]} {
+	$s destroy
+	error $msg
+    }
+    if {$version == "SNMPv2U"} {
+	$s configure -user $tnm(user)
+    }
+##    $s configure -agent $interp
+    return $s
+}
+
+##
+## Create a Tcl interpreter that can be used to evaluate arbitrary
+## scripts send from potentially unsecure managers. You can run the
+## agent with an unsafe Tcl interpreter by uncommenting the return
+## command below. But it will be your own risk to do so. You have
+## been warned.
+##
+
+proc CreateSafeInterp {} {
+
+    # return ""
+
+    set interp [interp create -safe]
+
+    # List of commands allowed in the safe Tcl interpreter. Note, the
+    # http command allows to write to local files. This is no problem
+    # if you run the agent on a restricted account.
+
+    # Safe Tcl/Tk commands.
+    
+    $interp alias bgerror	bgerror
+    $interp alias puts		puts stderr
+    
+    # Safe Scotty commands.
+    
+    $interp alias icmp		icmp
+    $interp alias http		http
+    $interp alias syslog	syslog
+    $interp alias mib		mib
+    return $interp
+}
+
+##
+## Startup the agent on port 1701.
+##
+
+if [catch {CreateAgent SNMPv2c 1701 [CreateSafeInterp]} s] {
+    puts stderr "Failed to setup SNMP agent: $s"
+    exit 42
+}
+
+##
+## Load and initialize some MIB modules.
+##
+
+set agentDir [file join $tnm(library) agents]
+if {[file exists $agentDir/snmpd-tnm.tcl]} {
+    source $agentDir/snmpd-tnm.tcl
+    SNMP_TnmInit $s
+    SMMP_EvalInit $s
+}
+
+if {[file exists $agentDir/snmpd-nfs.tcl]} {
+    source $agentDir/snmpd-nfs.tcl
+    SNMP_NfsInit $s
+}
+
+if {[file exists $agentDir/snmpd-proc.tcl]} {
+    source $agentDir/snmpd-proc.tcl
+    SNMP_ProcInit $s
+}
+
+if {[file exists $agentDir/snmpd-mlm.tcl]} {
+    source $agentDir/snmpd-mlm.tcl
+    SNMP_MLMInit $s
+}
+
+##
+## Some bindings to see what the agent is doing.
+##
+
+# $s bind 1.3 get      { puts "get      -> %V" }
+# $s bind 1.3 set      { puts "set      -> %V" }
+# $s bind 1.3 create   { puts "create   -> %V" }
+# $s bind 1.3 check    { puts "check    -> %V" }
+# $s bind 1.3 commit   { puts "commit   -> %V" }
+# $s bind 1.3 rollback { puts "rollback -> %V" }
+# $s bind ""  begin    { puts "begin    -> %T %E %I %V" }
+# $s bind ""  end      { puts "end      -> %T %E %I %V" }
+
+##
+## Show our configuration so that other can talk to us.
+##
+
+puts stdout "SNMP agent started using the following parameters:"
+foreach {option value} [$s configure] {
+    if {$value != ""} {
+	puts [format "  %-10s = %s" $option $value]
+    }
+}
+
+vwait forever

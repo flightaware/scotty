@@ -1,0 +1,63 @@
+'\"
+'\" Copyright (c) 1996-1997 University of Twente.
+'\" Copyright (c) 1997-1998 Technical University of Braunschweig.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+'\" @(#) $Id: TnmDialog.n,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+'\" 
+.so man.macros
+.TH TnmDialog n "February 1998" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+TnmDialog \- A Tcl/Tk package of simple dialog boxes.
+.BE
+
+.SH DESCRIPTION
+
+The TnmDialog package provides a set of Tcl/Tk command procedures used
+to create and display simple dialogs boxes.
+
+.SH USING THE PACKAGE
+
+The TnmDialog package is loaded into a Tcl interpreter by using the
+following sequence of Tcl commands:
+
+.CS
+package require Tnm
+.br
+package require TnmDialog $tnm(version)
+.CE
+
+All the TnmDialog commands live in the TnmDialog namespace. You can
+import these commands into the current namespace by using the
+following Tcl command:
+
+.CS
+namespace import TnmDialog::*
+.CE
+
+It is however suggested to import commands explicitely or to use the
+full name in scripts to avoid name clashes.
+
+.SH COMMANDS
+
+.TP
+.B TnmDialog::Confirm \fIpath bitmap text buttons\fR
+The \fBTnmDialog::Confirm\fR procedure displays a simple dialog which
+informs the user about some important conditions. It consists out of a
+\fIbitmap\fR (displayed on the left) and some \fItext\fR (displayed on
+the right). The bottom of the dialog contains a list of \fIbuttons\fR.
+The \fBTnmDialog::Confirm\fR procedure returns the name of the button
+activated by the user.
+.TP
+.B TnmDialog::Browse \fIpath title text buttons\fR
+
+.SH SEE ALSO
+scotty(1), Tnm(n), Tcl(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+.br
