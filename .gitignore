@@ -1,3 +1,8 @@
 configure
 config.log
 config.status
+*.o
+nmicmpd
+nmtrapd
+scotty
+tnm.so

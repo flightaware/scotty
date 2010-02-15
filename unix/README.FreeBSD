@@ -8,7 +8,7 @@
 
 # add --enable-symbols to build with debugging symbols
 
-./configure --with-tcl=/usr/local/lib/tcl8.4 --with-tclinclude=/usr/local/include/tcl8.4
+./configure --with-tcl=/usr/local/lib/tcl8.5 --mandir=/usr/local/man
 
 #--enable-symbols
 #--enable-symbols=mem
