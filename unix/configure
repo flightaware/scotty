@@ -1809,15 +1809,15 @@ ac_config_headers="$ac_config_headers config.h"
 
 TNM_VERSION=3.0.0
 TKI_VERSION=1.5.0
-TCL_VERSION=8.4
-TK_VERSION=8.4
+TCL_VERSION=8.5
+TK_VERSION=8.5
 
 #----------------------------------------------------------------------------
 #	Load the tcl configuration file.
 #----------------------------------------------------------------------------
 
-# Extract the first word of "tclsh8.4", so it can be a program name with args.
-set dummy tclsh8.4; ac_word=$2
+# Extract the first word of "tclsh8.5", so it can be a program name with args.
+set dummy tclsh8.5; ac_word=$2
 { $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_path_tclsh+set}" = set; then
@@ -1924,9 +1924,9 @@ fi
 $as_echo_n "checking for tcl version... " >&6; }
 { $as_echo "$as_me:$LINENO: result: \"$TCL_VERSION\"" >&5
 $as_echo "\"$TCL_VERSION\"" >&6; }
-if test "$TCL_VERSION" != "8.4" ; then
-    { { $as_echo "$as_me:$LINENO: error: \"Tcl version 8.4 needed\"" >&5
-$as_echo "$as_me: error: \"Tcl version 8.4 needed\"" >&2;}
+if test "$TCL_VERSION" != "8.5" ; then
+    { { $as_echo "$as_me:$LINENO: error: \"Tcl version 8.5 needed\"" >&5
+$as_echo "$as_me: error: \"Tcl version 8.5 needed\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -1937,8 +1937,8 @@ INSTALL_TARGETS="$INSTALL_TARGETS tnm-install"
 #	Load the tk configuration file.
 #----------------------------------------------------------------------------
 
-# Extract the first word of "wish8.4", so it can be a program name with args.
-set dummy wish8.4; ac_word=$2
+# Extract the first word of "wish8.5", so it can be a program name with args.
+set dummy wish8.5; ac_word=$2
 { $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_path_wish+set}" = set; then
@@ -2026,9 +2026,9 @@ else
 $as_echo_n "checking for tk version... " >&6; }
     { $as_echo "$as_me:$LINENO: result: \"$TK_VERSION\"" >&5
 $as_echo "\"$TK_VERSION\"" >&6; }
-    if test "$TK_VERSION" != "8.4" ; then
-        { { $as_echo "$as_me:$LINENO: error: \"Tk version 8.4 needed\"" >&5
-$as_echo "$as_me: error: \"Tk version 8.4 needed\"" >&2;}
+    if test "$TK_VERSION" != "8.5" ; then
+        { { $as_echo "$as_me:$LINENO: error: \"Tk version 8.5 needed\"" >&5
+$as_echo "$as_me: error: \"Tk version 8.5 needed\"" >&2;}
    { (exit 1); exit 1; }; }
     fi
 
