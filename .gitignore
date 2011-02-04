@@ -1,3 +1,4 @@
 configure
 config.log
 config.status
+*.o
