@@ -181,7 +181,7 @@ TnmWriteLogMessage(ident, level, facility, message)
 #else
 	openlog(ident, LOG_PID, facility);
 #endif
-	syslog(level, message);
+	syslog(level, "%s", message);
 	closelog();
     }
 

@@ -1,5 +1,10 @@
 $Id: ChangeLog,v 1.3 2008/02/13 16:44:05 karl Exp $
 
+2/9/12 karl
+    * fix the call to syslog to specify a format of "%s" and the text
+      as an argument to that, rather than the text argument being
+      interpreted as the format, which could cause unwanted %-substitutions
+
 2/13/08 karl
     * Fix numerous compiler warnings about discarding qualifiers on pointers.
 
