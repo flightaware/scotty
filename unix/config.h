@@ -24,7 +24,7 @@
 /* #undef WORDS_BIGENDIAN */
 
 /* Define if you have IP multicast support.  */
-/* #undef HAVE_MULTICAST */
+#define HAVE_MULTICAST 1
 
 /* Define if you have the getmntent function.  */
 /* #undef HAVE_GETMNTENT */

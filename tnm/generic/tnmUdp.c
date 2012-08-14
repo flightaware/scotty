@@ -645,7 +645,11 @@ UdpJoin(interp, udpPtr, objc, objv)
     Tcl_Obj *CONST objv[];
 {
     struct sockaddr_in name;
+#ifdef MCAST_JOIN_GROUP
+    struct group_req mreq;
+#else
     struct ip_mreq mreq;
+#endif
     char *s;
     
     if (objc < 4 || objc > 5) {
@@ -663,15 +667,44 @@ UdpJoin(interp, udpPtr, objc, objv)
 	return TCL_ERROR;
     }
 
-    mreq.imr_multiaddr.s_addr = name.sin_addr.s_addr;
-    mreq.imr_interface.s_addr = htonl(INADDR_ANY);
-
-    if ((mreq.imr_multiaddr.s_addr == -1 ||
-	 !IN_MULTICAST(ntohl(mreq.imr_multiaddr.s_addr)))) {
+    if ((name.sin_addr.s_addr == -1 ||
+	 !IN_MULTICAST(ntohl(name.sin_addr.s_addr)))) {
 	Tcl_AppendResult(interp, "bad multicast group address \"",
 			 s, "\"", (char *) NULL);
 	return TCL_ERROR;
     }
+    name.sin_len = sizeof(name);
+
+#ifdef MCAST_JOIN_GROUP
+    memset(&mreq, 0, sizeof(mreq));
+    memcpy(&mreq.gr_group, &name, sizeof(name));
+
+    if (objc == 5) {
+        char *iface = Tcl_GetStringFromObj(objv[4], NULL);
+        mreq.gr_interface = if_nametoindex(iface);
+        if (mreq.gr_interface == 0) {
+            Tcl_AppendResult(interp, "bad multicast interface \"", iface, "\"", NULL);
+            return TCL_ERROR;
+        }
+    } else {
+        mreq.gr_interface = 0;
+    }
+
+    if (bind(udpPtr->sock, (struct sockaddr*) &name, sizeof(name)) == -1) {
+        Tcl_AppendResult(interp, "binding multicast group address failed: ",
+                         Tcl_PosixError(interp), (char *) NULL);
+        return TCL_ERROR;
+    }
+
+    if (setsockopt(udpPtr->sock, IPPROTO_IP, MCAST_JOIN_GROUP, 
+                   (char*) &mreq, sizeof(mreq)) == -1) {
+        Tcl_AppendResult(interp, "adding multicast group membership failed: ",
+                         Tcl_PosixError(interp), (char *) NULL);
+        return TCL_ERROR;
+    }
+
+#else
+    mreq.imr_multiaddr.s_addr = name.sin_addr.s_addr;
 
     mreq.imr_interface.s_addr = htonl(INADDR_ANY);
     if (objc == 5) {
@@ -690,6 +723,7 @@ UdpJoin(interp, udpPtr, objc, objv)
 			 Tcl_PosixError(interp), (char *) NULL);
 	return TCL_ERROR;
     }
+#endif
 
     return TCL_OK;
 }
