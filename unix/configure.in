@@ -9,14 +9,14 @@ AC_CONFIG_HEADER(config.h)
 
 TNM_VERSION=3.0.0
 TKI_VERSION=1.5.0
-TCL_VERSION=8.5
-TK_VERSION=8.5
+TCL_VERSION=8.6
+TK_VERSION=8.6
 
 #----------------------------------------------------------------------------
 #	Load the tcl configuration file.
 #----------------------------------------------------------------------------
 
-AC_PATH_PROG(tclsh,tclsh8.5)
+AC_PATH_PROG(tclsh,tclsh8.6)
 if test -n "$tclsh" ; then
     tclsh_prefix=`dirname $tclsh`
     tclsh_prefix=`dirname $tclsh_prefix`
@@ -71,8 +71,8 @@ fi
 
 AC_MSG_CHECKING(for tcl version)
 AC_MSG_RESULT("$TCL_VERSION")
-if test "$TCL_VERSION" != "8.5" ; then
-    AC_MSG_ERROR("Tcl version 8.5 needed")
+if test "$TCL_VERSION" != "8.6" ; then
+    AC_MSG_ERROR("Tcl version 8.6 needed")
 fi
 
 BUILD_TARGETS="$BUILD_TARGETS scotty"
@@ -82,7 +82,7 @@ INSTALL_TARGETS="$INSTALL_TARGETS tnm-install"
 #	Load the tk configuration file.
 #----------------------------------------------------------------------------
 
-AC_PATH_PROG(wish,wish8.5)
+AC_PATH_PROG(wish,wish8.6)
 if test -n "$wish" ; then
     wish_prefix=`dirname $wish`
     wish_prefix=`dirname $wish_prefix`
@@ -122,7 +122,7 @@ else
 
     AC_MSG_CHECKING(for tk version)
     AC_MSG_RESULT("$TK_VERSION")
-    if test "$TK_VERSION" != "8.5" ; then
+    if test "$TK_VERSION" != "8.6" ; then
         AC_MSG_ERROR("Tk version 8.5 needed")
     fi
 

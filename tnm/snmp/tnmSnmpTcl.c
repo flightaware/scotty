@@ -2715,7 +2715,7 @@ SyncWalk(interp, session, varName, oidList, tclCmd)
 		    char msg[100];
 		    sprintf(msg, "\n    (\"%s walk\" body line %d)",
 			    Tcl_GetCommandName(interp, session->token),
-			    interp->errorLine);
+			    Tcl_GetErrorLine(interp));
 		    Tcl_AddErrorInfo(interp, msg);
 		    Tcl_DecrRefCount(vbList);
 		    goto loopDone;

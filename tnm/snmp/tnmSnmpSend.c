@@ -197,7 +197,7 @@ TnmSnmpEncode(interp, session, pdu, proc, clientData)
 	rPtr = TnmSnmpCreateRequest(pdu->requestId, packet, packetlen,
 				    proc, clientData, interp);
 	TnmSnmpQueueRequest(session, rPtr);
-	sprintf(interp->result, "%d", (int) pdu->requestId);
+	Tcl_SetObjResult (interp, Tcl_NewIntObj (pdu->requestId));
 	return TCL_OK;
     }
     
@@ -265,7 +265,7 @@ TnmSnmpEncode(interp, session, pdu, proc, clientData)
 	    
 	    if (rc == TCL_CONTINUE) {
 		if (hexdump) {
-		    fprintf(stderr, "%s\n", interp->result);
+		    fprintf(stderr, "%s\n", Tcl_GetStringResult(interp));
 		}
 		continue;
 	    }
@@ -351,7 +351,7 @@ EncodeMessage(interp, session, pdu, ber)
 				    (char *) parameter, parameterLen);
 	ber = EncodePDU(interp, session, pdu, ber);
 	if (ber == NULL) {
-	    if (*interp->result == '\0') {
+	    if (*Tcl_GetStringResult(interp) == '\0') {
 		Tcl_SetResult(interp, TnmBerGetError(NULL), TCL_STATIC);
 	    }
 	    return TCL_ERROR;
@@ -370,7 +370,7 @@ EncodeMessage(interp, session, pdu, ber)
 	ber = TnmBerEncOctetString(ber, ASN1_OCTET_STRING,
 				   (char *) secParam, secParamLength);
 	ber = EncodeScopedPDU(interp, session, pdu, ber);
-	if (*interp->result == '\0') {
+	if (*Tcl_GetStringResult (interp) == '\0') {
 	    Tcl_SetResult(interp, TnmBerGetError(NULL), TCL_STATIC);
 	}
     }
@@ -955,6 +955,7 @@ EncodePDU(interp, session, pdu, ber)
 	
 	char *value;
 	int asn1_type = ASN1_OTHER;
+	char string[64];
 	
 	/*
 	 * split a single varbind into its components
@@ -1202,8 +1203,9 @@ EncodePDU(interp, session, pdu, ber)
 		ber = TnmBerEncNull(ber, (u_char) asn1_type);
 		break;
 	    default:
-		sprintf(interp->result, "unknown asn1 type 0x%.2x",
+		sprintf(string, "unknown asn1 type 0x%.2x",
 			asn1_type);
+		Tcl_SetResult (interp, string, TCL_VOLATILE);
 		return NULL;
 	    }
 	}

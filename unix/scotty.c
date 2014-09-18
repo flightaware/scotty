@@ -96,7 +96,7 @@ Tcl_AppInit(interp)
     }
 
     if (Tcl_PkgRequire(interp, "Tnm", TNM_VERSION, 1) == NULL) {
-	if (Tcl_StringMatch(interp->result, "*can't find package*")) {
+	if (Tcl_StringMatch(Tcl_GetStringResult(interp), "*can't find package*")) {
 	    Tcl_AppendResult(interp, "\n",
    "This usually means that you have to define the TCLLIBPATH environment\n",
    "variable to point to the tnm library directory or you have to include\n",
@@ -182,7 +182,7 @@ main(argc, argv)
 	errChannel = Tcl_GetChannel(interp, "stderr", NULL);
 	if (errChannel) {
 	    Tcl_Write(errChannel, "initialization failed: ", -1);
-	    Tcl_Write(errChannel, interp->result, -1);
+	    Tcl_Write(errChannel, Tcl_GetStringResult(interp), -1);
 	    Tcl_Write(errChannel, "\n", 1);
 	}
 	exitCode = 1;
@@ -334,7 +334,7 @@ StdinProc(clientData, mask)
     Tcl_CreateChannelHandler(chan, TCL_READABLE, StdinProc,
 	    (ClientData) chan);
     Tcl_DStringFree(&command);
-    if (*interp->result != 0) {
+    if (*Tcl_GetStringResult (interp) != '\0') {
 	if ((code != TCL_OK) || (tty)) {
 	    /*
 	     * The statement below used to call "printf", but that resulted
@@ -343,7 +343,7 @@ StdinProc(clientData, mask)
              * NOTE: This probably will not work under Windows either.
 	     */
 
-	    puts(interp->result);
+	    puts(Tcl_GetStringResult (interp));
 	}
     }
 
@@ -418,7 +418,7 @@ defaultPrompt:
              */
 	    
             if (errChannel != (Tcl_Channel) NULL) {
-	        Tcl_Write(errChannel, interp->result, -1);
+	        Tcl_Write(errChannel, Tcl_GetStringResult (interp), -1);
 	        Tcl_Write(errChannel, "\n", 1);
 	    }
 	    goto defaultPrompt;

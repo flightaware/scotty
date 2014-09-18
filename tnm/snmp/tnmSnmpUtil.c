@@ -715,7 +715,7 @@ TnmSnmpEvalCallback(interp, session, pdu, cmd, instance, oid, value, last)
      */
 
     if (code == TCL_ERROR && oid == NULL) {
-	char *errorMsg = ckstrdup(interp->result);
+	char *errorMsg = ckstrdup(Tcl_GetStringResult(interp));
 	Tcl_AddErrorInfo(interp, "\n    (snmp callback)");
 	Tcl_BackgroundError(interp);
 	Tcl_SetResult(interp, errorMsg, TCL_DYNAMIC);

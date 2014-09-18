@@ -94,7 +94,7 @@ EXTERN char*
 TnmGetTableValue	_ANSI_ARGS_((TnmTable *table, unsigned key));
 
 EXTERN int
-TnmGetTableKey		_ANSI_ARGS_((TnmTable *table, char *value));
+TnmGetTableKey		(TnmTable *table, const char *value);
 
 EXTERN char*
 TnmGetTableValues	_ANSI_ARGS_((TnmTable *table));

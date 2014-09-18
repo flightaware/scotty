@@ -708,7 +708,7 @@ WalkTree(interp, varName, body, nodePtr, oidPtr, rootPtr)
 	    } else if (result == TCL_ERROR) {
 		char msg[100];
 		sprintf(msg, "\n    (\"mib walk\" body line %d)",
-			interp->errorLine);
+			Tcl_GetErrorLine(interp));
 		Tcl_AddErrorInfo(interp, msg);
 		goto loopDone;
 	    } else {

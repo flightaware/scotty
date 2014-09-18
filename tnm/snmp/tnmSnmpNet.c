@@ -859,7 +859,7 @@ ResponseProc(clientData, mask)
 	Tcl_BackgroundError(interp);
     }
     if (code == TCL_CONTINUE && hexdump) {
-	TnmWriteMessage(interp->result);
+	TnmWriteMessage(Tcl_GetStringResult(interp));
 	TnmWriteMessage("\n");
     }
 }
@@ -905,7 +905,7 @@ AgentProc(clientData, mask)
 	Tcl_BackgroundError(interp);
     }
     if (code == TCL_CONTINUE && hexdump) {
-	TnmWriteMessage(interp->result);
+	TnmWriteMessage(Tcl_GetStringResult(interp));
 	TnmWriteMessage("\n");
     }
 }

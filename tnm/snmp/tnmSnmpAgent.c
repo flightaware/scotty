@@ -741,7 +741,7 @@ GetRequest(interp, session, request, response)
 
       varBindTclError:
 	response->errorStatus = TnmGetTableKey(tnmSnmpErrorTable, 
-						interp->result);
+						Tcl_GetStringResult (interp));
 	if (response->errorStatus < 0) {
 	    response->errorStatus = TNM_SNMP_GENERR;
 	}
@@ -925,7 +925,7 @@ SetRequest(interp, session, request, response)
 
       varBindTclError:
 	response->errorStatus = TnmGetTableKey(tnmSnmpErrorTable, 
-						interp->result);
+						Tcl_GetStringResult (interp));
 	if (response->errorStatus < 0) {
 	    response->errorStatus = TNM_SNMP_GENERR;
 	}
@@ -970,7 +970,7 @@ SetRequest(interp, session, request, response)
 
 	    if (code != TCL_OK) {
 		response->errorStatus = TnmGetTableKey(tnmSnmpErrorTable, 
-							interp->result);
+							Tcl_GetStringResult (interp));
 		if (response->errorStatus < 0) {
 		    response->errorStatus = TNM_SNMP_GENERR;
 		}

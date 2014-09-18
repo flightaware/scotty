@@ -77,9 +77,7 @@ TnmGetTableValue(table, key)
  */
 
 int
-TnmGetTableKey(table, value)
-    TnmTable *table;
-    char *value;
+TnmGetTableKey(TnmTable *table, const char *value)
 {
     TnmTable *elemPtr;
 
