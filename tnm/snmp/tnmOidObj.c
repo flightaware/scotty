@@ -25,16 +25,16 @@
  */
 
 static void		
-DupOidInternalRep	_ANSI_ARGS_((Tcl_Obj *srcPtr, Tcl_Obj *copyPtr));
+DupOidInternalRep	(Tcl_Obj *srcPtr, Tcl_Obj *copyPtr);
 
 static void		
-FreeOidInternalRep	_ANSI_ARGS_((Tcl_Obj *objPtr));
+FreeOidInternalRep	(Tcl_Obj *objPtr);
 
 static int
-SetOidFromAny		_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr));
+SetOidFromAny		(Tcl_Interp *interp, Tcl_Obj *objPtr);
 
 static void
-UpdateStringOfOid	_ANSI_ARGS_((Tcl_Obj *objPtr));
+UpdateStringOfOid	(Tcl_Obj *objPtr);
 
 /*
  * The structure below defines the tnmOid Tcl object type by means of

@@ -33,11 +33,11 @@ static int ignoretrace = 0;
  */
 
 static int 
-ObjectCommand	      _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv));
+ObjectCommand	      (ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv);
 static void 
-do_debug              _ANSI_ARGS_((Tki_Object *object, Tcl_Interp *interp,
-				   int argc, char **argv, char *result));
+do_debug              (Tki_Object *object, Tcl_Interp *interp,
+				   int argc, char **argv, char *result);
 /* 
  * Find an object by its id.
  */

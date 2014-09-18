@@ -36,10 +36,10 @@ typedef struct TnmOid {
 } TnmOid;
 
 EXTERN void
-TnmOidInit		_ANSI_ARGS_((TnmOid *oidPtr));
+TnmOidInit		(TnmOid *oidPtr);
 
 EXTERN void
-TnmOidFree		_ANSI_ARGS_((TnmOid *oidPtr));
+TnmOidFree		(TnmOid *oidPtr);
 
 #define TnmOidGet(oidPtr,index)		((oidPtr)->elements[index])
 #define TnmOidSet(oidPtr,index,value)	((oidPtr)->elements[index] = value)
@@ -47,31 +47,31 @@ TnmOidFree		_ANSI_ARGS_((TnmOid *oidPtr));
 #define TnmOidGetElements(oidPtr)	((oidPtr)->elements)
 
 EXTERN void
-TnmOidSetLength		_ANSI_ARGS_((TnmOid *oidPtr, int length));
+TnmOidSetLength		(TnmOid *oidPtr, int length);
 
 EXTERN int
-TnmOidAppend		_ANSI_ARGS_((TnmOid *oidPtr, u_int value));
+TnmOidAppend		(TnmOid *oidPtr, u_int value);
 
 EXTERN int
-TnmOidFromString	_ANSI_ARGS_((TnmOid *oidPtr, char *string));
+TnmOidFromString	(TnmOid *oidPtr, char *string);
 
 EXTERN char*
-TnmOidToString		_ANSI_ARGS_((TnmOid *oidPtr));
+TnmOidToString		(TnmOid *oidPtr);
 
 EXTERN void
-TnmOidCopy		_ANSI_ARGS_((TnmOid *dstOidPtr, TnmOid *srcOidPtr));
+TnmOidCopy		(TnmOid *dstOidPtr, TnmOid *srcOidPtr);
 
 EXTERN int
-TnmOidCompare		_ANSI_ARGS_((TnmOid *oidPtr1, TnmOid *oidPtr2));
+TnmOidCompare		(TnmOid *oidPtr1, TnmOid *oidPtr2);
 
 EXTERN int
-TnmOidInTree		_ANSI_ARGS_((TnmOid *treePtr, TnmOid *oidPtr));
+TnmOidInTree		(TnmOid *treePtr, TnmOid *oidPtr);
 
 EXTERN int
-TnmIsOid		_ANSI_ARGS_((char *str));
+TnmIsOid		(char *str);
 
 EXTERN char*
-TnmHexToOid		_ANSI_ARGS_((char *str));
+TnmHexToOid		(char *str);
 
 /*
  *----------------------------------------------------------------
@@ -82,13 +82,13 @@ TnmHexToOid		_ANSI_ARGS_((char *str));
 EXTERN Tcl_ObjType tnmOidType;
 
 EXTERN Tcl_Obj*
-TnmNewOidObj		_ANSI_ARGS_((TnmOid *oidPtr));
+TnmNewOidObj		(TnmOid *oidPtr);
 
 EXTERN void
-TnmSetOidObj		_ANSI_ARGS_((Tcl_Obj *objPtr, TnmOid *oidPtr));
+TnmSetOidObj		(Tcl_Obj *objPtr, TnmOid *oidPtr);
 
 EXTERN TnmOid*
-TnmGetOidFromObj	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr));
+TnmGetOidFromObj	(Tcl_Interp *interp, Tcl_Obj *objPtr);
 
 #define TNM_OID_AS_OID	0x00
 #define TNM_OID_AS_NAME	0x01
@@ -259,61 +259,61 @@ EXTERN TnmMibType *tnmMibTypeSaveMark;	/* The first already saved */
  */
 
 EXTERN int
-TnmMibLoadFile		_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr));
+TnmMibLoadFile		(Tcl_Interp *interp, Tcl_Obj *objPtr);
 
 EXTERN int
-TnmMibLoadCore		_ANSI_ARGS_((Tcl_Interp *interp));
+TnmMibLoadCore		(Tcl_Interp *interp);
 
 EXTERN int
-TnmMibLoad		_ANSI_ARGS_((Tcl_Interp *interp));
+TnmMibLoad		(Tcl_Interp *interp);
 
 EXTERN char*
-TnmMibGetString		_ANSI_ARGS_((char *fileName, int fileOffset));
+TnmMibGetString		(char *fileName, int fileOffset);
 
 EXTERN TnmMibNode*
-TnmMibNodeFromOid	_ANSI_ARGS_((TnmOid *oidPtr, TnmOid *nodeOidPtr));
+TnmMibNodeFromOid	(TnmOid *oidPtr, TnmOid *nodeOidPtr);
 
 EXTERN void
-TnmMibNodeToOid		_ANSI_ARGS_((TnmMibNode *nodePtr, TnmOid *oidPtr));
+TnmMibNodeToOid		(TnmMibNode *nodePtr, TnmOid *oidPtr);
 
 EXTERN char*
-TnmMibGetOid		_ANSI_ARGS_((char *name));
+TnmMibGetOid		(char *name);
 
 EXTERN char*
-TnmMibGetName		_ANSI_ARGS_((char *oid,  int exact));
+TnmMibGetName		(char *oid,  int exact);
 
 EXTERN int
-TnmMibGetBaseSyntax	_ANSI_ARGS_((char *name));
+TnmMibGetBaseSyntax	(char *name);
 
 EXTERN TnmMibNode*
-TnmMibFindNode		_ANSI_ARGS_((char *name, int *offset, int exact));
+TnmMibFindNode		(char *name, int *offset, int exact);
 
 EXTERN TnmMibNode*
-TnmFindMibNode		_ANSI_ARGS_((TnmOid *oidPtr, char **tailPtr));
+TnmFindMibNode		(TnmOid *oidPtr, char **tailPtr);
 
 EXTERN Tcl_Obj*
-TnmMibFormat		_ANSI_ARGS_((char *name, int exact, char *arg));
+TnmMibFormat		(char *name, int exact, char *arg);
 
 EXTERN char*
-TnmMibScan		_ANSI_ARGS_((char *name, int exact, char *arg));
+TnmMibScan		(char *name, int exact, char *arg);
 
 EXTERN Tcl_Obj*
-TnmMibFormatValue	_ANSI_ARGS_((TnmMibType *typePtr, int syntax, 
-				     Tcl_Obj *value));
+TnmMibFormatValue	(TnmMibType *typePtr, int syntax, 
+				     Tcl_Obj *value);
 EXTERN Tcl_Obj*
-TnmMibScanValue		_ANSI_ARGS_((TnmMibType *typePtr, int syntax, 
-				     Tcl_Obj *value));
+TnmMibScanValue		(TnmMibType *typePtr, int syntax, 
+				     Tcl_Obj *value);
 EXTERN int
-TnmMibGetValue		_ANSI_ARGS_((int syntax, Tcl_Obj *objPtr,
-				     TnmMibType *typePtr, Tcl_Obj **newPtr));
+TnmMibGetValue		(int syntax, Tcl_Obj *objPtr,
+				     TnmMibType *typePtr, Tcl_Obj **newPtr);
 EXTERN int
-TnmMibPack		_ANSI_ARGS_((Tcl_Interp *interp, TnmOid *oidPtr,
+TnmMibPack		(Tcl_Interp *interp, TnmOid *oidPtr,
 				     int objc, Tcl_Obj **objv, int implied,
-				     TnmMibNode **indexNodeList));
+				     TnmMibNode **indexNodeList);
 EXTERN int
-TnmMibUnpack		_ANSI_ARGS_((Tcl_Interp *interp, TnmOid *oidPtr,
+TnmMibUnpack		(Tcl_Interp *interp, TnmOid *oidPtr,
 				     int offset, int implied,
-				     TnmMibNode **indexNodeList));
+				     TnmMibNode **indexNodeList);
 /*
  *----------------------------------------------------------------
  * Functions to read a file containing MIB definitions.
@@ -321,13 +321,13 @@ TnmMibUnpack		_ANSI_ARGS_((Tcl_Interp *interp, TnmOid *oidPtr,
  */
 
 EXTERN char*
-TnmMibParse		_ANSI_ARGS_((char *file, char *frozen));
+TnmMibParse		(char *file, char *frozen);
 
 EXTERN TnmMibNode*
-TnmMibReadFrozen	_ANSI_ARGS_((FILE *fp));
+TnmMibReadFrozen	(FILE *fp);
 
 EXTERN void
-TnmMibWriteFrozen	_ANSI_ARGS_((FILE *fp, TnmMibNode *nodePtr));
+TnmMibWriteFrozen	(FILE *fp, TnmMibNode *nodePtr);
 
 /*
  *----------------------------------------------------------------
@@ -337,18 +337,18 @@ TnmMibWriteFrozen	_ANSI_ARGS_((FILE *fp, TnmMibNode *nodePtr));
  */
 
 EXTERN TnmMibNode*
-TnmMibNewNode		_ANSI_ARGS_((char *label));
+TnmMibNewNode		(char *label);
 
 EXTERN int
-TnmMibAddNode		_ANSI_ARGS_((TnmMibNode **rootPtr, 
-				     TnmMibNode *nodePtr));
+TnmMibAddNode		(TnmMibNode **rootPtr, 
+				     TnmMibNode *nodePtr);
 EXTERN TnmMibType*
-TnmMibAddType		_ANSI_ARGS_((TnmMibType *typePtr));
+TnmMibAddType		(TnmMibType *typePtr);
 
 EXTERN TnmMibType*
-TnmMibFindType		_ANSI_ARGS_((char *name));
+TnmMibFindType		(char *name);
 
 EXTERN void
-TnmMibListTypes		_ANSI_ARGS_((char *pattern, Tcl_Obj *listPtr));
+TnmMibListTypes		(char *pattern, Tcl_Obj *listPtr);
 
 #endif /* _TNMMIB */

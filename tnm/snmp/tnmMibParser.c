@@ -270,76 +270,76 @@ static Keyword *hashtab[HASHTAB_SIZE];
  */
 
 static void
-AddNewNode		_ANSI_ARGS_((TnmMibNode **nodeList, char *label, 
-				     char *parentName, u_int subid));
+AddNewNode		(TnmMibNode **nodeList, char *label, 
+				     char *parentName, u_int subid);
 static TnmMibRest*
-ScanIntEnums		_ANSI_ARGS_((char *str));
+ScanIntEnums		(char *str);
 
 static TnmMibRest*
-ScanRange		_ANSI_ARGS_((char *str));
+ScanRange		(char *str);
 
 static int
-ReadIntEnums		_ANSI_ARGS_((FILE *fp, char **strPtr));
+ReadIntEnums		(FILE *fp, char **strPtr);
 
 static int
-ReadRange		_ANSI_ARGS_((FILE *fp, char **strPtr));
+ReadRange		(FILE *fp, char **strPtr);
 
 static char*
-ReadNameList		_ANSI_ARGS_((FILE *fp));
+ReadNameList		(FILE *fp);
 
 static TnmMibType*
-CreateType		_ANSI_ARGS_((char *name, int syntax, char *displayHint,
-				     char *enums));
+CreateType		(char *name, int syntax, char *displayHint,
+				     char *enums);
 static TnmMibNode*
-ParseFile		_ANSI_ARGS_((FILE *fp));
+ParseFile		(FILE *fp);
 
 static int
-ParseHeader		_ANSI_ARGS_((FILE *fp, char *keyword));
+ParseHeader		(FILE *fp, char *keyword);
 
 static int
-ParseASN1Type		_ANSI_ARGS_((FILE *fp, char *keyword));
+ParseASN1Type		(FILE *fp, char *keyword);
 
 static TnmMibNode*
-ParseModuleCompliance	_ANSI_ARGS_((FILE *fp, char *name, 
-				     TnmMibNode **nodeList));
+ParseModuleCompliance	(FILE *fp, char *name, 
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseModuleIdentity	_ANSI_ARGS_((FILE *fp, char *name, 
-				     TnmMibNode **nodeList));
+ParseModuleIdentity	(FILE *fp, char *name, 
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseNotificationType	_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseNotificationType	(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseNotificationGroup	_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseNotificationGroup	(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseCapabilitiesType	_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseCapabilitiesType	(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseTrapType		_ANSI_ARGS_((FILE *fp, char *name, 
-				     TnmMibNode **nodeList));
+ParseTrapType		(FILE *fp, char *name, 
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseObjectGroup	_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseObjectGroup	(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseObjectIdentity	_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseObjectIdentity	(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseObjectID		_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseObjectID		(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static TnmMibNode*
-ParseObjectType		_ANSI_ARGS_((FILE *fp, char *name,
-				     TnmMibNode **nodeList));
+ParseObjectType		(FILE *fp, char *name,
+				     TnmMibNode **nodeList);
 static int
-ParseNodeList		_ANSI_ARGS_((FILE *fp, TnmMibNode **nodeList,
-				     TnmMibNode *nodePtr));
+ParseNodeList		(FILE *fp, TnmMibNode **nodeList,
+				     TnmMibNode *nodePtr);
 static void
-HashKeywords		_ANSI_ARGS_((void));
+HashKeywords		(void);
 
 static int
-ReadKeyword		_ANSI_ARGS_((FILE *fp, char *keyword));
+ReadKeyword		(FILE *fp, char *keyword);
 
 static struct subid *
-ReadSubID		_ANSI_ARGS_((FILE *fp));
+ReadSubID		(FILE *fp);
 
 
 /*

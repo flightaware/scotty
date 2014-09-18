@@ -107,7 +107,7 @@ typedef long LONG;
 #define TkiGetTime TclpGetTime
 
 EXTERN void
-TclpGetTime		_ANSI_ARGS_((Tcl_Time *timePtr));
+TclpGetTime		(Tcl_Time *timePtr);
 
 /*
  *----------------------------------------------------------------
@@ -119,8 +119,8 @@ TclpGetTime		_ANSI_ARGS_((Tcl_Time *timePtr));
  *----------------------------------------------------------------
  */
 
-EXTERN void Tki_StripchartInit _ANSI_ARGS_((void));
-EXTERN void Tki_BarchartInit   _ANSI_ARGS_((void));
+EXTERN void Tki_StripchartInit (void);
+EXTERN void Tki_BarchartInit   (void);
 
 /*
  * This structure is used to hold all information belonging to an
@@ -152,35 +152,35 @@ typedef struct Tki_Editor {
  */
 
 int 
-Tki_CreateEditor	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_CreateEditor	(ClientData clientData, Tcl_Interp *interp,
+				     int argc, char **argv);
 void
-Tki_DeleteEditor	_ANSI_ARGS_((ClientData clientData));
+Tki_DeleteEditor	(ClientData clientData);
 
 int
-Tki_EditorPageSize	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorPageSize	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorOrientation	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorOrientation	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorPostScript	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorPostScript	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorTnmMap	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorTnmMap	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorGraph		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorGraph		(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorRetrieve	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorRetrieve	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorSelection	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorSelection	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 int
-Tki_EditorAttribute	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_EditorAttribute	(Tki_Editor *editor, Tcl_Interp *interp,
+				     int argc, char **argv);
 
 
 /*
@@ -269,13 +269,13 @@ typedef struct Tki_Object {
  */
 
 int
-Tki_CreateObject	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				     int argc, char **argv));
+Tki_CreateObject	(ClientData clientData, Tcl_Interp *interp,
+				     int argc, char **argv);
 void
-Tki_DeleteObject	_ANSI_ARGS_((ClientData clientData));
+Tki_DeleteObject	(ClientData clientData);
 
 void
-Tki_DumpObject		_ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+Tki_DumpObject		(Tcl_Interp *interp, Tki_Object *object);
 
 /*
  * Declaration of all functions that implement methods for tkined
@@ -283,140 +283,140 @@ Tki_DumpObject		_ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
  * about which method can be executed for a given object type.
  */
 
-int m_create           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-                                    int argc, char **argv));
-int m_dump             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-                                    int argc, char **argv));
-int m_retrieve         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_delete           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+int m_create           (Tcl_Interp *interp, Tki_Object *object,
+                                    int argc, char **argv);
+int m_dump             (Tcl_Interp *interp, Tki_Object *object,
+                                    int argc, char **argv);
+int m_retrieve         (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_delete           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 
-int m_id               _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_type             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_parent           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_name             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_canvas           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_editor           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_items            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_address          _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_oid              _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_action           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_select           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_unselect         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_selected         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_icon             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-		 		    int argc, char **argv));
-int m_label            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_font             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_color            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_move             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_raise            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_lower            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_size             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_src              _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_dst              _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_text             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_append           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_hyperlink        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+int m_id               (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_type             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_parent           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_name             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_canvas           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_editor           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_items            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_address          (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_oid              (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_action           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_select           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_unselect         (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_selected         (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_icon             (Tcl_Interp *interp, Tki_Object *object,
+		 		    int argc, char **argv);
+int m_label            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_font             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_color            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_move             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_raise            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_lower            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_size             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_src              (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_dst              (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_text             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_append           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_hyperlink        (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 #if 1
-int m_html_append      _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+int m_html_append      (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 #endif
-int m_clear            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_scale            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_values           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_jump             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_member           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_collapse         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_expand           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_collapsed        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_ungroup          _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_links            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_postscript       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_points           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_network_labelxy  _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_interpreter      _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_send             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_bell             _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_editor           _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_attribute        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
-int m_flash            _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+int m_clear            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_scale            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_values           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_jump             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_member           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_collapse         (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_expand           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_collapsed        (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_ungroup          (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_links            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_postscript       (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_points           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_network_labelxy  (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_interpreter      (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_send             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_bell             (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_editor           (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_attribute        (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
+int m_flash            (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 
 /*
  * More utility functions.
  */
 
-extern int TkiInit	    _ANSI_ARGS_((Tcl_Interp *interp));
+extern int TkiInit	    (Tcl_Interp *interp);
 
-extern void TkiInitPath	    _ANSI_ARGS_((Tcl_Interp *interp));
+extern void TkiInitPath	    (Tcl_Interp *interp);
 
-extern void receive         _ANSI_ARGS_((ClientData clientData, int mask));
-extern int  ined            _ANSI_ARGS_((ClientData clientData,
+extern void receive         (ClientData clientData, int mask);
+extern int  ined            (ClientData clientData,
 					 Tcl_Interp *interp,
-					 int argc, char **argv));
+					 int argc, char **argv);
 
-extern void TkiFlash        _ANSI_ARGS_((Tcl_Interp *interp,
-					 Tki_Object *object));
+extern void TkiFlash        (Tcl_Interp *interp,
+					 Tki_Object *object);
 
-extern char *findfile       _ANSI_ARGS_((Tcl_Interp *interp, char *name));
-extern char *type_to_string _ANSI_ARGS_((unsigned type));
-extern unsigned string_to_type   _ANSI_ARGS_((char *str));
+extern char *findfile       (Tcl_Interp *interp, char *name);
+extern char *type_to_string (unsigned type);
+extern unsigned string_to_type   (char *str);
 
-extern void TkiMarkRectangle _ANSI_ARGS_((Display *display,
+extern void TkiMarkRectangle (Display *display,
 				  Drawable drawable, GC gc,
-				  int x1, int y1, int x2, int y2 ));
+				  int x1, int y1, int x2, int y2 );
 
 /*
  * Delete or append an item from/to a list stored as a tcl string list.
  */
 
-extern void ldelete _ANSI_ARGS_((Tcl_Interp *interp, char *slist, char *item));
-extern void lappend _ANSI_ARGS_((char **slist, char *item));
+extern void ldelete (Tcl_Interp *interp, char *slist, char *item);
+extern void lappend (char **slist, char *item);
 
 /*
  * The trace mechanism is implemented by a function that is called
@@ -431,12 +431,12 @@ extern void lappend _ANSI_ARGS_((char **slist, char *item));
  * moves.
  */
 
-extern void TkiTrace _ANSI_ARGS_((Tki_Editor *editor, Tki_Object *object,
+extern void TkiTrace (Tki_Editor *editor, Tki_Object *object,
 				  char *cmd, int argc, char **argv, 
-				  char *result));
+				  char *result);
 
-extern int TkiNoTrace _ANSI_ARGS_((int (*method)(), Tcl_Interp *interp, 
-				   Tki_Object *object, int argc, char **argv));
+extern int TkiNoTrace (int (*method)(), Tcl_Interp *interp, 
+				   Tki_Object *object, int argc, char **argv);
 
 /*
  * The clipboard contains a global buffer of ined commands that
@@ -452,7 +452,7 @@ extern Tcl_DString clip;
 EXTERN Tcl_HashTable tki_ObjectTable;
 
 EXTERN Tki_Object* 
-Tki_LookupObject	_ANSI_ARGS_((char *id));
+Tki_LookupObject	(char *id);
 
 /*
  * This variable shows if we run in debug mode. It corresponds to
@@ -480,7 +480,7 @@ EXTERN int tki_Debug;
  * A ckstrdupnn that replaces all newlines with "\n" sequences.
  */
 
-extern char *ckstrdupnn _ANSI_ARGS_((char*));
+extern char *ckstrdupnn (char*);
 
 /*
  * A general purpose sprintf buffer of 1024 bytes. Please use it
@@ -490,6 +490,6 @@ extern char *ckstrdupnn _ANSI_ARGS_((char*));
  */
 
 EXTERN char *buffer;
-EXTERN void buffersize _ANSI_ARGS_((size_t size));
+EXTERN void buffersize (size_t size);
 
 #endif /* _TKINED */

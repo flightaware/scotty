@@ -31,11 +31,11 @@ typedef struct TnmNode {
  */
 
 static void
-NodeDeleteProc	_ANSI_ARGS_((TnmMapItem *itemPtr));
+NodeDeleteProc	(TnmMapItem *itemPtr);
 
 static int
-NodeCmd		_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+NodeCmd		(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The configuration options understood by a node item.

@@ -73,10 +73,10 @@ typedef struct {
  */
 
 static void
-IcmpExit	_ANSI_ARGS_((ClientData clientData));
+IcmpExit	(ClientData clientData);
 
 static DWORD
-IcmpThread	_ANSI_ARGS_((LPDWORD dwParam));
+IcmpThread	(LPDWORD dwParam);
 
 
 /*

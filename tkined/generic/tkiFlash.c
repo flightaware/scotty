@@ -26,7 +26,7 @@ static char *flashIcon = "optionFlashIcon";
  */
 
 static void
-FlashProc		_ANSI_ARGS_((ClientData clientData));
+FlashProc		(ClientData clientData);
 
 /*
  * The FlashProc callback flashes every object in the flashList 

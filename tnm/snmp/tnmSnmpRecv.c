@@ -60,38 +60,38 @@ typedef struct Message {
  */
 
 static int
-Authentic		_ANSI_ARGS_((TnmSnmp *session,
+Authentic		(TnmSnmp *session,
 				     Message *msg, TnmSnmpPdu *pdu,
 				     u_char *packet, int packetlen,
-				     u_int **snmpStatPtr));
+				     u_int **snmpStatPtr);
 
 static int
-DecodeMessage		_ANSI_ARGS_((Tcl_Interp	*interp, 
+DecodeMessage		(Tcl_Interp	*interp, 
 				     Message *msg, TnmSnmpPdu *pdu,
-				     TnmBer *ber));
+				     TnmBer *ber);
 static TnmBer*
-DecodeHeader		_ANSI_ARGS_((Message *msg, TnmSnmpPdu *pdu,
-				     TnmBer *ber));
+DecodeHeader		(Message *msg, TnmSnmpPdu *pdu,
+				     TnmBer *ber);
 static TnmBer*
-DecodeScopedPDU		_ANSI_ARGS_((TnmBer *ber, TnmSnmpPdu *pdu));
+DecodeScopedPDU		(TnmBer *ber, TnmSnmpPdu *pdu);
 
 static TnmBer*
-DecodeUsmSecParams	_ANSI_ARGS_((Message *msg, TnmSnmpPdu *pdu,
-				     TnmBer *ber));
+DecodeUsmSecParams	(Message *msg, TnmSnmpPdu *pdu,
+				     TnmBer *ber);
 
 #ifdef TNM_SNMPv2U
 static int
-DecodeUsecParameter	_ANSI_ARGS_((Message *msg));
+DecodeUsecParameter	(Message *msg);
 
 static void
-SendUsecReport		_ANSI_ARGS_((Tcl_Interp *interp, 
+SendUsecReport		(Tcl_Interp *interp, 
 				     TnmSnmp *session, 
 				     struct sockaddr_in *to, 
-				     int reqid, u_int *statPtr));
+				     int reqid, u_int *statPtr);
 #endif
 
 static TnmBer*
-DecodePDU		_ANSI_ARGS_((TnmBer *ber, TnmSnmpPdu *pdu));
+DecodePDU		(TnmBer *ber, TnmSnmpPdu *pdu);
 
 
 /*

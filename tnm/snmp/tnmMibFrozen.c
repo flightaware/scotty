@@ -29,35 +29,35 @@ static int poolOffset = 0;
  */
 
 static void
-PoolInit		_ANSI_ARGS_((void));
+PoolInit		(void);
 
 static void
-PoolDelete		_ANSI_ARGS_((void));
+PoolDelete		(void);
 
 static void
-PoolAddString		_ANSI_ARGS_((char *string));
+PoolAddString		(char *string);
 
 static int
-PoolGetOffset		_ANSI_ARGS_((char *string));
+PoolGetOffset		(char *string);
 
 static void
-PoolSave		_ANSI_ARGS_((FILE *fp));
+PoolSave		(FILE *fp);
 
 static void
-SaveRest		_ANSI_ARGS_((TnmMibRest *restPtr, int restKind, 
-				     FILE *fp));
+SaveRest		(TnmMibRest *restPtr, int restKind, 
+				     FILE *fp);
 static void
-SaveType		_ANSI_ARGS_((TnmMibType *typePtr, int *i, FILE *fp));
+SaveType		(TnmMibType *typePtr, int *i, FILE *fp);
 
 static void
-SaveNode		_ANSI_ARGS_((TnmMibNode *nodePtr, int *i, FILE *fp));
+SaveNode		(TnmMibNode *nodePtr, int *i, FILE *fp);
 
 static void
-CollectData		_ANSI_ARGS_((int *numRests, int *numTcs,
-				     int *numNodes, TnmMibNode *nodePtr));
+CollectData		(int *numRests, int *numTcs,
+				     int *numNodes, TnmMibNode *nodePtr);
 static void
-SaveData		_ANSI_ARGS_((FILE *fp, int numRests, int numTcs, 
-				     int numNodes, TnmMibNode *nodePtr));
+SaveData		(FILE *fp, int numRests, int numTcs, 
+				     int numNodes, TnmMibNode *nodePtr);
 
 
 /*

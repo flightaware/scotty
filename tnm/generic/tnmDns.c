@@ -90,37 +90,37 @@ static TnmTable dnsOptionTable[] = {
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static void
-DnsInit		_ANSI_ARGS_((DnsControl *control));
+DnsInit		(DnsControl *control);
 
 static int
-DnsGetHostName	_ANSI_ARGS_((Tcl_Interp *interp, char *hname));
+DnsGetHostName	(Tcl_Interp *interp, char *hname);
 
 static void
-DnsDoQuery	_ANSI_ARGS_((char *query_string, int query_type, 
-			     a_res *query_result));
+DnsDoQuery	(char *query_string, int query_type, 
+			     a_res *query_result);
 static void
-DnsHaveQuery	_ANSI_ARGS_((char *query_string, int query_type,
-			     a_res *query_result, int depth));
+DnsHaveQuery	(char *query_string, int query_type,
+			     a_res *query_result, int depth);
 static int 
-DnsA		_ANSI_ARGS_((Tcl_Interp *interp, char *hname));
+DnsA		(Tcl_Interp *interp, char *hname);
 
 static int
-DnsPtr		_ANSI_ARGS_((Tcl_Interp *interp, char *ip));
+DnsPtr		(Tcl_Interp *interp, char *ip);
 
 static void
-DnsCleanHinfo	_ANSI_ARGS_((char *str));
+DnsCleanHinfo	(char *str);
 
 static int
-DnsHinfo	_ANSI_ARGS_((Tcl_Interp *interp, const char *hname));
+DnsHinfo	(Tcl_Interp *interp, const char *hname);
 
 static int 
-DnsMx		_ANSI_ARGS_((Tcl_Interp *interp, char *hname));
+DnsMx		(Tcl_Interp *interp, char *hname);
 
 static int 
-DnsSoa		_ANSI_ARGS_((Tcl_Interp *interp, char *hname));
+DnsSoa		(Tcl_Interp *interp, char *hname);
 
 /*
  *----------------------------------------------------------------------

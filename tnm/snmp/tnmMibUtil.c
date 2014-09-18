@@ -71,22 +71,22 @@ static char oidBuffer[TNM_OID_MAX_SIZE * 8];
  */
 
 static Tcl_Obj*
-FormatOctetTC		_ANSI_ARGS_((Tcl_Obj *val, char *fmt));
+FormatOctetTC		(Tcl_Obj *val, char *fmt);
 
 static Tcl_Obj*
-FormatIntTC		_ANSI_ARGS_((Tcl_Obj *val, char *fmt));
+FormatIntTC		(Tcl_Obj *val, char *fmt);
 
 static Tcl_Obj*
-ScanOctetTC		_ANSI_ARGS_((Tcl_Obj *val, char *fmt));
+ScanOctetTC		(Tcl_Obj *val, char *fmt);
 
 static Tcl_Obj*
-ScanIntTC		_ANSI_ARGS_((Tcl_Obj *val, char *fmt));
+ScanIntTC		(Tcl_Obj *val, char *fmt);
 
 static void
-GetMibPath		_ANSI_ARGS_((TnmMibNode *nodePtr, char *soid));
+GetMibPath		(TnmMibNode *nodePtr, char *soid);
 
 static void
-FormatUnsigned		_ANSI_ARGS_((unsigned u, char *s));
+FormatUnsigned		(unsigned u, char *s);
 
 
 /*

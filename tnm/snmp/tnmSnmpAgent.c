@@ -45,41 +45,41 @@ static CacheElement cache[CACHE_SIZE];
  */
 
 static void
-CacheInit		_ANSI_ARGS_((void));
+CacheInit		(void);
 
 static TnmSnmpPdu*
-CacheGet		_ANSI_ARGS_((TnmSnmp *session, TnmSnmpPdu *pdu));
+CacheGet		(TnmSnmp *session, TnmSnmpPdu *pdu);
 
 static TnmSnmpPdu*
-CacheHit		_ANSI_ARGS_((TnmSnmp *session, TnmSnmpPdu *pdu));
+CacheHit		(TnmSnmp *session, TnmSnmpPdu *pdu);
 
 static char*
-TraceSysUpTime		_ANSI_ARGS_((ClientData clientData,
+TraceSysUpTime		(ClientData clientData,
 				     Tcl_Interp *interp,
-				     char *name1, char *name2, int flags));
+				     char *name1, char *name2, int flags);
 #ifdef TNM_SNMPv2U
 static char*
-TraceAgentTime		_ANSI_ARGS_((ClientData clientData,
+TraceAgentTime		(ClientData clientData,
 				     Tcl_Interp *interp,
-				     char *name1, char *name2, int flags));
+				     char *name1, char *name2, int flags);
 #endif
 
 static char*
-TraceUnsignedInt	_ANSI_ARGS_((ClientData clientData,
+TraceUnsignedInt	(ClientData clientData,
 				     Tcl_Interp *interp,
-				     char *name1, char *name2, int flags));
+				     char *name1, char *name2, int flags);
 static TnmSnmpNode*
-FindInstance		_ANSI_ARGS_((TnmSnmp *session, TnmOid *oidPtr));
+FindInstance		(TnmSnmp *session, TnmOid *oidPtr);
 
 static TnmSnmpNode*
-FindNextInstance	_ANSI_ARGS_((TnmSnmp *session, TnmOid *oidPtr));
+FindNextInstance	(TnmSnmp *session, TnmOid *oidPtr);
 
 static int
-GetRequest		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-				     TnmSnmpPdu *request, TnmSnmpPdu *response));
+GetRequest		(Tcl_Interp *interp, TnmSnmp *session,
+				     TnmSnmpPdu *request, TnmSnmpPdu *response);
 static int
-SetRequest		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-				     TnmSnmpPdu *request, TnmSnmpPdu *response));
+SetRequest		(Tcl_Interp *interp, TnmSnmp *session,
+				     TnmSnmpPdu *request, TnmSnmpPdu *response);
 
 
 /*

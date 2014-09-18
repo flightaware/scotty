@@ -98,6 +98,6 @@
  */
 
 EXTERN int
-TnmSmxInit		_ANSI_ARGS_((Tcl_Interp *interp));
+TnmSmxInit		(Tcl_Interp *interp);
 
 #endif /* _TNMUNIXPORT */

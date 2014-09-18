@@ -73,26 +73,26 @@ TCL_DECLARE_MUTEX(ntpMutex)
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static int
-NtpSocket	_ANSI_ARGS_((Tcl_Interp *interp));
+NtpSocket	(Tcl_Interp *interp);
 
 static int
-NtpReady	_ANSI_ARGS_((int s, int timeout));
+NtpReady	(int s, int timeout);
 
 static void
-NtpMakePkt	_ANSI_ARGS_((struct ntp_control *pkt, int op,
-			     unsigned short assoc, unsigned short seq));
+NtpMakePkt	(struct ntp_control *pkt, int op,
+			     unsigned short assoc, unsigned short seq);
 static int
-NtpFetch	_ANSI_ARGS_((Tcl_Interp *interp, struct sockaddr_in *daddr, 
+NtpFetch	(Tcl_Interp *interp, struct sockaddr_in *daddr, 
 			     int op, int retries, int timeo,
-			     char *buf, unsigned short assoc));
+			     char *buf, unsigned short assoc);
 static int
-NtpSplit	_ANSI_ARGS_((Tcl_Interp *interp, char *varname,
-			     char *pfix, char *buf));
+NtpSplit	(Tcl_Interp *interp, char *varname,
+			     char *pfix, char *buf);
 static int 
-NtpGetPeer	_ANSI_ARGS_((char *data, int *assoc));
+NtpGetPeer	(char *data, int *assoc);
 
 /*
  *----------------------------------------------------------------------

@@ -85,45 +85,45 @@ typedef struct StripchartItem {
  * Prototypes for procedures defined in this file:
  */
 
-static void             ComputeStripchartBbox _ANSI_ARGS_((
-                            Tk_Canvas canvas, StripchartItem *stripPtr));
-static int              ConfigureStripchart _ANSI_ARGS_((Tcl_Interp *interp,
+static void             ComputeStripchartBbox (
+                            Tk_Canvas canvas, StripchartItem *stripPtr);
+static int              ConfigureStripchart (Tcl_Interp *interp,
                             Tk_Canvas canvas, Tk_Item *itemPtr, int objc,
-                            Tcl_Obj *CONST objv[], int flags));
-static int              CreateStripchart _ANSI_ARGS_((Tcl_Interp *interp,
+                            Tcl_Obj *CONST objv[], int flags);
+static int              CreateStripchart (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr,
-			    int objc, Tcl_Obj *CONST objv[]));
-static void             DeleteStripchart _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, Display *display));
-static void             DisplayStripchart _ANSI_ARGS_((Tk_Canvas canvas,
+			    int objc, Tcl_Obj *CONST objv[]);
+static void             DeleteStripchart (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, Display *display);
+static void             DisplayStripchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, Display *display, Drawable dst,
-			    int x, int y, int width, int height));
-static void             FillStripchart _ANSI_ARGS_((Tk_Canvas canvas, 
+			    int x, int y, int width, int height);
+static void             FillStripchart (Tk_Canvas canvas, 
 			    Tk_Item *itemPtr, double *coordPtr, 
-			    Drawable drawable));
-static int              ParseStripchartValues _ANSI_ARGS_((ClientData 
+			    Drawable drawable);
+static int              ParseStripchartValues (ClientData 
 			    clientData, Tcl_Interp *interp, Tk_Window tkwin, 
-			    char *value, char *recordPtr, int offset));
-static char *           PrintStripchartValues _ANSI_ARGS_((ClientData 
+			    char *value, char *recordPtr, int offset);
+static char *           PrintStripchartValues (ClientData 
 			    clientData, Tk_Window tkwin, char *recordPtr, 
-			    int offset, Tcl_FreeProc **freeProcPtr));
-static void             ScaleStripchart _ANSI_ARGS_((Tk_Canvas canvas,
+			    int offset, Tcl_FreeProc **freeProcPtr);
+static void             ScaleStripchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, double originX, double originY,
-                            double scaleX, double scaleY));
-static int              StripchartCoords _ANSI_ARGS_((Tcl_Interp *interp,
+                            double scaleX, double scaleY);
+static int              StripchartCoords (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int objc, Tcl_Obj *CONST objv[]));
-static int              StripchartToArea _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, double *rectPtr));
-static double           StripchartToPoint _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, double *pointPtr));
-static int              StripchartToPostscript _ANSI_ARGS_((Tcl_Interp *interp,
-                            Tk_Canvas canvas, Tk_Item *itemPtr, int prepass));
+                            int objc, Tcl_Obj *CONST objv[]);
+static int              StripchartToArea (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, double *rectPtr);
+static double           StripchartToPoint (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, double *pointPtr);
+static int              StripchartToPostscript (Tcl_Interp *interp,
+                            Tk_Canvas canvas, Tk_Item *itemPtr, int prepass);
 static int              StripchartValues _ANSI_ARGS_ ((Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int argc, char **argv));
-static void             TranslateStripchart _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, double deltaX, double deltaY));
+                            int argc, char **argv);
+static void             TranslateStripchart (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, double deltaX, double deltaY);
 
 /*
  * Information used for parsing configuration specs:

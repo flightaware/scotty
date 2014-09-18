@@ -47,15 +47,15 @@ static Tcl_Channel trap_channel = NULL;
  */
 
 static int
-ForkDaemon		_ANSI_ARGS_((Tcl_Interp *interp));
+ForkDaemon		(Tcl_Interp *interp);
 
 static void
-TrapProc		_ANSI_ARGS_((ClientData clientData, int mask));
+TrapProc		(ClientData clientData, int mask);
 
 static int
-TrapRecv		_ANSI_ARGS_((Tcl_Interp *interp, 
+TrapRecv		(Tcl_Interp *interp,
 				     u_char *packet, int *packetlen, 
-				     struct sockaddr_in *from));
+				     struct sockaddr_in *from);
 
 /*
  *----------------------------------------------------------------------
@@ -75,8 +75,7 @@ TrapRecv		_ANSI_ARGS_((Tcl_Interp *interp,
  */
 
 static int
-ForkDaemon(interp)
-    Tcl_Interp *interp;
+ForkDaemon(Tcl_Interp *interp)
 {
     int argc = 1;
     char *argv[2];
@@ -110,8 +109,7 @@ ForkDaemon(interp)
  */
 
 int
-TnmSnmpNmtrapdOpen(interp)
-    Tcl_Interp *interp;
+TnmSnmpNmtrapdOpen(Tcl_Interp *interp)
 {
     int i;
     
@@ -197,11 +195,7 @@ TnmSnmpNmtrapdClose()
  */
 
 static int
-TrapRecv(interp, packet, packetlen, from)
-    Tcl_Interp *interp;
-    u_char *packet;
-    int *packetlen;
-    struct sockaddr_in *from;
+TrapRecv(Tcl_Interp *interp, u_char *packet, int *packetlen, struct sockaddr_in *from)
 {
     int len, rlen;
     char c, version, unused;
@@ -276,9 +270,7 @@ TrapRecv(interp, packet, packetlen, from)
  */
 
 static void
-TrapProc(clientData, mask)
-    ClientData clientData;
-    int mask;
+TrapProc(ClientData clientData, int mask)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     u_char packet[TNM_SNMP_MAXSIZE];

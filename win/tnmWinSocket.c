@@ -20,7 +20,7 @@
 	/*
  * TclPro does not seem to have tclIntPlatDecls.h.
  */ 
-	EXTERN void TclWinConvertWSAError _ANSI_ARGS_((DWORD errCode));
+	EXTERN void TclWinConvertWSAError (DWORD errCode);
 #else
 	/*
 	 * This internal header is needed for TclWinConvertWSAError() :-(

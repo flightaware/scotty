@@ -53,34 +53,34 @@ TCL_DECLARE_MUTEX(inedMutex)
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static int
-InedInitialize	_ANSI_ARGS_((Tcl_Interp *interp));
+InedInitialize	(Tcl_Interp *interp);
 
 static void 
-InedFatal	_ANSI_ARGS_((void));
+InedFatal	(void);
 
 static void
-InedQueue	_ANSI_ARGS_((Tcl_Interp *interp));
+InedQueue	(Tcl_Interp *interp);
 
 static void
-InedFlushProc	_ANSI_ARGS_((ClientData clientData));
+InedFlushProc	(ClientData clientData);
 
 static void
-InedFlushQueue	_ANSI_ARGS_((Tcl_Interp *));
+InedFlushQueue	(Tcl_Interp *);
 
 static void 
-InedAppendQueue	_ANSI_ARGS_((Tcl_Interp *interp, char *msg));
+InedAppendQueue	(Tcl_Interp *interp, char *msg);
 
 static char*
-InedGets	_ANSI_ARGS_((Tcl_Interp *interp));
+InedGets	(Tcl_Interp *interp);
 
 static int 
-InedCompCmd	_ANSI_ARGS_((char *cmd, Tcl_Interp *interp, 
-			     int argc, char **argv));
+InedCompCmd	(char *cmd, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static void
-InedReceiveProc	_ANSI_ARGS_((ClientData clientData, int mask));
+InedReceiveProc	(ClientData clientData, int mask);
 
 /*
  * The following tkined object type definitions must be in sync 

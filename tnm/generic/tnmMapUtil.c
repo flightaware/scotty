@@ -42,11 +42,11 @@ static TnmTable cmdTable[] = {
  */
 
 static Tcl_Obj*
-GetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option));
+GetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option);
 static int
-SetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option, Tcl_Obj *objPtr));
+SetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option, Tcl_Obj *objPtr);
 
 static TnmConfig config = {
     NULL,

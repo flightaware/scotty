@@ -90,7 +90,7 @@ static TnmTable syslogOptionTable[] = {
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 
 /*

@@ -51,68 +51,68 @@ static Tcl_DString *clip = NULL;
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static void
-TickProc	_ANSI_ARGS_((ClientData clientData));
+TickProc	(ClientData clientData);
 
 static TnmMapItemType*
-GetItemType	_ANSI_ARGS_((Tcl_Interp *interp, char *name));
+GetItemType	(Tcl_Interp *interp, char *name);
 
 static int
-CreateItem	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     int objc, Tcl_Obj *CONST objv[]));
+CreateItem	(Tcl_Interp *interp, TnmMap *mapPtr,
+			     int objc, Tcl_Obj *CONST objv[]);
 static void
-ItemDeleteProc	_ANSI_ARGS_((ClientData clientData));
+ItemDeleteProc	(ClientData clientData);
 
 static int
-SortProc	_ANSI_ARGS_((CONST VOID *first, CONST VOID *second));
+SortProc	(CONST VOID *first, CONST VOID *second);
 
 static int
-FindItems	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     int objc, Tcl_Obj *CONST objv[]));
+FindItems	(Tcl_Interp *interp, TnmMap *mapPtr,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-CreateMap	_ANSI_ARGS_((Tcl_Interp *interp, int objc,
-			     Tcl_Obj *CONST objv[]));
+CreateMap	(Tcl_Interp *interp, int objc,
+			     Tcl_Obj *CONST objv[]);
 static void
-MapDeleteProc	_ANSI_ARGS_((ClientData clientData));
+MapDeleteProc	(ClientData clientData);
 
 static void
-MapDestroyProc	_ANSI_ARGS_((char *memPtr));
+MapDestroyProc	(char *memPtr);
 
 static Tcl_Obj*
-GetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option));
+GetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option);
 static int
-SetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object,
-			     int option, Tcl_Obj *objPtr));
+SetOption	(Tcl_Interp *interp, ClientData object,
+			     int option, Tcl_Obj *objPtr);
 static void
-DumpMapProc	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr, 
-			     TnmMapItem *itemPtr, Tcl_DString *dsPtr));
+DumpMapProc	(Tcl_Interp *interp, TnmMap *mapPtr, 
+			     TnmMapItem *itemPtr, Tcl_DString *dsPtr);
 static int
-DumpMap		_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr));
+DumpMap		(Tcl_Interp *interp, TnmMap *mapPtr);
 
 static void
-ClearMap	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr));
+ClearMap	(Tcl_Interp *interp, TnmMap *mapPtr);
 
 static int
-LoadMap		_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     char *channelName));
+LoadMap		(Tcl_Interp *interp, TnmMap *mapPtr,
+			     char *channelName);
 static int
-SaveMap		_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     char *channelName));
+SaveMap		(Tcl_Interp *interp, TnmMap *mapPtr,
+			     char *channelName);
 static int
-CopyMap		_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     int objc, Tcl_Obj *CONST objv[]));
+CopyMap		(Tcl_Interp *interp, TnmMap *mapPtr,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-PasteMap	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     Tcl_DString *script));
+PasteMap	(Tcl_Interp *interp, TnmMap *mapPtr,
+			     Tcl_DString *script);
 static int
-MapObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+MapObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-FindMaps	_ANSI_ARGS_((Tcl_Interp *interp, MapControl *control,
-			     int objc, Tcl_Obj *CONST objv[]));
+FindMaps	(Tcl_Interp *interp, MapControl *control,
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The options used to configure map objects.

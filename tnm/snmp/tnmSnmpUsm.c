@@ -52,19 +52,19 @@ typedef struct KeyCache {
  */
 
 static void
-MD5PassWord2Key	_ANSI_ARGS_((u_char *pwBytes, int pwLength,
+MD5PassWord2Key	(u_char *pwBytes, int pwLength,
 			     u_char *engineBytes, int engineLength,
-			     u_char *key));
+			     u_char *key);
 static void
-SHAPassWord2Key	_ANSI_ARGS_((u_char *pwBytes, int pwLength,
+SHAPassWord2Key	(u_char *pwBytes, int pwLength,
 			     u_char *engineBytes, int engineLength,
-			     u_char *key));
+			     u_char *key);
 static void
-ComputeKey	_ANSI_ARGS_((Tcl_Obj **objPtrPtr, Tcl_Obj *password,
-			     Tcl_Obj *engineID, int algorithm));
+ComputeKey	(Tcl_Obj **objPtrPtr, Tcl_Obj *password,
+			     Tcl_Obj *engineID, int algorithm);
 static void
-MD5AuthOutMsg	_ANSI_ARGS_((char *authKey, u_char *msg, int msgLen,
-			     u_char *msgAuthenticationParameters));
+MD5AuthOutMsg	(char *authKey, u_char *msg, int msgLen,
+			     u_char *msgAuthenticationParameters);
 
 
 /*

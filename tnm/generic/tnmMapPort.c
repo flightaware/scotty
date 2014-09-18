@@ -31,11 +31,11 @@ typedef struct TnmPort {
  */
 
 static int
-PortCreateProc	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     TnmMapItem *itemPtr));
+PortCreateProc	(Tcl_Interp *interp, TnmMap *mapPtr,
+			     TnmMapItem *itemPtr);
 static int
-PortCmd		_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+PortCmd		(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The configuration options understood by a port item.

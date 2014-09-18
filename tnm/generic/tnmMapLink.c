@@ -33,11 +33,11 @@ typedef struct TnmLink {
  */
 
 static int
-LinkCreateProc	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-			     TnmMapItem *itemPtr));
+LinkCreateProc	(Tcl_Interp *interp, TnmMap *mapPtr,
+			     TnmMapItem *itemPtr);
 static int
-LinkCmd		_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+LinkCmd		(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The configuration options understood by a link item.

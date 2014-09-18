@@ -23,16 +23,15 @@
  */
 
 static char*
-FindPath		_ANSI_ARGS_((Tcl_Interp *interp, char *path,
-				     char *name, char* version));
+FindPath		(Tcl_Interp *interp, char *path,
+				     char *name, char* version);
 static void
-FindProc		_ANSI_ARGS_((Tcl_Interp *interp, char *name,
-				     char *version));
+FindProc		(Tcl_Interp *interp, char *name, char *version);
 EXTERN int
-Tnm_Init		_ANSI_ARGS_((Tcl_Interp *interp));
+Tnm_Init		(Tcl_Interp *interp);
 
 EXTERN int
-Tnm_SafeInit		_ANSI_ARGS_((Tcl_Interp *interp));
+Tnm_SafeInit		(Tcl_Interp *interp);
 
 
 /*
@@ -53,11 +52,7 @@ Tnm_SafeInit		_ANSI_ARGS_((Tcl_Interp *interp));
  */
 
 static char*
-FindPath(interp, path, name, version)
-    Tcl_Interp *interp;
-    char *path;
-    char *name;
-    char *version;
+FindPath(Tcl_Interp *interp, char *path, char *name, char *version)
 {
     char *pkgPath;
     int code, largc, i;
@@ -120,10 +115,7 @@ FindPath(interp, path, name, version)
  */
 
 static void
-FindProc(interp, name, version)
-    Tcl_Interp *interp;
-    char *name;
-    char *version;
+FindProc(Tcl_Interp *interp, char *name, char *version)
 {
     char *token, *path;
     Tcl_DString ds;
@@ -178,8 +170,7 @@ FindProc(interp, name, version)
  */
 
 void
-TnmInitPath(interp)
-    Tcl_Interp *interp;
+TnmInitPath(Tcl_Interp *interp)
 {
     char *path, *version;
 
@@ -234,8 +225,7 @@ TnmInitPath(interp)
  */
 
 void
-TnmInitDns(interp)
-    Tcl_Interp *interp;
+TnmInitDns(Tcl_Interp *interp)
 {
     char domain[MAXDNAME], *p;
 
@@ -273,8 +263,7 @@ TnmInitDns(interp)
  */
 
 int
-Tnm_Init(interp)
-    Tcl_Interp *interp;
+Tnm_Init(Tcl_Interp *interp)
 {
     int code;
 
@@ -304,8 +293,7 @@ Tnm_Init(interp)
  */
 
 int
-Tnm_SafeInit(interp)
-    Tcl_Interp *interp;
+Tnm_SafeInit(Tcl_Interp *interp)
 {
     return TnmInit(interp, 1);
 }

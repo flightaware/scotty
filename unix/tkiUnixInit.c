@@ -18,10 +18,10 @@
  */
 
 static char*
-FindPath		_ANSI_ARGS_((Tcl_Interp *interp, char *path,
-				     char *name, char* version));
+FindPath		(Tcl_Interp *interp, char *path,
+				     char *name, char* version);
 EXTERN int
-Tkined_Init		_ANSI_ARGS_((Tcl_Interp *interp));
+Tkined_Init		(Tcl_Interp *interp);
 
 
 /*
@@ -42,11 +42,7 @@ Tkined_Init		_ANSI_ARGS_((Tcl_Interp *interp));
  */
 
 static char*
-FindPath(interp, path, name, version)
-    Tcl_Interp *interp;
-    char *path;
-    char *name;
-    char *version;
+FindPath(Tcl_Interp *interp, char *path, char *name, char *version)
 {
     char *pkgPath;
     int code, largc, i;
@@ -108,8 +104,7 @@ FindPath(interp, path, name, version)
  */
 
 void
-TkiInitPath(interp)
-    Tcl_Interp *interp;
+TkiInitPath(Tcl_Interp *interp)
 {
     char *path;
 
@@ -138,8 +133,7 @@ TkiInitPath(interp)
  */
 
 int
-Tkined_Init(interp)
-    Tcl_Interp *interp;
+Tkined_Init(Tcl_Interp *interp)
 {
     return TkiInit(interp);
 }

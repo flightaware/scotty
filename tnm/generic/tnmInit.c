@@ -21,16 +21,16 @@
  */
 
 static void
-InitVars		_ANSI_ARGS_((Tcl_Interp *interp));
+InitVars		(Tcl_Interp *interp);
 
 static int
-SourceRcFile		_ANSI_ARGS_((Tcl_Interp *interp, char *fileName));
+SourceRcFile		(Tcl_Interp *interp, char *fileName);
 
 static int
-SourceInitFiles		_ANSI_ARGS_((Tcl_Interp *interp));
+SourceInitFiles		(Tcl_Interp *interp);
 
 static int
-InitCmds		_ANSI_ARGS_((Tcl_Interp *interp, int safe));
+InitCmds		(Tcl_Interp *interp, int safe);
 
 /*
  * The following global variable is used to hold the 

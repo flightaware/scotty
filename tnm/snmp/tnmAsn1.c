@@ -73,8 +73,8 @@ TnmTable tnmSnmpExceptionTable[] =
 
 #if 0
 static u_char*
-EncodeLength		_ANSI_ARGS_((u_char *packet, int *packetlen,
-				     int length));
+EncodeLength		(u_char *packet, int *packetlen,
+				     int length);
 #endif
 
 

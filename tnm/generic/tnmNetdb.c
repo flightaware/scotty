@@ -37,32 +37,32 @@ struct rpcent {
  */
 
 static void
-LookupFailed		_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr));
+LookupFailed		(Tcl_Interp *interp, Tcl_Obj *objPtr);
 
 static int
-GetIpAddr		_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr,
-				     unsigned long *addr));
+GetIpAddr		(Tcl_Interp *interp, Tcl_Obj *objPtr,
+				     unsigned long *addr);
 static int
-GetIpMask		_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr,
-				     unsigned long *mask));
+GetIpMask		(Tcl_Interp *interp, Tcl_Obj *objPtr,
+				     unsigned long *mask);
 static int
-NetdbHosts		_ANSI_ARGS_((Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+NetdbHosts		(Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 static int
-NetdbIp			_ANSI_ARGS_((Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+NetdbIp			(Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 static int
-NetdbNetworks		_ANSI_ARGS_((Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+NetdbNetworks		(Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 static int
-NetdbProtocols		_ANSI_ARGS_((Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+NetdbProtocols		(Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 static int
-NetdbServices		_ANSI_ARGS_((Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+NetdbServices		(Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 static int
-NetdbSunrpcs		_ANSI_ARGS_((Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+NetdbSunrpcs		(Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 
 
 /*

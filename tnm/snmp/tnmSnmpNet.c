@@ -53,15 +53,15 @@ TnmSnmpMark tnmSnmpBenchMark;
  */
 
 static void
-ResponseProc		_ANSI_ARGS_((ClientData clientData, int mask));
+ResponseProc		(ClientData clientData, int mask);
 
 static void
-AgentProc		_ANSI_ARGS_((ClientData clientData, int mask));
+AgentProc		(ClientData clientData, int mask);
 
 static int
-AgentRecv		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
+AgentRecv		(Tcl_Interp *interp, TnmSnmp *session,
 				     u_char *packet, int *packetlen,
-				     struct sockaddr_in *from));
+				     struct sockaddr_in *from);
 
 
 /*

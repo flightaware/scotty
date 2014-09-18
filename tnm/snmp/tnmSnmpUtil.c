@@ -153,26 +153,26 @@ static AgentIDCacheElem *firstAgentIDCacheElem = NULL;
  */
 
 static void
-SessionDestroyProc	_ANSI_ARGS_((char *memPtr));
+SessionDestroyProc	(char *memPtr);
 
 static void
-RequestDestroyProc	_ANSI_ARGS_((char *memPtr));
+RequestDestroyProc	(char *memPtr);
 
 #ifdef TNM_SNMPv2U
 static int
-FindAuthKey		_ANSI_ARGS_((TnmSnmp *session));
+FindAuthKey		(TnmSnmp *session);
 
 static void
-SaveAuthKey		_ANSI_ARGS_((TnmSnmp *session));
+SaveAuthKey		(TnmSnmp *session);
 
 static void 
-MakeAuthKey		_ANSI_ARGS_((TnmSnmp *session));
+MakeAuthKey		(TnmSnmp *session);
 
 static int
-FindAgentID		_ANSI_ARGS_((TnmSnmp *session));
+FindAgentID		(TnmSnmp *session);
 
 static void
-SaveAgentID		_ANSI_ARGS_((TnmSnmp *session));
+SaveAgentID		(TnmSnmp *session);
 #endif
 
 

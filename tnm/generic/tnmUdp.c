@@ -51,53 +51,53 @@ typedef struct UdpControl {
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static void
-DeleteProc	_ANSI_ARGS_((ClientData clientData));
+DeleteProc	(ClientData clientData);
 
 static void
-DestroyProc	_ANSI_ARGS_((char *memPtr));
+DestroyProc	(char *memPtr);
 
 static void
-UdpEventProc	_ANSI_ARGS_((ClientData clientData, int mask));
+UdpEventProc	(ClientData clientData, int mask);
 
 static int
-UdpCreate	_ANSI_ARGS_((Tcl_Interp *interp, int objc,
-			     Tcl_Obj *CONST objv[]));
+UdpCreate	(Tcl_Interp *interp, int objc,
+			     Tcl_Obj *CONST objv[]);
 static int
-UdpConnect	_ANSI_ARGS_((Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]));
+UdpConnect	(Tcl_Interp *interp, Udp *udpPtr, int objc,
+			     Tcl_Obj *CONST objv[]);
 static int
-UdpSend		_ANSI_ARGS_((Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]));
+UdpSend		(Tcl_Interp *interp, Udp *udpPtr, int objc,
+			     Tcl_Obj *CONST objv[]);
 static int
-UdpReceive	_ANSI_ARGS_((Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]));
+UdpReceive	(Tcl_Interp *interp, Udp *udpPtr, int objc,
+			     Tcl_Obj *CONST objv[]);
 #ifdef HAVE_MULTICAST
 static int
-UdpJoin		_ANSI_ARGS_((Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]));
+UdpJoin		(Tcl_Interp *interp, Udp *udpPtr, int objc,
+			     Tcl_Obj *CONST objv[]);
 #endif
 
 #if 0
 static int
-UdpMulticast	_ANSI_ARGS_((Tcl_Interp *interp, int objc,
+UdpMulticast	(Tcl_Interp *interp, int objc,
 			     Tcl_Obj *CONST objv[]));
 #endif
 
 static Tcl_Obj*
-GetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option));
+GetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option);
 static int
-SetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option, Tcl_Obj *objPtr));
+SetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option, Tcl_Obj *objPtr);
 static int
-UdpObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+UdpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-UdpFind		_ANSI_ARGS_((Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+UdpFind		(Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The options used to configure udp socket objects.

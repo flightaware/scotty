@@ -40,29 +40,29 @@ static Tcl_HashTable *nodeHashTable = NULL;
  */
 
 static TnmMibNode*
-LookupOID		_ANSI_ARGS_((TnmMibNode *root, char *label,
-				     int *offset, int exact));
+LookupOID		(TnmMibNode *root, char *label,
+				     int *offset, int exact);
 static TnmMibNode*
-LookupLabelOID		_ANSI_ARGS_((TnmMibNode *root, char *label,
-				     int *offset, int exact));
+LookupLabelOID		(TnmMibNode *root, char *label,
+				     int *offset, int exact);
 static TnmMibNode*
-LookupLabel		_ANSI_ARGS_((TnmMibNode *root, char *start, 
+LookupLabel		(TnmMibNode *root, char *start, 
 				     char *label, char *moduleName,
-				     int *offset, int exact, int fuzzy));
+				     int *offset, int exact, int fuzzy);
 static void
-HashNode		_ANSI_ARGS_((TnmMibNode *node));
+HashNode		(TnmMibNode *node);
 
 static TnmMibNode*
-BuildTree		_ANSI_ARGS_((TnmMibNode *nlist));
+BuildTree		(TnmMibNode *nlist);
 
 static void
-BuildSubTree		_ANSI_ARGS_((TnmMibNode *root));
+BuildSubTree		(TnmMibNode *root);
 
 static void
-HashNodeList		_ANSI_ARGS_((TnmMibNode *nlist));
+HashNodeList		(TnmMibNode *nlist);
 
 static int
-HashNodeLabel		_ANSI_ARGS_((char *label));
+HashNodeLabel		(char *label);
 
 
 /*

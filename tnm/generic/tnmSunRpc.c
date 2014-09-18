@@ -78,52 +78,52 @@ TCL_DECLARE_MUTEX(rpcMutex)
  */
 
 static void
-SunrpcCreateError	_ANSI_ARGS_((Tcl_Interp *interp));
+SunrpcCreateError	(Tcl_Interp *interp);
 
 static void
-SunrpcError		_ANSI_ARGS_((Tcl_Interp *interp, int res));
+SunrpcError		(Tcl_Interp *interp, int res);
 
 static char*
-SunrpcGetHostname	_ANSI_ARGS_((Tcl_Interp *interp, char *address));
+SunrpcGetHostname	(Tcl_Interp *interp, char *address);
 
 static int 
-SunrpcOpenEtherd	_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcOpenEtherd	(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcCloseEtherd	_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcCloseEtherd	(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcEtherd		_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcEtherd		(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcRstat		_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcRstat		(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcInfo		_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcInfo		(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcMount		_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcMount		(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcExports		_ANSI_ARGS_((Tcl_Interp *interp, char *host));
+SunrpcExports		(Tcl_Interp *interp, char *host);
 
 static int
-SunrpcProbe		_ANSI_ARGS_((Tcl_Interp *interp, char *host, 
+SunrpcProbe		(Tcl_Interp *interp, char *host, 
 				     unsigned long prognum,
 				     unsigned long version, 
-				     unsigned protocol));
+				     unsigned protocol);
 static int
-PcnfsInfo		_ANSI_ARGS_((Tcl_Interp *interp, char *host,
-				     char *array));
+PcnfsInfo		(Tcl_Interp *interp, char *host,
+				     char *array);
 static int 
-PcnfsQueue		_ANSI_ARGS_((Tcl_Interp *interp, char *host, 
-				     char *printer, char *array));
+PcnfsQueue		(Tcl_Interp *interp, char *host, 
+				     char *printer, char *array);
 static int 
-PcnfsList		_ANSI_ARGS_((Tcl_Interp *interp, char *host,
-				     char *array));
+PcnfsList		(Tcl_Interp *interp, char *host,
+				     char *array);
 static int 
-PcnfsStatus		_ANSI_ARGS_((Tcl_Interp *interp, char *host, 
-				     char *printer, char *array));
+PcnfsStatus		(Tcl_Interp *interp, char *host, 
+				     char *printer, char *array);
 
 
 /*

@@ -30,13 +30,13 @@ static int tty;			/* Non-zero means standard input is a
  */
 
 static void
-EventLoop		_ANSI_ARGS_((Tcl_Interp *interp));
+EventLoop		(Tcl_Interp *interp);
 
 static void
-Prompt			_ANSI_ARGS_((Tcl_Interp *interp, int partial));
+Prompt			(Tcl_Interp *interp, int partial);
 
 static void		
-StdinProc		_ANSI_ARGS_((ClientData clientData, int mask));
+StdinProc		(ClientData clientData, int mask);
 
 
 /*

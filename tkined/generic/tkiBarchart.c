@@ -72,42 +72,42 @@ typedef struct BarchartItem {
  * Prototypes for procedures defined in this file:
  */
 
-static void             ComputeBarchartBbox _ANSI_ARGS_((
-                            Tk_Canvas canvas, BarchartItem *barPtr));
-static int              ConfigureBarchart _ANSI_ARGS_((Tcl_Interp *interp,
+static void             ComputeBarchartBbox (
+                            Tk_Canvas canvas, BarchartItem *barPtr);
+static int              ConfigureBarchart (Tcl_Interp *interp,
                             Tk_Canvas canvas, Tk_Item *itemPtr, int objc,
-                            Tcl_Obj *CONST objv[], int flags));
-static int              CreateBarchart _ANSI_ARGS_((Tcl_Interp *interp,
+                            Tcl_Obj *CONST objv[], int flags);
+static int              CreateBarchart (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int objc, Tcl_Obj *CONST objv[]));
-static void             DeleteBarchart _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, Display *display));
-static void             DisplayBarchart _ANSI_ARGS_((Tk_Canvas canvas,
+                            int objc, Tcl_Obj *CONST objv[]);
+static void             DeleteBarchart (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, Display *display);
+static void             DisplayBarchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, Display *display, Drawable dst,
-			    int x, int y, int width, int height));
-static int              BarchartCoords _ANSI_ARGS_((Tcl_Interp *interp,
+			    int x, int y, int width, int height);
+static int              BarchartCoords (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr,
-                            int objc, Tcl_Obj *CONST objv[]));
-static int              BarchartToArea _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, double *rectPtr));
-static double           BarchartToPoint _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, double *pointPtr));
-static int              BarchartToPostscript _ANSI_ARGS_((Tcl_Interp *interp,
-                            Tk_Canvas canvas, Tk_Item *itemPtr, int prepass));
-static int              ParseBarchartValues _ANSI_ARGS_((ClientData 
+                            int objc, Tcl_Obj *CONST objv[]);
+static int              BarchartToArea (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, double *rectPtr);
+static double           BarchartToPoint (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, double *pointPtr);
+static int              BarchartToPostscript (Tcl_Interp *interp,
+                            Tk_Canvas canvas, Tk_Item *itemPtr, int prepass);
+static int              ParseBarchartValues (ClientData 
                             clientData, Tcl_Interp *interp, Tk_Window tkwin, 
-                            char *value, char *recordPtr, int offset));
-static char *           PrintBarchartValues _ANSI_ARGS_((ClientData 
+                            char *value, char *recordPtr, int offset);
+static char *           PrintBarchartValues (ClientData 
                             clientData, Tk_Window tkwin, char *recordPtr, 
-                            int offset, Tcl_FreeProc **freeProcPtr));
+                            int offset, Tcl_FreeProc **freeProcPtr);
 static int              BarchartValues _ANSI_ARGS_ ((Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int argc, char **argv, int numPoints));
-static void             ScaleBarchart _ANSI_ARGS_((Tk_Canvas canvas,
+                            int argc, char **argv, int numPoints);
+static void             ScaleBarchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, double originX, double originY,
-                            double scaleX, double scaleY));
-static void             TranslateBarchart _ANSI_ARGS_((Tk_Canvas canvas,
-                            Tk_Item *itemPtr, double deltaX, double deltaY));
+                            double scaleX, double scaleY);
+static void             TranslateBarchart (Tk_Canvas canvas,
+                            Tk_Item *itemPtr, double deltaX, double deltaY);
 
 /*
  * Information used for parsing configuration specs:

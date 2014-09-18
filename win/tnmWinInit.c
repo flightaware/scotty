@@ -44,14 +44,14 @@
  */
 
 static void
-FixPath				_ANSI_ARGS_((char *path));
+FixPath				(char *path);
 
 static char*
-GetRegValue			_ANSI_ARGS_((char *path, char *attribute));
+GetRegValue			(char *path, char *attribute);
 
-EXPORT(int,Tnm_Init)		_ANSI_ARGS_((Tcl_Interp *interp));
+EXPORT(int,Tnm_Init)		(Tcl_Interp *interp);
 
-EXPORT(int,Tnm_SafeInit)	_ANSI_ARGS_((Tcl_Interp *interp));
+EXPORT(int,Tnm_SafeInit)	(Tcl_Interp *interp);
 
 
 /*

@@ -37,47 +37,47 @@ TnmGetTAddrFromObj
  */
 
 static void		
-FreeUnsigned64InternalRep	_ANSI_ARGS_((Tcl_Obj *objPtr));
+FreeUnsigned64InternalRep	(Tcl_Obj *objPtr);
 
 static void
-DupUnsigned64InternalRep	_ANSI_ARGS_((Tcl_Obj *srcPtr,
-					     Tcl_Obj *copyPtr));
+DupUnsigned64InternalRep	(Tcl_Obj *srcPtr,
+					     Tcl_Obj *copyPtr);
 static void
-UpdateStringOfUnsigned64	_ANSI_ARGS_((Tcl_Obj *objPtr));
-
-static int
-SetUnsigned64FromAny		_ANSI_ARGS_((Tcl_Interp *interp,
-					     Tcl_Obj *objPtr));
-static void
-DupUnsigned32InternalRep	_ANSI_ARGS_((Tcl_Obj *srcPtr,
-					     Tcl_Obj *copyPtr));
-static void
-UpdateStringOfUnsigned32	_ANSI_ARGS_((Tcl_Obj *objPtr));
+UpdateStringOfUnsigned64	(Tcl_Obj *objPtr);
 
 static int
-SetUnsigned32FromAny		_ANSI_ARGS_((Tcl_Interp *interp,
-					     Tcl_Obj *objPtr));
+SetUnsigned64FromAny		(Tcl_Interp *interp,
+					     Tcl_Obj *objPtr);
+static void
+DupUnsigned32InternalRep	(Tcl_Obj *srcPtr,
+					     Tcl_Obj *copyPtr);
+static void
+UpdateStringOfUnsigned32	(Tcl_Obj *objPtr);
+
+static int
+SetUnsigned32FromAny		(Tcl_Interp *interp,
+					     Tcl_Obj *objPtr);
 static void		
-FreeOctetStringInternalRep	_ANSI_ARGS_((Tcl_Obj *objPtr));
+FreeOctetStringInternalRep	(Tcl_Obj *objPtr);
 
 static void
-DupOctetStringInternalRep	_ANSI_ARGS_((Tcl_Obj *srcPtr,
-					     Tcl_Obj *copyPtr));
+DupOctetStringInternalRep	(Tcl_Obj *srcPtr,
+					     Tcl_Obj *copyPtr);
 static void
-UpdateStringOfOctetString	_ANSI_ARGS_((Tcl_Obj *objPtr));
-
-static int
-SetOctetStringFromAny		_ANSI_ARGS_((Tcl_Interp *interp,
-					     Tcl_Obj *objPtr));
-static void
-DupIpAddressInternalRep		_ANSI_ARGS_((Tcl_Obj *srcPtr,
-					     Tcl_Obj *copyPtr));
-static void
-UpdateStringOfIpAddress		_ANSI_ARGS_((Tcl_Obj *objPtr));
+UpdateStringOfOctetString	(Tcl_Obj *objPtr);
 
 static int
-SetIpAddressFromAny		_ANSI_ARGS_((Tcl_Interp *interp,
-					     Tcl_Obj *objPtr));
+SetOctetStringFromAny		(Tcl_Interp *interp,
+					     Tcl_Obj *objPtr);
+static void
+DupIpAddressInternalRep		(Tcl_Obj *srcPtr,
+					     Tcl_Obj *copyPtr);
+static void
+UpdateStringOfIpAddress		(Tcl_Obj *objPtr);
+
+static int
+SetIpAddressFromAny		(Tcl_Interp *interp,
+					     Tcl_Obj *objPtr);
 
 /*
  * The structure below defines the tnmUnsigned64 Tcl object type by

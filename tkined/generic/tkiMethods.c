@@ -27,7 +27,7 @@
  * does not appear to be installed on many systems.
  */
 
-EXTERN void TclGetAndDetachPids _ANSI_ARGS_((Tcl_Interp * interp, 
+EXTERN void TclGetAndDetachPids (Tcl_Interp * interp, 
                                              Tcl_Channel chan));
 #else
 /*
@@ -45,206 +45,206 @@ EXTERN void TclGetAndDetachPids _ANSI_ARGS_((Tcl_Interp * interp,
  */
 
 static void
-dump_move             _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_move             (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_icon             _ANSI_ARGS_((Tcl_Interp *interp,
-				   Tki_Object *object));
+dump_icon             (Tcl_Interp *interp,
+				   Tki_Object *object);
 static void
-dump_name             _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_name             (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_address          _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_address          (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_oid              _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_oid              (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_font             _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_font             (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_color            _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_color            (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_label            _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_label            (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_scale            _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_scale            (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_size             _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+dump_size             (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-dump_attributes       _ANSI_ARGS_((Tcl_Interp *interp,
-                                   Tki_Object *object));
+dump_attributes       (Tcl_Interp *interp,
+                                   Tki_Object *object);
 
 static void
-parent_resize         _ANSI_ARGS_((Tcl_Interp *interp, 
-				   Tki_Object *object));
+parent_resize         (Tcl_Interp *interp, 
+				   Tki_Object *object);
 static void
-update_links	      _ANSI_ARGS_((Tcl_Interp *interp,
-				   Tki_Object *object));
+update_links	      (Tcl_Interp *interp,
+				   Tki_Object *object);
 
 static void
-m_network_link_end    _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *network,
-				   double *sx, double *sy));
+m_network_link_end    (Tcl_Interp *interp, Tki_Object *network,
+				   double *sx, double *sy);
 static int 
-m_link_update         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_link_update         (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 
 static int 
-m_node_create         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_node_create         (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_group_create        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_group_create        (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_network_create      _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_network_create      (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_link_create         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_link_create         (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_text_create         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_text_create         (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_image_create        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_image_create        (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_interpreter_create  _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_interpreter_create  (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_menu_create         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_menu_create         (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_log_create          _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_log_create          (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_ref_create          _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_ref_create          (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_strip_create        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_strip_create        (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static int 
-m_bar_create          _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+m_bar_create          (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 static int 
-m_graph_create        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+m_graph_create        (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 static int
-m_data_create         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+m_data_create         (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 static int
-m_event_create        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+m_event_create        (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 
 static int 
-m_node_retrieve       _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_node_retrieve       (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_group_retrieve      _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_group_retrieve      (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_network_retrieve    _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_network_retrieve    (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_link_retrieve       _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_link_retrieve       (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_text_retrieve       _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_text_retrieve       (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_image_retrieve      _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_image_retrieve      (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_interpreter_retrieve _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				    int argc, char** argv));
+m_interpreter_retrieve (Tcl_Interp* interp, Tki_Object *object,
+				    int argc, char** argv);
 static int 
-m_menu_retrieve       _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_menu_retrieve       (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_log_retrieve        _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_log_retrieve        (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_ref_retrieve        _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_ref_retrieve        (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_strip_retrieve      _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_strip_retrieve      (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_bar_retrieve        _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_bar_retrieve        (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int 
-m_graph_retrieve      _ANSI_ARGS_((Tcl_Interp* interp, Tki_Object *object,
-				   int argc, char** argv));
+m_graph_retrieve      (Tcl_Interp* interp, Tki_Object *object,
+				   int argc, char** argv);
 static int
-m_data_retrieve       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+m_data_retrieve       (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 static int
-m_event_retrieve      _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv));
+m_event_retrieve      (Tcl_Interp *interp, Tki_Object *object,
+				    int argc, char **argv);
 
 static void 
-m_linked_delete       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_linked_delete       (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static void 
-m_link_delete         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_link_delete         (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static void 
-m_group_delete        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_group_delete        (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 static void 
-m_interpreter_delete  _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv));
+m_interpreter_delete  (Tcl_Interp *interp, Tki_Object *object,
+				   int argc, char **argv);
 
 static int 
-m_node_dump        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_node_dump        (Tcl_Interp *interp, Tki_Object *object);
 
 static int 
-m_group_dump       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_group_dump       (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_network_dump     _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_network_dump     (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_link_dump        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_link_dump        (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_text_dump        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_text_dump        (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_image_dump       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_image_dump       (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_interpreter_dump _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_interpreter_dump (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_log_dump	   _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_log_dump	   (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_ref_dump         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_ref_dump         (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_strip_dump       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_strip_dump       (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_bar_dump         _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_bar_dump         (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_graph_dump       _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_graph_dump       (Tcl_Interp *interp, Tki_Object *object);
 
 static int
-m_data_dump        _ANSI_ARGS_((Tcl_Interp *interp, Tki_Object *object));
+m_data_dump        (Tcl_Interp *interp, Tki_Object *object);
 
 static void
-RemoveObject	   _ANSI_ARGS_((Tki_Object **table, Tki_Object *object));
+RemoveObject	   (Tki_Object **table, Tki_Object *object);
 
 #ifdef USE_TCP_CHANNEL
 static void
-AcceptProc	   _ANSI_ARGS_((ClientData clientData, Tcl_Channel channel, 
-				char *hostName, int port));
+AcceptProc	   (ClientData clientData, Tcl_Channel channel, 
+				char *hostName, int port);
 static void
-TimeOutProc	   _ANSI_ARGS_((ClientData clientData));
+TimeOutProc	   (ClientData clientData);
 #endif
 
 /* 

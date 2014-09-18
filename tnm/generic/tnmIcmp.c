@@ -59,11 +59,11 @@ TCL_DECLARE_MUTEX(icmpMutex)
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static int
-IcmpRequest	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *hosts, 
-			     TnmIcmpRequest *icmpPtr));
+IcmpRequest	(Tcl_Interp *interp, Tcl_Obj *hosts, 
+			     TnmIcmpRequest *icmpPtr);
 
 /*
  *----------------------------------------------------------------------

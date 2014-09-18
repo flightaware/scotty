@@ -95,17 +95,17 @@ typedef struct TnmMapItem {
  */
 
 typedef int	
-TnmMapItemCreateProc	_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-				     TnmMapItem *itemPtr));
+TnmMapItemCreateProc	(Tcl_Interp *interp, TnmMap *mapPtr,
+				     TnmMapItem *itemPtr);
 typedef void
-TnmMapItemDeleteProc	_ANSI_ARGS_((TnmMapItem *itemPtr));
+TnmMapItemDeleteProc	(TnmMapItem *itemPtr);
 
 typedef int
-TnmMapItemDumpProc	_ANSI_ARGS_((Tcl_Interp *interp, TnmMapItem *itemPtr));
+TnmMapItemDumpProc	(Tcl_Interp *interp, TnmMapItem *itemPtr);
 
 typedef int
-TnmMapItemMoveProc	_ANSI_ARGS_((Tcl_Interp *interp, TnmMapItem *itemPtr, 
-				     int x, int y));
+TnmMapItemMoveProc	(Tcl_Interp *interp, TnmMapItem *itemPtr, 
+				     int x, int y);
 
 typedef struct TnmMapItemType {
     char *name;			     /* The unique name of this item type. */
@@ -123,7 +123,7 @@ typedef struct TnmMapItemType {
 } TnmMapItemType;
 
 EXTERN void
-TnmMapRegisterItemType		_ANSI_ARGS_((TnmMapItemType *itemType));
+TnmMapRegisterItemType		(TnmMapItemType *itemType);
 
 EXTERN TnmMapItemType tnmNodeType;
 EXTERN TnmMapItemType tnmPortType;
@@ -178,20 +178,20 @@ EXTERN TnmMapEvent *tnmCurrentEvent;	/* The currenty active event. */
 #define TNM_MAP_EVENT_QUEUE	0x00010000
 
 typedef void
-TnmMapEventProc		_ANSI_ARGS_((TnmMap *mapPtr, TnmMapEvent *eventPtr,
-				     char *eventData));
+TnmMapEventProc		(TnmMap *mapPtr, TnmMapEvent *eventPtr,
+				     char *eventData);
 EXTERN void
-TnmMapCreateEvent	_ANSI_ARGS_((int type, TnmMapItem *itemPtr, 
-				     char *eventData));
+TnmMapCreateEvent	(int type, TnmMapItem *itemPtr, 
+				     char *eventData);
 EXTERN TnmMapEvent*
-TnmMapCreateUserEvent	_ANSI_ARGS_((TnmMap *mapPtr, TnmMapItem *itemPtr,
-				     char *name, char *args));
+TnmMapCreateUserEvent	(TnmMap *mapPtr, TnmMapItem *itemPtr,
+				     char *name, char *args);
 EXTERN void
-TnmMapRaiseEvent	_ANSI_ARGS_((TnmMapEvent *eventPtr));
+TnmMapRaiseEvent	(TnmMapEvent *eventPtr);
 
 EXTERN void
-TnmMapExpireEvents	_ANSI_ARGS_((TnmMapEvent **eventListPtr, 
-				     long expireTime));
+TnmMapExpireEvents	(TnmMapEvent **eventListPtr, 
+				     long expireTime);
 
 typedef struct TnmMapBind {
     int type;			/* The type of this binding. */
@@ -206,8 +206,8 @@ typedef struct TnmMapBind {
 } TnmMapBind;
 
 EXTERN TnmMapBind*
-TnmMapUserBinding	_ANSI_ARGS_((TnmMap *mapPtr, TnmMapItem *itemPtr,
-				     char *pattern, char *script));
+TnmMapUserBinding	(TnmMap *mapPtr, TnmMapItem *itemPtr,
+				     char *pattern, char *script);
 /*
  *----------------------------------------------------------------
  * Functions used to collect information about map or item 
@@ -234,16 +234,9 @@ typedef struct TnmMapMsg {
     struct TnmMapMsg *nextPtr;	/* The next logging message. */
 } TnmMapMsg;
 
-EXTERN TnmMapMsg*
-TnmMapCreateMsg		_ANSI_ARGS_((TnmMap *mapPtr, TnmMapItem *itemPtr,
-				     Tcl_Obj *tag, Tcl_Obj *message));
-EXTERN int
-TnmMapMsgCmd		_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-				     TnmMapItem *itemPtr, 
-				     int objc, Tcl_Obj *CONST objv[]));
-EXTERN void
-TnmMapExpireMsgs	_ANSI_ARGS_((TnmMapMsg **msgListPtr, 
-				     long expireTime));
+EXTERN TnmMapMsg* TnmMapCreateMsg (TnmMap *mapPtr, TnmMapItem *itemPtr, Tcl_Obj *tag, Tcl_Obj *message);
+EXTERN int TnmMapMsgCmd	(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, int objc, Tcl_Obj *CONST objv[]);
+EXTERN void TnmMapExpireMsgs	(TnmMapMsg **msgListPtr, long expireTime);
 
 /*
  *----------------------------------------------------------------
@@ -282,19 +275,18 @@ TnmMapExpireMsgs	_ANSI_ARGS_((TnmMapMsg **msgListPtr,
 #define TNM_ITEM_OPT_ADDRESS	0x0F
 
 EXTERN int
-TnmMapItemObjCmd	_ANSI_ARGS_((TnmMapItem *itemPtr, Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]));
+TnmMapItemObjCmd	(TnmMapItem *itemPtr, Tcl_Interp *interp, 
+				     int objc, Tcl_Obj *CONST objv[]);
 EXTERN void
-TnmMapItemCmdList	_ANSI_ARGS_((TnmMapItem *itemPtr, Tcl_Interp *interp));
+TnmMapItemCmdList	(TnmMapItem *itemPtr, Tcl_Interp *interp);
 
 EXTERN void
-TnmMapItemDump		_ANSI_ARGS_((TnmMapItem *itemPtr, Tcl_Interp *interp));
+TnmMapItemDump		(TnmMapItem *itemPtr, Tcl_Interp *interp);
 
 EXTERN int
-TnmMapItemConfigure	_ANSI_ARGS_((TnmMapItem *itemPtr, Tcl_Interp *interp,
-				     int objc, Tcl_Obj *CONST objv[]));
+TnmMapItemConfigure	(TnmMapItem *itemPtr, Tcl_Interp *interp,
+				     int objc, Tcl_Obj *CONST objv[]);
 EXTERN TnmMapItem*
-TnmMapFindItem		_ANSI_ARGS_((Tcl_Interp *interp, TnmMap *mapPtr,
-				     char *name));
+TnmMapFindItem		(Tcl_Interp *interp, TnmMap *mapPtr, char *name);
 
 #endif /* _TNMMAP */

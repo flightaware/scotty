@@ -83,21 +83,21 @@ static TnmTable tnmSmiAccessTable[] = {
  */
 
 static SmiType*
-GetMibType	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr));
+GetMibType	(Tcl_Interp *interp, Tcl_Obj *objPtr);
 
 static SmiNode*
-GetMibNode	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr, 
-			     TnmOid **oidPtrPtr, TnmOid *nodeOidPtr));
+GetMibNode	(Tcl_Interp *interp, Tcl_Obj *objPtr, 
+			     TnmOid **oidPtrPtr, TnmOid *nodeOidPtr);
 static int
-GetMibNodeOrType _ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr,
+GetMibNodeOrType (Tcl_Interp *interp, Tcl_Obj *objPtr,
 			      SmiType **typePtrPtr,
-			      SmiNode **nodePtrPtr));
+			      SmiNode **nodePtrPtr);
 static int
-GetSmiList	_ANSI_ARGS_((Tcl_Interp *interp, SmiNode *smiNode,
-			     Tcl_Obj *objPtr));
+GetSmiList	(Tcl_Interp *interp, SmiNode *smiNode,
+			     Tcl_Obj *objPtr);
 static int
-WalkTree	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *varName, 
-			     Tcl_Obj *body, SmiNode *smiNode, TnmOid *oidPtr));
+WalkTree	(Tcl_Interp *interp, Tcl_Obj *varName, 
+			     Tcl_Obj *body, SmiNode *smiNode, TnmOid *oidPtr);
 
 
 /*

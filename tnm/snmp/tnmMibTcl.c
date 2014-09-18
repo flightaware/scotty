@@ -31,25 +31,25 @@ TCL_DECLARE_MUTEX(mibMutex)	/* To serialize access to the mib command. */
  */
 
 static TnmMibType*
-GetMibType	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr));
+GetMibType	(Tcl_Interp *interp, Tcl_Obj *objPtr);
 
 static TnmMibNode*
-GetMibNode	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr, 
-			     TnmOid **oidPtrPtr, TnmOid *nodeOidPtr));
+GetMibNode	(Tcl_Interp *interp, Tcl_Obj *objPtr, 
+			     TnmOid **oidPtrPtr, TnmOid *nodeOidPtr);
 static int
-GetMibNodeOrType _ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr,
+GetMibNodeOrType (Tcl_Interp *interp, Tcl_Obj *objPtr,
 			      TnmMibType **typePtrPtr,
-			      TnmMibNode **nodePtrPtr));
+			      TnmMibNode **nodePtrPtr);
 static TnmMibNode*
-GetMibColumnNode _ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *objPtr,
-			      TnmOid **oidPtrPtr, TnmOid *nodeOidPtr));
+GetMibColumnNode (Tcl_Interp *interp, Tcl_Obj *objPtr,
+			      TnmOid **oidPtrPtr, TnmOid *nodeOidPtr);
 static Tcl_Obj*
-GetIndexList	_ANSI_ARGS_((Tcl_Interp *interp, TnmMibNode *nodePtr,
-			     TnmMibNode ***indexNodeList, int *implied));
+GetIndexList	(Tcl_Interp *interp, TnmMibNode *nodePtr,
+			     TnmMibNode ***indexNodeList, int *implied);
 static int
-WalkTree	_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *varName, 
+WalkTree	(Tcl_Interp *interp, Tcl_Obj *varName, 
 			     Tcl_Obj *body, TnmMibNode* nodePtr, 
-			     TnmOid *oidPtr, TnmOid *rootPtr));
+			     TnmOid *oidPtr, TnmOid *rootPtr);
 
 /*
  *----------------------------------------------------------------------

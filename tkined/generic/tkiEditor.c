@@ -27,87 +27,87 @@ static char *defaultName = "noname.tki"; /* the default map name */
  */
 
 static void
-do_delete	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     Tcl_DString *dstp));
+do_delete	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     Tcl_DString *dstp);
 static void
-do_dump		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     Tki_Object *group, Tcl_DString *dstp));
+do_dump		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     Tki_Object *group, Tcl_DString *dstp);
 static int 
-do_ined		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     char *line));
+do_ined		(Tki_Editor *editor, Tcl_Interp *interp,
+			     char *line);
 static int 
-do_set		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     char *line));
+do_set		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     char *line);
 
 static int
-GetId		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+GetId		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-GetWidth	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+GetWidth	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-GetHeight	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+GetHeight	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-GetPageWidth	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+GetPageWidth	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-GetPageHeight	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+GetPageHeight	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-Toplevel	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+Toplevel	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-DirName		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv));
+DirName		(Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv);
 static int
-FileName	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv));
+FileName	(Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv);
 static int
-Cut		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+Cut		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-Copy		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+Copy		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-Paste		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+Paste		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-ClearEditor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+ClearEditor	(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-GetColor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv));
+GetColor	(Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv);
 static void
-ReadHistory	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp));
+ReadHistory	(Tki_Editor *editor, Tcl_Interp *interp);
 
 static void
-WriteHistory	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp));
+WriteHistory	(Tki_Editor *editor, Tcl_Interp *interp);
 
 static void
-ExpandIconName	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int type, char *str));
+ExpandIconName	(Tki_Editor *editor, Tcl_Interp *interp,
+			     int type, char *str);
 static void
-ReadDefaultFile	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     char *filename));
+ReadDefaultFile	(Tki_Editor *editor, Tcl_Interp *interp,
+			     char *filename);
 static void
-ReadDefaults	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv));
+ReadDefaults	(Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv);
 static int
-LoadMap		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+LoadMap		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-SaveMap		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv));
+SaveMap		(Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv);
 static int
-DeleteEditor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv));
+DeleteEditor	(Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv);
 static int
-QuitEditor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv));
+QuitEditor	(Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv);
 static int 
-EditorCommand	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int argc, char **argv));
+EditorCommand	(ClientData clientData, Tcl_Interp *interp,
+			     int argc, char **argv);
 /*
  * Create a new editor object. No Parameters are expected.
  */

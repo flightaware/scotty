@@ -110,41 +110,41 @@ static char *weekdays[] = {
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static void
-DeleteProc	_ANSI_ARGS_((ClientData clientData));
+DeleteProc	(ClientData clientData);
 
 static void
-DestroyProc	_ANSI_ARGS_((char *memPtr));
+DestroyProc	(char *memPtr);
 
 static void
-ScheduleProc	_ANSI_ARGS_((ClientData clientData));
+ScheduleProc	(ClientData clientData);
 
 static void 
-NextSchedule	_ANSI_ARGS_((Tcl_Interp *interp, JobControl *control));
+NextSchedule	(Tcl_Interp *interp, JobControl *control);
 
 static void 
-AdjustTime	_ANSI_ARGS_((JobControl *control));
+AdjustTime	(JobControl *control);
 
 static void
-Schedule	_ANSI_ARGS_((Tcl_Interp *interp, JobControl *control));
+Schedule	(Tcl_Interp *interp, JobControl *control);
 
 static int
-CreateJob	_ANSI_ARGS_((Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+CreateJob	(Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 static Tcl_Obj*
-GetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option));
+GetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option);
 static int
-SetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option, Tcl_Obj *objPtr));
+SetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option, Tcl_Obj *objPtr);
 static int
-JobObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+JobObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-FindJobs	_ANSI_ARGS_((Tcl_Interp *interp, JobControl *control,
-			     int objc, Tcl_Obj *CONST objv[]));
+FindJobs	(Tcl_Interp *interp, JobControl *control,
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The options used to configure job objects.

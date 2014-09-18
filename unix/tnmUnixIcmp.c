@@ -66,10 +66,10 @@ typedef struct IcmpMsg {
  */
 
 static int
-ForkDaemon	_ANSI_ARGS_((Tcl_Interp *interp));
+ForkDaemon	(Tcl_Interp *interp);
 
 static void
-KillDaemon	_ANSI_ARGS_((ClientData clientData));
+KillDaemon	(ClientData clientData);
 
 
 /*
@@ -90,8 +90,7 @@ KillDaemon	_ANSI_ARGS_((ClientData clientData));
  */
 
 static int
-ForkDaemon(interp)
-    Tcl_Interp *interp;
+ForkDaemon(Tcl_Interp *interp)
 {
     int argc = 1;
     char *argv[2];
@@ -131,8 +130,7 @@ ForkDaemon(interp)
  */
 
 static void
-KillDaemon(clientData)
-    ClientData clientData;
+KillDaemon(ClientData clientData)
 {
     if (channel) {
 	Tcl_Close((Tcl_Interp *) NULL, channel);
@@ -159,9 +157,7 @@ KillDaemon(clientData)
  */
 
 int
-TnmIcmp(interp, icmpPtr)
-    Tcl_Interp *interp;
-    TnmIcmpRequest *icmpPtr;
+TnmIcmp(Tcl_Interp *interp, TnmIcmpRequest *icmpPtr)
 {
     int i, j, rc, code = TCL_OK;
     IcmpMsg icmpMsg;

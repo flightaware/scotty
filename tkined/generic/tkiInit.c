@@ -39,17 +39,17 @@
  */
 
 static int 
-tkined_mark_box       _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv));
+tkined_mark_box       (ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv);
 static int 
-tkined_mark_points    _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv));
+tkined_mark_points    (ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv);
 static void 
-mark_one_item         _ANSI_ARGS_((Tcl_Interp *interp, double x, double y, 
-				   char *canvas, char *item));
+mark_one_item         (Tcl_Interp *interp, double x, double y, 
+				   char *canvas, char *item);
 static int 
-blt_axes_time	      _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv));
+blt_axes_time	      (ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv);
 
 /*
  * Linkage to some external funtions and global variables.

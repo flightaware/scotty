@@ -29,29 +29,29 @@ TCL_DECLARE_MUTEX(mapEventMutex)
  */
 
 static void
-EventDeleteProc	_ANSI_ARGS_((ClientData clientData));
+EventDeleteProc	(ClientData clientData);
 
 static void
-BindDeleteProc	_ANSI_ARGS_((ClientData clientData));
+BindDeleteProc	(ClientData clientData);
 
 static void
-MsgDeleteProc	_ANSI_ARGS_((ClientData clientData));
+MsgDeleteProc	(ClientData clientData);
 
 static int 
-EventObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+EventObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int 
-BindObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+BindObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-EvalBinding	_ANSI_ARGS_((TnmMapEvent *eventPtr, TnmMapBind *bindList));
+EvalBinding	(TnmMapEvent *eventPtr, TnmMapBind *bindList);
 
 static int
-SaveMsg		_ANSI_ARGS_((TnmMapMsg *msgPtr));
+SaveMsg		(TnmMapMsg *msgPtr);
 
 static int 
-MsgObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+MsgObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The following table maps internal events to strings.

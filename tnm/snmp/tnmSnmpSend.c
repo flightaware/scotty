@@ -28,28 +28,28 @@ extern int	hexdump;
  */
 
 static int
-EncodeMessage		_ANSI_ARGS_((Tcl_Interp *interp,
+EncodeMessage		(Tcl_Interp *interp,
 				     TnmSnmp *sess, TnmSnmpPdu *pdu,
-				     TnmBer *ber));
+				     TnmBer *ber);
 static TnmBer*
-EncodeHeader		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-				     TnmSnmpPdu *pdu, TnmBer *ber));
+EncodeHeader		(Tcl_Interp *interp, TnmSnmp *session,
+				     TnmSnmpPdu *pdu, TnmBer *ber);
 static TnmBer*
-EncodeScopedPDU		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-				     TnmSnmpPdu *pdu, TnmBer *ber));
+EncodeScopedPDU		(Tcl_Interp *interp, TnmSnmp *session,
+				     TnmSnmpPdu *pdu, TnmBer *ber);
 static u_char*
-EncodeUsmSecParams	_ANSI_ARGS_((TnmSnmp *session, TnmSnmpPdu *pdu,
-				     int *lengthPtr));
+EncodeUsmSecParams	(TnmSnmp *session, TnmSnmpPdu *pdu,
+				     int *lengthPtr);
 #ifdef TNM_SNMPv2U
 static int
-EncodeUsecParameter	_ANSI_ARGS_((TnmSnmp *session, TnmSnmpPdu *pdu, 
-				     u_char *parameter));
+EncodeUsecParameter	(TnmSnmp *session, TnmSnmpPdu *pdu, 
+				     u_char *parameter);
 #endif
 
 static TnmBer*
-EncodePDU		_ANSI_ARGS_((Tcl_Interp *interp, 
+EncodePDU		(Tcl_Interp *interp, 
 				     TnmSnmp *sess, TnmSnmpPdu *pdu,
-				     TnmBer *ber));
+				     TnmBer *ber);
 
 /*
  *----------------------------------------------------------------------

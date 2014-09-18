@@ -116,10 +116,10 @@ EXTERN TnmTable tnmSnmpPDUTable[];
 typedef u_int Tnm_Oid;
 
 EXTERN char*
-TnmOidToStr		_ANSI_ARGS_((Tnm_Oid *oid, int len));
+TnmOidToStr		(Tnm_Oid *oid, int len);
 
 EXTERN Tnm_Oid*
-TnmStrToOid		_ANSI_ARGS_((char *str, int *len));
+TnmStrToOid		(char *str, int *len);
 
 /*
  *----------------------------------------------------------------
@@ -135,10 +135,10 @@ typedef struct TnmBer {
 } TnmBer;
 
 EXTERN TnmBer*
-TnmBerCreate		_ANSI_ARGS_((u_char *packet, int packetlen));
+TnmBerCreate		(u_char *packet, int packetlen);
 
 EXTERN void
-TnmBerDelete		_ANSI_ARGS_((TnmBer *ber));
+TnmBerDelete		(TnmBer *ber);
 
 /*
  *----------------------------------------------------------------
@@ -148,19 +148,19 @@ TnmBerDelete		_ANSI_ARGS_((TnmBer *ber));
  */
 
 EXTERN char*
-TnmBerGetError		_ANSI_ARGS_((TnmBer *ber));
+TnmBerGetError		(TnmBer *ber);
 
 EXTERN void
-TnmBerSetError		_ANSI_ARGS_((TnmBer *ber, char *msg));
+TnmBerSetError		(TnmBer *ber, char *msg);
 
 EXTERN void
-TnmBerWrongValue	_ANSI_ARGS_((TnmBer *ber, u_char tag));
+TnmBerWrongValue	(TnmBer *ber, u_char tag);
 
 EXTERN void
-TnmBerWrongLength	_ANSI_ARGS_((TnmBer *ber, u_char tag, int length));
+TnmBerWrongLength	(TnmBer *ber, u_char tag, int length);
 
 EXTERN void
-TnmBerWrongTag		_ANSI_ARGS_((TnmBer *ber, u_char tag, u_char expected));
+TnmBerWrongTag		(TnmBer *ber, u_char tag, u_char expected);
 
 /*
  *----------------------------------------------------------------
@@ -169,69 +169,69 @@ TnmBerWrongTag		_ANSI_ARGS_((TnmBer *ber, u_char tag, u_char expected));
  */
 
 EXTERN int
-TnmBerDecDone		_ANSI_ARGS_((TnmBer *ber));
+TnmBerDecDone		(TnmBer *ber);
 
 EXTERN int
-TnmBerSize		_ANSI_ARGS_((TnmBer *ber));
+TnmBerSize		(TnmBer *ber);
 
 EXTERN TnmBer*
-TnmBerDecPeek		_ANSI_ARGS_((TnmBer *ber, u_char *byte));
+TnmBerDecPeek		(TnmBer *ber, u_char *byte);
 
 EXTERN TnmBer*
-TnmBerEncByte		_ANSI_ARGS_((TnmBer *ber, u_char byte));
+TnmBerEncByte		(TnmBer *ber, u_char byte);
 
 EXTERN TnmBer*
-TnmBerDecByte		_ANSI_ARGS_((TnmBer *ber, u_char *byte));
+TnmBerDecByte		(TnmBer *ber, u_char *byte);
 
 EXTERN TnmBer*
-TnmBerEncLength		_ANSI_ARGS_((TnmBer *ber, u_char *position,
-				     int length));
+TnmBerEncLength		(TnmBer *ber, u_char *position,
+				     int length);
 EXTERN TnmBer*
-TnmBerDecLength		_ANSI_ARGS_((TnmBer *ber, int *length));
+TnmBerDecLength		(TnmBer *ber, int *length);
 
 EXTERN TnmBer*
-TnmBerEncSequenceStart  _ANSI_ARGS_((TnmBer *ber, u_char tag,
-				     u_char **token));
+TnmBerEncSequenceStart  (TnmBer *ber, u_char tag,
+				     u_char **token);
 EXTERN TnmBer*
-TnmBerEncSequenceEnd    _ANSI_ARGS_((TnmBer *ber,
-				     u_char *token));
+TnmBerEncSequenceEnd    (TnmBer *ber,
+				     u_char *token);
 EXTERN TnmBer*
-TnmBerDecSequenceStart  _ANSI_ARGS_((TnmBer *ber, u_char tag,
-				     u_char **token, int *length));
+TnmBerDecSequenceStart  (TnmBer *ber, u_char tag,
+				     u_char **token, int *length);
 EXTERN TnmBer*
-TnmBerDecSequenceEnd    _ANSI_ARGS_((TnmBer *ber,
-                                     u_char *token, int length));
+TnmBerDecSequenceEnd    (TnmBer *ber,
+                                     u_char *token, int length);
 EXTERN TnmBer*
-TnmBerEncInt		_ANSI_ARGS_((TnmBer *ber, u_char tag,
-				     int value));
+TnmBerEncInt		(TnmBer *ber, u_char tag,
+				     int value);
 EXTERN TnmBer*
-TnmBerDecInt		_ANSI_ARGS_((TnmBer *ber, u_char tag,
-				     int *value));
+TnmBerDecInt		(TnmBer *ber, u_char tag,
+				     int *value);
 EXTERN TnmBer*
-TnmBerEncUnsigned64	_ANSI_ARGS_((TnmBer *ber,
-				     double value));
+TnmBerEncUnsigned64	(TnmBer *ber,
+				     double value);
 EXTERN TnmBer*
-TnmBerDecUnsigned64	_ANSI_ARGS_((TnmBer *ber,
-				     TnmUnsigned64 *uPtr));
+TnmBerDecUnsigned64	(TnmBer *ber,
+				     TnmUnsigned64 *uPtr);
 EXTERN TnmBer*
-TnmBerEncOID		_ANSI_ARGS_((TnmBer *ber,
-				     Tnm_Oid *oid, int oidlen));
+TnmBerEncOID		(TnmBer *ber,
+				     Tnm_Oid *oid, int oidlen);
 EXTERN TnmBer*
-TnmBerDecOID		_ANSI_ARGS_((TnmBer *ber,
-				     Tnm_Oid *oid, int *oidlen));
+TnmBerDecOID		(TnmBer *ber,
+				     Tnm_Oid *oid, int *oidlen);
 EXTERN TnmBer*
-TnmBerEncOctetString	_ANSI_ARGS_((TnmBer *ber, u_char tag,
-				     char *octets, int len));
+TnmBerEncOctetString	(TnmBer *ber, u_char tag,
+				     char *octets, int len);
 EXTERN TnmBer*
-TnmBerDecOctetString	_ANSI_ARGS_((TnmBer *ber, u_char tag,
-				     char **octets, int *len));
+TnmBerDecOctetString	(TnmBer *ber, u_char tag,
+				     char **octets, int *len);
 EXTERN TnmBer*
-TnmBerEncNull		_ANSI_ARGS_((TnmBer *ber, u_char tag));
+TnmBerEncNull		(TnmBer *ber, u_char tag);
 
 EXTERN TnmBer*
-TnmBerDecNull		_ANSI_ARGS_((TnmBer *ber, u_char tag));
+TnmBerDecNull		(TnmBer *ber, u_char tag);
 
 EXTERN TnmBer*
-TnmBerDecAny		_ANSI_ARGS_((TnmBer *ber, char **octets, int *len));
+TnmBerDecAny		(TnmBer *ber, char **octets, int *len);
 
 #endif /* _TNMASN1 */

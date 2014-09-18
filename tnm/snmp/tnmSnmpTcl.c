@@ -45,89 +45,89 @@ typedef struct SnmpControl {
  */
 
 static void
-AssocDeleteProc	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp));
+AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
 
 static void
-DeleteProc	_ANSI_ARGS_((ClientData clientdata));
+DeleteProc	(ClientData clientdata);
 
 static void
-PduInit		_ANSI_ARGS_((TnmSnmpPdu *pduPtr, TnmSnmp *session, int type));
+PduInit		(TnmSnmpPdu *pduPtr, TnmSnmp *session, int type);
 
 static void
-PduFree		_ANSI_ARGS_((TnmSnmpPdu *pduPtr));
+PduFree		(TnmSnmpPdu *pduPtr);
 
 static Tcl_Obj*
-GetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option));
+GetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option);
 static int
-SetOption	_ANSI_ARGS_((Tcl_Interp *interp, ClientData object, 
-			     int option, Tcl_Obj *objPtr));
+SetOption	(Tcl_Interp *interp, ClientData object, 
+			     int option, Tcl_Obj *objPtr);
 static int
-BindEvent	_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-			     Tcl_Obj *eventPtr, Tcl_Obj *script));
+BindEvent	(Tcl_Interp *interp, TnmSnmp *session,
+			     Tcl_Obj *eventPtr, Tcl_Obj *script);
 static int
-FindSessions	_ANSI_ARGS_((Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+FindSessions	(Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-GeneratorCmd	_ANSI_ARGS_((ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+GeneratorCmd	(ClientData	clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-ListenerCmd	_ANSI_ARGS_((ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+ListenerCmd	(ClientData	clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-NotifierCmd	_ANSI_ARGS_((ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+NotifierCmd	(ClientData	clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int
-ResponderCmd	_ANSI_ARGS_((ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+ResponderCmd	(ClientData	clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 static int 
-WaitSession	_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session, int id));
+WaitSession	(Tcl_Interp *interp, TnmSnmp *session, int id);
 
 static void
-ResponseProc	_ANSI_ARGS_((TnmSnmp *session, TnmSnmpPdu *pdu, 
-			     ClientData clientData));
+ResponseProc	(TnmSnmp *session, TnmSnmpPdu *pdu, 
+			     ClientData clientData);
 static int
-Notify		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session, int type,
-			     Tcl_Obj *oid, Tcl_Obj *vbList, Tcl_Obj *script));
+Notify		(Tcl_Interp *interp, TnmSnmp *session, int type,
+			     Tcl_Obj *oid, Tcl_Obj *vbList, Tcl_Obj *script);
 static int
-Request		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session, int type,
-			     int n, int m, Tcl_Obj *vbList, Tcl_Obj *cmd));
+Request		(Tcl_Interp *interp, TnmSnmp *session, int type,
+			     int n, int m, Tcl_Obj *vbList, Tcl_Obj *cmd);
 static Tcl_Obj*
-WalkCheck	_ANSI_ARGS_((int oidListLen, Tcl_Obj **oidListElems, 
-			     int vbListLen, Tcl_Obj **vbListElems));
+WalkCheck	(int oidListLen, Tcl_Obj **oidListElems, 
+			     int vbListLen, Tcl_Obj **vbListElems);
 static void
-AsyncWalkProc	_ANSI_ARGS_((TnmSnmp *session, TnmSnmpPdu *pdu, 
-			     ClientData clientData));
+AsyncWalkProc	(TnmSnmp *session, TnmSnmpPdu *pdu, 
+			     ClientData clientData);
 static int
-AsyncWalk	_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-			     Tcl_Obj *oidList, Tcl_Obj *tclCmd));
+AsyncWalk	(Tcl_Interp *interp, TnmSnmp *session,
+			     Tcl_Obj *oidList, Tcl_Obj *tclCmd);
 static int
-SyncWalk	_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
+SyncWalk	(Tcl_Interp *interp, TnmSnmp *session,
 			     Tcl_Obj *varName, Tcl_Obj *oidList, 
-			     Tcl_Obj *tclCmd));
+			     Tcl_Obj *tclCmd);
 static int
-Delta		_ANSI_ARGS_((Tcl_Interp *interp, Tcl_Obj *vbl1,
-			     Tcl_Obj *vbl2));
+Delta		(Tcl_Interp *interp, Tcl_Obj *vbl1,
+			     Tcl_Obj *vbl2);
 static int
-Extract		_ANSI_ARGS_((Tcl_Interp *interp, int what, Tcl_Obj *objPtr,
-			     Tcl_Obj *indexObjPtr));
+Extract		(Tcl_Interp *interp, int what, Tcl_Obj *objPtr,
+			     Tcl_Obj *indexObjPtr);
 
 #if 0
 static int
-ExpandTable	_ANSI_ARGS_((Tcl_Interp *interp, 
-			     char *tList, Tcl_DString *dst));
+ExpandTable	(Tcl_Interp *interp, 
+			     char *tList, Tcl_DString *dst);
 static int
-ExpandScalars	_ANSI_ARGS_((Tcl_Interp *interp, 
-			     char *sList, Tcl_DString *dst));
+ExpandScalars	(Tcl_Interp *interp, 
+			     char *sList, Tcl_DString *dst);
 static int
-Table		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-			     char *table, char *arrayName));
+Table		(Tcl_Interp *interp, TnmSnmp *session,
+			     char *table, char *arrayName);
 static int
-Scalars		_ANSI_ARGS_((Tcl_Interp *interp, TnmSnmp *session,
-			     char *group, char *arrayName));
+Scalars		(Tcl_Interp *interp, TnmSnmp *session,
+			     char *group, char *arrayName);
 static void
-ScalarSetVar	_ANSI_ARGS_((Tcl_Interp *interp, char *vbl,
-			     char *varName, Tcl_DString *result));
+ScalarSetVar	(Tcl_Interp *interp, char *vbl,
+			     char *varName, Tcl_DString *result);
 #endif
 
 /*

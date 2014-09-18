@@ -31,8 +31,8 @@ typedef struct TnmNetwork {
  */
 
 static int
-NetworkCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+NetworkCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 
 /*
  * The configuration options understood by a node item.

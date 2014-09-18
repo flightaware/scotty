@@ -132,75 +132,75 @@ TCL_DECLARE_MUTEX(smxMutex)
  */
 
 static void
-AssocDeleteProc		_ANSI_ARGS_((ClientData clientData,
-				     Tcl_Interp *interp));
+AssocDeleteProc		(ClientData clientData,
+				     Tcl_Interp *interp);
 static Run*
-SmxNewRun		_ANSI_ARGS_((SmxControl *control, unsigned runid));
-
-static Run*
-SmxGetRunFromId		_ANSI_ARGS_((SmxControl *control, unsigned runid));
+SmxNewRun		(SmxControl *control, unsigned runid);
 
 static Run*
-SmxGetRunFromInterp	_ANSI_ARGS_((SmxControl *control, Tcl_Interp *interp));
+SmxGetRunFromId		(SmxControl *control, unsigned runid);
+
+static Run*
+SmxGetRunFromInterp	(SmxControl *control, Tcl_Interp *interp);
 
 static void
-SmxDeleteRun		_ANSI_ARGS_((SmxControl *control, unsigned runid));
+SmxDeleteRun		(SmxControl *control, unsigned runid);
 
 static void
-SmxAbortRun		_ANSI_ARGS_((Tcl_Interp *interp, SmxControl *control,
-				     Run *runPtr));
+SmxAbortRun		(Tcl_Interp *interp, SmxControl *control,
+				     Run *runPtr);
 static void
-SmxHello		_ANSI_ARGS_((Tcl_Interp *interp, int id));
+SmxHello		(Tcl_Interp *interp, int id);
 
 static void
-SmxStart		_ANSI_ARGS_((Tcl_Interp *interp,
+SmxStart		(Tcl_Interp *interp,
 				     int id, unsigned runid, char *script,
-                                     char *profile, char *argument));
+                                     char *profile, char *argument);
 static void
-SmxSuspend		_ANSI_ARGS_((Tcl_Interp *interp,
-				     int id, unsigned runid));
+SmxSuspend		(Tcl_Interp *interp,
+				     int id, unsigned runid);
 static void
-SmxResume		_ANSI_ARGS_((Tcl_Interp *interp,
-				     int id, unsigned runid));
+SmxResume		(Tcl_Interp *interp,
+				     int id, unsigned runid);
 static void
-SmxAbort		_ANSI_ARGS_((Tcl_Interp *interp,
-				     int id, unsigned runid));
+SmxAbort		(Tcl_Interp *interp,
+				     int id, unsigned runid);
 static void
-SmxStatus		_ANSI_ARGS_((Tcl_Interp *interp,
-				     int id, unsigned runid));
+SmxStatus		(Tcl_Interp *interp,
+				     int id, unsigned runid);
 static void
-SmxAppendHexString	_ANSI_ARGS_((char *dst, CONST char *src, int len));
+SmxAppendHexString	(char *dst, CONST char *src, int len);
 
 static void
-SmxAppendQuotedString	_ANSI_ARGS_((char *dst, CONST char *src, int len));
+SmxAppendQuotedString	(char *dst, CONST char *src, int len);
 
 static void
-SmxAppendHexOrQuotedString _ANSI_ARGS_((char *dst, CONST char *src, int len));
+SmxAppendHexOrQuotedString (char *dst, CONST char *src, int len);
 
 static void
-SmxReply		_ANSI_ARGS_((SmxControl *control,
+SmxReply		(SmxControl *control,
 				     int reply, int id, Run *run,
-				     CONST char *msg, int msglen));
+				     CONST char *msg, int msglen);
 static char*
-SmxParseRunId		_ANSI_ARGS_((char *line, int id, unsigned *runid));
+SmxParseRunId		(char *line, int id, unsigned *runid);
 
 static char*
-SmxParseQuotedString	_ANSI_ARGS_((char *line, char **dst, int *len));
+SmxParseQuotedString	(char *line, char **dst, int *len);
 
 static char*
-SmxParseHexString	_ANSI_ARGS_((char *line, char **dst, int *len));
+SmxParseHexString	(char *line, char **dst, int *len);
 
 static char*
-SmxParseHexOrQuotedString _ANSI_ARGS_((char *line, char **dst, int *len));
+SmxParseHexOrQuotedString (char *line, char **dst, int *len);
 
 static char*
-SmxParseProfileString	_ANSI_ARGS_((char *line, char **dst));
+SmxParseProfileString	(char *line, char **dst);
 
 static int
-SmxParse		_ANSI_ARGS_((char *line, Tcl_Interp *interp));
+SmxParse		(char *line, Tcl_Interp *interp);
 
 static void
-SmxReceiveProc		_ANSI_ARGS_((ClientData clientData, int mask));
+SmxReceiveProc		(ClientData clientData, int mask);
 
 
 /*

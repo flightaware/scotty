@@ -27,26 +27,26 @@ static TnmSnmpNode *instTree = NULL;
  */
 
 static void
-DumpTree                _ANSI_ARGS_((TnmSnmpNode *instPtr));
+DumpTree                (TnmSnmpNode *instPtr);
 
 static void
-FreeNode		_ANSI_ARGS_((TnmSnmpNode *inst));
+FreeNode		(TnmSnmpNode *inst);
 
 static TnmSnmpNode*
-AddNode			_ANSI_ARGS_((char *id, int offset, int syntax,
-				     int access, char *tclVarName));
+AddNode			(char *id, int offset, int syntax,
+				     int access, char *tclVarName);
 static void
-RemoveNode		_ANSI_ARGS_((TnmSnmpNode *root, char *varname));
+RemoveNode		(TnmSnmpNode *root, char *varname);
 
 static TnmSnmpNode*
-FindNode		_ANSI_ARGS_((TnmSnmpNode *root, TnmOid *oidPtr));
+FindNode		(TnmSnmpNode *root, TnmOid *oidPtr);
 
 static TnmSnmpNode*
-FindNextNode		_ANSI_ARGS_((TnmSnmpNode *root, u_int *oid, int len));
+FindNextNode		(TnmSnmpNode *root, u_int *oid, int len);
 
 static char*
-DeleteNodeProc		_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-				     char *name1, char *name2, int flags));
+DeleteNodeProc		(ClientData clientData, Tcl_Interp *interp,
+				     char *name1, char *name2, int flags);
 
 
 /*

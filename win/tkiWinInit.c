@@ -41,12 +41,12 @@
  */
 
 static void
-FixPath				_ANSI_ARGS_((char *path));
+FixPath				(char *path);
 
 static char*
-GetRegValue			_ANSI_ARGS_((char *path, char *attribute));
+GetRegValue			(char *path, char *attribute);
 
-EXTERN EXPORT(int,Tkined_Init)	_ANSI_ARGS_((Tcl_Interp *interp));
+EXTERN EXPORT(int,Tkined_Init)	(Tcl_Interp *interp);
 
 
 /*

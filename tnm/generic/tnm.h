@@ -111,46 +111,46 @@ typedef long LONG;
  */
 
 EXTERN int
-Tnm_MapObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_MapObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_JobObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_JobObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_MibObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_MibObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_NetdbObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_NetdbObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_SnmpObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_SnmpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_IcmpObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_IcmpObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_SyslogObjCmd _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_SyslogObjCmd (ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_UdpObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_UdpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_DnsObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_DnsObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_NtpObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_NtpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_SunrpcObjCmd _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_SunrpcObjCmd (ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_InedObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_InedObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_SmxObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_SmxObjCmd	(ClientData clientData, Tcl_Interp *interp,
+			     int objc, Tcl_Obj *CONST objv[]);
 EXTERN int
-Tnm_SmiObjCmd	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]));
+Tnm_SmiObjCmd	(ClientData clientData, Tcl_Interp *interp, 
+			     int objc, Tcl_Obj *CONST objv[]);
 
 #endif /* _TNM */
