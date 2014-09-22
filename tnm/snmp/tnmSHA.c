@@ -340,3 +340,4 @@ char *sha_version(void)
 }
 
 #endif /* SHA_FOR_C */
+

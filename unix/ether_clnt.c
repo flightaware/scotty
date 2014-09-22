@@ -9,9 +9,7 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 etherstat *
-etherproc_getdata_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+etherproc_getdata_1(void *argp, CLIENT *clnt)
 {
 	static etherstat clnt_res;
 
@@ -26,9 +24,7 @@ etherproc_getdata_1(argp, clnt)
 }
 
 void *
-etherproc_on_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+etherproc_on_1(void *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
@@ -43,9 +39,7 @@ etherproc_on_1(argp, clnt)
 }
 
 void *
-etherproc_off_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+etherproc_off_1(void *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
@@ -60,9 +54,7 @@ etherproc_off_1(argp, clnt)
 }
 
 etheraddrs *
-etherproc_getsrcdata_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+etherproc_getsrcdata_1(void *argp, CLIENT *clnt)
 {
 	static etheraddrs clnt_res;
 
@@ -77,9 +69,7 @@ etherproc_getsrcdata_1(argp, clnt)
 }
 
 etheraddrs *
-etherproc_getdstdata_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+etherproc_getdstdata_1(void *argp, CLIENT *clnt)
 {
 	static etheraddrs clnt_res;
 
@@ -94,9 +84,7 @@ etherproc_getdstdata_1(argp, clnt)
 }
 
 void *
-etherproc_selectsrc_1(argp, clnt)
-	addrmask *argp;
-	CLIENT *clnt;
+etherproc_selectsrc_1(addrmask *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
@@ -111,9 +99,7 @@ etherproc_selectsrc_1(argp, clnt)
 }
 
 void *
-etherproc_selectdst_1(argp, clnt)
-	addrmask *argp;
-	CLIENT *clnt;
+etherproc_selectdst_1(addrmask *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
@@ -128,9 +114,7 @@ etherproc_selectdst_1(argp, clnt)
 }
 
 void *
-etherproc_selectproto_1(argp, clnt)
-	addrmask *argp;
-	CLIENT *clnt;
+etherproc_selectproto_1(addrmask *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
@@ -145,9 +129,7 @@ etherproc_selectproto_1(argp, clnt)
 }
 
 void *
-etherproc_selectlnth_1(argp, clnt)
-	addrmask *argp;
-	CLIENT *clnt;
+etherproc_selectlnth_1(addrmask *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
@@ -160,3 +142,5 @@ etherproc_selectlnth_1(argp, clnt)
 	}
 	return ((void *)&clnt_res);
 }
+
+

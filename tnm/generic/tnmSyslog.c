@@ -111,9 +111,7 @@ AssocDeleteProc	(ClientData clientData, Tcl_Interp *interp);
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     SyslogControl *control = (SyslogControl *) clientData;
 
@@ -143,11 +141,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 int
-Tnm_SyslogObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_SyslogObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int x, level, code;
     char *ident = NULL;
@@ -247,3 +241,4 @@ Tnm_SyslogObjCmd(clientData, interp, objc, objv)
 
     return TCL_OK;
 }
+

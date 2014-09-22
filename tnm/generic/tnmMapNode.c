@@ -107,8 +107,7 @@ TnmMapItemType tnmNodeType = {
  */
 
 static void
-NodeDeleteProc(itemPtr)
-    TnmMapItem *itemPtr;
+NodeDeleteProc(TnmMapItem *itemPtr)
 {
     int i;
 
@@ -141,11 +140,7 @@ repeat:
  */
 
 static int
-NodeCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NodeCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);
@@ -160,3 +155,4 @@ NodeCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

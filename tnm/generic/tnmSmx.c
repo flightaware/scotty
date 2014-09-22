@@ -221,9 +221,7 @@ SmxReceiveProc		(ClientData clientData, int mask);
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     SmxControl *control = (SmxControl *) clientData;
 
@@ -250,9 +248,7 @@ AssocDeleteProc(clientData, interp)
  *----------------------------------------------------------------------
  */
 
-static Run* SmxNewRun(control, runid)
-    SmxControl *control;
-    unsigned runid;
+static Run* SmxNewRun(SmxControl *control, unsigned runid)
 {
     Run *runPtr;
 
@@ -283,9 +279,7 @@ static Run* SmxNewRun(control, runid)
  *----------------------------------------------------------------------
  */
 
-static Run* SmxGetRunFromId(control, runid)
-    SmxControl *control;
-    unsigned runid;
+static Run* SmxGetRunFromId(SmxControl *control, unsigned runid)
 {
     Run *runPtr;
 
@@ -313,9 +307,7 @@ static Run* SmxGetRunFromId(control, runid)
  *----------------------------------------------------------------------
  */
 
-static Run* SmxGetRunFromInterp(control, interp)
-    SmxControl *control;
-    Tcl_Interp *interp;
+static Run* SmxGetRunFromInterp(SmxControl *control, Tcl_Interp *interp)
 {
     Run *runPtr;
 
@@ -345,9 +337,7 @@ static Run* SmxGetRunFromInterp(control, interp)
  */
 
 static void
-SmxDeleteRun(control, runid)
-    SmxControl *control;
-    unsigned runid;
+SmxDeleteRun(SmxControl *control, unsigned runid)
 {
     Run **rPtrPtr, *runPtr;
 
@@ -382,10 +372,7 @@ SmxDeleteRun(control, runid)
 
 
 static void
-SmxAbortRun(interp, control, runPtr)
-    Tcl_Interp *interp;
-    SmxControl *control;
-    Run *runPtr;
+SmxAbortRun(Tcl_Interp *interp, SmxControl *control, Run *runPtr)
 {
     CONST char *msg;
     int i;
@@ -459,9 +446,7 @@ SmxAbortRun(interp, control, runPtr)
  *----------------------------------------------------------------------
  */
 
-static void SmxHello(interp, id)
-    Tcl_Interp *interp;
-    int id;
+static void SmxHello(Tcl_Interp *interp, int id)
 {
     char *smxCookie = getenv("SMX_COOKIE");
     SmxControl *control = (SmxControl *)
@@ -487,13 +472,7 @@ static void SmxHello(interp, id)
  *----------------------------------------------------------------------
  */
 
-static void SmxStart(interp, id, runid, script, profile, argument)
-    Tcl_Interp *interp;
-    int id;
-    unsigned runid;
-    char *script;
-    char *profile;
-    char *argument;
+static void SmxStart(Tcl_Interp *interp, int id, unsigned runid, char *script, char *profile, char *argument)
 {
     Run *runPtr;
     int i, code, objc, argc;
@@ -634,10 +613,7 @@ static void SmxStart(interp, id, runid, script, profile, argument)
  *----------------------------------------------------------------------
  */
 
-static void SmxSuspend(interp, id, runid)
-    Tcl_Interp *interp;
-    int id;
-    unsigned runid;
+static void SmxSuspend(Tcl_Interp *interp, int id, unsigned runid)
 {
     Run *runPtr;
     SmxControl *control = (SmxControl *)
@@ -676,10 +652,7 @@ static void SmxSuspend(interp, id, runid)
  *----------------------------------------------------------------------
  */
 
-static void SmxResume(interp, id, runid)
-    Tcl_Interp *interp;
-    int id;
-    unsigned runid;
+static void SmxResume(Tcl_Interp *interp, int id, unsigned runid)
 {
     Run *runPtr;
     SmxControl *control = (SmxControl *)
@@ -718,10 +691,7 @@ static void SmxResume(interp, id, runid)
  *----------------------------------------------------------------------
  */
 
-static void SmxAbort(interp, id, runid)
-    Tcl_Interp *interp;
-    int id;
-    unsigned runid;
+static void SmxAbort(Tcl_Interp *interp, int id, unsigned runid)
 {
     Run *runPtr;
     SmxControl *control = (SmxControl *)
@@ -759,10 +729,7 @@ static void SmxAbort(interp, id, runid)
  *----------------------------------------------------------------------
  */
 
-static void SmxStatus(interp, id, runid)
-    Tcl_Interp *interp;
-    int id;
-    unsigned runid;
+static void SmxStatus(Tcl_Interp *interp, int id, unsigned runid)
 {
     Run *runPtr;
     SmxControl *control = (SmxControl *)
@@ -798,10 +765,7 @@ static void SmxStatus(interp, id, runid)
  */
 
 static void
-SmxAppendHexString(dst, src, len)
-    char *dst;
-    CONST char *src;
-    int len;
+SmxAppendHexString(char *dst, CONST char *src, int len)
 {
     char *p;
     int i;
@@ -834,10 +798,7 @@ SmxAppendHexString(dst, src, len)
  */
 
 static void
-SmxAppendQuotedString(dst, src, len)
-    char *dst;
-    CONST char *src;
-    int len;
+SmxAppendQuotedString(char *dst, CONST char *src, int len)
 {
     char *p;
     int i;
@@ -903,10 +864,7 @@ SmxAppendQuotedString(dst, src, len)
  */
 
 static void
-SmxAppendHexOrQuotedString(dst, src, len)
-    char *dst;
-    CONST char *src;
-    int len;
+SmxAppendHexOrQuotedString(char *dst, CONST char *src, int len)
 {
     int i;
 
@@ -949,13 +907,7 @@ SmxAppendHexOrQuotedString(dst, src, len)
  *----------------------------------------------------------------------
  */
 
-static void SmxReply(control, reply, id, runPtr, msg, msglen)
-    SmxControl *control;
-    int reply;
-    int id;
-    Run *runPtr;
-    CONST char *msg;
-    int msglen;
+static void SmxReply(SmxControl *control, int reply, int id, Run *runPtr, CONST char *msg, int msglen)
 {
     char *line;
     int n;
@@ -1082,10 +1034,7 @@ static void SmxReply(control, reply, id, runPtr, msg, msglen)
  *----------------------------------------------------------------------
  */
 
-static char *SmxParseRunId(line, id, runid)
-    char *line;
-    int id;
-    unsigned *runid;
+static char *SmxParseRunId(char *line, int id, unsigned *runid)
 {
     char *ptr;
     
@@ -1114,10 +1063,7 @@ static char *SmxParseRunId(line, id, runid)
  *----------------------------------------------------------------------
  */
 
-static char *SmxParseQuotedString(line, dst, len)
-    char *line;
-    char **dst;
-    int *len;
+static char *SmxParseQuotedString(char *line, char **dst, int *len)
 {
     char *ptr, last;
 
@@ -1176,10 +1122,7 @@ static char *SmxParseQuotedString(line, dst, len)
  *----------------------------------------------------------------------
  */
 
-static char *SmxParseHexString(line, dst, len)
-    char *line;
-    char **dst;
-    int *len;
+static char *SmxParseHexString(char *line, char **dst, int *len)
 {
     char *ptr;
     int i, c;
@@ -1224,10 +1167,7 @@ static char *SmxParseHexString(line, dst, len)
  *----------------------------------------------------------------------
  */
 
-static char *SmxParseHexOrQuotedString(line, dst, len)
-    char *line;
-    char **dst;
-    int *len;
+static char *SmxParseHexOrQuotedString(char *line, char **dst, int *len)
 {
     char *ptr;
 
@@ -1259,9 +1199,7 @@ static char *SmxParseHexOrQuotedString(line, dst, len)
  *----------------------------------------------------------------------
  */
 
-static char *SmxParseProfileString(line, dst)
-    char *line;
-    char **dst;
+static char *SmxParseProfileString(char *line, char **dst)
 {
     char *ptr;
     
@@ -1299,9 +1237,7 @@ static char *SmxParseProfileString(line, dst)
  *----------------------------------------------------------------------
  */
 
-static int SmxParse(line, interp)
-    char *line;
-    Tcl_Interp *interp;
+static int SmxParse(char *line, Tcl_Interp *interp)
 {
     char *ptr;
     char *cmd, *script, *profile, *argument;
@@ -1415,9 +1351,7 @@ static int SmxParse(line, interp)
  */
 
 static void
-SmxReceiveProc(clientData, mask)
-    ClientData clientData;
-    int mask;
+SmxReceiveProc(ClientData clientData, int mask)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     static Tcl_DString *in = NULL;
@@ -1477,8 +1411,7 @@ SmxReceiveProc(clientData, mask)
  */
 
 int
-TnmSmxInit(interp)
-    Tcl_Interp *interp;
+TnmSmxInit(Tcl_Interp *interp)
 {
     char *smxPort = getenv("SMX_PORT");
     char *smxCookie = getenv("SMX_COOKIE");
@@ -1574,11 +1507,7 @@ TnmSmxInit(interp)
  */
 
 int
-Tnm_SmxObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_SmxObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     char *msg;
     int msglen, result, code;
@@ -1775,3 +1704,4 @@ Tnm_SmxObjCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

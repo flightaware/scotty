@@ -101,11 +101,7 @@ TnmMapItemType tnmGroupType = {
  */
 
 static int
-GroupCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+GroupCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);
@@ -120,3 +116,4 @@ GroupCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

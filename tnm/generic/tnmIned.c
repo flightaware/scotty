@@ -146,9 +146,7 @@ static TnmTable tkiTypeTable[] = {
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     InedControl *control = (InedControl *) clientData;
 
@@ -192,8 +190,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static int
-InedInitialize(interp)
-    Tcl_Interp *interp;
+InedInitialize(Tcl_Interp *interp)
 {
     Tcl_Channel channel;
     char *path = NULL, *tmp, *p;
@@ -345,8 +342,7 @@ InedFatal()
  */
 
 static void
-InedQueue(interp)
-    Tcl_Interp *interp;
+InedQueue(Tcl_Interp *interp)
 {
     Tcl_Channel channel;
     char msg[256];
@@ -395,8 +391,7 @@ InedQueue(interp)
  */
 
 static void
-InedFlushProc(clientData)
-    ClientData clientData;
+InedFlushProc(ClientData clientData)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     InedFlushQueue(interp);
@@ -419,8 +414,7 @@ InedFlushProc(clientData)
  */
 
 static void
-InedFlushQueue(interp)
-    Tcl_Interp *interp;
+InedFlushQueue(Tcl_Interp *interp)
 {
     Message *p, *m;
     
@@ -461,9 +455,7 @@ InedFlushQueue(interp)
  */
 
 static void
-InedAppendQueue(interp, msg)
-    Tcl_Interp *interp;
-    char *msg;
+InedAppendQueue(Tcl_Interp *interp, char *msg)
 {
     Message *np, *p;
     
@@ -514,8 +506,7 @@ InedAppendQueue(interp, msg)
  */
 
 static char*
-InedGets(interp)
-    Tcl_Interp *interp;
+InedGets(Tcl_Interp *interp)
 {
     Tcl_Channel channel;
     Tcl_DString line;
@@ -565,11 +556,7 @@ InedGets(interp)
  */
 
 static int
-InedCompCmd(cmd, interp, argc, argv)
-    char *cmd;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+InedCompCmd(char *cmd, Tcl_Interp *interp, int argc, char **argv)
 {
     int type = TnmGetTableKey(tkiTypeTable, argv[0]);
     if (type < 0 || (type == TKINED_NONE) || (type == TKINED_ALL)) {
@@ -664,11 +651,7 @@ InedCompCmd(cmd, interp, argc, argv)
  */
 
 int
-Tnm_InedObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_InedObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     Tcl_Channel channel;
     int i;
@@ -816,9 +799,7 @@ Tnm_InedObjCmd(clientData, interp, objc, objv)
  */
 
 static void
-InedReceiveProc (clientData, mask)
-    ClientData clientData;
-    int mask;
+InedReceiveProc (ClientData clientData, int mask)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     char *cmd = InedGets(interp);
@@ -833,3 +814,4 @@ InedReceiveProc (clientData, mask)
     Tcl_MutexUnlock(&inedMutex);
     InedFlushQueue(interp);
 }
+

@@ -73,11 +73,7 @@ static TnmConfig config = {
  */
 
 int
-TnmMapItemConfigure(itemPtr, interp, objc, objv)
-    TnmMapItem *itemPtr;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+TnmMapItemConfigure(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     config.optionTable = itemPtr->typePtr->configTable;
     return TnmSetConfig(interp, &config, (ClientData) itemPtr, objc, objv);
@@ -105,11 +101,7 @@ TnmMapItemConfigure(itemPtr, interp, objc, objv)
  */
 
 int
-TnmMapItemObjCmd(itemPtr, interp, objc, objv)
-    TnmMapItem *itemPtr;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int i, cmd, result = TCL_OK;
     char *pattern = NULL;
@@ -387,9 +379,7 @@ TnmMapItemObjCmd(itemPtr, interp, objc, objv)
  *---------------------------------------------------------------------- */
 
 void
-TnmMapItemCmdList(itemPtr, interp)
-    TnmMapItem *itemPtr;
-    Tcl_Interp *interp;
+TnmMapItemCmdList(TnmMapItem *itemPtr, Tcl_Interp *interp)
 {
     TnmTable *elemPtr, *newCmdTable;
     int i;
@@ -430,10 +420,7 @@ TnmMapItemCmdList(itemPtr, interp)
  */
 
 static Tcl_Obj*
-GetOption(interp, object, option)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
+GetOption(Tcl_Interp *interp, ClientData object, int option)
 {
     TnmMapItem *itemPtr = (TnmMapItem *) object;
     Tcl_Obj *objPtr = NULL;
@@ -521,11 +508,7 @@ GetOption(interp, object, option)
  */
 
 static int
-SetOption(interp, object, option, objPtr)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
-    Tcl_Obj *objPtr;
+SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     TnmMapItem *itemPtr = (TnmMapItem *) object;
     TnmMapItem *linkPtr, *iPtr;
@@ -758,9 +741,7 @@ SetOption(interp, object, option, objPtr)
  */
 
 void
-TnmMapItemDump(itemPtr, interp)
-    TnmMapItem *itemPtr;
-    Tcl_Interp *interp;
+TnmMapItemDump(TnmMapItem *itemPtr, Tcl_Interp *interp)
 {
     Tcl_DString ds;
     TnmTable *elemPtr;
@@ -839,10 +820,7 @@ TnmMapItemDump(itemPtr, interp)
  */
 
 TnmMapItem*
-TnmMapFindItem(interp, mapPtr, name)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    char *name;
+TnmMapFindItem(Tcl_Interp *interp, TnmMap *mapPtr, char *name)
 {
     Tcl_CmdInfo info;
     TnmMapItem *itemPtr;
@@ -872,3 +850,4 @@ TnmMapFindItem(interp, mapPtr, name)
 
     return itemPtr;
 }
+

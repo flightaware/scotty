@@ -69,8 +69,7 @@ Tcl_ObjType tnmOidType = {
  */
 
 int
-TnmIsOid(string)
-    char *string;
+TnmIsOid(char *string)
 {
     char *c, isHex;
 
@@ -112,8 +111,7 @@ TnmIsOid(string)
  */
 
 char*
-TnmHexToOid(str)
-    char *str;
+TnmHexToOid(char *str)
 {
     static char expstr[TNM_OID_MAX_SIZE * 8];
     char *p, *s;
@@ -183,8 +181,7 @@ TnmHexToOid(str)
  */
 
 void
-TnmOidInit(oidPtr)
-    TnmOid *oidPtr;
+TnmOidInit(TnmOid *oidPtr)
 {
     oidPtr->elements = oidPtr->staticSpace;
     oidPtr->length = 0;
@@ -211,8 +208,7 @@ TnmOidInit(oidPtr)
  */
 
 void
-TnmOidFree(oidPtr)
-    TnmOid *oidPtr;
+TnmOidFree(TnmOid *oidPtr)
 {
     if (oidPtr) {
 	if (oidPtr->elements != oidPtr->staticSpace) {
@@ -247,9 +243,7 @@ TnmOidFree(oidPtr)
  */
 
 void
-TnmOidSetLength(oidPtr, length)
-    TnmOid *oidPtr;
-    int length;
+TnmOidSetLength(TnmOid *oidPtr, int length)
 {
     if (length > oidPtr->spaceAvl) {
 	int i, size;
@@ -296,9 +290,7 @@ TnmOidSetLength(oidPtr, length)
  */
 
 int
-TnmOidAppend(oidPtr, value)
-    TnmOid *oidPtr;
-    u_int value;
+TnmOidAppend(TnmOid *oidPtr, u_int value)
 {
     short length = TnmOidGetLength(oidPtr);
     if (length == TNM_OID_MAX_SIZE) {
@@ -327,9 +319,7 @@ TnmOidAppend(oidPtr, value)
  */
 
 int
-TnmOidFromString(oidPtr, string)
-    TnmOid *oidPtr;
-    char *string;
+TnmOidFromString(TnmOid *oidPtr, char *string)
 {
     int i, len;
     char *c, isHex;
@@ -431,8 +421,7 @@ TnmOidFromString(oidPtr, string)
  */
 
 char*
-TnmOidToString(oidPtr)
-    TnmOid *oidPtr;
+TnmOidToString(TnmOid *oidPtr)
 {
     int i;
     static char buf[TNM_OID_MAX_SIZE * 8];
@@ -479,9 +468,7 @@ TnmOidToString(oidPtr)
  */
 
 void
-TnmOidCopy(dstOidPtr, srcOidPtr)
-    TnmOid *dstOidPtr;
-    TnmOid *srcOidPtr;
+TnmOidCopy(TnmOid *dstOidPtr, TnmOid *srcOidPtr)
 {
     int i;
 
@@ -550,9 +537,7 @@ TnmOidCompare(oidPtr1, oidPtr2)
  */
 
 int
-TnmOidInTree(treePtr, oidPtr)
-    TnmOid *treePtr;
-    TnmOid *oidPtr;
+TnmOidInTree(TnmOid *treePtr, TnmOid *oidPtr)
 {
     int i;
 
@@ -591,9 +576,7 @@ TnmOidInTree(treePtr, oidPtr)
  */
 
 TnmOid*
-TnmGetOidFromObj(interp, objPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
+TnmGetOidFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     int result;
 
@@ -625,8 +608,7 @@ TnmGetOidFromObj(interp, objPtr)
  */
 
 Tcl_Obj*
-TnmNewOidObj(oidPtr)
-    TnmOid *oidPtr;
+TnmNewOidObj(TnmOid *oidPtr)
 {
     Tcl_Obj *objPtr;
     TnmOid *newOidPtr;
@@ -667,9 +649,7 @@ TnmNewOidObj(oidPtr)
  */
 
 void
-TnmSetOidObj(objPtr, oidPtr)
-    Tcl_Obj *objPtr;
-    TnmOid *oidPtr;
+TnmSetOidObj(Tcl_Obj *objPtr, TnmOid *oidPtr)
 {
     register Tcl_ObjType *oldTypePtr = objPtr->typePtr;
 
@@ -857,8 +837,7 @@ errorExit:
  */
 
 static void
-UpdateStringOfOid(objPtr)
-    Tcl_Obj *objPtr;
+UpdateStringOfOid(Tcl_Obj *objPtr)
 {
     TnmOid *oidPtr = (TnmOid *) objPtr->internalRep.twoPtrValue.ptr1;
     int isOid = (TnmOidObjGetRep(objPtr) == TNM_OID_AS_OID);
@@ -910,3 +889,4 @@ UpdateStringOfOid(objPtr)
  * compile-command: "make -k -C ../../unix"
  * End:
  */
+

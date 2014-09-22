@@ -90,8 +90,7 @@ static CmdInfo tnmCmds[] = {
  */
 
 static void
-InitVars(interp)
-    Tcl_Interp *interp;
+InitVars(Tcl_Interp *interp)
 {
     CONST char *machine, *os, *vers, *user;
     char *tmp, *p;
@@ -262,9 +261,7 @@ InitVars(interp)
  */
 
 static int
-SourceRcFile(interp, fileName)
-    Tcl_Interp *interp;
-    char *fileName;
+SourceRcFile(Tcl_Interp *interp, char *fileName)
 {
     Tcl_DString temp;
     char *fullName;
@@ -313,8 +310,7 @@ SourceRcFile(interp, fileName)
  */
 
 static int
-SourceInitFiles(interp)
-    Tcl_Interp *interp;
+SourceInitFiles(Tcl_Interp *interp)
 {
     char *fileName;
     CONST char *library;
@@ -370,9 +366,7 @@ SourceInitFiles(interp)
  */
 
 static int
-InitCmds(interp, safe)
-    Tcl_Interp *interp;
-    int safe;
+InitCmds(Tcl_Interp *interp, int safe)
 {
     CmdInfo *cmdInfoPtr;
     Tcl_CmdInfo info;
@@ -439,9 +433,7 @@ InitCmds(interp, safe)
  */
 
 int
-TnmInit(interp, safe)
-    Tcl_Interp *interp;
-    int safe;
+TnmInit(Tcl_Interp *interp, int safe)
 {
 
 #ifdef USE_TCL_STUBS
@@ -474,3 +466,4 @@ TnmInit(interp, safe)
 
     return SourceInitFiles(interp);
 }
+

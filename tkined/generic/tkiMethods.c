@@ -253,9 +253,7 @@ TimeOutProc	   (ClientData clientData);
  */
 
 static void
-RemoveObject (table, object)
-     Tki_Object **table;
-     Tki_Object *object;
+RemoveObject (Tki_Object **table, Tki_Object *object)
 {
     int i, j;
 
@@ -277,9 +275,7 @@ RemoveObject (table, object)
  */
 
 static void
-dump_move (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_move (Tcl_Interp *interp, Tki_Object *object)
 {
     sprintf (buffer, "ined -noupdate move $%s %.2f %.2f\n",
 	     object->id, object->x, object->y);
@@ -287,9 +283,7 @@ dump_move (interp, object)
 }
 
 static void
-dump_icon (interp, object)
-     Tcl_Interp *interp;
-     Tki_Object *object;
+dump_icon (Tcl_Interp *interp, Tki_Object *object)
 {
     if (*(object->icon) != '\0') {
 
@@ -303,9 +297,7 @@ dump_icon (interp, object)
 }
 
 static void
-dump_name (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_name (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "ined -noupdate name $", 
 		      object->id, (char *) NULL);
@@ -314,9 +306,7 @@ dump_name (interp, object)
 }
 
 static void
-dump_address (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_address (Tcl_Interp *interp, Tki_Object *object)
 {
     if (*(object->address) != '\0') {
         Tcl_AppendResult (interp, "ined -noupdate address $",
@@ -327,9 +317,7 @@ dump_address (interp, object)
 }
     
 static void
-dump_oid (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_oid (Tcl_Interp *interp, Tki_Object *object)
 {
     if (object->oid != 0) {
 	sprintf (buffer, "ined -noupdate oid $%s \"%d\"\n",
@@ -339,9 +327,7 @@ dump_oid (interp, object)
 }
 
 static void
-dump_font (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_font (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "ined -noupdate font $", 
 		      object->id, (char *) NULL);
@@ -350,9 +336,7 @@ dump_font (interp, object)
 }
 
 static void
-dump_color (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_color (Tcl_Interp *interp, Tki_Object *object)
 {
     if (strlen(object->color) > 0 && strcmp(object->color, "black") != 0) {
         Tcl_AppendResult (interp, "ined -noupdate color $",
@@ -363,9 +347,7 @@ dump_color (interp, object)
 }
 
 static void
-dump_label (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_label (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "ined -noupdate label $", object->id, 
 		      (char *) NULL);
@@ -374,9 +356,7 @@ dump_label (interp, object)
 }
 
 static void
-dump_scale (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_scale (Tcl_Interp *interp, Tki_Object *object)
 {
     sprintf (buffer, "ined -noupdate scale $%s %.2f\n", 
 	     object->id, object->scale);
@@ -384,18 +364,14 @@ dump_scale (interp, object)
 }
 
 static void
-dump_size (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_size (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "ined -noupdate size $", object->id, " ", 
 		      object->size, "\n", (char *) NULL);
 }
 
 static void
-dump_attributes (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+dump_attributes (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_HashEntry *ht_entry;
     Tcl_HashSearch ht_search;
@@ -426,8 +402,7 @@ typedef struct ObjectElem {
 static ObjectElem *resizeList = NULL;
 
 static void
-ParentUpdateProc (clientData)
-     ClientData clientData;
+ParentUpdateProc (ClientData clientData)
 {
     char *tmp = "reset";
 
@@ -454,9 +429,7 @@ ParentUpdateProc (clientData)
 }
 
 static void
-parent_resize (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+parent_resize (Tcl_Interp *interp, Tki_Object *object)
 {
     Tki_Object *parent = object->parent;
 
@@ -501,9 +474,7 @@ parent_resize (interp, object)
  */
 
 static void
-update_links (interp, object)
-     Tcl_Interp *interp;
-     Tki_Object *object;
+update_links (Tcl_Interp *interp, Tki_Object *object)
 {
     switch (object->type) {
       case TKINED_LINK: 
@@ -544,11 +515,7 @@ update_links (interp, object)
  */
 
 static void 
-m_network_link_end (interp, network, sx, sy)
-    Tcl_Interp *interp;
-    Tki_Object *network;
-    double *sx;
-    double *sy;
+m_network_link_end (Tcl_Interp *interp, Tki_Object *network, double *sx, double *sy)
 {
     int found = 0;
     int i, j, n;
@@ -639,8 +606,7 @@ m_network_link_end (interp, network, sx, sy)
 static Tcl_HashTable *linkUpdateTablePtr = NULL;
 
 static void
-LinkUpdateProc (clientData)
-     ClientData clientData;
+LinkUpdateProc (ClientData clientData)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     Tcl_HashEntry *entryPtr;
@@ -665,11 +631,7 @@ LinkUpdateProc (clientData)
 }
 
 static int
-m_link_update (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_link_update (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int dummy;
     Tcl_HashEntry *entryPtr;
@@ -836,11 +798,7 @@ m_link_update (interp, object, argc, argv)
  */
 
 static int 
-m_node_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_node_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -860,11 +818,7 @@ m_node_create (interp, object, argc, argv)
  */
 
 static int 
-m_group_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_group_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -888,11 +842,7 @@ m_group_create (interp, object, argc, argv)
  */
 
 static int 
-m_network_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_network_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -937,11 +887,7 @@ m_network_create (interp, object, argc, argv)
  */
 
 static int 
-m_link_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_link_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -982,11 +928,7 @@ m_link_create (interp, object, argc, argv)
  */
 
 static int 
-m_text_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_text_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1009,11 +951,7 @@ m_text_create (interp, object, argc, argv)
  */
 
 static int 
-m_image_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_image_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
     char *file;
@@ -1044,11 +982,7 @@ m_image_create (interp, object, argc, argv)
  */
 
 static void
-AcceptProc(clientData, channel, hostName, port)
-    ClientData clientData;
-    Tcl_Channel channel;
-    char *hostName;
-    int port;
+AcceptProc(ClientData clientData, Tcl_Channel channel, char *hostName, int port)
 {
     int code;
     Tki_Object *object = (Tki_Object *) clientData;
@@ -1085,8 +1019,7 @@ AcceptProc(clientData, channel, hostName, port)
  */
 
 static void
-TimeOutProc(clientData)
-    ClientData clientData;
+TimeOutProc(ClientData clientData)
 {
     Tki_Object *object = (Tki_Object *) clientData;
 
@@ -1100,11 +1033,7 @@ TimeOutProc(clientData)
  */
 
 static int 
-m_interpreter_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_interpreter_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1312,11 +1241,7 @@ m_interpreter_create (interp, object, argc, argv)
  */
 
 static int 
-m_menu_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_menu_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
     char *freeme;
@@ -1341,11 +1266,7 @@ m_menu_create (interp, object, argc, argv)
  */
 
 static int
-m_log_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_log_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     char *user;
     static unsigned lastid = 0;
@@ -1379,11 +1300,7 @@ m_log_create (interp, object, argc, argv)
  */
 
 static int
-m_ref_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_ref_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1401,11 +1318,7 @@ m_ref_create (interp, object, argc, argv)
  */
 
 static int
-m_strip_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_strip_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1423,11 +1336,7 @@ m_strip_create (interp, object, argc, argv)
  */
 
 static int
-m_bar_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_bar_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1446,11 +1355,7 @@ m_bar_create (interp, object, argc, argv)
  */
 
 static int
-m_graph_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_graph_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1470,11 +1375,7 @@ m_graph_create (interp, object, argc, argv)
  */
 
 static int
-m_data_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_data_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1492,11 +1393,7 @@ m_data_create (interp, object, argc, argv)
  */
 
 static int
-m_event_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_event_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     static unsigned lastid = 0;
 
@@ -1515,11 +1412,7 @@ m_event_create (interp, object, argc, argv)
  */
 
 int
-m_create (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     switch (object->type) {
  case TKINED_NODE: 
@@ -1561,11 +1454,7 @@ m_create (interp, object, argc, argv)
  */
 
 static int 
-m_node_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_node_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     sprintf (buffer, "%u", object->oid);
     Tcl_AppendElement (interp, "NODE");
@@ -1583,11 +1472,7 @@ m_node_retrieve (interp, object, argc, argv)
  */
 
 static int 
-m_group_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_group_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     sprintf (buffer, "%u", object->oid);
     Tcl_AppendElement (interp, "GROUP");
@@ -1615,11 +1500,7 @@ m_group_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_network_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_network_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {    
     sprintf (buffer, "%u", object->oid);
     Tcl_AppendElement (interp, "NETWORK");
@@ -1637,11 +1518,7 @@ m_network_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_link_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_link_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "LINK");
     Tcl_AppendElement (interp, object->id);
@@ -1656,11 +1533,7 @@ m_link_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_text_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_text_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "TEXT");
     Tcl_AppendElement (interp, object->id);
@@ -1674,11 +1547,7 @@ m_text_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_image_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_image_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "IMAGE");
     Tcl_AppendElement (interp, object->id);
@@ -1692,11 +1561,7 @@ m_image_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_interpreter_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_interpreter_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "INTERPRETER");
     Tcl_AppendElement (interp, object->id);
@@ -1710,11 +1575,7 @@ m_interpreter_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_menu_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_menu_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "MENU");
     Tcl_AppendElement (interp, object->id);
@@ -1729,11 +1590,7 @@ m_menu_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_log_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_log_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "LOG");
     Tcl_AppendElement (interp, object->id);
@@ -1748,11 +1605,7 @@ m_log_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_ref_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_ref_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "REFERENCE");
     Tcl_AppendElement (interp, object->id);
@@ -1767,11 +1620,7 @@ m_ref_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_strip_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_strip_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "STRIPCHART");
     Tcl_AppendElement (interp, object->id);
@@ -1786,11 +1635,7 @@ m_strip_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_bar_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_bar_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "BARCHART");
     Tcl_AppendElement (interp, object->id);
@@ -1805,11 +1650,7 @@ m_bar_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_graph_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_graph_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "GRAPH");
     Tcl_AppendElement (interp, object->id);
@@ -1824,11 +1665,7 @@ m_graph_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_data_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_data_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "DATA");
     Tcl_AppendElement (interp, object->id);
@@ -1843,11 +1680,7 @@ m_data_retrieve (interp, object, argc, argv)
  */
 
 static int
-m_event_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_event_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_AppendElement (interp, "EVENT");
     Tcl_AppendElement (interp, object->id);
@@ -1861,11 +1694,7 @@ m_event_retrieve (interp, object, argc, argv)
  */
 
 int
-m_retrieve (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_retrieve (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     switch (object->type) {
  case TKINED_NODE: 
@@ -1908,11 +1737,7 @@ m_retrieve (interp, object, argc, argv)
  */
 
 int
-m_type (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_type (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_SetResult (interp, type_to_string (object->type), TCL_STATIC);
 
@@ -1924,11 +1749,7 @@ m_type (interp, object, argc, argv)
  */
 
 int 
-m_id (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_id (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_SetResult (interp, object->id, TCL_STATIC);
 
@@ -1940,11 +1761,7 @@ m_id (interp, object, argc, argv)
  */
 
 int
-m_parent (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_parent (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_SetResult (interp, 
 		   object->parent ? object->parent->id : "", TCL_STATIC);
@@ -1957,11 +1774,7 @@ m_parent (interp, object, argc, argv)
  */
 
 int
-m_name (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_name (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -1991,11 +1804,7 @@ m_name (interp, object, argc, argv)
  */
 
 int 
-m_canvas (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_canvas (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc > 0 ) {
 
@@ -2038,11 +1847,7 @@ m_canvas (interp, object, argc, argv)
  */
 
 int
-m_editor (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_editor (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
 
     if (argc == 1) {
@@ -2074,11 +1879,7 @@ m_editor (interp, object, argc, argv)
  */
 
 int
-m_items (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_items (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
         STRCOPY (object->items, argv[0]);
@@ -2094,11 +1895,7 @@ m_items (interp, object, argc, argv)
  */
 
 int
-m_address (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_address (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -2123,11 +1920,7 @@ m_address (interp, object, argc, argv)
  */
 
 int
-m_oid (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_oid (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int result;
     
@@ -2152,11 +1945,7 @@ m_oid (interp, object, argc, argv)
  */
 
 int
-m_action (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_action (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -2177,11 +1966,7 @@ m_action (interp, object, argc, argv)
  */
 
 int
-m_select (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_select (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if ((!object->selected) && (*(object->canvas) != '\0')) {
 	object->selected = 1;
@@ -2203,11 +1988,7 @@ m_select (interp, object, argc, argv)
  */
 
 int
-m_unselect (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_unselect (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (object->selected) {
 	object->selected = 0;
@@ -2228,11 +2009,7 @@ m_unselect (interp, object, argc, argv)
  */
 
 int
-m_selected (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_selected (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_ResetResult (interp);
     sprintf (interp->result, "%d", object->selected);
@@ -2245,11 +2022,7 @@ m_selected (interp, object, argc, argv)
  */
 
 int
-m_icon (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_icon (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     char *tmp = "reset";
 
@@ -2339,11 +2112,7 @@ m_icon (interp, object, argc, argv)
  */
 
 int
-m_label (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_label (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc > 0) {
 
@@ -2395,11 +2164,7 @@ m_label (interp, object, argc, argv)
  */
 
 int
-m_font (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_font (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int selected = (object->selected && object->type == TKINED_TEXT);
 
@@ -2453,11 +2218,7 @@ m_font (interp, object, argc, argv)
  */
 
 int
-m_color (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_color (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -2501,11 +2262,7 @@ m_color (interp, object, argc, argv)
  */
 
 int
-m_move (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_move (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 2) {
 
@@ -2585,11 +2342,7 @@ m_move (interp, object, argc, argv)
  */
 
 int
-m_raise (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_raise (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_VarEval (interp, type_to_string (object->type),
 		 "__raise ", object->id, (char *) NULL);
@@ -2608,11 +2361,7 @@ m_raise (interp, object, argc, argv)
  */
 
 int
-m_lower (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_lower (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
 
     Tcl_VarEval (interp, type_to_string (object->type),
@@ -2645,11 +2394,7 @@ m_lower (interp, object, argc, argv)
  */
 
 int
-m_size (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_size (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int ret;
 
@@ -2704,9 +2449,7 @@ m_size (interp, object, argc, argv)
  */
 
 static int 
-m_node_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_node_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create NODE ]\n", (char *) NULL);
@@ -2731,9 +2474,7 @@ m_node_dump (interp, object)
  */
 
 static int
-m_group_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_group_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     int i;
     double dx = 0, dy = 0;
@@ -2786,9 +2527,7 @@ m_group_dump (interp, object)
  */
 
 static int
-m_network_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_network_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create NETWORK ", 
@@ -2812,9 +2551,7 @@ m_network_dump (interp, object)
  */
 
 static int
-m_link_dump(interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_link_dump(Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create LINK $", object->src->id, 
@@ -2832,9 +2569,7 @@ m_link_dump(interp, object)
  */
 
 static int
-m_text_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_text_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create TEXT ", (char *) NULL);
@@ -2853,9 +2588,7 @@ m_text_dump (interp, object)
  */
 
 static int
-m_image_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_image_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create IMAGE ", (char *) NULL);
@@ -2873,9 +2606,7 @@ m_image_dump (interp, object)
  */
 
 static int
-m_interpreter_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_interpreter_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     /* remove the absolute path name to make saved files more portable */
 
@@ -2907,9 +2638,7 @@ m_interpreter_dump (interp, object)
  */
 
 static int
-m_log_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_log_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create LOG ]\n", (char *) NULL);
@@ -2925,9 +2654,7 @@ m_log_dump (interp, object)
  */
 
 static int
-m_ref_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_ref_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     Tcl_AppendResult (interp, "set ", object->id, 
 		      " [ ined -noupdate create REFERENCE ]\n", (char *) NULL);
@@ -2950,9 +2677,7 @@ m_ref_dump (interp, object)
  */
 
 static int
-m_strip_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_strip_dump (Tcl_Interp *interp, Tki_Object *object)
 {
 #if 0
     char *values = NULL;
@@ -2996,9 +2721,7 @@ m_strip_dump (interp, object)
  */
 
 static int
-m_bar_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_bar_dump (Tcl_Interp *interp, Tki_Object *object)
 {
 #if 0
     char *values = NULL;
@@ -3042,9 +2765,7 @@ m_bar_dump (interp, object)
  */
 
 static int
-m_graph_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_graph_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     int i;
     
@@ -3078,9 +2799,7 @@ m_graph_dump (interp, object)
  */
 
 static int
-m_data_dump (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+m_data_dump (Tcl_Interp *interp, Tki_Object *object)
 {
     char *values = NULL;
 
@@ -3114,9 +2833,7 @@ m_data_dump (interp, object)
 }
 
 void
-Tki_DumpObject (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+Tki_DumpObject (Tcl_Interp *interp, Tki_Object *object)
 {
     switch (object->type) {
  case TKINED_NODE:
@@ -3168,11 +2885,7 @@ Tki_DumpObject (interp, object)
  * protocol to applications.
  */
 
-int m_dump (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+int m_dump (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     char *p;
 
@@ -3190,11 +2903,7 @@ int m_dump (interp, object, argc, argv)
  */
 
 int
-m_src (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_src (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_SetResult (interp, object->src ? object->src->id : "", TCL_STATIC);
     return TCL_OK;
@@ -3205,11 +2914,7 @@ m_src (interp, object, argc, argv)
  */
 
 int
-m_dst (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_dst (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_SetResult (interp, object->dst ? object->dst->id : "", TCL_STATIC);
     return TCL_OK;
@@ -3221,11 +2926,7 @@ m_dst (interp, object, argc, argv)
  */
 
 int
-m_text (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_text (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -3258,11 +2959,7 @@ m_text (interp, object, argc, argv)
  */
 
 int
-m_append (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_append (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int i;
     char *p;
@@ -3292,11 +2989,7 @@ m_append (interp, object, argc, argv)
  */
 
 int
-m_hyperlink (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_hyperlink (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int i;
     char *p;
@@ -3327,11 +3020,7 @@ m_hyperlink (interp, object, argc, argv)
  */
 
 int
-m_interpreter (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_interpreter (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_SetResult (interp, object->links, TCL_STATIC);
     return TCL_OK;
@@ -3344,11 +3033,7 @@ m_interpreter (interp, object, argc, argv)
  */
 
 int
-m_clear (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_clear (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (object->type == TKINED_GRAPH) {
 	if (object->valuePtr) {
@@ -3376,11 +3061,7 @@ m_clear (interp, object, argc, argv)
  */
 
 int
-m_scale (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_scale (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -3404,11 +3085,7 @@ m_scale (interp, object, argc, argv)
  */
 
 int
-m_values (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_values (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
 #define MAX_STATIC_POINTS 256
     if (object->type == TKINED_GRAPH) {
@@ -3492,11 +3169,7 @@ m_values (interp, object, argc, argv)
  */
 
 int
-m_jump (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_jump (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -3522,11 +3195,7 @@ m_jump (interp, object, argc, argv)
  */
 
 int
-m_member (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_member (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc > 0) {
 
@@ -3614,11 +3283,7 @@ m_member (interp, object, argc, argv)
  */
 
 int
-m_collapse (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_collapse (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (!object->collapsed) {
 
@@ -3707,11 +3372,7 @@ m_collapse (interp, object, argc, argv)
  */
 
 int
-m_expand (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_expand (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (object->collapsed) {
 
@@ -3770,11 +3431,7 @@ m_expand (interp, object, argc, argv)
  */
 
 int
-m_collapsed (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_collapsed (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_ResetResult (interp);
     sprintf (interp->result, "%d", object->collapsed);
@@ -3786,11 +3443,7 @@ m_collapsed (interp, object, argc, argv)
  */
 
 int
-m_ungroup (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_ungroup (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int i;
 
@@ -3819,11 +3472,7 @@ m_ungroup (interp, object, argc, argv)
  */
 
 int
-m_links (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_links (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
         STRCOPY (object->links, argv[0]);
@@ -3839,11 +3488,7 @@ m_links (interp, object, argc, argv)
  */
 
 int
-m_points (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_points (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -3888,11 +3533,7 @@ m_points (interp, object, argc, argv)
  */
 
 int 
-m_network_labelxy (interp, network, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *network;
-    int argc;
-    char **argv;
+m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **argv)
 {
     int found = 0;
     int i, j, n;
@@ -3963,11 +3604,7 @@ m_network_labelxy (interp, network, argc, argv)
  */
 
 int
-m_send (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_send (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int len, code;
     char *args;
@@ -4012,11 +3649,7 @@ m_send (interp, object, argc, argv)
  */
 
 int
-m_bell (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_bell (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_VarEval (interp, type_to_string (object->type),
 		 "__bell ", object->id, (char *) NULL);
@@ -4033,11 +3666,7 @@ m_bell (interp, object, argc, argv)
  */
 
 static void
-m_linked_delete (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_linked_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int i, largc;
     char **largv;
@@ -4060,11 +3689,7 @@ m_linked_delete (interp, object, argc, argv)
  */
 
 static void
-m_link_delete (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_link_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (object->src) {
 	ldelete (interp, object->src->links, object->id);
@@ -4081,11 +3706,7 @@ m_link_delete (interp, object, argc, argv)
  */
 
 static void
-m_group_delete (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_group_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (object->member) {	
 	while (object->member[0]) {
@@ -4101,11 +3722,7 @@ m_group_delete (interp, object, argc, argv)
  */
 
 static void
-m_interpreter_delete (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_interpreter_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (object->trace && object->editor) 
 	object->editor->traceCount--;
@@ -4137,11 +3754,7 @@ m_interpreter_delete (interp, object, argc, argv)
  */
 
 int
-m_delete (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     switch (object->type) {
  case TKINED_NODE: 
@@ -4205,11 +3818,7 @@ m_delete (interp, object, argc, argv)
  */
 
 int
-m_postscript (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_postscript (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int rc;
 
@@ -4230,11 +3839,7 @@ m_postscript (interp, object, argc, argv)
  */
 
 int 
-m_attribute (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_attribute (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_HashEntry *ht_entry;
 
@@ -4292,11 +3897,7 @@ m_attribute (interp, object, argc, argv)
  */
 
 int 
-m_flash (interp, object, argc, argv)
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+m_flash (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     if (argc == 1) {
 
@@ -4333,4 +3934,5 @@ m_flash (interp, object, argc, argv)
 
     return TCL_OK;
 }
+
 

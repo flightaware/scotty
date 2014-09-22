@@ -45,10 +45,7 @@ typedef struct SocketHandler {
 static SocketHandler *socketHandlerList = NULL;
 
 int
-TnmSocket(domain, type, protocol)
-    int domain;
-    int type;
-    int protocol;
+TnmSocket(int domain, int type, int protocol)
 {
     int s = socket(domain, type, protocol);
     if (s == INVALID_SOCKET) {
@@ -59,10 +56,7 @@ TnmSocket(domain, type, protocol)
 }
 
 int
-TnmSocketBind(s, name, namelen)
-    int s;
-    struct sockaddr *name;
-    int namelen;
+TnmSocketBind(int s, struct sockaddr *name, int namelen)
 {
     int e = bind(s, name, namelen);
     if (e == SOCKET_ERROR) {
@@ -72,13 +66,7 @@ TnmSocketBind(s, name, namelen)
 }
 
 int
-TnmSocketSendTo(s, buf, len, flags, to, tolen)
-    int s;
-    char *buf;
-    int len;
-    int flags;
-    struct sockaddr *to;
-    int tolen;
+TnmSocketSendTo(int s, char *buf, int len, int flags, struct sockaddr *to, int tolen)
 {
     int n = sendto(s, buf, len, flags, to, tolen);
     if (n == SOCKET_ERROR) {
@@ -88,13 +76,7 @@ TnmSocketSendTo(s, buf, len, flags, to, tolen)
 }
 
 int
-TnmSocketRecvFrom(s, buf, len, flags, from, fromlen)
-    int s;
-    char *buf;
-    int len;
-    int flags;
-    struct sockaddr *from;
-    int *fromlen;
+TnmSocketRecvFrom(int s, char *buf, int len, int flags, struct sockaddr *from, int *fromlen)
 {
     int n = recvfrom(s, buf, len, flags, from, fromlen);
 
@@ -118,8 +100,7 @@ TnmSocketRecvFrom(s, buf, len, flags, from, fromlen)
     return (n == SOCKET_ERROR) ? TNM_SOCKET_ERROR : n;
 }
 
-int TnmSocketClose(s)
-    int s;
+int TnmSocketClose(int s)
 {
     int e = closesocket(s);
     if (e == INVALID_SOCKET) {
@@ -129,11 +110,7 @@ int TnmSocketClose(s)
 }
 
 void
-TnmCreateSocketHandler(sock, mask, proc, clientData)
-    int sock;
-    int mask;
-    TnmSocketProc *proc;
-    ClientData clientData;
+TnmCreateSocketHandler(int sock, int mask, TnmSocketProc *proc, ClientData clientData)
 {
     SocketHandler *shPtr;
 
@@ -149,8 +126,7 @@ TnmCreateSocketHandler(sock, mask, proc, clientData)
 }
 
 void
-TnmDeleteSocketHandler(sock)
-    int sock;
+TnmDeleteSocketHandler(int sock)
 {
     SocketHandler **shPtrPtr;
 
@@ -166,3 +142,4 @@ TnmDeleteSocketHandler(sock)
 	}
     }
 }
+

@@ -71,9 +71,7 @@ WalkTree	(Tcl_Interp *interp, Tcl_Obj *varName,
  */
 
 static TnmMibType*
-GetMibType(interp, objPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
+GetMibType(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     TnmMibType *typePtr = TnmMibFindType(Tcl_GetStringFromObj(objPtr,NULL));
     if (! typePtr) {
@@ -109,11 +107,7 @@ GetMibType(interp, objPtr)
  */
 
 static TnmMibNode*
-GetMibNode(interp, objPtr, oidPtrPtr, nodeOidPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    TnmOid **oidPtrPtr;
-    TnmOid *nodeOidPtr;
+GetMibNode(Tcl_Interp *interp, Tcl_Obj *objPtr, TnmOid **oidPtrPtr, TnmOid *nodeOidPtr)
 {
     TnmMibNode *nodePtr = NULL;
     TnmOid *oidPtr;
@@ -161,11 +155,7 @@ GetMibNode(interp, objPtr, oidPtrPtr, nodeOidPtr)
  */
 
 static int
-GetMibNodeOrType(interp, objPtr, typePtrPtr, nodePtrPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    TnmMibType **typePtrPtr;
-    TnmMibNode **nodePtrPtr;
+GetMibNodeOrType(Tcl_Interp *interp, Tcl_Obj *objPtr, TnmMibType **typePtrPtr, TnmMibNode **nodePtrPtr)
 {
     *nodePtrPtr = (TnmMibNode *) NULL;
     *typePtrPtr = GetMibType(interp, objPtr);
@@ -208,11 +198,7 @@ GetMibNodeOrType(interp, objPtr, typePtrPtr, nodePtrPtr)
  */
 
 static TnmMibNode*
-GetMibColumnNode(interp, objPtr, oidPtrPtr, nodeOidPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    TnmOid **oidPtrPtr;
-    TnmOid *nodeOidPtr;
+GetMibColumnNode(Tcl_Interp *interp, Tcl_Obj *objPtr, TnmOid **oidPtrPtr, TnmOid *nodeOidPtr)
 {
     TnmMibNode *nodePtr;
     
@@ -268,11 +254,7 @@ GetMibColumnNode(interp, objPtr, oidPtrPtr, nodeOidPtr)
  */
 
 static Tcl_Obj*
-GetIndexList(interp, nodePtr, indexNodeList, implied)
-    Tcl_Interp *interp;
-    TnmMibNode *nodePtr;
-    TnmMibNode ***indexNodeList;
-    int *implied;
+GetIndexList(Tcl_Interp *interp, TnmMibNode *nodePtr, TnmMibNode ***indexNodeList, int *implied)
 {
     int i, code = TCL_OK, idxc;
     Tcl_Obj *idxObj, **idxv;
@@ -367,9 +349,7 @@ GetIndexList(interp, nodePtr, indexNodeList, implied)
  */
 
 int
-TnmMibLoadFile(interp, objPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
+TnmMibLoadFile(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     Tcl_DString fileBuffer, frozenFileBuffer;
     CONST char *library, *cache, *arch;
@@ -556,8 +536,7 @@ TnmMibLoadFile(interp, objPtr)
  */
 
 int
-TnmMibLoadCore(interp)
-    Tcl_Interp *interp;
+TnmMibLoadCore(Tcl_Interp *interp)
 {
     Tcl_Obj *listPtr, *part1Ptr, *part2Ptr, **objv;
     int i, objc;
@@ -607,8 +586,7 @@ TnmMibLoadCore(interp)
  */
 
 int
-TnmMibLoad(interp)
-    Tcl_Interp *interp;
+TnmMibLoad(Tcl_Interp *interp)
 {
     Tcl_Obj *listPtr, *part1Ptr, *part2Ptr, **objv;
     int i, objc;
@@ -669,13 +647,7 @@ TnmMibLoad(interp)
  */
 
 static int
-WalkTree(interp, varName, body, nodePtr, oidPtr, rootPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *varName;
-    Tcl_Obj *body;
-    TnmMibNode* nodePtr;
-    TnmOid *oidPtr;
-    TnmOid *rootPtr;
+WalkTree(Tcl_Interp *interp, Tcl_Obj *varName, Tcl_Obj *body, TnmMibNode* nodePtr, TnmOid *oidPtr, TnmOid *rootPtr)
 {
     int result = TCL_OK;
     int length = TnmOidGetLength(oidPtr);
@@ -742,11 +714,7 @@ WalkTree(interp, varName, body, nodePtr, oidPtr, rootPtr)
  */
 
 int
-Tnm_MibObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int	objc;
-    Tcl_Obj *CONST objv[];
+Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
 {
     TnmMibNode *nodePtr;
     TnmMibType *typePtr;
@@ -1593,3 +1561,4 @@ Tnm_MibObjCmd(clientData, interp, objc, objv)
     return TCL_OK;
 }
     
+

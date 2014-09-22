@@ -1372,3 +1372,4 @@ Tki_BarchartInit ()
     Tk_CreateItemType((Tk_ItemType *) &TkBarchartType);
 }
 
+

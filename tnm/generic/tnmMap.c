@@ -160,9 +160,7 @@ static TnmConfig configTable = {
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     MapControl *control = (MapControl *) clientData;
 
@@ -195,8 +193,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static void
-TickProc(clientData)
-    ClientData clientData;
+TickProc(ClientData clientData)
 {
     TnmMap *mapPtr = (TnmMap *) clientData;
     TnmMapItem *itemPtr;
@@ -281,8 +278,7 @@ TickProc(clientData)
  */
 
 void
-TnmMapRegisterItemType(itemType)
-    TnmMapItemType *itemType;
+TnmMapRegisterItemType(TnmMapItemType *itemType)
 {
     itemType->nextPtr = itemTypes;
     itemTypes = itemType;
@@ -305,9 +301,7 @@ TnmMapRegisterItemType(itemType)
  */
 
 static TnmMapItemType*
-GetItemType(interp, name)
-    Tcl_Interp *interp;
-    char *name;
+GetItemType(Tcl_Interp *interp, char *name)
 {
     TnmMapItemType *typePtr;
 
@@ -339,11 +333,7 @@ GetItemType(interp, name)
  */
 
 static int
-CreateItem(interp, mapPtr, objc, objv)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+CreateItem(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItemType *typePtr;
     TnmMapItem *itemPtr;
@@ -430,8 +420,7 @@ CreateItem(interp, mapPtr, objc, objv)
  */
 
 static void
-ItemDeleteProc(clientData)
-    ClientData clientData;
+ItemDeleteProc(ClientData clientData)
 {
     TnmMapItem **itemPtrPtr;
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
@@ -552,9 +541,7 @@ repeat:
  */
 
 static int
-SortProc(first, second)
-    CONST VOID *first;
-    CONST VOID *second;
+SortProc(CONST VOID *first, CONST VOID *second)
 {
     TnmMapItem *firstItem = *((TnmMapItem **) first);
     TnmMapItem *secondItem = *((TnmMapItem **) second);
@@ -611,11 +598,7 @@ SortProc(first, second)
  */
 
 static int
-FindItems(interp, mapPtr, objc, objv)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+FindItems(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr, **itemVector;
     TnmMapItemType *typePtr = NULL;
@@ -760,10 +743,7 @@ FindItems(interp, mapPtr, objc, objv)
  */
 
 static int
-CreateMap(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+CreateMap(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMap *mapPtr, *p;
     static unsigned nextid = 0;
@@ -840,8 +820,7 @@ CreateMap(interp, objc, objv)
  */
 
 static void
-MapDeleteProc(clientData)
-    ClientData clientData;
+MapDeleteProc(ClientData clientData)
 {
     TnmMap **mapPtrPtr;
     TnmMap *mapPtr = (TnmMap *) clientData;
@@ -894,8 +873,7 @@ MapDeleteProc(clientData)
  */
 
 static void
-MapDestroyProc(memPtr)
-    char *memPtr;
+MapDestroyProc(char *memPtr)
 {
     TnmMap *map = (TnmMap *) memPtr;
 
@@ -923,10 +901,7 @@ MapDestroyProc(memPtr)
  */
 
 static Tcl_Obj*
-GetOption(interp, object, option)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
+GetOption(Tcl_Interp *interp, ClientData object, int option)
 {
     TnmMap *mapPtr = (TnmMap *) object;
     static char *freeme = NULL;
@@ -974,11 +949,7 @@ GetOption(interp, object, option)
  */
 
 static int
-SetOption(interp, object, option, objPtr)
-    Tcl_Interp *interp;
-    ClientData object; 
-    int option;
-    Tcl_Obj *objPtr;
+SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     TnmMap *mapPtr = (TnmMap *) object;
     int num;
@@ -1067,11 +1038,7 @@ SetOption(interp, object, option, objPtr)
  */
 
 static void
-DumpMapProc(interp, mapPtr, itemPtr, dsPtr)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
-    Tcl_DString *dsPtr;
+DumpMapProc(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, Tcl_DString *dsPtr)
 {
     char *tok, *val;
     CONST char *str;
@@ -1153,9 +1120,7 @@ DumpMapProc(interp, mapPtr, itemPtr, dsPtr)
  */
 
 static int
-DumpMap(interp, mapPtr)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
+DumpMap(Tcl_Interp *interp, TnmMap *mapPtr)
 {
     TnmMapItem *itemPtr;
     Tcl_DString ds;
@@ -1201,9 +1166,7 @@ DumpMap(interp, mapPtr)
  */
 
 static void
-ClearMap(interp, mapPtr)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
+ClearMap(Tcl_Interp *interp, TnmMap *mapPtr)
 {
  repeat:
     if (mapPtr->itemList) {
@@ -1231,10 +1194,7 @@ ClearMap(interp, mapPtr)
  */
 
 static int
-LoadMap(interp, mapPtr, channelName)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    char *channelName;
+LoadMap(Tcl_Interp *interp, TnmMap *mapPtr, char *channelName)
 {
     int mode, code, offset, valid;
     Tcl_Channel channel;
@@ -1319,10 +1279,7 @@ LoadMap(interp, mapPtr, channelName)
  */
 
 static int
-SaveMap(interp, mapPtr, channelName)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    char *channelName;
+SaveMap(Tcl_Interp *interp, TnmMap *mapPtr, char *channelName)
 {
     Tcl_Channel channel;
     Tcl_DString ds;
@@ -1406,11 +1363,7 @@ SaveMap(interp, mapPtr, channelName)
  */
 
 static int
-CopyMap(interp, mapPtr, objc, objv)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+CopyMap(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr, **itemv;
     Tcl_CmdInfo info;
@@ -1490,10 +1443,7 @@ CopyMap(interp, mapPtr, objc, objv)
  *---------------------------------------------------------------------- */
 
 static int
-PasteMap(interp, mapPtr, script)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    Tcl_DString *script;
+PasteMap(Tcl_Interp *interp, TnmMap *mapPtr, Tcl_DString *script)
 {
     int code;
     char *value;
@@ -1541,11 +1491,7 @@ PasteMap(interp, mapPtr, script)
  */
 
 static int
-MapObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMap *mapPtr = (TnmMap *) clientData;
     int result;
@@ -1824,11 +1770,7 @@ MapObjCmd(clientData, interp, objc, objv)
  */
 
 static int
-FindMaps(interp, control, objc, objv)
-    Tcl_Interp *interp;
-    MapControl *control;
-    int objc;
-    Tcl_Obj *CONST objv[];
+FindMaps(Tcl_Interp *interp, MapControl *control, int objc, Tcl_Obj *CONST objv[])
 {
     int i, result;
     TnmMap *mapPtr;
@@ -1895,11 +1837,7 @@ FindMaps(interp, control, objc, objv)
  */
 
 int
-Tnm_MapObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMap *mapPtr;
     TnmMapItemType *typePtr;
@@ -2004,3 +1942,4 @@ Tnm_MapObjCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

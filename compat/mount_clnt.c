@@ -13,9 +13,7 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 void *
-mountproc_null_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+mountproc_null_1(void *argp, CLIENT *clnt)
 {
 	static char res;
 
@@ -30,9 +28,7 @@ mountproc_null_1(argp, clnt)
 }
 
 fhstatus *
-mountproc_mnt_1(argp, clnt)
-	dirpath *argp;
-	CLIENT *clnt;
+mountproc_mnt_1(dirpath *argp, CLIENT *clnt)
 {
 	static fhstatus res;
 
@@ -44,9 +40,7 @@ mountproc_mnt_1(argp, clnt)
 }
 
 mountlist *
-mountproc_dump_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+mountproc_dump_1(void *argp, CLIENT *clnt)
 {
 	static mountlist res;
 
@@ -58,9 +52,7 @@ mountproc_dump_1(argp, clnt)
 }
 
 void *
-mountproc_umnt_1(argp, clnt)
-	dirpath *argp;
-	CLIENT *clnt;
+mountproc_umnt_1(dirpath *argp, CLIENT *clnt)
 {
 	static char res;
 
@@ -72,9 +64,7 @@ mountproc_umnt_1(argp, clnt)
 }
 
 void *
-mountproc_umntall_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+mountproc_umntall_1(void *argp, CLIENT *clnt)
 {
 	static char res;
 
@@ -86,9 +76,7 @@ mountproc_umntall_1(argp, clnt)
 }
 
 exports *
-mountproc_export_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+mountproc_export_1(void *argp, CLIENT *clnt)
 {
 	static exports res;
 
@@ -100,9 +88,7 @@ mountproc_export_1(argp, clnt)
 }
 
 exports *
-mountproc_exportall_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+mountproc_exportall_1(void *argp, CLIENT *clnt)
 {
 	static exports res;
 
@@ -112,3 +98,4 @@ mountproc_exportall_1(argp, clnt)
 	}
 	return (&res);
 }
+

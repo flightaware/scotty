@@ -89,8 +89,7 @@ static TnmTable eventTable[] = {
  */
 
 static void
-EventDeleteProc(clientData)
-    ClientData clientData;
+EventDeleteProc(ClientData clientData)
 {
     TnmMapEvent **eventPtrPtr;
     TnmMapEvent *eventPtr = (TnmMapEvent *) clientData;
@@ -139,11 +138,7 @@ EventDeleteProc(clientData)
  */
 
 TnmMapEvent*
-TnmMapCreateUserEvent(mapPtr, itemPtr, name, args)
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
-    char *name;
-    char *args;
+TnmMapCreateUserEvent(TnmMap *mapPtr, TnmMapItem *itemPtr, char *name, char *args)
 {
     size_t size;
     TnmMapEvent *eventPtr;
@@ -207,10 +202,7 @@ TnmMapCreateUserEvent(mapPtr, itemPtr, name, args)
  */
 
 void
-TnmMapCreateEvent(type, itemPtr, eventData)
-    int type;
-    TnmMapItem *itemPtr;
-    char *eventData;
+TnmMapCreateEvent(int type, TnmMapItem *itemPtr, char *eventData)
 {
     TnmMapEvent event, *eventPtr = &event;
     char *eventName;
@@ -261,8 +253,7 @@ TnmMapCreateEvent(type, itemPtr, eventData)
  */
 
 void
-TnmMapRaiseEvent(eventPtr)
-    TnmMapEvent *eventPtr;
+TnmMapRaiseEvent(TnmMapEvent *eventPtr)
 {
     TnmMapItem *itemPtr;
     TnmMap *mapPtr;
@@ -313,9 +304,7 @@ TnmMapRaiseEvent(eventPtr)
  */
 
 void
-TnmMapExpireEvents(eventListPtr, expireTime)
-    TnmMapEvent **eventListPtr;
-    long expireTime;
+TnmMapExpireEvents(TnmMapEvent **eventListPtr, long expireTime)
 {
     TnmMapEvent *evtPtr;
 
@@ -346,11 +335,7 @@ nextEvent:
  */
 
 static int
-EventObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+EventObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapEvent *eventPtr = (TnmMapEvent *) clientData;
     char buffer[20];
@@ -434,8 +419,7 @@ EventObjCmd(clientData, interp, objc, objv)
  */
 
 static void
-BindDeleteProc(clientData)
-    ClientData clientData;
+BindDeleteProc(ClientData clientData)
 {
     TnmMapBind **bindPtrPtr;
     TnmMapBind *bindPtr = (TnmMapBind *) clientData;
@@ -486,11 +470,7 @@ BindDeleteProc(clientData)
  */
 
 TnmMapBind*
-TnmMapUserBinding(mapPtr, itemPtr, pattern, script)
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
-    char *pattern;
-    char *script;
+TnmMapUserBinding(TnmMap *mapPtr, TnmMapItem *itemPtr, char *pattern, char *script)
 {
     TnmMapBind *bindPtr;
     size_t size;
@@ -564,9 +544,7 @@ TnmMapUserBinding(mapPtr, itemPtr, pattern, script)
  */
 
 static int
-EvalBinding(eventPtr, bindList)
-    TnmMapEvent *eventPtr;
-    TnmMapBind *bindList;
+EvalBinding(TnmMapEvent *eventPtr, TnmMapBind *bindList)
 {
     TnmMapBind *bindPtr;
     char buf[20];
@@ -710,11 +688,7 @@ EvalBinding(eventPtr, bindList)
  */
 
 static int
-BindObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[]; 
+BindObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapBind *bindPtr = (TnmMapBind *) clientData;
     int result;
@@ -789,8 +763,7 @@ BindObjCmd(clientData, interp, objc, objv)
  */
 
 static void
-MsgDeleteProc(clientData)
-    ClientData clientData;
+MsgDeleteProc(ClientData clientData)
 {
     TnmMapMsg **msgPtrPtr;
     TnmMapMsg *msgPtr = (TnmMapMsg *) clientData;
@@ -841,11 +814,7 @@ MsgDeleteProc(clientData)
  */
 
 TnmMapMsg*
-TnmMapCreateMsg(mapPtr, itemPtr, tag, message)
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
-    Tcl_Obj *tag;
-    Tcl_Obj *message;
+TnmMapCreateMsg(TnmMap *mapPtr, TnmMapItem *itemPtr, Tcl_Obj *tag, Tcl_Obj *message)
 {
     size_t size;
     TnmMapMsg *msgPtr;
@@ -910,12 +879,7 @@ TnmMapCreateMsg(mapPtr, itemPtr, tag, message)
  */
 
 int
-TnmMapMsgCmd(interp, mapPtr, itemPtr, objc, objv)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
-    int objc;
-    Tcl_Obj *CONST objv[]; 
+TnmMapMsgCmd(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, int objc, Tcl_Obj *CONST objv[])
 {
     int result, optHealth = 0, optInterval = 0;
     TnmMapMsg *msgPtr;
@@ -989,8 +953,7 @@ TnmMapMsgCmd(interp, mapPtr, itemPtr, objc, objv)
  */
 
 static int
-SaveMsg(msgPtr)
-    TnmMapMsg *msgPtr;
+SaveMsg(TnmMapMsg *msgPtr)
 {
     Tcl_Obj *path = NULL;
     int code;
@@ -1039,9 +1002,7 @@ SaveMsg(msgPtr)
 }
 
 int
-MatchMsg(msgPtr, storeList)
-    TnmMapMsg *msgPtr;
-    Tcl_Obj *storeList;
+MatchMsg(TnmMapMsg *msgPtr, Tcl_Obj *storeList)
 {
     int i, code, objc;
     Tcl_Obj **objv;
@@ -1076,9 +1037,7 @@ MatchMsg(msgPtr, storeList)
  */
 
 void
-TnmMapExpireMsgs(msgListPtr, expireTime)
-    TnmMapMsg **msgListPtr;
-    long expireTime;
+TnmMapExpireMsgs(TnmMapMsg **msgListPtr, long expireTime)
 {
     TnmMapMsg *msgPtr;
     char *s;
@@ -1152,11 +1111,7 @@ nextMsg:
  */
 
 static int
-MsgObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[]; 
+MsgObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapMsg *msgPtr = (TnmMapMsg *) clientData;
     char buffer[20];
@@ -1227,3 +1182,4 @@ MsgObjCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

@@ -60,8 +60,7 @@ StdinProc		(ClientData clientData, int mask);
  */
 
 static void
-EventLoop(interp)
-    Tcl_Interp *interp;
+EventLoop(Tcl_Interp *interp)
 {
     while (Tcl_DoOneEvent(TCL_ALL_EVENTS)) {
         Tcl_DoOneEvent(TCL_DONT_WAIT|TCL_FILE_EVENTS);
@@ -88,8 +87,7 @@ EventLoop(interp)
  */
 
 int
-Tcl_AppInit(interp)
-    Tcl_Interp *interp;
+Tcl_AppInit(Tcl_Interp *interp)
 {
     if (Tcl_Init(interp) != TCL_OK) {
         return TCL_ERROR;
@@ -127,9 +125,7 @@ Tcl_AppInit(interp)
  */
 
 int
-main(argc, argv)
-    int argc;
-    const char *const *argv;
+main(int argc, const char *const *argv)
 {
     char buffer[512], *args; 
     const char *fileName = NULL;
@@ -428,3 +424,5 @@ defaultPrompt:
         Tcl_Flush(outChannel);
     }
 }
+
+

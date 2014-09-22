@@ -102,8 +102,7 @@ DllEntryPoint(hInst, reason, reserved)
  */
 
 static void
-FixPath(path)
-    char *path;
+FixPath(char *path)
 {
     if (path) {
 	for (; *path; path++) {
@@ -133,9 +132,7 @@ FixPath(path)
  */
 
 static char *
-GetRegValue(path, attribute)
-    char *path;
-    char *attribute;
+GetRegValue(char *path, char *attribute)
 {
     int code;
     HKEY key;
@@ -186,8 +183,7 @@ GetRegValue(path, attribute)
  */
 
 void
-TnmInitPath(interp)
-    Tcl_Interp *interp;
+TnmInitPath(Tcl_Interp *interp)
 {
     char *p, *path, *tclVersion, *tkVersion, *tclRoot;
     Tcl_DString ds;
@@ -338,8 +334,7 @@ TnmInitPath(interp)
  */
 
 void
-TnmInitDns(interp)
-    Tcl_Interp *interp;
+TnmInitDns(Tcl_Interp *interp)
 {
     char domain[MAXDNAME], *p;
     char *nameServer = NULL, *domainName = NULL;
@@ -474,3 +469,4 @@ EXPORT(int,Tnm_SafeInit)(interp)
 {
     return TnmInit(interp, 1);
 }
+

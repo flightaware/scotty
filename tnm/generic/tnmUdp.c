@@ -149,9 +149,7 @@ static TnmConfig config = {
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     UdpControl *control = (UdpControl *) clientData;
 
@@ -184,8 +182,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static void
-DeleteProc(clientData)
-    ClientData clientData;
+DeleteProc(ClientData clientData)
 {
     Udp **udpPtrPtr;
     Udp *udpPtr = (Udp *) clientData;
@@ -227,8 +224,7 @@ DeleteProc(clientData)
  */
 
 static void
-DestroyProc(memPtr)
-    char *memPtr;
+DestroyProc(char *memPtr)
 {
     Udp *udpPtr = (Udp *) memPtr;
 
@@ -264,9 +260,7 @@ DestroyProc(memPtr)
  */
 
 static void
-UdpEventProc(clientData, mask)
-    ClientData clientData;
-    int mask;
+UdpEventProc(ClientData clientData, int mask)
 {
     Udp *udpPtr = (Udp *) clientData;
     Tcl_Interp *interp = udpPtr->interp;
@@ -343,10 +337,7 @@ UdpEventProc(clientData, mask)
  */
 
 static int
-UdpCreate(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpCreate(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     static unsigned nextId = 0;
     int code, len;
@@ -445,11 +436,7 @@ UdpCreate(interp, objc, objv)
  */
 
 static int
-UdpConnect(interp, udpPtr, objc, objv)
-    Tcl_Interp *interp;
-    Udp *udpPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpConnect(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in name;
     char *host, *port;
@@ -502,11 +489,7 @@ UdpConnect(interp, udpPtr, objc, objv)
  */
 
 static int
-UdpSend(interp, udpPtr, objc, objv)
-    Tcl_Interp *interp;
-    Udp *udpPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in name;
     char *bytes;
@@ -581,11 +564,7 @@ UdpSend(interp, udpPtr, objc, objv)
  */
 
 static int
-UdpReceive(interp, udpPtr, objc, objv)
-    Tcl_Interp *interp;
-    Udp *udpPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpReceive(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     char msg[65535];
     int clen, len;
@@ -638,11 +617,7 @@ UdpReceive(interp, udpPtr, objc, objv)
  */
 
 static int
-UdpJoin(interp, udpPtr, objc, objv)
-    Tcl_Interp *interp;
-    Udp *udpPtr;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpJoin(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in name;
     struct ip_mreq mreq;
@@ -712,10 +687,7 @@ UdpJoin(interp, udpPtr, objc, objv)
  */
 
 static Tcl_Obj*
-GetOption(interp, object, option)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
+GetOption(Tcl_Interp *interp, ClientData object, int option)
 {
     Udp *udpPtr = (Udp *) object;
 #ifdef HAVE_MULTICAST
@@ -769,11 +741,7 @@ GetOption(interp, object, option)
  */
 
 static int
-SetOption(interp, object, option, objPtr)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
-    Tcl_Obj *objPtr;
+SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     int mask, length;
     Udp *udpPtr = (Udp *) object;
@@ -872,11 +840,7 @@ SetOption(interp, object, option, objPtr)
  */
 
 static int
-UdpObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int code, result;
     Udp *udpPtr = (Udp *) clientData;
@@ -983,10 +947,7 @@ UdpObjCmd(clientData, interp, objc, objv)
  */
 
 static int
-UdpFind(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+UdpFind(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int i, result;
     Udp *udpPtr;
@@ -1055,11 +1016,7 @@ UdpFind(interp, objc, objv)
  */
 
 int
-Tnm_UdpObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int cmd, result = TCL_OK;
     UdpControl *control = (UdpControl *) 
@@ -1109,3 +1066,4 @@ Tnm_UdpObjCmd(clientData, interp, objc, objv)
  * compile-command: "make -k -C ../../unix"
  * End:
  */
+

@@ -6,9 +6,7 @@
 #include "rstat.h"
 
 bool_t
-xdr_rstat_timeval(xdrs, objp)
-	register XDR *xdrs;
-	rstat_timeval *objp;
+xdr_rstat_timeval(register XDR *xdrs, rstat_timeval *objp)
 {
 
 	if (!xdr_u_int(xdrs, &objp->tv_sec))
@@ -19,9 +17,7 @@ xdr_rstat_timeval(xdrs, objp)
 }
 
 bool_t
-xdr_statstime(xdrs, objp)
-	register XDR *xdrs;
-	statstime *objp;
+xdr_statstime(register XDR *xdrs, statstime *objp)
 {
 
 	if (!xdr_vector(xdrs, (char *)objp->cp_time, CPUSTATES,
@@ -63,9 +59,7 @@ xdr_statstime(xdrs, objp)
 }
 
 bool_t
-xdr_statsswtch(xdrs, objp)
-	register XDR *xdrs;
-	statsswtch *objp;
+xdr_statsswtch(register XDR *xdrs, statsswtch *objp)
 {
 
 	if (!xdr_vector(xdrs, (char *)objp->cp_time, CPUSTATES,
@@ -105,9 +99,7 @@ xdr_statsswtch(xdrs, objp)
 }
 
 bool_t
-xdr_stats(xdrs, objp)
-	register XDR *xdrs;
-	stats *objp;
+xdr_stats(register XDR *xdrs, stats *objp)
 {
 
 	if (!xdr_vector(xdrs, (char *)objp->cp_time, CPUSTATES,
@@ -138,3 +130,5 @@ xdr_stats(xdrs, objp)
 		return (FALSE);
 	return (TRUE);
 }
+
+

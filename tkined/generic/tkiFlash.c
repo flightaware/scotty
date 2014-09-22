@@ -34,8 +34,7 @@ FlashProc		(ClientData clientData);
  */
 
 static void
-FlashProc (clientData)
-    ClientData clientData;
+FlashProc (ClientData clientData)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     Tki_Object *object;
@@ -131,9 +130,7 @@ FlashProc (clientData)
  */
 
 void
-TkiFlash (interp, object)
-    Tcl_Interp *interp;
-    Tki_Object *object;
+TkiFlash (Tcl_Interp *interp, Tki_Object *object)
 {
     FlashItem *p;
 
@@ -168,3 +165,4 @@ TkiFlash (interp, object)
 	p->nextPtr = NULL;
     }
 }
+

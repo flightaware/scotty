@@ -7,9 +7,7 @@
 #include "pcnfsd.h"
 
 bool_t
-xdr_ident(xdrs, objp)
-	XDR *xdrs;
-	ident *objp;
+xdr_ident(XDR *xdrs, ident *objp)
 {
 	if (!xdr_string(xdrs, objp, IDENTLEN)) {
 		return (FALSE);
@@ -18,9 +16,7 @@ xdr_ident(xdrs, objp)
 }
 
 bool_t
-xdr_message(xdrs, objp)
-	XDR *xdrs;
-	message *objp;
+xdr_message(XDR *xdrs, message *objp)
 {
 	if (!xdr_string(xdrs, objp, MESSAGELEN)) {
 		return (FALSE);
@@ -29,9 +25,7 @@ xdr_message(xdrs, objp)
 }
 
 bool_t
-xdr_password(xdrs, objp)
-	XDR *xdrs;
-	password *objp;
+xdr_password(XDR *xdrs, password *objp)
 {
 	if (!xdr_string(xdrs, objp, PASSWORDLEN)) {
 		return (FALSE);
@@ -40,9 +34,7 @@ xdr_password(xdrs, objp)
 }
 
 bool_t
-xdr_client(xdrs, objp)
-	XDR *xdrs;
-	client *objp;
+xdr_client(XDR *xdrs, client *objp)
 {
 	if (!xdr_string(xdrs, objp, CLIENTLEN)) {
 		return (FALSE);
@@ -51,9 +43,7 @@ xdr_client(xdrs, objp)
 }
 
 bool_t
-xdr_printername(xdrs, objp)
-	XDR *xdrs;
-	printername *objp;
+xdr_printername(XDR *xdrs, printername *objp)
 {
 	if (!xdr_string(xdrs, objp, PRINTERNAMELEN)) {
 		return (FALSE);
@@ -62,9 +52,7 @@ xdr_printername(xdrs, objp)
 }
 
 bool_t
-xdr_username(xdrs, objp)
-	XDR *xdrs;
-	username *objp;
+xdr_username(XDR *xdrs, username *objp)
 {
 	if (!xdr_string(xdrs, objp, USERNAMELEN)) {
 		return (FALSE);
@@ -73,9 +61,7 @@ xdr_username(xdrs, objp)
 }
 
 bool_t
-xdr_comment(xdrs, objp)
-	XDR *xdrs;
-	comment *objp;
+xdr_comment(XDR *xdrs, comment *objp)
 {
 	if (!xdr_string(xdrs, objp, COMMENTLEN)) {
 		return (FALSE);
@@ -84,9 +70,7 @@ xdr_comment(xdrs, objp)
 }
 
 bool_t
-xdr_spoolname(xdrs, objp)
-	XDR *xdrs;
-	spoolname *objp;
+xdr_spoolname(XDR *xdrs, spoolname *objp)
 {
 	if (!xdr_string(xdrs, objp, SPOOLNAMELEN)) {
 		return (FALSE);
@@ -95,9 +79,7 @@ xdr_spoolname(xdrs, objp)
 }
 
 bool_t
-xdr_printjobid(xdrs, objp)
-	XDR *xdrs;
-	printjobid *objp;
+xdr_printjobid(XDR *xdrs, printjobid *objp)
 {
 	if (!xdr_string(xdrs, objp, PRINTJOBIDLEN)) {
 		return (FALSE);
@@ -106,9 +88,7 @@ xdr_printjobid(xdrs, objp)
 }
 
 bool_t
-xdr_homedir(xdrs, objp)
-	XDR *xdrs;
-	homedir *objp;
+xdr_homedir(XDR *xdrs, homedir *objp)
 {
 	if (!xdr_string(xdrs, objp, OPTIONSLEN)) {
 		return (FALSE);
@@ -117,9 +97,7 @@ xdr_homedir(xdrs, objp)
 }
 
 bool_t
-xdr_options(xdrs, objp)
-	XDR *xdrs;
-	options *objp;
+xdr_options(XDR *xdrs, options *objp)
 {
 	if (!xdr_string(xdrs, objp, OPTIONSLEN)) {
 		return (FALSE);
@@ -128,9 +106,7 @@ xdr_options(xdrs, objp)
 }
 
 bool_t
-xdr_arstat(xdrs, objp)
-	XDR *xdrs;
-	arstat *objp;
+xdr_arstat(XDR *xdrs, arstat *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -139,9 +115,7 @@ xdr_arstat(xdrs, objp)
 }
 
 bool_t
-xdr_alrstat(xdrs, objp)
-	XDR *xdrs;
-	alrstat *objp;
+xdr_alrstat(XDR *xdrs, alrstat *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -150,9 +124,7 @@ xdr_alrstat(xdrs, objp)
 }
 
 bool_t
-xdr_pirstat(xdrs, objp)
-	XDR *xdrs;
-	pirstat *objp;
+xdr_pirstat(XDR *xdrs, pirstat *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -161,9 +133,7 @@ xdr_pirstat(xdrs, objp)
 }
 
 bool_t
-xdr_pcrstat(xdrs, objp)
-	XDR *xdrs;
-	pcrstat *objp;
+xdr_pcrstat(XDR *xdrs, pcrstat *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -172,9 +142,7 @@ xdr_pcrstat(xdrs, objp)
 }
 
 bool_t
-xdr_psrstat(xdrs, objp)
-	XDR *xdrs;
-	psrstat *objp;
+xdr_psrstat(XDR *xdrs, psrstat *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -183,9 +151,7 @@ xdr_psrstat(xdrs, objp)
 }
 
 bool_t
-xdr_mapreq(xdrs, objp)
-	XDR *xdrs;
-	mapreq *objp;
+xdr_mapreq(XDR *xdrs, mapreq *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -194,9 +160,7 @@ xdr_mapreq(xdrs, objp)
 }
 
 bool_t
-xdr_maprstat(xdrs, objp)
-	XDR *xdrs;
-	maprstat *objp;
+xdr_maprstat(XDR *xdrs, maprstat *objp)
 {
 	if (!xdr_enum(xdrs, (enum_t *)objp)) {
 		return (FALSE);
@@ -205,9 +169,7 @@ xdr_maprstat(xdrs, objp)
 }
 
 bool_t
-xdr_auth_args(xdrs, objp)
-	XDR *xdrs;
-	auth_args *objp;
+xdr_auth_args(XDR *xdrs, auth_args *objp)
 {
 	if (!xdr_ident(xdrs, &objp->id)) {
 		return (FALSE);
@@ -219,9 +181,7 @@ xdr_auth_args(xdrs, objp)
 }
 
 bool_t
-xdr_auth_results(xdrs, objp)
-	XDR *xdrs;
-	auth_results *objp;
+xdr_auth_results(XDR *xdrs, auth_results *objp)
 {
 	if (!xdr_arstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -236,9 +196,7 @@ xdr_auth_results(xdrs, objp)
 }
 
 bool_t
-xdr_pr_init_args(xdrs, objp)
-	XDR *xdrs;
-	pr_init_args *objp;
+xdr_pr_init_args(XDR *xdrs, pr_init_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -250,9 +208,7 @@ xdr_pr_init_args(xdrs, objp)
 }
 
 bool_t
-xdr_pr_init_results(xdrs, objp)
-	XDR *xdrs;
-	pr_init_results *objp;
+xdr_pr_init_results(XDR *xdrs, pr_init_results *objp)
 {
 	if (!xdr_pirstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -264,9 +220,7 @@ xdr_pr_init_results(xdrs, objp)
 }
 
 bool_t
-xdr_pr_start_args(xdrs, objp)
-	XDR *xdrs;
-	pr_start_args *objp;
+xdr_pr_start_args(XDR *xdrs, pr_start_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -287,9 +241,7 @@ xdr_pr_start_args(xdrs, objp)
 }
 
 bool_t
-xdr_pr_start_results(xdrs, objp)
-	XDR *xdrs;
-	pr_start_results *objp;
+xdr_pr_start_results(XDR *xdrs, pr_start_results *objp)
 {
 	if (!xdr_psrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -298,9 +250,7 @@ xdr_pr_start_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_info_args(xdrs, objp)
-	XDR *xdrs;
-	v2_info_args *objp;
+xdr_v2_info_args(XDR *xdrs, v2_info_args *objp)
 {
 	if (!xdr_comment(xdrs, &objp->vers)) {
 		return (FALSE);
@@ -312,9 +262,7 @@ xdr_v2_info_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_info_results(xdrs, objp)
-	XDR *xdrs;
-	v2_info_results *objp;
+xdr_v2_info_results(XDR *xdrs, v2_info_results *objp)
 {
 	if (!xdr_comment(xdrs, &objp->vers)) {
 		return (FALSE);
@@ -329,9 +277,7 @@ xdr_v2_info_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_init_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_init_args *objp;
+xdr_v2_pr_init_args(XDR *xdrs, v2_pr_init_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -346,9 +292,7 @@ xdr_v2_pr_init_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_init_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_init_results *objp;
+xdr_v2_pr_init_results(XDR *xdrs, v2_pr_init_results *objp)
 {
 	if (!xdr_pirstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -363,9 +307,7 @@ xdr_v2_pr_init_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_start_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_start_args *objp;
+xdr_v2_pr_start_args(XDR *xdrs, v2_pr_start_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -392,9 +334,7 @@ xdr_v2_pr_start_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_start_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_start_results *objp;
+xdr_v2_pr_start_results(XDR *xdrs, v2_pr_start_results *objp)
 {
 	if (!xdr_psrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -409,9 +349,7 @@ xdr_v2_pr_start_results(xdrs, objp)
 }
 
 bool_t
-xdr_pr_list(xdrs, objp)
-	XDR *xdrs;
-	pr_list *objp;
+xdr_pr_list(XDR *xdrs, pr_list *objp)
 {
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof(struct pr_list_item), xdr_pr_list_item)) {
 		return (FALSE);
@@ -420,9 +358,7 @@ xdr_pr_list(xdrs, objp)
 }
 
 bool_t
-xdr_pr_list_item(xdrs, objp)
-	XDR *xdrs;
-	pr_list_item *objp;
+xdr_pr_list_item(XDR *xdrs, pr_list_item *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -443,9 +379,7 @@ xdr_pr_list_item(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_list_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_list_results *objp;
+xdr_v2_pr_list_results(XDR *xdrs, v2_pr_list_results *objp)
 {
 	if (!xdr_comment(xdrs, &objp->cm)) {
 		return (FALSE);
@@ -457,9 +391,7 @@ xdr_v2_pr_list_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_queue_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_queue_args *objp;
+xdr_v2_pr_queue_args(XDR *xdrs, v2_pr_queue_args *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -480,9 +412,7 @@ xdr_v2_pr_queue_args(xdrs, objp)
 }
 
 bool_t
-xdr_pr_queue(xdrs, objp)
-	XDR *xdrs;
-	pr_queue *objp;
+xdr_pr_queue(XDR *xdrs, pr_queue *objp)
 {
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof(struct pr_queue_item), xdr_pr_queue_item)) {
 		return (FALSE);
@@ -491,9 +421,7 @@ xdr_pr_queue(xdrs, objp)
 }
 
 bool_t
-xdr_pr_queue_item(xdrs, objp)
-	XDR *xdrs;
-	pr_queue_item *objp;
+xdr_pr_queue_item(XDR *xdrs, pr_queue_item *objp)
 {
 	if (!xdr_int(xdrs, &objp->position)) {
 		return (FALSE);
@@ -526,9 +454,7 @@ xdr_pr_queue_item(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_queue_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_queue_results *objp;
+xdr_v2_pr_queue_results(XDR *xdrs, v2_pr_queue_results *objp)
 {
 	if (!xdr_pirstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -552,9 +478,7 @@ xdr_v2_pr_queue_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_cancel_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_cancel_args *objp;
+xdr_v2_pr_cancel_args(XDR *xdrs, v2_pr_cancel_args *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -575,9 +499,7 @@ xdr_v2_pr_cancel_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_cancel_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_cancel_results *objp;
+xdr_v2_pr_cancel_results(XDR *xdrs, v2_pr_cancel_results *objp)
 {
 	if (!xdr_pcrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -589,9 +511,7 @@ xdr_v2_pr_cancel_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_status_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_status_args *objp;
+xdr_v2_pr_status_args(XDR *xdrs, v2_pr_status_args *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -603,9 +523,7 @@ xdr_v2_pr_status_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_status_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_status_results *objp;
+xdr_v2_pr_status_results(XDR *xdrs, v2_pr_status_results *objp)
 {
 	if (!xdr_pirstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -632,9 +550,7 @@ xdr_v2_pr_status_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_admin_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_admin_args *objp;
+xdr_v2_pr_admin_args(XDR *xdrs, v2_pr_admin_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -652,9 +568,7 @@ xdr_v2_pr_admin_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_admin_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_admin_results *objp;
+xdr_v2_pr_admin_results(XDR *xdrs, v2_pr_admin_results *objp)
 {
 	if (!xdr_pirstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -666,9 +580,7 @@ xdr_v2_pr_admin_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_requeue_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_requeue_args *objp;
+xdr_v2_pr_requeue_args(XDR *xdrs, v2_pr_requeue_args *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -692,9 +604,7 @@ xdr_v2_pr_requeue_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_requeue_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_requeue_results *objp;
+xdr_v2_pr_requeue_results(XDR *xdrs, v2_pr_requeue_results *objp)
 {
 	if (!xdr_pcrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -706,9 +616,7 @@ xdr_v2_pr_requeue_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_hold_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_hold_args *objp;
+xdr_v2_pr_hold_args(XDR *xdrs, v2_pr_hold_args *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -729,9 +637,7 @@ xdr_v2_pr_hold_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_hold_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_hold_results *objp;
+xdr_v2_pr_hold_results(XDR *xdrs, v2_pr_hold_results *objp)
 {
 	if (!xdr_pcrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -743,9 +649,7 @@ xdr_v2_pr_hold_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_release_args(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_release_args *objp;
+xdr_v2_pr_release_args(XDR *xdrs, v2_pr_release_args *objp)
 {
 	if (!xdr_printername(xdrs, &objp->pn)) {
 		return (FALSE);
@@ -766,9 +670,7 @@ xdr_v2_pr_release_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_pr_release_results(xdrs, objp)
-	XDR *xdrs;
-	v2_pr_release_results *objp;
+xdr_v2_pr_release_results(XDR *xdrs, v2_pr_release_results *objp)
 {
 	if (!xdr_pcrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -780,9 +682,7 @@ xdr_v2_pr_release_results(xdrs, objp)
 }
 
 bool_t
-xdr_mapreq_arg(xdrs, objp)
-	XDR *xdrs;
-	mapreq_arg *objp;
+xdr_mapreq_arg(XDR *xdrs, mapreq_arg *objp)
 {
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof(struct mapreq_arg_item), xdr_mapreq_arg_item)) {
 		return (FALSE);
@@ -791,9 +691,7 @@ xdr_mapreq_arg(xdrs, objp)
 }
 
 bool_t
-xdr_mapreq_arg_item(xdrs, objp)
-	XDR *xdrs;
-	mapreq_arg_item *objp;
+xdr_mapreq_arg_item(XDR *xdrs, mapreq_arg_item *objp)
 {
 	if (!xdr_mapreq(xdrs, &objp->req)) {
 		return (FALSE);
@@ -811,9 +709,7 @@ xdr_mapreq_arg_item(xdrs, objp)
 }
 
 bool_t
-xdr_mapreq_res(xdrs, objp)
-	XDR *xdrs;
-	mapreq_res *objp;
+xdr_mapreq_res(XDR *xdrs, mapreq_res *objp)
 {
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof(struct mapreq_res_item), xdr_mapreq_res_item)) {
 		return (FALSE);
@@ -822,9 +718,7 @@ xdr_mapreq_res(xdrs, objp)
 }
 
 bool_t
-xdr_mapreq_res_item(xdrs, objp)
-	XDR *xdrs;
-	mapreq_res_item *objp;
+xdr_mapreq_res_item(XDR *xdrs, mapreq_res_item *objp)
 {
 	if (!xdr_mapreq(xdrs, &objp->req)) {
 		return (FALSE);
@@ -845,9 +739,7 @@ xdr_mapreq_res_item(xdrs, objp)
 }
 
 bool_t
-xdr_v2_mapid_args(xdrs, objp)
-	XDR *xdrs;
-	v2_mapid_args *objp;
+xdr_v2_mapid_args(XDR *xdrs, v2_mapid_args *objp)
 {
 	if (!xdr_comment(xdrs, &objp->cm)) {
 		return (FALSE);
@@ -859,9 +751,7 @@ xdr_v2_mapid_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_mapid_results(xdrs, objp)
-	XDR *xdrs;
-	v2_mapid_results *objp;
+xdr_v2_mapid_results(XDR *xdrs, v2_mapid_results *objp)
 {
 	if (!xdr_comment(xdrs, &objp->cm)) {
 		return (FALSE);
@@ -873,9 +763,7 @@ xdr_v2_mapid_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_auth_args(xdrs, objp)
-	XDR *xdrs;
-	v2_auth_args *objp;
+xdr_v2_auth_args(XDR *xdrs, v2_auth_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -893,9 +781,7 @@ xdr_v2_auth_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_auth_results(xdrs, objp)
-	XDR *xdrs;
-	v2_auth_results *objp;
+xdr_v2_auth_results(XDR *xdrs, v2_auth_results *objp)
 {
 	if (!xdr_arstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -922,9 +808,7 @@ xdr_v2_auth_results(xdrs, objp)
 }
 
 bool_t
-xdr_v2_alert_args(xdrs, objp)
-	XDR *xdrs;
-	v2_alert_args *objp;
+xdr_v2_alert_args(XDR *xdrs, v2_alert_args *objp)
 {
 	if (!xdr_client(xdrs, &objp->system)) {
 		return (FALSE);
@@ -942,9 +826,7 @@ xdr_v2_alert_args(xdrs, objp)
 }
 
 bool_t
-xdr_v2_alert_results(xdrs, objp)
-	XDR *xdrs;
-	v2_alert_results *objp;
+xdr_v2_alert_results(XDR *xdrs, v2_alert_results *objp)
 {
 	if (!xdr_alrstat(xdrs, &objp->stat)) {
 		return (FALSE);
@@ -960,3 +842,4 @@ xdr_v2_alert_results(xdrs, objp)
 #if RPC_HDR
  extern void msg_out();
 #endif
+

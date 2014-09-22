@@ -104,10 +104,7 @@ TnmMapItemType tnmPortType = {
  */
 
 static int
-PortCreateProc(interp, mapPtr, itemPtr)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
+PortCreateProc(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr)
 {
     if (! itemPtr->parent) {
 	Tcl_SetResult(interp, "-node option missing or empty", TCL_STATIC);
@@ -134,11 +131,7 @@ PortCreateProc(interp, mapPtr, itemPtr)
  */
 
 static int
-PortCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+PortCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);
@@ -153,3 +146,4 @@ PortCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

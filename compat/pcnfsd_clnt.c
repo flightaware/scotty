@@ -21,9 +21,7 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 void *
-pcnfsd_null_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+pcnfsd_null_1(void *argp, CLIENT *clnt)
 {
 	static char res;
 
@@ -35,9 +33,7 @@ pcnfsd_null_1(argp, clnt)
 }
 
 auth_results *
-pcnfsd_auth_1(argp, clnt)
-	auth_args *argp;
-	CLIENT *clnt;
+pcnfsd_auth_1(auth_args *argp, CLIENT *clnt)
 {
 	static auth_results res;
 
@@ -49,9 +45,7 @@ pcnfsd_auth_1(argp, clnt)
 }
 
 pr_init_results *
-pcnfsd_pr_init_1(argp, clnt)
-	pr_init_args *argp;
-	CLIENT *clnt;
+pcnfsd_pr_init_1(pr_init_args *argp, CLIENT *clnt)
 {
 	static pr_init_results res;
 
@@ -63,9 +57,7 @@ pcnfsd_pr_init_1(argp, clnt)
 }
 
 pr_start_results *
-pcnfsd_pr_start_1(argp, clnt)
-	pr_start_args *argp;
-	CLIENT *clnt;
+pcnfsd_pr_start_1(pr_start_args *argp, CLIENT *clnt)
 {
 	static pr_start_results res;
 
@@ -77,9 +69,7 @@ pcnfsd_pr_start_1(argp, clnt)
 }
 
 void *
-pcnfsd2_null_2(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+pcnfsd2_null_2(void *argp, CLIENT *clnt)
 {
 	static char res;
 
@@ -91,9 +81,7 @@ pcnfsd2_null_2(argp, clnt)
 }
 
 v2_info_results *
-pcnfsd2_info_2(argp, clnt)
-	v2_info_args *argp;
-	CLIENT *clnt;
+pcnfsd2_info_2(v2_info_args *argp, CLIENT *clnt)
 {
 	static v2_info_results res;
 
@@ -105,9 +93,7 @@ pcnfsd2_info_2(argp, clnt)
 }
 
 v2_pr_init_results *
-pcnfsd2_pr_init_2(argp, clnt)
-	v2_pr_init_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_init_2(v2_pr_init_args *argp, CLIENT *clnt)
 {
 	static v2_pr_init_results res;
 
@@ -119,9 +105,7 @@ pcnfsd2_pr_init_2(argp, clnt)
 }
 
 v2_pr_start_results *
-pcnfsd2_pr_start_2(argp, clnt)
-	v2_pr_start_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_start_2(v2_pr_start_args *argp, CLIENT *clnt)
 {
 	static v2_pr_start_results res;
 
@@ -133,9 +117,7 @@ pcnfsd2_pr_start_2(argp, clnt)
 }
 
 v2_pr_list_results *
-pcnfsd2_pr_list_2(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_list_2(void *argp, CLIENT *clnt)
 {
 	static v2_pr_list_results res;
 
@@ -147,9 +129,7 @@ pcnfsd2_pr_list_2(argp, clnt)
 }
 
 v2_pr_queue_results *
-pcnfsd2_pr_queue_2(argp, clnt)
-	v2_pr_queue_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_queue_2(v2_pr_queue_args *argp, CLIENT *clnt)
 {
 	static v2_pr_queue_results res;
 
@@ -161,9 +141,7 @@ pcnfsd2_pr_queue_2(argp, clnt)
 }
 
 v2_pr_status_results *
-pcnfsd2_pr_status_2(argp, clnt)
-	v2_pr_status_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_status_2(v2_pr_status_args *argp, CLIENT *clnt)
 {
 	static v2_pr_status_results res;
 
@@ -175,9 +153,7 @@ pcnfsd2_pr_status_2(argp, clnt)
 }
 
 v2_pr_cancel_results *
-pcnfsd2_pr_cancel_2(argp, clnt)
-	v2_pr_cancel_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_cancel_2(v2_pr_cancel_args *argp, CLIENT *clnt)
 {
 	static v2_pr_cancel_results res;
 
@@ -189,9 +165,7 @@ pcnfsd2_pr_cancel_2(argp, clnt)
 }
 
 v2_pr_admin_results *
-pcnfsd2_pr_admin_2(argp, clnt)
-	v2_pr_admin_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_admin_2(v2_pr_admin_args *argp, CLIENT *clnt)
 {
 	static v2_pr_admin_results res;
 
@@ -203,9 +177,7 @@ pcnfsd2_pr_admin_2(argp, clnt)
 }
 
 v2_pr_requeue_results *
-pcnfsd2_pr_requeue_2(argp, clnt)
-	v2_pr_requeue_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_requeue_2(v2_pr_requeue_args *argp, CLIENT *clnt)
 {
 	static v2_pr_requeue_results res;
 
@@ -217,9 +189,7 @@ pcnfsd2_pr_requeue_2(argp, clnt)
 }
 
 v2_pr_hold_results *
-pcnfsd2_pr_hold_2(argp, clnt)
-	v2_pr_hold_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_hold_2(v2_pr_hold_args *argp, CLIENT *clnt)
 {
 	static v2_pr_hold_results res;
 
@@ -231,9 +201,7 @@ pcnfsd2_pr_hold_2(argp, clnt)
 }
 
 v2_pr_release_results *
-pcnfsd2_pr_release_2(argp, clnt)
-	v2_pr_release_args *argp;
-	CLIENT *clnt;
+pcnfsd2_pr_release_2(v2_pr_release_args *argp, CLIENT *clnt)
 {
 	static v2_pr_release_results res;
 
@@ -245,9 +213,7 @@ pcnfsd2_pr_release_2(argp, clnt)
 }
 
 v2_mapid_results *
-pcnfsd2_mapid_2(argp, clnt)
-	v2_mapid_args *argp;
-	CLIENT *clnt;
+pcnfsd2_mapid_2(v2_mapid_args *argp, CLIENT *clnt)
 {
 	static v2_mapid_results res;
 
@@ -259,9 +225,7 @@ pcnfsd2_mapid_2(argp, clnt)
 }
 
 v2_auth_results *
-pcnfsd2_auth_2(argp, clnt)
-	v2_auth_args *argp;
-	CLIENT *clnt;
+pcnfsd2_auth_2(v2_auth_args *argp, CLIENT *clnt)
 {
 	static v2_auth_results res;
 
@@ -273,9 +237,7 @@ pcnfsd2_auth_2(argp, clnt)
 }
 
 v2_alert_results *
-pcnfsd2_alert_2(argp, clnt)
-	v2_alert_args *argp;
-	CLIENT *clnt;
+pcnfsd2_alert_2(v2_alert_args *argp, CLIENT *clnt)
 {
 	static v2_alert_results res;
 
@@ -285,3 +247,4 @@ pcnfsd2_alert_2(argp, clnt)
 	}
 	return (&res);
 }
+

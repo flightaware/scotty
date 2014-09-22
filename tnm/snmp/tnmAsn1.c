@@ -96,9 +96,7 @@ EncodeLength		(u_char *packet, int *packetlen,
  */
 
 char*
-TnmOidToStr(oid, oidLen)
-    Tnm_Oid *oid;
-    int oidLen;
+TnmOidToStr(Tnm_Oid *oid, int oidLen)
 {
     int i;
     static char buf[TNM_OID_MAX_SIZE * 8];
@@ -148,9 +146,7 @@ TnmOidToStr(oid, oidLen)
  */
 
 Tnm_Oid*
-TnmStrToOid(str, len)
-    char *str;
-    int *len;
+TnmStrToOid(char *str, int *len)
 {
     static Tnm_Oid oid[TNM_OID_MAX_SIZE];
 
@@ -203,9 +199,7 @@ TnmStrToOid(str, len)
  */
 
 TnmBer*
-TnmBerCreate(packet, packetlen)
-    u_char *packet;
-    int packetlen;
+TnmBerCreate(u_char *packet, int packetlen)
 {
     TnmBer *ber;
 
@@ -237,8 +231,7 @@ TnmBerCreate(packet, packetlen)
  */
 
 void
-TnmBerDelete(ber)
-    TnmBer *ber;
+TnmBerDelete(TnmBer *ber)
 {
     if (ber) {
 	ckfree((char *) ber);
@@ -263,8 +256,7 @@ TnmBerDelete(ber)
  */
 
 char*
-TnmBerGetError(ber)
-    TnmBer *ber;
+TnmBerGetError(TnmBer *ber)
 {
     return ber->error;
 }
@@ -287,9 +279,7 @@ TnmBerGetError(ber)
  */
 
 void
-TnmBerSetError(ber, msg)
-    TnmBer *ber;
-    char *msg;
+TnmBerSetError(TnmBer *ber, char *msg)
 {
     if (ber) {
 	strncpy(ber->error, msg, sizeof(ber->error));
@@ -314,9 +304,7 @@ TnmBerSetError(ber, msg)
  */
 
 void
-TnmBerWrongValue(ber, tag)
-    TnmBer *ber;
-    u_char tag;
+TnmBerWrongValue(TnmBer *ber, u_char tag)
 {
     sprintf(ber->error, "invalid value for tag 0x%.2x at byte %d",
 	    tag, ber->current - ber->start);
@@ -340,10 +328,7 @@ TnmBerWrongValue(ber, tag)
  */
 
 void
-TnmBerWrongLength(ber, tag, length)
-    TnmBer *ber;
-    u_char tag;
-    int length;
+TnmBerWrongLength(TnmBer *ber, u_char tag, int length)
 {
     sprintf(ber->error, "invalid length %d for tag 0x%.2x at byte %d", 
 	    length, tag, ber->current - ber->start);
@@ -367,10 +352,7 @@ TnmBerWrongLength(ber, tag, length)
  */
 
 void
-TnmBerWrongTag(ber, tag, expected)
-    TnmBer *ber;
-    u_char tag;
-    u_char expected;
+TnmBerWrongTag(TnmBer *ber, u_char tag, u_char expected)
 {
     if (expected) {
 	sprintf(ber->error, "invalid tag 0x%.2x at byte %d (expected 0x%.2x)",
@@ -399,8 +381,7 @@ TnmBerWrongTag(ber, tag, expected)
  */
 
 int
-TnmBerDecDone(ber)
-    TnmBer *ber;
+TnmBerDecDone(TnmBer *ber)
 {
     return (!ber || ber->current >= ber->end);
 }
@@ -423,8 +404,7 @@ TnmBerDecDone(ber)
  */
 
 int
-TnmBerSize(ber)
-    TnmBer *ber;
+TnmBerSize(TnmBer *ber)
 {
     return (ber->current - ber->start);
 }
@@ -447,9 +427,7 @@ TnmBerSize(ber)
  */
 
 TnmBer*
-TnmBerDecPeek(ber, byte)
-    TnmBer *ber;
-    u_char *byte;
+TnmBerDecPeek(TnmBer *ber, u_char *byte)
 {
     if (! ber) {
 	return NULL;
@@ -465,10 +443,7 @@ TnmBerDecPeek(ber, byte)
 
 #if 0
 static u_char*
-EncodeLength(packet, packetlen, length)
-    u_char *packet;
-    int *packetlen;
-    int length;
+EncodeLength(u_char *packet, int *packetlen, int length)
 {
     if (length < 0 || length > 0xffff) {
 	Tcl_Panic("illegal ASN.1 length");
@@ -510,9 +485,7 @@ EncodeLength(packet, packetlen, length)
  */
 
 TnmBer*
-TnmBerEncByte(ber, byte)
-    TnmBer *ber;
-    u_char byte;
+TnmBerEncByte(TnmBer *ber, u_char byte)
 {
     if (! ber) {
 	return NULL;
@@ -543,9 +516,7 @@ TnmBerEncByte(ber, byte)
  */
 
 TnmBer*
-TnmBerDecByte(ber, byte)
-    TnmBer *ber;
-    u_char *byte;
+TnmBerDecByte(TnmBer *ber, u_char *byte)
 {
     if (! ber) {
 	return NULL;
@@ -578,10 +549,7 @@ TnmBerDecByte(ber, byte)
  */
 
 TnmBer*
-TnmBerEncLength(ber, position, length)
-    TnmBer *ber;
-    u_char *position;
-    int length;
+TnmBerEncLength(TnmBer *ber, u_char *position, int length)
 {
     int i, d;
 
@@ -640,9 +608,7 @@ TnmBerEncLength(ber, position, length)
  */
 
 TnmBer*
-TnmBerDecLength(ber, length)
-    TnmBer *ber;
-    int *length;
+TnmBerDecLength(TnmBer *ber, int *length)
 {
     u_char byte;
 
@@ -715,10 +681,7 @@ TnmBerDecLength(ber, length)
  */
 
 TnmBer*
-TnmBerEncSequenceStart(ber, tag, token)
-    TnmBer *ber;
-    u_char tag; 
-    u_char **token;
+TnmBerEncSequenceStart(TnmBer *ber, u_char tag, u_char **token)
 {
     ber = TnmBerEncByte(ber, tag);
     if (! ber) {
@@ -750,9 +713,7 @@ TnmBerEncSequenceStart(ber, tag, token)
  */
 
 TnmBer*
-TnmBerEncSequenceEnd(ber, token)
-    TnmBer *ber;
-    u_char *token;
+TnmBerEncSequenceEnd(TnmBer *ber, u_char *token)
 {
     if (! ber) {
         return ber;
@@ -782,11 +743,7 @@ TnmBerEncSequenceEnd(ber, token)
  */
 
 TnmBer*
-TnmBerDecSequenceStart(ber, tag, token, length)
-    TnmBer *ber;
-    u_char tag;
-    u_char **token;
-    int *length;
+TnmBerDecSequenceStart(TnmBer *ber, u_char tag, u_char **token, int *length)
 {
     u_char byte;
 
@@ -829,10 +786,7 @@ TnmBerDecSequenceStart(ber, tag, token, length)
  */
 
 TnmBer*
-TnmBerDecSequenceEnd(ber, token, length)
-    TnmBer *ber;
-    u_char *token;
-    int length;
+TnmBerDecSequenceEnd(TnmBer *ber, u_char *token, int length)
 {
     int len;
 
@@ -869,10 +823,7 @@ TnmBerDecSequenceEnd(ber, token, length)
  */
 
 TnmBer*
-TnmBerEncInt(ber, tag, value)
-    TnmBer *ber;
-    u_char tag;
-    int value;
+TnmBerEncInt(TnmBer *ber, u_char tag, int value)
 {
     int asnlen  = 0;
     int intsize = sizeof(int);
@@ -937,10 +888,7 @@ TnmBerEncInt(ber, tag, value)
  */
 
 TnmBer*
-TnmBerDecInt(ber, tag, value)
-    TnmBer *ber;
-    u_char tag;
-    int *value;
+TnmBerDecInt(TnmBer *ber, u_char tag, int *value)
 {
     int len = 0;
     int negative = 0;
@@ -1039,9 +987,7 @@ TnmBerDecInt(ber, tag, value)
  */
 
 TnmBer*
-TnmBerEncUnsigned64(ber, value)
-    TnmBer *ber;
-    double value;
+TnmBerEncUnsigned64(TnmBer *ber, double value)
 {
     int i, len = 0;
     u_char *length;
@@ -1107,9 +1053,7 @@ TnmBerEncUnsigned64(ber, value)
  */
 
 TnmBer*
-TnmBerDecUnsigned64(ber, uPtr)
-    TnmBer *ber;
-    TnmUnsigned64 *uPtr;
+TnmBerDecUnsigned64(TnmBer *ber, TnmUnsigned64 *uPtr)
 {
     int len = 0;
     u_char byte;
@@ -1165,10 +1109,7 @@ TnmBerDecUnsigned64(ber, uPtr)
  */
 
 TnmBer*
-TnmBerEncOID(ber, oid, oidLen)
-    TnmBer *ber;
-    Tnm_Oid *oid;
-    int oidLen;
+TnmBerEncOID(TnmBer *ber, Tnm_Oid *oid, int oidLen)
 {
     int len = 0;
 #if (SIZEOF_LONG == 8)
@@ -1287,10 +1228,7 @@ TnmBerEncOID(ber, oid, oidLen)
  */
 
 TnmBer*
-TnmBerDecOID(ber, oid, oidLen)
-    TnmBer *ber;
-    Tnm_Oid *oid;
-    int *oidLen;
+TnmBerDecOID(TnmBer *ber, Tnm_Oid *oid, int *oidLen)
 {
     int len;
     u_char byte;
@@ -1368,11 +1306,7 @@ TnmBerDecOID(ber, oid, oidLen)
  */
 
 TnmBer*
-TnmBerEncOctetString(ber, tag, octets, octets_len)
-    TnmBer *ber;
-    u_char tag;
-    char *octets;
-    int octets_len;
+TnmBerEncOctetString(TnmBer *ber, u_char tag, char *octets, int octets_len)
 {
     int	i;
     u_char *length;
@@ -1414,11 +1348,7 @@ TnmBerEncOctetString(ber, tag, octets, octets_len)
  */
 
 TnmBer*
-TnmBerDecOctetString(ber, tag, octets, octets_len)
-    TnmBer *ber;
-    u_char tag;
-    char **octets;
-    int *octets_len;
+TnmBerDecOctetString(TnmBer *ber, u_char tag, char **octets, int *octets_len)
 {
     int len;
     u_char byte;
@@ -1473,9 +1403,7 @@ TnmBerDecOctetString(ber, tag, octets, octets_len)
  */
 
 TnmBer*
-TnmBerEncNull(ber, tag)
-    TnmBer *ber;
-    u_char tag;
+TnmBerEncNull(TnmBer *ber, u_char tag)
 {
     ber = TnmBerEncByte(ber, tag);
     ber = TnmBerEncByte(ber, 0);
@@ -1500,9 +1428,7 @@ TnmBerEncNull(ber, tag)
  */
 
 TnmBer*
-TnmBerDecNull(ber, tag)
-    TnmBer *ber;
-    u_char tag;
+TnmBerDecNull(TnmBer *ber, u_char tag)
 {
     int len;
     u_char byte;
@@ -1540,10 +1466,7 @@ TnmBerDecNull(ber, tag)
  */
 
 TnmBer*
-TnmBerDecAny(ber, octets, octets_len)
-    TnmBer *ber;
-    char **octets;
-    int *octets_len;
+TnmBerDecAny(TnmBer *ber, char **octets, int *octets_len)
 {
     int len;
     u_char *start;
@@ -1570,3 +1493,5 @@ TnmBerDecAny(ber, octets, octets_len)
     
     return ber;
 }
+
+

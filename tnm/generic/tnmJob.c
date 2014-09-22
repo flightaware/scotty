@@ -201,9 +201,7 @@ static TnmConfig config = {
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     JobControl *control = (JobControl *) clientData;
 
@@ -240,8 +238,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static void
-DeleteProc(clientData)
-    ClientData clientData;
+DeleteProc(ClientData clientData)
 {
     Job **jobPtrPtr;
     Job *jobPtr = (Job *) clientData;
@@ -283,8 +280,7 @@ DeleteProc(clientData)
  */
 
 static void
-DestroyProc(memPtr)
-    char *memPtr;
+DestroyProc(char *memPtr)
 {
     Job *jobPtr = (Job *) memPtr;
 
@@ -325,8 +321,7 @@ DestroyProc(memPtr)
  */
 
 static void
-ScheduleProc(clientData)
-    ClientData clientData;
+ScheduleProc(ClientData clientData)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     JobControl *control = (JobControl *) 
@@ -359,9 +354,7 @@ ScheduleProc(clientData)
  */
 
 static void
-NextSchedule(interp, control)
-    Tcl_Interp *interp;
-    JobControl *control;
+NextSchedule(Tcl_Interp *interp, JobControl *control)
 {
     Job *jobPtr;
     int ms;
@@ -398,9 +391,7 @@ NextSchedule(interp, control)
 
 #ifdef TNM_CAL
 int
-NextSchedulePoint(control, jobPtr)
-    JobControl *control;
-    Job *jobPtr;
+NextSchedulePoint(JobControl *control, Job *jobPtr)
 {
     struct tm *time;
     int secs;
@@ -443,8 +434,7 @@ done:
  */
 
 static void
-AdjustTime(control)
-    JobControl *control;
+AdjustTime(JobControl *control)
 {
     int delta;
     Job *jobPtr;
@@ -499,9 +489,7 @@ AdjustTime(control)
  */
 
 static void
-Schedule(interp, control)
-    Tcl_Interp *interp;
-    JobControl *control;
+Schedule(Tcl_Interp *interp, JobControl *control)
 {
     Job *jobPtr;
     int code, len;
@@ -621,10 +609,7 @@ Schedule(interp, control)
  */
 
 static int
-CreateJob(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+CreateJob(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     static unsigned nextId = 0;
     Job *jobPtr, *p;
@@ -703,10 +688,7 @@ CreateJob(interp, objc, objv)
  */
 
 static Tcl_Obj*
-GetOption(interp, object, option)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
+GetOption(Tcl_Interp *interp, ClientData object, int option)
 {
     char *status;
     Job *jobPtr = (Job *) object;
@@ -800,11 +782,7 @@ GetOption(interp, object, option)
  */
 
 static int
-SetOption(interp, object, option, objPtr)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
-    Tcl_Obj *objPtr;
+SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     Job *jobPtr = (Job *) object;
     int num, status;
@@ -906,11 +884,7 @@ SetOption(interp, object, option, objPtr)
  */
 
 static int
-JobObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int result;
     Job *jobPtr = (Job *) clientData;
@@ -1021,11 +995,7 @@ JobObjCmd(clientData, interp, objc, objv)
  */
 
 static int
-FindJobs(interp, control, objc, objv)
-    Tcl_Interp *interp;
-    JobControl *control;
-    int objc;
-    Tcl_Obj *CONST objv[];
+FindJobs(Tcl_Interp *interp, JobControl *control, int objc, Tcl_Obj *CONST objv[])
 {
     int i, result, status = -1;
     Job *jobPtr;
@@ -1100,11 +1070,7 @@ FindJobs(interp, control, objc, objv)
  */
 
 int
-Tnm_JobObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     Job *jobPtr;
     int result;
@@ -1187,3 +1153,4 @@ Tnm_JobObjCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

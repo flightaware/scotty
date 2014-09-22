@@ -303,8 +303,7 @@ SetCpuLimit(int secs)
  */
 
 static void
-PosixError(msg)
-    char *msg;
+PosixError(char *msg)
 {
 #ifdef HAVE_STRERROR
     syslog(LOG_ERR, "%s: %s", msg, strerror(errno));
@@ -329,8 +328,7 @@ PosixError(msg)
  */
 
 static int
-SwapShort(x)
-    unsigned x;
+SwapShort(unsigned x)
 {
     return ((x & 0xff) << 8) | ((x & 0xff00) >> 8);
 }
@@ -413,8 +411,7 @@ GetFreeUdpPort()
  */
 
 static unsigned short
-GetWindow(val)
-    int val;
+GetWindow(int val)
 {  
     static int counter = 0;
 
@@ -439,8 +436,7 @@ GetWindow(val)
  */
 
 static void
-ReceivePending(wtim)
-    int wtim;
+ReceivePending(int wtim)
 {
     fd_set fds;
     struct timeval tv, time_mark, now;
@@ -528,9 +524,7 @@ ReceivePending(wtim)
  */
 
 static jobElem *
-FindJobByPort(ip, udph)
-    struct ip *ip;
-    struct udphdr *udph;
+FindJobByPort(struct ip *ip, struct udphdr *udph)
 {
     unsigned short id = ntohs(udph->uh_sport);
     unsigned short port = ntohs(udph->uh_dport);
@@ -601,8 +595,7 @@ FindJobByPort(ip, udph)
  */
 
 static jobElem *
-FindJobById(id)
-    unsigned short id;
+FindJobById(unsigned short id)
 {
     jobElem *job;
 
@@ -879,9 +872,7 @@ ReceivePacket()
  */
 
 static int 
-CalcIcmpCksum(buf, n)
-    unsigned short *buf;
-    int n;
+CalcIcmpCksum(unsigned short *buf, int n)
 {
     int sum = 0, nleft = n;
     unsigned short *ptr = buf;
@@ -995,8 +986,7 @@ resend:
  */
 
 static void
-SendTrace(job)
-    jobElem *job;
+SendTrace(jobElem *job)
 {
     char *datap, outpack [MAX_POSSIBLE_DATALEN + 128];
 #ifndef USE_DLPI
@@ -1100,8 +1090,7 @@ SendTrace(job)
  */
 
 static void
-SendIcmp(job)
-    jobElem *job;
+SendIcmp(jobElem *job)
 {
     char outpack [MAX_POSSIBLE_DATALEN + 128];
     struct icmp *icp = (struct icmp *) outpack;
@@ -1372,8 +1361,7 @@ InitSockets()
  */
 
 static void
-SetUnblock(fd)
-    int fd;
+SetUnblock(int fd)
 {
 #if defined(EWOULDBLOCK) && defined(FNDELAY)
     if (fcntl(fd, F_SETFL, FNDELAY) < 0) {
@@ -1514,8 +1502,7 @@ ReadJob()
  */
 
 static void
-LookupNextRetryTimeout(tv)
-    struct timeval *tv;
+LookupNextRetryTimeout(struct timeval *tv)
 {
     jobElem *job;
     struct timeval now;
@@ -1746,9 +1733,7 @@ DoOneEvent()
  *---------------------------------------------------------------------- */
 
 int
-main(argc, argv)
-    int argc;
-    char *argv[];
+main(int argc, char *argv[])
 {
     int i;
 
@@ -1822,3 +1807,5 @@ main(argc, argv)
 
     return 0;
 }
+
+

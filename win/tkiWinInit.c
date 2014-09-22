@@ -97,8 +97,7 @@ DllEntryPoint(hInst, reason, reserved)
  */
 
 static void
-FixPath(path)
-    char *path;
+FixPath(char *path)
 {
     char *s;
 
@@ -128,9 +127,7 @@ FixPath(path)
  */
 
 static char *
-GetRegValue(path, attribute)
-    char *path;
-    char *attribute;
+GetRegValue(char *path, char *attribute)
 {
     int code;
     HKEY key;
@@ -181,8 +178,7 @@ GetRegValue(path, attribute)
  */
 
 void
-TkiInitPath(interp)
-    Tcl_Interp *interp;
+TkiInitPath(Tcl_Interp *interp)
 {
     char *p, *path, *tclVersion, *tkVersion, *tclRoot;
     Tcl_DString ds;
@@ -309,3 +305,4 @@ EXPORT(int,Tkined_Init)(interp)
 {
     return TkiInit(interp);
 }
+

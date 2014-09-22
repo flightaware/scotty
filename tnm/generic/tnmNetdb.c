@@ -83,9 +83,7 @@ NetdbSunrpcs		(Tcl_Interp *interp,
  */
 
 static void
-LookupFailed(interp, objPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
+LookupFailed(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     Tcl_AppendResult(interp, "can not lookup \"",
 		     Tcl_GetStringFromObj(objPtr, NULL),
@@ -110,10 +108,7 @@ LookupFailed(interp, objPtr)
  */
 
 static int
-GetIpAddr(interp, objPtr, addr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    unsigned long *addr;
+GetIpAddr(Tcl_Interp *interp, Tcl_Obj *objPtr, unsigned long *addr)
 {
     unsigned long m;
     char *arg = Tcl_GetStringFromObj(objPtr, NULL);
@@ -154,10 +149,7 @@ GetIpAddr(interp, objPtr, addr)
  */
 
 static int
-GetIpMask(interp, objPtr, mask)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    unsigned long *mask;
+GetIpMask(Tcl_Interp *interp, Tcl_Obj *objPtr, unsigned long *mask)
 {
     unsigned long m;
     char *arg = Tcl_GetStringFromObj(objPtr, NULL);
@@ -198,10 +190,7 @@ GetIpMask(interp, objPtr, mask)
  */
 
 static int
-NetdbHosts(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetdbHosts(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in addr;
     char *name;
@@ -325,10 +314,7 @@ NetdbHosts(interp, objc, objv)
  */
 
 static int
-NetdbIp(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetdbIp(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int result;
 
@@ -483,10 +469,7 @@ NetdbIp(interp, objc, objv)
  */
 
 static int
-NetdbNetworks(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetdbNetworks(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     struct netent *net;
     unsigned long addr;
@@ -606,10 +589,7 @@ NetdbNetworks(interp, objc, objv)
  */
 
 static int
-NetdbProtocols(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetdbProtocols(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     struct protoent *proto;
     int result, num;
@@ -713,10 +693,7 @@ NetdbProtocols(interp, objc, objv)
  */
 
 static int
-NetdbServices(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetdbServices(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in addr;
     int result, port;
@@ -847,10 +824,7 @@ NetdbServices(interp, objc, objv)
  */
 
 static int
-NetdbSunrpcs(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetdbSunrpcs(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     struct rpcent *rpc;
     int num, result;
@@ -956,11 +930,7 @@ NetdbSunrpcs(interp, objc, objv)
  */
 
 int
-Tnm_NetdbObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_NetdbObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int result;
 
@@ -1007,3 +977,4 @@ Tnm_NetdbObjCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

@@ -83,8 +83,7 @@
 
 #ifdef SIGPIPE
 static void
-IgnorePipe(dummy)
-    int dummy;
+IgnorePipe(int dummy)
 {
     signal(SIGPIPE, IgnorePipe);
 }
@@ -108,8 +107,7 @@ IgnorePipe(dummy)
  */
 
 static void
-PosixError(msg)
-    char *msg;
+PosixError(char *msg)
 {
 #ifdef HAVE_STRERROR
     syslog(LOG_ERR, "%s: %s", msg, strerror(errno));
@@ -136,8 +134,7 @@ PosixError(msg)
  */
 
 static void
-InternalError(msg)
-    char *msg;
+InternalError(char *msg)
 {
     syslog(LOG_ERR, "%s", msg);
 }
@@ -160,11 +157,7 @@ InternalError(msg)
  */
 
 static int
-ForwardTrap(fd, addr, buf, len)
-    int fd;
-    struct sockaddr_in *addr;
-    char *buf;
-    size_t len;
+ForwardTrap(int fd, struct sockaddr_in *addr, char *buf, size_t len)
 {
     struct {
 	u_char version;
@@ -205,9 +198,7 @@ ForwardTrap(fd, addr, buf, len)
  */
 
 int
-main(argc, argv)
-    int argc;
-    char *argv[];
+main(int argc, char *argv[])
 {
     struct servent *se;
     struct sockaddr_in taddr, laddr;
@@ -516,3 +507,5 @@ main(argc, argv)
 
     return 0;
 }
+
+

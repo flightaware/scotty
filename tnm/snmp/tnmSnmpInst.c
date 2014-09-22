@@ -67,8 +67,7 @@ DeleteNodeProc		(ClientData clientData, Tcl_Interp *interp,
  */
 
 static void
-DumpTree(instPtr)
-    TnmSnmpNode *instPtr;
+DumpTree(TnmSnmpNode *instPtr)
 {
     if (instPtr) {
         fprintf(stderr, "** %s (%s)\n",
@@ -102,8 +101,7 @@ DumpTree(instPtr)
  */
 
 static void
-FreeNode(instPtr)
-    TnmSnmpNode *instPtr;
+FreeNode(TnmSnmpNode *instPtr)
 {
 
     if (instPtr->label) {
@@ -141,12 +139,7 @@ FreeNode(instPtr)
  */
 
 static TnmSnmpNode*
-AddNode(soid, offset, syntax, access, tclVarName)
-    char *soid;
-    int offset;
-    int syntax;
-    int access;
-    char *tclVarName;
+AddNode(char *soid, int offset, int syntax, int access, char *tclVarName)
 {
     Tnm_Oid *oid;
     int i, oidlen;
@@ -241,10 +234,7 @@ AddNode(soid, offset, syntax, access, tclVarName)
  */
 
 static TnmSnmpNode*
-FindNextNode(root, oid, len)
-    TnmSnmpNode *root;
-    u_int *oid;
-    int len;
+FindNextNode(TnmSnmpNode *root, u_int *oid, int len)
 {
     TnmSnmpNode *p, *inst;
     static int force = 0;
@@ -323,9 +313,7 @@ FindNextNode(root, oid, len)
  */
 
 static TnmSnmpNode*
-FindNode(root, oidPtr)
-    TnmSnmpNode *root;
-    TnmOid *oidPtr;
+FindNode(TnmSnmpNode *root, TnmOid *oidPtr)
 {
     TnmSnmpNode *p, *q = NULL;
     int i;
@@ -360,9 +348,7 @@ FindNode(root, oidPtr)
  */
 
 static void
-RemoveNode(root, varName)
-    TnmSnmpNode *root;
-    char *varName;
+RemoveNode(TnmSnmpNode *root, char *varName)
 {
     TnmSnmpNode *p, *q;
 
@@ -452,11 +438,7 @@ DeleteNodeProc(clientData, interp, name1, name2, flags)
  */
  
 int
-TnmSnmpCreateNode(interp, label, tclVarName, defval)
-    Tcl_Interp *interp;
-    char *label;
-    char *tclVarName;
-    char *defval;
+TnmSnmpCreateNode(Tcl_Interp *interp, char *label, char *tclVarName, char *defval)
 {
     char *soid = NULL;
     TnmMibNode *nodePtr = TnmMibFindNode(label, NULL, 0);
@@ -587,9 +569,7 @@ TnmSnmpCreateNode(interp, label, tclVarName, defval)
  */
 
 TnmSnmpNode*
-TnmSnmpFindNode(session, oidPtr)
-    TnmSnmp *session;
-    TnmOid *oidPtr;
+TnmSnmpFindNode(TnmSnmp *session, TnmOid *oidPtr)
 {
     return FindNode(instTree, oidPtr);
 }
@@ -612,9 +592,7 @@ TnmSnmpFindNode(session, oidPtr)
  */
 
 TnmSnmpNode*
-TnmSnmpFindNextNode(session, oidPtr)
-    TnmSnmp *session;
-    TnmOid *oidPtr;
+TnmSnmpFindNextNode(TnmSnmp *session, TnmOid *oidPtr)
 {
 #if 0
     DumpTree(instTree);
@@ -641,11 +619,7 @@ TnmSnmpFindNextNode(session, oidPtr)
  */
 
 int
-TnmSnmpSetNodeBinding(session, oidPtr, event, command)
-    TnmSnmp *session;
-    TnmOid *oidPtr;
-    int event;
-    char *command;
+TnmSnmpSetNodeBinding(TnmSnmp *session, TnmOid *oidPtr, int event, char *command)
 {
     TnmSnmpNode *node = NULL;
     TnmSnmpBinding *bindPtr = NULL;
@@ -715,10 +689,7 @@ TnmSnmpSetNodeBinding(session, oidPtr, event, command)
  */
 
 char*
-TnmSnmpGetNodeBinding(session, oidPtr, event)
-    TnmSnmp *session;
-    TnmOid *oidPtr;
-    int event;
+TnmSnmpGetNodeBinding(TnmSnmp *session, TnmOid *oidPtr, int event)
 {
     TnmSnmpNode *node = NULL;
     TnmSnmpBinding *bindPtr = NULL;
@@ -759,13 +730,7 @@ TnmSnmpGetNodeBinding(session, oidPtr, event)
  */
 
 int
-TnmSnmpEvalNodeBinding(session, pdu, inst, event, value, oldValue)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    TnmSnmpNode *inst;
-    int event;
-    char *value;
-    char *oldValue;
+TnmSnmpEvalNodeBinding(TnmSnmp *session, TnmSnmpPdu *pdu, TnmSnmpNode *inst, int event, char *value, char *oldValue)
 {
     TnmOid oid;
     int code = TCL_OK, len;
@@ -825,4 +790,5 @@ TnmSnmpEvalNodeBinding(session, pdu, inst, event, value, oldValue)
 
     return code;
 }
+
 

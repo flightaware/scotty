@@ -1524,3 +1524,4 @@ Tki_StripchartInit ()
     Tk_CreateItemType((Tk_ItemType *) &TkStripchartType);
 }
 
+

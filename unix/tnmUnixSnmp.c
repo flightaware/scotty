@@ -292,3 +292,5 @@ TrapProc(ClientData clientData, int mask)
 	TnmWriteMessage("\n");
     }
 }
+
+

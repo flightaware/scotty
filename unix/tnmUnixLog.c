@@ -35,11 +35,7 @@
  */
 
 int
-TnmWriteLogMessage(ident, level, facility, message)
-    char *ident;
-    int level;
-    int facility;
-    char *message;
+TnmWriteLogMessage(char *ident, int level, int facility, char *message)
 {
     switch (level) {
       case TNM_LOG_EMERG:
@@ -187,3 +183,5 @@ TnmWriteLogMessage(ident, level, facility, message)
 
     return 0;
 }
+
+

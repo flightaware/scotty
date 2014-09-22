@@ -113,15 +113,7 @@ DecodePDU		(TnmBer *ber, TnmSnmpPdu *pdu);
  */
 
 int
-TnmSnmpDecode(interp, packet, packetlen, from, session, reqid, status, index)
-    Tcl_Interp *interp;
-    u_char *packet;
-    int	packetlen;
-    struct sockaddr_in *from;
-    TnmSnmp *session;
-    int *reqid;
-    int *status;
-    int *index;
+TnmSnmpDecode(Tcl_Interp *interp, u_char *packet, int	packetlen, struct sockaddr_in *from, TnmSnmp *session, int *reqid, int *status, int *index)
 {
     TnmSnmpPdu _pdu, *pdu = &_pdu;
     Message _msg, *msg = &_msg;
@@ -478,13 +470,7 @@ TnmSnmpDecode(interp, packet, packetlen, from, session, reqid, status, index)
  */
 
 static int
-Authentic(session, msg, pdu, packet, packetlen, snmpStatPtr)
-    TnmSnmp *session;
-    Message *msg;
-    TnmSnmpPdu *pdu;
-    u_char *packet;
-    int packetlen;
-    u_int **snmpStatPtr;
+Authentic(TnmSnmp *session, Message *msg, TnmSnmpPdu *pdu, u_char *packet, int packetlen, u_int **snmpStatPtr)
 {
     int authentic = 0;
     int communityLength;
@@ -674,11 +660,7 @@ Authentic(session, msg, pdu, packet, packetlen, snmpStatPtr)
  */
 
 static int
-DecodeMessage(interp, msg, pdu, ber)
-    Tcl_Interp *interp;
-    Message *msg;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+DecodeMessage(Tcl_Interp *interp, Message *msg, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     int version, msgSeqLength;
     u_char *msgSeqToken, *msgSeqStart;
@@ -825,10 +807,7 @@ DecodeMessage(interp, msg, pdu, ber)
  */
 
 static TnmBer*
-DecodeHeader(msg, pdu, ber)
-    Message *msg;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+DecodeHeader(Message *msg, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
     int seqLength, flagsLen, secmodel;
@@ -896,10 +875,7 @@ DecodeHeader(msg, pdu, ber)
  */
 
 static TnmBer*
-DecodeUsmSecParams(msg, pdu, ber)
-    Message *msg;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+DecodeUsmSecParams(Message *msg, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
     int seqLength;
@@ -956,9 +932,7 @@ DecodeUsmSecParams(msg, pdu, ber)
  */
 
 static TnmBer*
-DecodeScopedPDU(ber, pdu)
-    TnmBer *ber;
-    TnmSnmpPdu *pdu;
+DecodeScopedPDU(TnmBer *ber, TnmSnmpPdu *pdu)
 {
     u_char *seqToken;
     int seqLength;
@@ -1003,8 +977,7 @@ DecodeScopedPDU(ber, pdu)
  */
 
 static int
-DecodeUsecParameter(msg)
-    Message *msg;
+DecodeUsecParameter(Message *msg)
 {
     u_char *p = msg->com;
 
@@ -1097,12 +1070,7 @@ DecodeUsecParameter(msg)
  */
 
 static void
-SendUsecReport(interp, session, to, reqid, statPtr)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    struct sockaddr_in *to;
-    int reqid;
-    u_int *statPtr;
+SendUsecReport(Tcl_Interp *interp, TnmSnmp *session, struct sockaddr_in *to, int reqid, u_int *statPtr)
 {
     TnmSnmpPdu _pdu, *pdu = &_pdu;
     char varbind[80];
@@ -1176,9 +1144,7 @@ SendUsecReport(interp, session, to, reqid, statPtr)
  */
 
 static TnmBer*
-DecodePDU(ber, pdu)
-    TnmBer *ber;
-    TnmSnmpPdu *pdu;
+DecodePDU(TnmBer *ber, TnmSnmpPdu *pdu)
 {
     int oidlen = 0;
     
@@ -1657,3 +1623,5 @@ DecodePDU(ber, pdu)
  * compile-command: "make -k -C ../../unix"
  * End:
  */
+
+

@@ -87,12 +87,7 @@ MD5AuthOutMsg	(char *authKey, u_char *msg, int msgLen,
  */
 
 static void
-MD5PassWord2Key(pwBytes, pwLength, engineBytes, engineLength, key)
-    u_char *pwBytes;
-    int pwLength;
-    u_char *engineBytes;
-    int engineLength;
-    u_char *key;
+MD5PassWord2Key(u_char *pwBytes, int pwLength, u_char *engineBytes, int engineLength, u_char *key)
 {
     MD5_CTX MD;
     u_char *cp, buffer[64];
@@ -138,12 +133,7 @@ MD5PassWord2Key(pwBytes, pwLength, engineBytes, engineLength, key)
  */
 
 static void
-SHAPassWord2Key(pwBytes, pwLength, engineBytes, engineLength, key)
-    u_char *pwBytes;
-    int pwLength;
-    u_char *engineBytes;
-    int engineLength;
-    u_char *key;
+SHAPassWord2Key(u_char *pwBytes, int pwLength, u_char *engineBytes, int engineLength, u_char *key)
 {
     SHA_CTX SH;
     u_char *cp, buffer[72];
@@ -188,11 +178,7 @@ SHAPassWord2Key(pwBytes, pwLength, engineBytes, engineLength, key)
  */
 
 static void
-ComputeKey(objPtrPtr, password, engineID, algorithm)
-    Tcl_Obj **objPtrPtr;
-    Tcl_Obj *password;
-    Tcl_Obj *engineID;
-    int algorithm;
+ComputeKey(Tcl_Obj **objPtrPtr, Tcl_Obj *password, Tcl_Obj *engineID, int algorithm)
 {
     char *pwBytes, *engineBytes, *bytes;
     int pwLength, engineLength, length;
@@ -287,8 +273,7 @@ ComputeKey(objPtrPtr, password, engineID, algorithm)
  */
 
 void
-TnmSnmpComputeKeys(session)
-    TnmSnmp *session;
+TnmSnmpComputeKeys(TnmSnmp *session)
 {
     int authProto, privProto;
 
@@ -323,11 +308,7 @@ TnmSnmpComputeKeys(session)
  */
 
 void
-TnmSnmpLocalizeKey(algorithm, authKey, engineID, localAuthKey)
-    int algorithm;
-    Tcl_Obj *authKey;
-    Tcl_Obj *engineID;
-    Tcl_Obj *localAuthKey;
+TnmSnmpLocalizeKey(int algorithm, Tcl_Obj *authKey, Tcl_Obj *engineID, Tcl_Obj *localAuthKey)
 {
     char *engineBytes, *authKeyBytes;
     int engineLength, authKeyLength, localAuthKeyLength = 20;
@@ -368,11 +349,7 @@ TnmSnmpLocalizeKey(algorithm, authKey, engineID, localAuthKey)
 }
 
 static void
-MD5AuthOutMsg(authKey, msg, msgLen, msgAuthenticationParameters)
-    char *authKey;
-    u_char *msg;
-    int msgLen;
-    u_char *msgAuthenticationParameters;
+MD5AuthOutMsg(char *authKey, u_char *msg, int msgLen, u_char *msgAuthenticationParameters)
 {
     MD5_CTX MD;
     char extendedAuthKey[64];
@@ -404,12 +381,7 @@ MD5AuthOutMsg(authKey, msg, msgLen, msgAuthenticationParameters)
 }
 
 void
-TnmSnmpAuthOutMsg(algorithm, authKey, msg, msgLen, msgAuthenticationParameters)
-    int algorithm;
-    Tcl_Obj *authKey;
-    u_char *msg;
-    int msgLen;
-    u_char *msgAuthenticationParameters;
+TnmSnmpAuthOutMsg(int algorithm, Tcl_Obj *authKey, u_char *msg, int msgLen, u_char *msgAuthenticationParameters)
 {
     char *keyBytes;
     int keyLen;
@@ -427,3 +399,4 @@ TnmSnmpAuthOutMsg(algorithm, authKey, msg, msgLen, msgAuthenticationParameters)
         Tcl_Panic("unknown authentication algorithm");
     }
 }
+

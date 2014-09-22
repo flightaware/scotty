@@ -70,12 +70,7 @@ EncodePDU		(Tcl_Interp *interp,
  */
 
 int
-TnmSnmpEncode(interp, session, pdu, proc, clientData)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    TnmSnmpRequestProc *proc;
-    ClientData clientData;
+TnmSnmpEncode(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmSnmpRequestProc *proc, ClientData clientData)
 {
     int	retry = 0, packetlen = 0, code = 0;
     u_char packet[TNM_SNMP_MAXSIZE];
@@ -302,11 +297,7 @@ TnmSnmpEncode(interp, session, pdu, proc, clientData)
  */
 
 static int
-EncodeMessage(interp, session, pdu, ber)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+EncodeMessage(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
     int version = 0, parameterLen = 0;
@@ -404,11 +395,7 @@ EncodeMessage(interp, session, pdu, ber)
  */
 
 static TnmBer*
-EncodeHeader(interp, session, pdu, ber)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+EncodeHeader(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
     u_char flags = 0;
@@ -476,10 +463,7 @@ EncodeHeader(interp, session, pdu, ber)
  */
 
 static u_char*
-EncodeUsmSecParams(session, pdu, lengthPtr)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    int *lengthPtr;
+EncodeUsmSecParams(TnmSnmp *session, TnmSnmpPdu *pdu, int *lengthPtr)
 {
     u_char *seqToken;
     char *user, *engineID;
@@ -557,11 +541,7 @@ EncodeUsmSecParams(session, pdu, lengthPtr)
  */
 
 static TnmBer*
-EncodeScopedPDU(interp, session, pdu, ber)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+EncodeScopedPDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
     char *context, *engineID;
@@ -603,10 +583,7 @@ EncodeScopedPDU(interp, session, pdu, ber)
  */
 
 static int
-EncodeUsecParameter(session, pdu, parameter)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    u_char *parameter;
+EncodeUsecParameter(TnmSnmp *session, TnmSnmpPdu *pdu, u_char *parameter)
 {
     u_char *p = parameter, *context, *user;
     u_int boots = 0, clock = 0;
@@ -733,10 +710,7 @@ EncodeUsecParameter(session, pdu, parameter)
  */
 
 void
-TnmSnmpUsecAuth(session, packet, packetlen)
-    TnmSnmp *session;
-    u_char *packet;
-    int packetlen;
+TnmSnmpUsecAuth(TnmSnmp *session, u_char *packet, int packetlen)
 {
     u_char *parm, *p = packet;
     int dummy = packetlen;
@@ -822,11 +796,7 @@ TnmSnmpUsecAuth(session, packet, packetlen)
  */
 
 static TnmBer*
-EncodePDU(interp, session, pdu, ber)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    TnmBer *ber;
+EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {    
     u_char *pduSeqToken, *vbSeqToken, *vblSeqToken;
     
@@ -1221,3 +1191,5 @@ EncodePDU(interp, session, pdu, ber)
     ber = TnmBerEncSequenceEnd(ber, pduSeqToken);
     return ber;
 }
+
+

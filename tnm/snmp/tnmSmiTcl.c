@@ -120,9 +120,7 @@ WalkTree	(Tcl_Interp *interp, Tcl_Obj *varName,
  */
 
 static SmiType*
-GetMibType(interp, objPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
+GetMibType(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     SmiType *smiType;
 
@@ -178,11 +176,7 @@ GetMibType(interp, objPtr)
  */
 
 static SmiNode*
-GetMibNode(interp, objPtr, oidPtrPtr, nodeOidPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    TnmOid **oidPtrPtr;
-    TnmOid *nodeOidPtr;
+GetMibNode(Tcl_Interp *interp, Tcl_Obj *objPtr, TnmOid **oidPtrPtr, TnmOid *nodeOidPtr)
 {
     SmiNode *smiNode = NULL;
     TnmOid *oidPtr;
@@ -229,11 +223,7 @@ GetMibNode(interp, objPtr, oidPtrPtr, nodeOidPtr)
  */
 
 static int
-GetMibNodeOrType(interp, objPtr, typePtrPtr, nodePtrPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    SmiType **typePtrPtr;
-    SmiNode **nodePtrPtr;
+GetMibNodeOrType(Tcl_Interp *interp, Tcl_Obj *objPtr, SmiType **typePtrPtr, SmiNode **nodePtrPtr)
 {
     *nodePtrPtr = (SmiNode *) NULL;
     *typePtrPtr = GetMibType(interp, objPtr);
@@ -272,10 +262,7 @@ GetMibNodeOrType(interp, objPtr, typePtrPtr, nodePtrPtr)
  */
 
 static int
-GetSmiList(interp, smiNode, objPtr)
-    Tcl_Interp *interp;
-    SmiNode *smiNode;
-    Tcl_Obj *objPtr;
+GetSmiList(Tcl_Interp *interp, SmiNode *smiNode, Tcl_Obj *objPtr)
 {
     Tcl_Obj *listPtr, *elemObjPtr;
     SmiElement *smiElem;
@@ -327,8 +314,7 @@ GetSmiList(interp, smiNode, objPtr)
  */
 
 static int
-LoadCore(interp)
-    Tcl_Interp *interp;
+LoadCore(Tcl_Interp *interp)
 {
     Tcl_Obj *listPtr, *part1Ptr, *part2Ptr, **objv;
     int i, objc, cnt = 0;
@@ -389,12 +375,7 @@ LoadCore(interp)
  */
 
 static int
-WalkTree(interp, varName, body, smiNode, oidPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *varName;
-    Tcl_Obj *body;
-    SmiNode* smiNode;
-    TnmOid *oidPtr;
+WalkTree(Tcl_Interp *interp, Tcl_Obj *varName, Tcl_Obj *body, SmiNode* smiNode, TnmOid *oidPtr)
 {
     SmiNode *childNode;
     int result = TCL_OK;
@@ -464,11 +445,7 @@ WalkTree(interp, varName, body, smiNode, oidPtr)
  */
 
 int
-Tnm_SmiObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int	objc;
-    Tcl_Obj *CONST objv[];
+Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
 {
     SmiNode *smiNode;
     SmiType *smiType;
@@ -1418,3 +1395,4 @@ Tnm_SmiObjCmd(clientData, interp, objc, objv)
  * compile-command: "make -k -C ../../unix"
  * End:
  */
+

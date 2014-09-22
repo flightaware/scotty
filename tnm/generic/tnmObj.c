@@ -149,8 +149,7 @@ Tcl_ObjType tnmIpAddressType = {
  *---------------------------------------------------------------------- */
 
 Tcl_Obj*
-TnmNewUnsigned64Obj(u)
-    TnmUnsigned64 u;
+TnmNewUnsigned64Obj(TnmUnsigned64 u)
 {
     Tcl_Obj *objPtr = Tcl_NewObj();
     TnmUnsigned64 *uPtr;
@@ -182,9 +181,7 @@ TnmNewUnsigned64Obj(u)
  */
 
 void
-TnmSetUnsigned64Obj(objPtr, u)
-    Tcl_Obj *objPtr;
-    TnmUnsigned64 u;
+TnmSetUnsigned64Obj(Tcl_Obj *objPtr, TnmUnsigned64 u)
 {
     Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     TnmUnsigned64 *uPtr;
@@ -227,10 +224,7 @@ TnmSetUnsigned64Obj(objPtr, u)
  */
 
 int
-TnmGetUnsigned64FromObj(interp, objPtr, uPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    TnmUnsigned64 *uPtr;
+TnmGetUnsigned64FromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, TnmUnsigned64 *uPtr)
 {
     int result;
 
@@ -318,8 +312,7 @@ DupUnsigned64InternalRep(srcPtr, copyPtr)
  */
 
 static void
-UpdateStringOfUnsigned64(objPtr)
-    Tcl_Obj *objPtr;
+UpdateStringOfUnsigned64(Tcl_Obj *objPtr)
 {
     TnmUnsigned64 *uPtr = (TnmUnsigned64 *) objPtr->internalRep.otherValuePtr;
 
@@ -426,8 +419,7 @@ SetUnsigned64FromAny(interp, objPtr)
  */
 
 Tcl_Obj*
-TnmNewUnsigned32Obj(u)
-    TnmUnsigned32 u;
+TnmNewUnsigned32Obj(TnmUnsigned32 u)
 {
     Tcl_Obj *objPtr = Tcl_NewObj();
 
@@ -457,9 +449,7 @@ TnmNewUnsigned32Obj(u)
  */
 
 void
-TnmSetUnsigned32Obj(objPtr, u)
-    Tcl_Obj *objPtr;
-    TnmUnsigned32 u;
+TnmSetUnsigned32Obj(Tcl_Obj *objPtr, TnmUnsigned32 u)
 {
     Tcl_ObjType *oldTypePtr = objPtr->typePtr;
 
@@ -498,10 +488,7 @@ TnmSetUnsigned32Obj(objPtr, u)
  */
 
 int
-TnmGetUnsigned32FromObj(interp, objPtr, uPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    TnmUnsigned32 *uPtr;
+TnmGetUnsigned32FromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, TnmUnsigned32 *uPtr)
 {
     int result;
 
@@ -559,8 +546,7 @@ DupUnsigned32InternalRep(srcPtr, copyPtr)
  */
 
 static void
-UpdateStringOfUnsigned32(objPtr)
-    Tcl_Obj *objPtr;
+UpdateStringOfUnsigned32(Tcl_Obj *objPtr)
 {
     TnmUnsigned32 u = (TnmUnsigned32) objPtr->internalRep.longValue;
 
@@ -688,9 +674,7 @@ SetUnsigned32FromAny(interp, objPtr)
  */
 
 Tcl_Obj*
-TnmNewOctetStringObj(bytes, length)
-    char *bytes;
-    int length;
+TnmNewOctetStringObj(char *bytes, int length)
 {
     Tcl_Obj *objPtr = Tcl_NewObj();
     TnmSetOctetStringObj(objPtr, bytes, length);
@@ -717,10 +701,7 @@ TnmNewOctetStringObj(bytes, length)
  */
 
 void
-TnmSetOctetStringObj(objPtr, bytes, length)
-    Tcl_Obj *objPtr;
-    char *bytes;
-    int length;
+TnmSetOctetStringObj(Tcl_Obj *objPtr, char *bytes, int length)
 {
     Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     size_t size = length;
@@ -762,10 +743,7 @@ TnmSetOctetStringObj(objPtr, bytes, length)
  */
 
 char*
-TnmGetOctetStringFromObj(interp, objPtr, lengthPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    int *lengthPtr;
+TnmGetOctetStringFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int *lengthPtr)
 {
     int result;
 
@@ -858,8 +836,7 @@ DupOctetStringInternalRep(srcPtr, copyPtr)
  */
 
 static void
-UpdateStringOfOctetString(objPtr)
-    Tcl_Obj *objPtr;
+UpdateStringOfOctetString(Tcl_Obj *objPtr)
 {
     objPtr->bytes = Tcl_Alloc(
 			(size_t) objPtr->internalRep.twoPtrValue.ptr2 * 3);
@@ -961,8 +938,7 @@ SetOctetStringFromAny(interp, objPtr)
  */
 
 Tcl_Obj*
-TnmNewIpAddressObj(ipaddr)
-    struct in_addr *ipaddr;
+TnmNewIpAddressObj(struct in_addr *ipaddr)
 {
     Tcl_Obj *objPtr = Tcl_NewObj();
     TnmSetIpAddressObj(objPtr, ipaddr);
@@ -989,9 +965,7 @@ TnmNewIpAddressObj(ipaddr)
  */
 
 void
-TnmSetIpAddressObj(objPtr, ipaddr)
-    Tcl_Obj *objPtr;
-    struct in_addr *ipaddr;
+TnmSetIpAddressObj(Tcl_Obj *objPtr, struct in_addr *ipaddr)
 {
     Tcl_ObjType *oldTypePtr = objPtr->typePtr;
 
@@ -1030,9 +1004,7 @@ TnmSetIpAddressObj(objPtr, ipaddr)
  */
 
 struct in_addr*
-TnmGetIpAddressFromObj(interp, objPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
+TnmGetIpAddressFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     int result;
 
@@ -1089,8 +1061,7 @@ DupIpAddressInternalRep(srcPtr, copyPtr)
  */
 
 static void
-UpdateStringOfIpAddress(objPtr)
-    Tcl_Obj *objPtr;
+UpdateStringOfIpAddress(Tcl_Obj *objPtr)
 {
     struct in_addr *ipaddrPtr;
     
@@ -1158,4 +1129,5 @@ SetIpAddressFromAny(interp, objPtr)
     objPtr->typePtr = &tnmIpAddressType;
     return TCL_OK;
 }    
+
 

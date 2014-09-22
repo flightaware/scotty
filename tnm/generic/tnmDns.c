@@ -140,9 +140,7 @@ DnsSoa		(Tcl_Interp *interp, char *hname);
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     DnsControl *control = (DnsControl *) clientData;
 
@@ -168,8 +166,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static void
-DnsInit(control)
-    DnsControl *control;
+DnsInit(DnsControl *control)
 {
     int i;
 
@@ -199,9 +196,7 @@ DnsInit(control)
  */
 
 static int
-DnsGetHostName(interp, hname)
-    Tcl_Interp *interp;
-    char *hname;
+DnsGetHostName(Tcl_Interp *interp, char *hname)
 {
     int rc;
     
@@ -234,10 +229,7 @@ DnsGetHostName(interp, hname)
  */
 
 static void
-DnsDoQuery(query_string, query_type, query_result)
-    char *query_string;
-    int query_type;
-    a_res *query_result;
+DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 {
     querybuf query, answer;
     char buf[512], lbuf[512], auth_buf[512];
@@ -491,11 +483,7 @@ DnsDoQuery(query_string, query_type, query_result)
  */
 
 static void
-DnsHaveQuery(query_string, query_type, query_result, depth)
-    char *query_string;
-    int query_type;
-    a_res *query_result;
-    int depth;
+DnsHaveQuery(char *query_string, int query_type, a_res *query_result, int depth)
 {
     int i;
     a_res res;
@@ -605,9 +593,7 @@ DnsHaveQuery(query_string, query_type, query_result, depth)
  */
 
 static int 
-DnsA(interp, hname)
-    Tcl_Interp *interp;
-    char *hname;
+DnsA(Tcl_Interp *interp, char *hname)
 {
     a_res res;
     int i;
@@ -656,9 +642,7 @@ DnsA(interp, hname)
  */
 
 static int
-DnsPtr(interp, ip)
-    Tcl_Interp *interp;
-    char *ip;
+DnsPtr(Tcl_Interp *interp, char *ip)
 {
     a_res res;
     int i, a, b, c, d;
@@ -705,8 +689,7 @@ DnsPtr(interp, ip)
  */
 
 static void
-DnsCleanHinfo(str)
-    char *str;
+DnsCleanHinfo(char *str)
 {
     char *ptr;
     
@@ -737,9 +720,7 @@ DnsCleanHinfo(str)
  */
 
 static int
-DnsHinfo(interp, hname)
-    Tcl_Interp *interp;
-    const char *hname;
+DnsHinfo(Tcl_Interp *interp, const char *hname)
 {
     a_res res;
     char *start, *ptr;
@@ -814,9 +795,7 @@ DnsHinfo(interp, hname)
  */
 
 static int 
-DnsMx(interp, hname)
-    Tcl_Interp *interp;
-    char *hname;
+DnsMx(Tcl_Interp *interp, char *hname)
 {
     a_res res;
     int i;
@@ -868,9 +847,7 @@ DnsMx(interp, hname)
  */
 
 static int 
-DnsSoa(interp, hname)
-    Tcl_Interp *interp;
-    char *hname;
+DnsSoa(Tcl_Interp *interp, char *hname)
 {
     a_res res;
     int i;
@@ -923,11 +900,7 @@ DnsSoa(interp, hname)
  */
 
 int
-Tnm_DnsObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int x, i, code;
     char *arg;
@@ -1128,3 +1101,4 @@ Tnm_DnsObjCmd(clientData, interp, objc, objv)
 
     return TCL_OK;
 }
+

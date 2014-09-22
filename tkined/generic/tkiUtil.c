@@ -75,3 +75,4 @@ TkiMarkRectangle(display, drawable, gc, x1, y1, x2, y2)
 
     XFillRectangles(display, drawable, gc, rects, n);
 }
+

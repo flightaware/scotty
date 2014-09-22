@@ -96,8 +96,7 @@ IcmpThread	(LPDWORD dwParam);
  */
 
 void
-IcmpExit(clientData)
-    ClientData clientData;
+IcmpExit(ClientData clientData)
 {
     HANDLE hIcmp = (HANDLE) clientData;
     FreeLibrary(hIcmp);
@@ -122,8 +121,7 @@ IcmpExit(clientData)
  */
 
 static DWORD
-IcmpThread(lpdwParam)
-    LPDWORD lpdwParam;
+IcmpThread(LPDWORD lpdwParam)
 {
     IcmpThreadParam *threadParamPtr = (IcmpThreadParam *) lpdwParam;
     TnmIcmpRequest *icmpPtr = threadParamPtr->icmpPtr;
@@ -238,9 +236,7 @@ IcmpThread(lpdwParam)
  */
 
 int
-TnmIcmp(interp, icmpPtr)
-    Tcl_Interp *interp;
-    TnmIcmpRequest *icmpPtr;
+TnmIcmp(Tcl_Interp *interp, TnmIcmpRequest *icmpPtr)
 {
     static HANDLE hIcmp = 0;	/* The handle for ICMP.DLL. */
     int j, i, code;
@@ -331,3 +327,4 @@ TnmIcmp(interp, icmpPtr)
     pIcmpCloseHandle(hIP);
     return code;
 }
+

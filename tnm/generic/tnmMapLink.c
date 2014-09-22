@@ -109,10 +109,7 @@ TnmMapItemType tnmLinkType = {
  */
 
 static int
-LinkCreateProc(interp, mapPtr, itemPtr)
-    Tcl_Interp *interp;
-    TnmMap *mapPtr;
-    TnmMapItem *itemPtr;
+LinkCreateProc(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr)
 {
     if (! itemPtr->srcPtr && ! itemPtr->dstPtr) {
 	Tcl_SetResult(interp, "-src and -dst option missing", TCL_STATIC);
@@ -149,11 +146,7 @@ LinkCreateProc(interp, mapPtr, itemPtr)
  */
 
 static int
-LinkCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+LinkCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);
@@ -168,3 +161,4 @@ LinkCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

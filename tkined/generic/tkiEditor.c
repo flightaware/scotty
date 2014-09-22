@@ -113,11 +113,7 @@ EditorCommand	(ClientData clientData, Tcl_Interp *interp,
  */
 
 int 
-Tki_CreateEditor (clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     Tki_Editor *editor;
     static unsigned lastid = 0;
@@ -181,8 +177,7 @@ Tki_CreateEditor (clientData, interp, argc, argv)
  */
 
 void 
-Tki_DeleteEditor (clientData)
-     ClientData clientData;
+Tki_DeleteEditor (ClientData clientData)
 {
     Tki_Editor *editor = (Tki_Editor *) clientData;
     Tcl_HashEntry *entryPtr;
@@ -332,11 +327,7 @@ WriteHistory (editor, interp)
  */
 
 static int 
-GetId (editor, interp, argc, argv)
-    Tki_Editor *editor;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+GetId (Tki_Editor *editor, Tcl_Interp *interp, int argc, char **argv)
 {
     interp->result = editor->id;
     return TCL_OK;
@@ -925,10 +916,7 @@ Copy (editor, interp, argc, argv)
  */
 
 static int
-do_ined (editor, interp, line)
-    Tki_Editor *editor;
-    Tcl_Interp *interp;
-    char *line;
+do_ined (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 {
     int largc;
     char **largv;
@@ -973,10 +961,7 @@ do_ined (editor, interp, line)
 }
 
 static int
-do_set (editor, interp, line)
-    Tki_Editor *editor;
-    Tcl_Interp *interp;
-    char *line;
+do_set (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 {
     int len;
     char *var;
@@ -1303,10 +1288,7 @@ ExpandIconName (editor, interp, type, str)
  */
 
 static void
-ReadDefaultFile (editor, interp, filename)
-    Tki_Editor *editor;
-    Tcl_Interp *interp;
-    char *filename;
+ReadDefaultFile (Tki_Editor *editor, Tcl_Interp *interp, char *filename)
 {
     FILE *f;
 
@@ -1384,11 +1366,7 @@ ReadDefaultFile (editor, interp, filename)
  */
 
 static void
-ReadDefaults (editor, interp, argc, argv)
-    Tki_Editor *editor;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+ReadDefaults (Tki_Editor *editor, Tcl_Interp *interp, int argc, char **argv)
 {
     char *library;
     char *fname;
@@ -1660,11 +1638,7 @@ static Method methodTable[] = {
  */
 
 static int
-EditorCommand (clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+EditorCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     Tki_Editor *editor = (Tki_Editor *) clientData;
     Method *ds;
@@ -1701,3 +1675,4 @@ EditorCommand (clientData, interp, argc, argv)
 
     return TCL_ERROR;
 }
+

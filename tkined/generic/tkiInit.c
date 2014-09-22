@@ -65,8 +65,7 @@ int tki_Debug = 0;
  */
 
 int
-TkiInit(interp)
-    Tcl_Interp *interp;
+TkiInit(Tcl_Interp *interp)
 {
     int code;
     char *library, *tmp;
@@ -274,11 +273,7 @@ mark_one_item(interp, x, y, canvas, item)
 }
 
 static int 
-tkined_mark_points(clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     int ret;
     int largc;
@@ -336,11 +331,7 @@ tkined_mark_points(clientData, interp, argc, argv)
 }
 
 static int 
-tkined_mark_box (clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     int ret;
     int largc;
@@ -390,11 +381,7 @@ tkined_mark_box (clientData, interp, argc, argv)
  */
 
 static int
-blt_axes_time(clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     double val;
     time_t clock;
@@ -410,4 +397,5 @@ blt_axes_time(clientData, interp, argc, argv)
 
     return TCL_OK;
 }
+
 

@@ -335,9 +335,7 @@ typedef struct AsyncToken {
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     SnmpControl *control = (SnmpControl *) clientData;
     Tcl_HashEntry *entryPtr;
@@ -383,8 +381,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static void
-DeleteProc(clientData)
-    ClientData clientData;
+DeleteProc(ClientData clientData)
 {
     TnmSnmp **sPtrPtr, *session = (TnmSnmp *) clientData;
 
@@ -421,10 +418,7 @@ DeleteProc(clientData)
  */
 
 static void
-PduInit(pduPtr, session, type)
-    TnmSnmpPdu *pduPtr;
-    TnmSnmp *session;
-    int type;
+PduInit(TnmSnmpPdu *pduPtr, TnmSnmp *session, int type)
 {
     pduPtr->addr = session->maddr;
     pduPtr->type = type;
@@ -456,8 +450,7 @@ PduInit(pduPtr, session, type)
  */
 
 static void
-PduFree(pduPtr)
-    TnmSnmpPdu *pduPtr;
+PduFree(TnmSnmpPdu *pduPtr)
 {
     if (pduPtr->trapOID) ckfree(pduPtr->trapOID);
     Tcl_DStringFree(&pduPtr->varbind);
@@ -480,10 +473,7 @@ PduFree(pduPtr)
  */
 
 static Tcl_Obj*
-GetOption(interp, object, option)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
+GetOption(Tcl_Interp *interp, ClientData object, int option)
 {
     TnmSnmp *session = (TnmSnmp *) object;
 
@@ -600,11 +590,7 @@ GetOption(interp, object, option)
  */
 
 static int
-SetOption(interp, object, option, objPtr)
-    Tcl_Interp *interp;
-    ClientData object;
-    int option;
-    Tcl_Obj *objPtr;
+SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     TnmSnmp *session = (TnmSnmp *) object;
     int num, len;
@@ -883,11 +869,7 @@ SetOption(interp, object, option, objPtr)
  */
 
 static int
-BindEvent(interp, session, eventObjPtr, script)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    Tcl_Obj *eventObjPtr;
-    Tcl_Obj *script;
+BindEvent(Tcl_Interp *interp, TnmSnmp *session, Tcl_Obj *eventObjPtr, Tcl_Obj *script)
 {
     TnmSnmpBinding *bindPtr;
     TnmTable *tablePtr = NULL;
@@ -965,10 +947,7 @@ BindEvent(interp, session, eventObjPtr, script)
  */
 
 static int
-FindSessions(interp, objc, objv)
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+FindSessions(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int i, result, type = 0, version = 0;
     TnmSnmp *session;
@@ -1067,11 +1046,7 @@ FindSessions(interp, objc, objv)
  */
 
 int
-Tnm_SnmpObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int	objc;
-    Tcl_Obj *CONST objv[];
+Tnm_SnmpObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
 {
     static int initialized = 0;
     static unsigned nextId = 0;
@@ -1540,11 +1515,7 @@ Tnm_SnmpObjCmd(clientData, interp, objc, objv)
  */
 
 static int
-GeneratorCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+GeneratorCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code, nonReps, maxReps;
@@ -1772,11 +1743,7 @@ GeneratorCmd(clientData, interp, objc, objv)
  */
 
 static int
-ListenerCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int	objc;
-    Tcl_Obj *CONST objv[];
+ListenerCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code;
@@ -1882,11 +1849,7 @@ ListenerCmd(clientData, interp, objc, objv)
  */
 
 static int
-NotifierCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int	objc;
-    Tcl_Obj *CONST objv[];
+NotifierCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code;
@@ -2009,11 +1972,7 @@ NotifierCmd(clientData, interp, objc, objv)
  */
 
 static int
-ResponderCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int	objc;
-    Tcl_Obj *CONST objv[];
+ResponderCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code;
@@ -2125,10 +2084,7 @@ ResponderCmd(clientData, interp, objc, objv)
  */
 
 static int
-WaitSession(interp, session, request)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    int request;
+WaitSession(Tcl_Interp *interp, TnmSnmp *session, int request)
 {
     CONST char *cmdName;
     char *name;
@@ -2184,10 +2140,7 @@ WaitSession(interp, session, request)
  */
 
 static void
-ResponseProc(session, pdu, clientData)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    ClientData clientData;
+ResponseProc(TnmSnmp *session, TnmSnmpPdu *pdu, ClientData clientData)
 {
     AsyncToken *atPtr = (AsyncToken *) clientData;
     TnmSnmpEvalCallback(atPtr->interp, session, pdu, 
@@ -2214,13 +2167,7 @@ ResponseProc(session, pdu, clientData)
  */
 
 static int
-Notify(interp, session, type, oid, vbl, script)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    int type;
-    Tcl_Obj *oid;
-    Tcl_Obj *vbl;
-    Tcl_Obj *script;
+Notify(Tcl_Interp *interp, TnmSnmp *session, int type, Tcl_Obj *oid, Tcl_Obj *vbl, Tcl_Obj *script)
 {
     TnmSnmpPdu pdu;
     char *trapOid;
@@ -2266,14 +2213,7 @@ Notify(interp, session, type, oid, vbl, script)
  */
 
 static int
-Request(interp, session, type, non, max, vbList, cmdObj)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    int type;
-    int non;
-    int max;
-    Tcl_Obj *vbList;
-    Tcl_Obj *cmdObj;
+Request(Tcl_Interp *interp, TnmSnmp *session, int type, int non, int max, Tcl_Obj *vbList, Tcl_Obj *cmdObj)
 {
     TnmSnmpPdu pdu;
     int code = TCL_OK;
@@ -2331,11 +2271,7 @@ Request(interp, session, type, non, max, vbList, cmdObj)
  */
 
 static Tcl_Obj*
-WalkCheck(oidListLen, oidListElems, vbListLen, vbListElems)
-    int oidListLen;
-    Tcl_Obj **oidListElems;
-    int vbListLen;
-    Tcl_Obj **vbListElems;
+WalkCheck(int oidListLen, Tcl_Obj **oidListElems, int vbListLen, Tcl_Obj **vbListElems)
 {
     int i, code;
     Tcl_Obj *objPtr;
@@ -2396,10 +2332,7 @@ WalkCheck(oidListLen, oidListElems, vbListLen, vbListElems)
  */
 
 static void
-AsyncWalkProc(session, pdu, clientData)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    ClientData clientData;
+AsyncWalkProc(TnmSnmp *session, TnmSnmpPdu *pdu, ClientData clientData)
 {
     AsyncToken *atPtr = (AsyncToken *) clientData;
     Tcl_Interp *interp = atPtr->interp;
@@ -2484,11 +2417,7 @@ done:
  */
 
 static int
-AsyncWalk(interp, session, oidList, tclCmd)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    Tcl_Obj *oidList;
-    Tcl_Obj *tclCmd;
+AsyncWalk(Tcl_Interp *interp, TnmSnmp *session, Tcl_Obj *oidList, Tcl_Obj *tclCmd)
 {
     TnmSnmpPdu pdu;
     int i, result;
@@ -2565,12 +2494,7 @@ AsyncWalk(interp, session, oidList, tclCmd)
  */
 
 static int
-SyncWalk(interp, session, varName, oidList, tclCmd)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    Tcl_Obj *varName;
-    Tcl_Obj *oidList;
-    Tcl_Obj *tclCmd;
+SyncWalk(Tcl_Interp *interp, TnmSnmp *session, Tcl_Obj *varName, Tcl_Obj *oidList, Tcl_Obj *tclCmd)
 {
     int i, j, result;
     TnmSnmpPdu pdu;
@@ -2911,11 +2835,7 @@ Delta(interp, obj1Ptr, obj2Ptr)
  */
 
 static int
-Extract(interp, what, objPtr, indexObjPtr)
-    Tcl_Interp *interp;
-    int what;
-    Tcl_Obj *objPtr;
-    Tcl_Obj *indexObjPtr;
+Extract(Tcl_Interp *interp, int what, Tcl_Obj *objPtr, Tcl_Obj *indexObjPtr)
 {
     Tcl_Obj *listPtr;
     Tcl_Obj **objv, **vbv;
@@ -2988,10 +2908,7 @@ Extract(interp, what, objPtr, indexObjPtr)
  */
 
 static int
-ExpandTable(interp, tList, dst)
-    Tcl_Interp *interp;
-    char *tList;
-    Tcl_DString *dst;
+ExpandTable(Tcl_Interp *interp, char *tList, Tcl_DString *dst)
 {
     int i, argc, code;
     char **argv = NULL;
@@ -3102,11 +3019,7 @@ ExpandTable(interp, tList, dst)
  */
 
 static int
-Table(interp, session, table, arrayName)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    char *table;
-    char *arrayName;
+Table(Tcl_Interp *interp, TnmSnmp *session, char *table, char *arrayName)
 {
     int i, largc, code;
     TnmSnmpPdu _pdu, *pdu = &_pdu;
@@ -3186,10 +3099,7 @@ Table(interp, session, table, arrayName)
  */
 
 static int
-ExpandScalars(interp, sList, dst)
-    Tcl_Interp *interp;
-    char *sList;
-    Tcl_DString *dst;
+ExpandScalars(Tcl_Interp *interp, char *sList, Tcl_DString *dst)
 {
     int argc, code, i;
     char **argv = NULL;
@@ -3276,11 +3186,7 @@ ExpandScalars(interp, sList, dst)
  */
 
 static int
-Scalars(interp, session, group, arrayName)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    char *group;
-    char *arrayName;
+Scalars(Tcl_Interp *interp, TnmSnmp *session, char *group, char *arrayName)
 {
     int i, largc, code;
     TnmSnmpPdu _pdu, *pdu = &_pdu;
@@ -3401,11 +3307,7 @@ Scalars(interp, session, group, arrayName)
  */
 
 static void
-ScalarSetVar(interp, vbl, varName, result)
-    Tcl_Interp *interp;
-    char *vbl;
-    char *varName;
-    Tcl_DString *result;
+ScalarSetVar(Tcl_Interp *interp, char *vbl, char *varName, Tcl_DString *result)
 {
     int i, code;
     char *name;
@@ -3437,3 +3339,4 @@ ScalarSetVar(interp, vbl, varName, result)
     TnmVectorFree(&vector);
 }
 #endif
+

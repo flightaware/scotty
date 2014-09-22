@@ -6,9 +6,7 @@
 #include "ether.h"
 
 bool_t
-xdr_ethertimeval(xdrs, objp)
-	register XDR *xdrs;
-	ethertimeval *objp;
+xdr_ethertimeval(register XDR *xdrs, ethertimeval *objp)
 {
 
 	if (!xdr_u_int(xdrs, &objp->tv_seconds))
@@ -19,9 +17,7 @@ xdr_ethertimeval(xdrs, objp)
 }
 
 bool_t
-xdr_etherstat(xdrs, objp)
-	register XDR *xdrs;
-	etherstat *objp;
+xdr_etherstat(register XDR *xdrs, etherstat *objp)
 {
 
 	if (!xdr_ethertimeval(xdrs, &objp->e_time))
@@ -42,9 +38,7 @@ xdr_etherstat(xdrs, objp)
 }
 
 bool_t
-xdr_etherhmem_node(xdrs, objp)
-	register XDR *xdrs;
-	etherhmem_node *objp;
+xdr_etherhmem_node(register XDR *xdrs, etherhmem_node *objp)
 {
 
 	if (!xdr_int(xdrs, &objp->h_addr))
@@ -57,9 +51,7 @@ xdr_etherhmem_node(xdrs, objp)
 }
 
 bool_t
-xdr_etherhmem(xdrs, objp)
-	register XDR *xdrs;
-	etherhmem *objp;
+xdr_etherhmem(register XDR *xdrs, etherhmem *objp)
 {
 
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof (etherhmem_node), (xdrproc_t) xdr_etherhmem_node))
@@ -68,9 +60,7 @@ xdr_etherhmem(xdrs, objp)
 }
 
 bool_t
-xdr_etheraddrs(xdrs, objp)
-	register XDR *xdrs;
-	etheraddrs *objp;
+xdr_etheraddrs(register XDR *xdrs, etheraddrs *objp)
 {
 
 	if (!xdr_ethertimeval(xdrs, &objp->e_time))
@@ -88,9 +78,7 @@ xdr_etheraddrs(xdrs, objp)
 }
 
 bool_t
-xdr_addrmask(xdrs, objp)
-	register XDR *xdrs;
-	addrmask *objp;
+xdr_addrmask(register XDR *xdrs, addrmask *objp)
 {
 
 	if (!xdr_int(xdrs, &objp->a_addr))
@@ -99,3 +87,5 @@ xdr_addrmask(xdrs, objp)
 		return (FALSE);
 	return (TRUE);
 }
+
+

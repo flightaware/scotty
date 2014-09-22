@@ -134,8 +134,7 @@ PoolDelete()
  */
 
 static void
-PoolAddString(s)
-    char *s;
+PoolAddString(char *s)
 {
     Tcl_HashEntry *entryPtr;
     int isnew;
@@ -168,8 +167,7 @@ PoolAddString(s)
  */
 
 static int
-PoolGetOffset(s)
-    char *s;
+PoolGetOffset(char *s)
 {
     Tcl_HashEntry *entryPtr;
 
@@ -200,8 +198,7 @@ PoolGetOffset(s)
  */
 
 static void
-PoolSave(fp)
-    FILE *fp;
+PoolSave(FILE *fp)
 {
     Tcl_HashSearch searchPtr;
     Tcl_HashEntry *entryPtr;
@@ -357,10 +354,7 @@ SaveRest(restPtr, restKind, fp)
  */
 
 static void
-SaveType(typePtr, i, fp)
-    TnmMibType *typePtr;
-    int *i;
-    FILE *fp;
+SaveType(TnmMibType *typePtr, int *i, FILE *fp)
 {
     TnmMibType tc;
 
@@ -397,10 +391,7 @@ SaveType(typePtr, i, fp)
  */
 
 static void
-SaveNode(nodePtr, i, fp)
-    TnmMibNode *nodePtr;
-    int *i;
-    FILE *fp;
+SaveNode(TnmMibNode *nodePtr, int *i, FILE *fp)
 {
     struct TnmMibNode no;
 
@@ -517,9 +508,7 @@ SaveData(fp, numEnums, numTCs, numNodes, nodePtr)
  */
 
 void
-TnmMibWriteFrozen(fp, nodePtr)
-    FILE *fp;
-    TnmMibNode *nodePtr;
+TnmMibWriteFrozen(FILE *fp, TnmMibNode *nodePtr)
 {
     int numEnums, numTcs, numNodes; 
     PoolInit();
@@ -556,8 +545,7 @@ TnmMibWriteFrozen(fp, nodePtr)
  */
 
 TnmMibNode*
-TnmMibReadFrozen(fp)
-    FILE *fp;
+TnmMibReadFrozen(FILE *fp)
 {
     TnmMibNode *root = NULL;
     size_t poolSize;
@@ -725,3 +713,4 @@ TnmMibReadFrozen(fp)
     
     return root;
 }
+

@@ -6,9 +6,7 @@
 #include "mount.h"
 
 bool_t
-xdr_fhandle(xdrs, objp)
-	register XDR *xdrs;
-	fhandle objp;
+xdr_fhandle(register XDR *xdrs, fhandle objp)
 {
 
 	if (!xdr_opaque(xdrs, objp, FHSIZE))
@@ -17,9 +15,7 @@ xdr_fhandle(xdrs, objp)
 }
 
 bool_t
-xdr_fhstatus(xdrs, objp)
-	register XDR *xdrs;
-	fhstatus *objp;
+xdr_fhstatus(register XDR *xdrs, fhstatus *objp)
 {
 
 	if (!xdr_u_int(xdrs, &objp->fhs_status))
@@ -36,9 +32,7 @@ xdr_fhstatus(xdrs, objp)
 }
 
 bool_t
-xdr_dirpath(xdrs, objp)
-	register XDR *xdrs;
-	dirpath *objp;
+xdr_dirpath(register XDR *xdrs, dirpath *objp)
 {
 
 	if (!xdr_string(xdrs, objp, MNTPATHLEN))
@@ -47,9 +41,7 @@ xdr_dirpath(xdrs, objp)
 }
 
 bool_t
-xdr_name(xdrs, objp)
-	register XDR *xdrs;
-	name *objp;
+xdr_name(register XDR *xdrs, name *objp)
 {
 
 	if (!xdr_string(xdrs, objp, MNTNAMLEN))
@@ -58,9 +50,7 @@ xdr_name(xdrs, objp)
 }
 
 bool_t
-xdr_mountlist(xdrs, objp)
-	register XDR *xdrs;
-	mountlist *objp;
+xdr_mountlist(register XDR *xdrs, mountlist *objp)
 {
 
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof (struct mountbody), (xdrproc_t) xdr_mountbody))
@@ -69,9 +59,7 @@ xdr_mountlist(xdrs, objp)
 }
 
 bool_t
-xdr_mountbody(xdrs, objp)
-	register XDR *xdrs;
-	mountbody *objp;
+xdr_mountbody(register XDR *xdrs, mountbody *objp)
 {
 
 	if (!xdr_name(xdrs, &objp->ml_hostname))
@@ -84,9 +72,7 @@ xdr_mountbody(xdrs, objp)
 }
 
 bool_t
-xdr_groups(xdrs, objp)
-	register XDR *xdrs;
-	groups *objp;
+xdr_groups(register XDR *xdrs, groups *objp)
 {
 
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof (struct groupnode), (xdrproc_t) xdr_groupnode))
@@ -95,9 +81,7 @@ xdr_groups(xdrs, objp)
 }
 
 bool_t
-xdr_groupnode(xdrs, objp)
-	register XDR *xdrs;
-	groupnode *objp;
+xdr_groupnode(register XDR *xdrs, groupnode *objp)
 {
 
 	if (!xdr_name(xdrs, &objp->gr_name))
@@ -108,9 +92,7 @@ xdr_groupnode(xdrs, objp)
 }
 
 bool_t
-xdr_exports(xdrs, objp)
-	register XDR *xdrs;
-	exports *objp;
+xdr_exports(register XDR *xdrs, exports *objp)
 {
 
 	if (!xdr_pointer(xdrs, (char **)objp, sizeof (struct exportnode), (xdrproc_t) xdr_exportnode))
@@ -119,9 +101,7 @@ xdr_exports(xdrs, objp)
 }
 
 bool_t
-xdr_exportnode(xdrs, objp)
-	register XDR *xdrs;
-	exportnode *objp;
+xdr_exportnode(register XDR *xdrs, exportnode *objp)
 {
 
 	if (!xdr_dirpath(xdrs, &objp->ex_dir))
@@ -132,3 +112,5 @@ xdr_exportnode(xdrs, objp)
 		return (FALSE);
 	return (TRUE);
 }
+
+

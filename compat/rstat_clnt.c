@@ -13,9 +13,7 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 statstime *
-rstatproc_stats_3(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+rstatproc_stats_3(void *argp, CLIENT *clnt)
 {
 	static statstime res;
 
@@ -27,9 +25,7 @@ rstatproc_stats_3(argp, clnt)
 }
 
 u_int *
-rstatproc_havedisk_3(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+rstatproc_havedisk_3(void *argp, CLIENT *clnt)
 {
 	static u_int res;
 
@@ -41,9 +37,7 @@ rstatproc_havedisk_3(argp, clnt)
 }
 
 statsswtch *
-rstatproc_stats_2(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+rstatproc_stats_2(void *argp, CLIENT *clnt)
 {
 	static statsswtch res;
 
@@ -55,9 +49,7 @@ rstatproc_stats_2(argp, clnt)
 }
 
 u_int *
-rstatproc_havedisk_2(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+rstatproc_havedisk_2(void *argp, CLIENT *clnt)
 {
 	static u_int res;
 
@@ -69,9 +61,7 @@ rstatproc_havedisk_2(argp, clnt)
 }
 
 stats *
-rstatproc_stats_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+rstatproc_stats_1(void *argp, CLIENT *clnt)
 {
 	static stats res;
 
@@ -83,9 +73,7 @@ rstatproc_stats_1(argp, clnt)
 }
 
 u_int *
-rstatproc_havedisk_1(argp, clnt)
-	void *argp;
-	CLIENT *clnt;
+rstatproc_havedisk_1(void *argp, CLIENT *clnt)
 {
 	static u_int res;
 
@@ -95,3 +83,4 @@ rstatproc_havedisk_1(argp, clnt)
 	}
 	return (&res);
 }
+

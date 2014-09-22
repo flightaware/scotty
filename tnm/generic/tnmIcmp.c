@@ -83,9 +83,7 @@ IcmpRequest	(Tcl_Interp *interp, Tcl_Obj *hosts,
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     IcmpControl *control = (IcmpControl *) clientData;
 
@@ -111,10 +109,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static int
-IcmpRequest(interp, hosts, icmpPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *hosts;
-    TnmIcmpRequest *icmpPtr;
+IcmpRequest(Tcl_Interp *interp, Tcl_Obj *hosts, TnmIcmpRequest *icmpPtr)
 {
     int i, code, objc;
     struct sockaddr_in addr;
@@ -227,11 +222,7 @@ IcmpRequest(interp, hosts, icmpPtr)
  */
 
 int
-Tnm_IcmpObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_IcmpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int actTimeout = -1;	/* actually used timeout */
     int actRetries = -1;	/* actually used retries */
@@ -462,3 +453,4 @@ Tnm_IcmpObjCmd(clientData, interp, objc, objv)
     ckfree((char *) icmpPtr);
     return code;
 }
+

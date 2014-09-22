@@ -205,9 +205,7 @@ CacheInit()
  */
 
 static TnmSnmpPdu*
-CacheGet(session, pdu)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
+CacheGet(TnmSnmp *session, TnmSnmpPdu *pdu)
 {
     static int last = 0;
     last = (last + 1 ) % CACHE_SIZE;
@@ -244,9 +242,7 @@ CacheGet(session, pdu)
  */
 
 static TnmSnmpPdu*
-CacheHit(session, pdu)
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
+CacheHit(TnmSnmp *session, TnmSnmpPdu *pdu)
 {
     int i;
     time_t now = time((time_t *) NULL);
@@ -299,8 +295,7 @@ CacheHit(session, pdu)
  */
 
 static void
-CacheClear(session)
-    TnmSnmp *session;
+CacheClear(TnmSnmp *session)
 {
     int i;
 
@@ -425,9 +420,7 @@ TraceUnsignedInt(clientData, interp, name1, name2, flags)
  */
 
 int
-TnmSnmpAgentInit(interp, session)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
+TnmSnmpAgentInit(Tcl_Interp *interp, TnmSnmp *session)
 {
     static int done = 0;
     char tclvar[80], buffer[255];
@@ -581,9 +574,7 @@ TnmSnmpAgentInit(interp, session)
  */
 
 static TnmSnmpNode*
-FindInstance(session, oidPtr)
-    TnmSnmp *session;
-    TnmOid *oidPtr;
+FindInstance(TnmSnmp *session, TnmOid *oidPtr)
 {
     TnmSnmpNode *inst = TnmSnmpFindNode(session, oidPtr);
     return (inst && inst->syntax) ? inst : NULL;
@@ -608,9 +599,7 @@ FindInstance(session, oidPtr)
  */
 
 static TnmSnmpNode*
-FindNextInstance(session, oidPtr)
-    TnmSnmp *session;
-    TnmOid *oidPtr;
+FindNextInstance(TnmSnmp *session, TnmOid *oidPtr)
 {
     TnmSnmpNode *inst = TnmSnmpFindNextNode(session, oidPtr);
     return (inst && inst->syntax) ? inst : NULL;
@@ -634,11 +623,7 @@ FindNextInstance(session, oidPtr)
  */
 
 static int
-GetRequest(interp, session, request, response)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *request;
-    TnmSnmpPdu *response;
+GetRequest(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *request, TnmSnmpPdu *response)
 {
     int i, code;
     TnmSnmpNode *inst;
@@ -786,11 +771,7 @@ GetRequest(interp, session, request, response)
  */
 
 static int
-SetRequest(interp, session, request, response)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *request;
-    TnmSnmpPdu *response;
+SetRequest(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *request, TnmSnmpPdu *response)
 {
     int i, code;
     TnmOid oid;
@@ -1067,10 +1048,7 @@ SetRequest(interp, session, request, response)
  */
 
 int
-TnmSnmpAgentRequest(interp, session, pdu)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
+TnmSnmpAgentRequest(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu)
 {
     int rc;
     TnmSnmpPdu *reply;
@@ -1146,3 +1124,4 @@ TnmSnmpAgentRequest(interp, session, pdu)
 	return TCL_OK;
     }
 }
+

@@ -26,8 +26,7 @@ char *buffer;
  */
 
 void
-buffersize(size)
-    size_t size;
+buffersize(size_t size)
 {
     static size_t buffer_size = 0;
 
@@ -63,8 +62,7 @@ buffersize(size)
  */
 
 static char *
-FixPath(path)
-    char *path;
+FixPath(char *path)
 {
     char *s;
 
@@ -82,9 +80,7 @@ FixPath(path)
  */
 
 char* 
-findfile (interp, name)
-    Tcl_Interp *interp;
-    char *name;
+findfile (Tcl_Interp *interp, char *name)
 {
     int i;
     char *library, *file;
@@ -137,8 +133,7 @@ findfile (interp, name)
  */
 
 char* 
-type_to_string (type)
-    unsigned type;
+type_to_string (unsigned type)
 {
     char *result;
 
@@ -166,8 +161,7 @@ type_to_string (type)
 }
 
 unsigned 
-string_to_type (str)
-    char *str;
+string_to_type (char *str)
 {
     unsigned type = TKINED_NONE;
 
@@ -219,10 +213,7 @@ string_to_type (str)
  */
 
 void
-ldelete (interp, slist, item)
-    Tcl_Interp *interp;
-    char *slist;
-    char *item;
+ldelete (Tcl_Interp *interp, char *slist, char *item)
 {
     int largc, i;
     char **largv;
@@ -252,9 +243,7 @@ ldelete (interp, slist, item)
  */
 
 void
-lappend (slist, item)
-    char **slist;
-    char *item;
+lappend (char **slist, char *item)
 {
     *slist = ckrealloc (*slist, strlen (*slist) + strlen(item) + 2);
     if (**slist != '\0') strcat (*slist, " ");
@@ -268,8 +257,7 @@ lappend (slist, item)
  */
 
 char*
-ckstrdupnn (s)
-    char *s;
+ckstrdupnn (char *s)
 {
     char *p, *t, *r;
     size_t n = 2;
@@ -293,3 +281,4 @@ ckstrdupnn (s)
     
     return r;
 }
+

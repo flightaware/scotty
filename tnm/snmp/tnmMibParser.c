@@ -347,11 +347,7 @@ ReadSubID		(FILE *fp);
  */
 
 static void
-AddNewNode(nodeList, label, parentName, subid)
-     TnmMibNode **nodeList;
-     char *label;
-     char *parentName;
-     u_int subid;
+AddNewNode(TnmMibNode **nodeList, char *label, char *parentName, u_int subid)
 {
     TnmMibNode *newPtr = TnmMibNewNode(label);
     newPtr->parentName = ckstrdup(parentName);
@@ -369,9 +365,7 @@ AddNewNode(nodeList, label, parentName, subid)
  */
 
 char*
-TnmMibParse(file, frozen)
-    char *file;
-    char *frozen;
+TnmMibParse(char *file, char *frozen)
 {
     FILE *fp;		/* The current FILE pointer. */
     TnmMibNode *nodePtr = NULL;
@@ -439,8 +433,7 @@ TnmMibParse(file, frozen)
  */
 
 static TnmMibRest*
-ScanIntEnums(str)
-    char *str;
+ScanIntEnums(char *str)
 {
     int done = 0;
     TnmMibRest *enumList = NULL, **enumPtr = &enumList;
@@ -489,8 +482,7 @@ ScanIntEnums(str)
  */
 
 static TnmMibRest*
-ScanRange (str)
-    char *str;
+ScanRange (char *str)
 {
     TnmMibRest *rangeList = NULL;
     int base = 0;
@@ -558,11 +550,7 @@ ScanRange (str)
 
 
 static TnmMibType*
-CreateType(name, syntax, displayHint, enums)
-    char *name;
-    int syntax;
-    char *displayHint;
-    char *enums;
+CreateType(char *name, int syntax, char *displayHint, char *enums)
 {
     TnmMibType *typePtr = TnmMibFindType(name);
 
@@ -613,9 +601,7 @@ CreateType(name, syntax, displayHint, enums)
  */
 
 static int
-ReadIntEnums(fp, strPtr)
-    FILE *fp;
-    char **strPtr;
+ReadIntEnums(FILE *fp, char **strPtr)
 {
     Tcl_DString result;
     int syntax;
@@ -680,9 +666,7 @@ ReadIntEnums(fp, strPtr)
  */
 
 static int
-ReadRange(fp, strPtr)
-    FILE *fp;
-    char **strPtr;
+ReadRange(FILE *fp, char **strPtr)
 {
     Tcl_DString result;
     int syntax;
@@ -779,8 +763,7 @@ ReadRange(fp, strPtr)
  */
 
 static char*
-ReadNameList(fp)
-    FILE *fp;
+ReadNameList(FILE *fp)
 {
     int syntax;
     Tcl_DString dst;
@@ -818,8 +801,7 @@ ReadNameList(fp)
  */
 
 static TnmMibNode*
-ParseFile (fp)
-     FILE *fp;
+ParseFile (FILE *fp)
 {
     char name[SYMBOL_MAXLEN];
     char keyword[SYMBOL_MAXLEN];
@@ -1185,9 +1167,7 @@ ParseFile (fp)
  */
 
 static int
-ParseHeader (fp, keyword)
-    FILE *fp;
-    char *keyword;
+ParseHeader (FILE *fp, char *keyword)
 {
     int syntax;
 
@@ -1280,9 +1260,7 @@ ParseHeader (fp, keyword)
  */
 
 static int
-ParseASN1Type (fp, keyword)
-     FILE *fp;
-     char *keyword;
+ParseASN1Type (FILE *fp, char *keyword)
 {
 #ifndef USE_RANGES
     int level = 0;
@@ -1506,10 +1484,7 @@ ParseASN1Type (fp, keyword)
  */
 
 static TnmMibNode*
-ParseModuleCompliance (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseModuleCompliance (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int syntax;
@@ -1552,10 +1527,7 @@ ParseModuleCompliance (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseModuleIdentity (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseModuleIdentity (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -1598,10 +1570,7 @@ ParseModuleIdentity (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseNotificationType (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseNotificationType (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -1659,10 +1628,7 @@ ParseNotificationType (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseCapabilitiesType (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseCapabilitiesType (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -1699,10 +1665,7 @@ ParseCapabilitiesType (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseTrapType (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseTrapType (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int  syntax, bracket = 0;
@@ -1809,10 +1772,7 @@ ParseTrapType (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseObjectGroup (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseObjectGroup (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -1877,10 +1837,7 @@ ParseObjectGroup (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseNotificationGroup (fp, name, nodeList)
-    FILE *fp;
-    char *name;
-    TnmMibNode **nodeList;
+ParseNotificationGroup (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -1946,10 +1903,7 @@ ParseNotificationGroup (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseObjectIdentity (fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseObjectIdentity (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -2002,10 +1956,7 @@ ParseObjectIdentity (fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseObjectID(fp, name, nodeList)
-     FILE *fp;
-     char *name;
-     TnmMibNode **nodeList;
+ParseObjectID(FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -2035,10 +1986,7 @@ ParseObjectID(fp, name, nodeList)
  */
 
 static TnmMibNode*
-ParseObjectType (fp, name, nodeList)
-    FILE *fp;
-    char *name;
-    TnmMibNode **nodeList;
+ParseObjectType (FILE *fp, char *name, TnmMibNode **nodeList)
 {
     char keyword[SYMBOL_MAXLEN];
     int	syntax;
@@ -2382,10 +2330,7 @@ ParseObjectType (fp, name, nodeList)
  */
 
 static int
-ParseNodeList(fp, nodeList, nodePtr)
-    FILE *fp;
-    TnmMibNode **nodeList;
-    TnmMibNode *nodePtr;
+ParseNodeList(FILE *fp, TnmMibNode **nodeList, TnmMibNode *nodePtr)
 {
     struct subid *subidList, *freePtr;
 
@@ -2456,9 +2401,7 @@ HashKeywords()
  */
 
 static int
-ReadKeyword(fp, keyword)
-     FILE *fp;
-     char *keyword;
+ReadKeyword(FILE *fp, char *keyword)
 {
     char *cp = keyword;
     int	ch = lastchar;
@@ -2641,8 +2584,7 @@ ReadKeyword(fp, keyword)
  */
 
 static struct subid*
-ReadSubID (fp)
-    FILE *fp;
+ReadSubID (FILE *fp)
 {
    char	name[SYMBOL_MAXLEN]; 
    char	keyword[SYMBOL_MAXLEN]; 
@@ -2722,4 +2664,5 @@ ReadSubID (fp)
    }
    return subidList;
 }
+
 

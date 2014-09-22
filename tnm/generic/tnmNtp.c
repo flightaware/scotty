@@ -112,9 +112,7 @@ NtpGetPeer	(char *data, int *assoc);
  */
 
 static void
-AssocDeleteProc(clientData, interp)
-    ClientData clientData;
-    Tcl_Interp *interp;
+AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     NtpControl *control = (NtpControl *) clientData;
 
@@ -141,8 +139,7 @@ AssocDeleteProc(clientData, interp)
  */
 
 static int
-NtpSocket(interp)
-    Tcl_Interp *interp;
+NtpSocket(Tcl_Interp *interp)
 {
     struct sockaddr_in maddr;
     int code;
@@ -234,11 +231,7 @@ NtpReady(s, timeout)
  */
 
 static void
-NtpMakePkt(pkt, op, assoc, seq)
-    struct ntp_control *pkt;
-    int op;
-    unsigned short assoc;
-    unsigned short seq;
+NtpMakePkt(struct ntp_control *pkt, int op, unsigned short assoc, unsigned short seq)
 {
     pkt->mode = 0x18 | 6;			/* version 3 | MODE_CONTROL */
     pkt->op = op;				/* CTL_OP_... */
@@ -276,14 +269,7 @@ NtpMakePkt(pkt, op, assoc, seq)
  */
 
 static int
-NtpFetch(interp, daddr, op, retries, timeo, buf, assoc)
-    Tcl_Interp *interp;
-    struct sockaddr_in *daddr;
-    int op;
-    int retries;
-    int timeo;
-    char *buf;
-    unsigned short assoc;
+NtpFetch(Tcl_Interp *interp, struct sockaddr_in *daddr, int op, int retries, int timeo, char *buf, unsigned short assoc)
 {
     struct ntp_control qpkt, pkt;
     struct sockaddr_in saddr;
@@ -362,11 +348,7 @@ NtpFetch(interp, daddr, op, retries, timeo, buf, assoc)
  */
 
 static int
-NtpSplit(interp, varname, pfix, buf)
-    Tcl_Interp *interp;
-    char *varname;
-    char *pfix;
-    char *buf;
+NtpSplit(Tcl_Interp *interp, char *varname, char *pfix, char *buf)
 {
     char *d, *s, *g;
     const char *r;
@@ -419,9 +401,7 @@ NtpSplit(interp, varname, pfix, buf)
  */
 
 static int 
-NtpGetPeer(data, assoc)
-    char *data;
-    int *assoc;
+NtpGetPeer(char *data, int *assoc)
 {
     int i;
 
@@ -452,11 +432,7 @@ NtpGetPeer(data, assoc)
  */
 
 int
-Tnm_NtpObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_NtpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in daddr;
     int x, code, assoc;
@@ -600,3 +576,4 @@ Tnm_NtpObjCmd(clientData, interp, objc, objv)
     Tcl_MutexUnlock(&ntpMutex);
     return code;
 }
+

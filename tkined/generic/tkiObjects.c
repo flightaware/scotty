@@ -43,8 +43,7 @@ do_debug              (Tki_Object *object, Tcl_Interp *interp,
  */
 
 Tki_Object* 
-Tki_LookupObject (id)
-     char *id;
+Tki_LookupObject (char *id)
 {
     Tcl_HashEntry *entryPtr;
 
@@ -71,13 +70,7 @@ Tki_LookupObject (id)
  */
 
 void
-TkiTrace (editor, object, cmd, argc, argv, result)
-    Tki_Editor *editor;
-    Tki_Object *object;
-    char *cmd;
-    int argc;
-    char **argv;
-    char *result;
+TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, char **argv, char *result)
 {
 
     /* **** start of hack **** */
@@ -197,12 +190,7 @@ TkiTrace (editor, object, cmd, argc, argv, result)
  */
 
 static void 
-do_debug (object, interp, argc, argv, result)
-    Tki_Object *object;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
-    char *result;
+do_debug (Tki_Object *object, Tcl_Interp *interp, int argc, char **argv, char *result)
 {
     int i;
 
@@ -236,11 +224,7 @@ do_debug (object, interp, argc, argv, result)
  */
 
 int 
-Tki_CreateObject (clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+Tki_CreateObject (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     Tki_Object *object;
     Tcl_HashEntry *entryPtr;
@@ -315,8 +299,7 @@ Tki_CreateObject (clientData, interp, argc, argv)
  */
 
 void 
-Tki_DeleteObject (clientData)
-     ClientData clientData;
+Tki_DeleteObject (ClientData clientData)
 {
     Tcl_HashEntry *entryPtr;
     Tcl_HashSearch ht_search;
@@ -379,11 +362,7 @@ Tki_DeleteObject (clientData)
  */
 
 int 
-ined (clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     Tki_Object *object = (Tki_Object *) clientData;
     char *cmd;
@@ -1002,11 +981,7 @@ static Method methodTable[] = {
  */
 
 static int
-ObjectCommand (clientData, interp, argc, argv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int argc;
-    char **argv;
+ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 {
     Tki_Object *object = (Tki_Object *) clientData;
     Method *ds;
@@ -1064,12 +1039,7 @@ ObjectCommand (clientData, interp, argc, argv)
  */
 
 int
-TkiNoTrace (method, interp, object, argc, argv)
-    int (*method)();
-    Tcl_Interp *interp;
-    Tki_Object *object;
-    int argc;
-    char **argv;
+TkiNoTrace (int (*method)(), Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int nt = ignoretrace;
     int res;
@@ -1080,3 +1050,4 @@ TkiNoTrace (method, interp, object, argc, argv)
 
     return res;
 }
+

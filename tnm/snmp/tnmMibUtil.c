@@ -108,9 +108,7 @@ FormatUnsigned		(unsigned u, char *s);
  */
 
 static void
-FormatUnsigned(u, s)
-    u_int u;
-    char *s;
+FormatUnsigned(u_int u, char *s)
 {
     if (u < 10) {
 	*s++ = '0' + u;
@@ -144,9 +142,7 @@ FormatUnsigned(u, s)
  */
 
 static void
-GetMibPath(nodePtr, s) 
-    TnmMibNode *nodePtr;
-    char *s;
+GetMibPath(TnmMibNode *nodePtr, char *s)
 {
     if (! nodePtr) return;
     if (nodePtr->parentPtr) {
@@ -176,9 +172,7 @@ GetMibPath(nodePtr, s)
  */
 
 void
-TnmMibNodeToOid(nodePtr, oidPtr)
-    TnmMibNode *nodePtr;
-    TnmOid *oidPtr;
+TnmMibNodeToOid(TnmMibNode *nodePtr, TnmOid *oidPtr)
 {
     if (! nodePtr) {
 	TnmOidFree(oidPtr);
@@ -208,8 +202,7 @@ TnmMibNodeToOid(nodePtr, oidPtr)
  */
 
 char*
-TnmMibGetOid(label)
-    char *label;
+TnmMibGetOid(char *label)
 {
     char *expanded = TnmHexToOid(label);
     TnmMibNode *nodePtr;
@@ -250,9 +243,7 @@ TnmMibGetOid(label)
  */
 
 char*
-TnmMibGetName(label, exact)
-    char *label;
-    int exact;
+TnmMibGetName(char *label, int exact)
 {
     char *expanded = TnmHexToOid(label);
     TnmMibNode *nodePtr;
@@ -293,9 +284,7 @@ TnmMibGetName(label, exact)
  */
 
 char*
-TnmMibGetString(fileName, fileOffset)
-    char *fileName;
-    int fileOffset;
+TnmMibGetString(char *fileName, int fileOffset)
 {
     static Tcl_DString *result = NULL;
     FILE *fp;
@@ -389,8 +378,7 @@ TnmMibGetString(fileName, fileOffset)
  */
 
 int
-TnmMibGetBaseSyntax(name)
-    char *name;
+TnmMibGetBaseSyntax(char *name)
 {
     int syntax = ASN1_OTHER;
     TnmMibNode *nodePtr = TnmMibFindNode(name, NULL, 0);
@@ -425,9 +413,7 @@ TnmMibGetBaseSyntax(name)
  */
 
 static Tcl_Obj*
-FormatOctetTC(val, fmt)
-    Tcl_Obj *val;
-    char *fmt;
+FormatOctetTC(Tcl_Obj *val, char *fmt)
 {
     int i = 0, len, pfx, have_pfx;			/* counter prefix */
     char *last_fmt;			/* save ptr to last seen fmt */
@@ -569,9 +555,7 @@ FormatOctetTC(val, fmt)
  */
 
 Tcl_Obj*
-FormatIntTC(val, fmt)
-    Tcl_Obj *val;
-    char *fmt;
+FormatIntTC(Tcl_Obj *val, char *fmt)
 {
     long value;
     Tcl_Obj *objPtr = NULL;
@@ -684,9 +668,7 @@ FormatIntTC(val, fmt)
  */
 
 static Tcl_Obj*
-ScanOctetTC(val, fmt)
-    Tcl_Obj *val;
-    char *fmt;
+ScanOctetTC(Tcl_Obj *val, char *fmt)
 {
     int i = 0, valid = 0, len, pfx, have_pfx;		/* counter prefix */
     char *last_fmt;			/* save ptr to last seen fmt */
@@ -837,9 +819,7 @@ ScanOctetTC(val, fmt)
  */
 
 static Tcl_Obj*
-ScanIntTC(val, fmt)
-    Tcl_Obj *val;
-    char *fmt;
+ScanIntTC(Tcl_Obj *val, char *fmt)
 {
     int i = 0, dpt = -1, sign = 0, frac = -1;
     Tcl_Obj *objPtr = NULL;
@@ -938,10 +918,7 @@ ScanIntTC(val, fmt)
  */
 
 Tcl_Obj*
-TnmMibFormatValue(typePtr, syntax, value)
-    TnmMibType *typePtr;
-    int syntax;
-    Tcl_Obj *value;
+TnmMibFormatValue(TnmMibType *typePtr, int syntax, Tcl_Obj *value)
 {
     Tcl_Obj *objPtr = NULL;
     
@@ -1020,10 +997,7 @@ TnmMibFormatValue(typePtr, syntax, value)
  */
 
 Tcl_Obj*
-TnmMibFormat(name, exact, value)
-    char *name;
-    int exact;
-    char *value;
+TnmMibFormat(char *name, int exact, char *value)
 {
     TnmMibNode *nodePtr;
     Tcl_Obj *src, *dst;
@@ -1065,10 +1039,7 @@ TnmMibFormat(name, exact, value)
  */
 
 Tcl_Obj*
-TnmMibScanValue(typePtr, syntax, value)
-    TnmMibType *typePtr;
-    int syntax;
-    Tcl_Obj *value;
+TnmMibScanValue(TnmMibType *typePtr, int syntax, Tcl_Obj *value)
 {
     Tcl_Obj *objPtr = NULL;
     
@@ -1132,10 +1103,7 @@ TnmMibScanValue(typePtr, syntax, value)
  */
 
 char*
-TnmMibScan(name, exact, value)
-    char *name;
-    int exact;
-    char *value;
+TnmMibScan(char *name, int exact, char *value)
 {
     TnmMibNode *nodePtr = TnmMibFindNode(name, NULL, exact);
     static Tcl_Obj *objPtr = NULL;
@@ -1177,12 +1145,7 @@ TnmMibScan(name, exact, value)
  */
 
 int
-TnmMibUnpack(interp, oidPtr, offset, implied, indexNodeList)
-    Tcl_Interp *interp;
-    TnmOid *oidPtr;
-    int offset;
-    int implied;
-    TnmMibNode **indexNodeList;
+TnmMibUnpack(Tcl_Interp *interp, TnmOid *oidPtr, int offset, int implied, TnmMibNode **indexNodeList)
 {
     int i, j, syntax, oidLength;
     Tcl_Obj *listObjPtr, *value, *fmtValue;
@@ -1349,13 +1312,7 @@ TnmMibUnpack(interp, oidPtr, offset, implied, indexNodeList)
  */
 
 int
-TnmMibPack(interp, oidPtr, objc, objv, implied, indexNodeList)
-    Tcl_Interp *interp;
-    TnmOid *oidPtr;
-    int objc;
-    Tcl_Obj **objv;
-    int implied;
-    TnmMibNode **indexNodeList;
+TnmMibPack(Tcl_Interp *interp, TnmOid *oidPtr, int objc, Tcl_Obj **objv, int implied, TnmMibNode **indexNodeList)
 {
     int i, j, len, syntax, code;
     long int32Value;
@@ -1500,11 +1457,7 @@ TnmMibPack(interp, oidPtr, objc, objv, implied, indexNodeList)
  */
 
 int
-TnmMibGetValue(syntax, objPtr, typePtr, newPtr)
-    int syntax;
-    Tcl_Obj *objPtr;
-    TnmMibType *typePtr;
-    Tcl_Obj **newPtr;
+TnmMibGetValue(int syntax, Tcl_Obj *objPtr, TnmMibType *typePtr, Tcl_Obj **newPtr)
 {
     int result = TCL_OK;
 
@@ -1573,3 +1526,4 @@ TnmMibGetValue(syntax, objPtr, typePtr, newPtr)
  * compile-command: "make -k -C ../../unix"
  * End:
  */
+

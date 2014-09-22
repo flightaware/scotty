@@ -41,9 +41,7 @@ TCL_DECLARE_MUTEX(utilMutex)
  */
 
 char *
-TnmGetTableValue(table, key)
-    TnmTable *table;
-    unsigned key;
+TnmGetTableValue(TnmTable *table, unsigned key)
 {
     TnmTable *elemPtr;
 
@@ -112,8 +110,7 @@ TnmGetTableKey(TnmTable *table, const char *value)
  */
 
 char *
-TnmGetTableValues(table)
-    TnmTable *table;
+TnmGetTableValues(TnmTable *table)
 {
     static char *buffer = NULL;
     static size_t size = 0;
@@ -193,10 +190,7 @@ TnmGetTableValues(table)
  */
 
 void
-TnmListFromTable(table, listPtr, pattern)
-    TnmTable *table;
-    Tcl_Obj *listPtr;
-    char *pattern;
+TnmListFromTable(TnmTable *table, Tcl_Obj *listPtr, char *pattern)
 {
     for (; table->value; table++) {
 	if (pattern && !Tcl_StringMatch(table->value, pattern)) {
@@ -228,11 +222,7 @@ TnmListFromTable(table, listPtr, pattern)
  */
 
 int
-TnmGetTableKeyFromObj(interp, table, objPtr, what)
-    Tcl_Interp *interp;
-    TnmTable *table;
-    Tcl_Obj *objPtr;
-    char *what;
+TnmGetTableKeyFromObj(Tcl_Interp *interp, TnmTable *table, Tcl_Obj *objPtr, char *what)
 {
     char *name;
     int value;
@@ -266,10 +256,7 @@ TnmGetTableKeyFromObj(interp, table, objPtr, what)
  */
 
 void
-TnmListFromList(objPtr, listPtr, pattern)
-    Tcl_Obj *objPtr;
-    Tcl_Obj *listPtr;
-    char *pattern;
+TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
 {
     int i, objc, code;
     Tcl_Obj **objv;
@@ -305,12 +292,7 @@ TnmListFromList(objPtr, listPtr, pattern)
  */
 
 int
-TnmSetConfig(interp, config, object, objc, objv)
-    Tcl_Interp *interp;
-    TnmConfig *config;
-    ClientData object;
-    int objc;
-    Tcl_Obj *CONST objv[];
+TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *CONST objv[])
 {
     int i, option, code;
     TnmTable *elemPtr;
@@ -387,12 +369,7 @@ TnmSetConfig(interp, config, object, objc, objv)
  */
 
 int
-TnmGetConfig(interp, config, object, objc, objv)
-    Tcl_Interp *interp;
-    TnmConfig *config;
-    ClientData object;
-    int objc;
-    Tcl_Obj *CONST objv[];
+TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *CONST objv[])
 {
     int option;
     Tcl_Obj *objPtr;
@@ -438,8 +415,7 @@ TnmGetConfig(interp, config, object, objc, objv)
  */
 
 void
-TnmVectorInit(vPtr)
-    TnmVector *vPtr;
+TnmVectorInit(TnmVector *vPtr)
 {
     vPtr->elements = vPtr->staticSpace;
     vPtr->size = 0;
@@ -466,8 +442,7 @@ TnmVectorInit(vPtr)
  */
 
 void
-TnmVectorFree(vPtr)
-    TnmVector *vPtr;
+TnmVectorFree(TnmVector *vPtr)
 {
     if (vPtr->elements != vPtr->staticSpace) {
 	ckfree((char *) vPtr->elements);
@@ -496,9 +471,7 @@ TnmVectorFree(vPtr)
  */
 
 void
-TnmVectorAdd(vPtr, clientData)
-    TnmVector *vPtr;
-    ClientData clientData;
+TnmVectorAdd(TnmVector *vPtr, ClientData clientData)
 {
     int i;
     size_t size;
@@ -537,9 +510,7 @@ TnmVectorAdd(vPtr, clientData)
  */
 
 void
-TnmVectorDelete(vPtr, clientData)
-    TnmVector *vPtr;
-    ClientData clientData;
+TnmVectorDelete(TnmVector *vPtr, ClientData clientData)
 {
     int i, found = 0;
 
@@ -577,10 +548,7 @@ TnmVectorDelete(vPtr, clientData)
  */
 
 int
-TnmGetUnsigned(interp, string, intPtr)
-    Tcl_Interp *interp;
-    char *string;
-    int *intPtr;
+TnmGetUnsigned(Tcl_Interp *interp, char *string, int *intPtr)
 {
     int code;
 
@@ -614,10 +582,7 @@ TnmGetUnsigned(interp, string, intPtr)
  */
 
 int
-TnmGetUnsignedFromObj(interp, objPtr, intPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    int *intPtr;
+TnmGetUnsignedFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int *intPtr)
 {
     int code;
 
@@ -651,10 +616,7 @@ TnmGetUnsignedFromObj(interp, objPtr, intPtr)
  */
 
 int
-TnmGetPositive(interp, string, intPtr)
-    Tcl_Interp *interp;
-    char *string;
-    int *intPtr;
+TnmGetPositive(Tcl_Interp *interp, char *string, int *intPtr)
 {
     int code;
 
@@ -688,10 +650,7 @@ TnmGetPositive(interp, string, intPtr)
  */
 
 int
-TnmGetPositiveFromObj(interp, objPtr, intPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    int *intPtr;
+TnmGetPositiveFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int *intPtr)
 {
     int code;
 
@@ -725,12 +684,7 @@ TnmGetPositiveFromObj(interp, objPtr, intPtr)
  */
 
 int
-TnmGetIntRangeFromObj(interp, objPtr, min, max, intPtr)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    int min;
-    int max;
-    int *intPtr;
+TnmGetIntRangeFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int min, int max, int *intPtr)
 {
     int code;
     char buffer[40];
@@ -767,9 +721,7 @@ TnmGetIntRangeFromObj(interp, objPtr, min, max, intPtr)
  */
 
 char*
-TnmPrintCounter64(high, low)
-    u_int high;
-    u_int low;
+TnmPrintCounter64(u_int high, u_int low)
 {
     double d;
     int j, carry;
@@ -834,10 +786,7 @@ TnmPrintCounter64(high, low)
  */
 
 int
-TnmSetIPAddress(interp, host, addr)
-    Tcl_Interp *interp;
-    char *host;
-    struct sockaddr_in *addr;
+TnmSetIPAddress(Tcl_Interp *interp, char *host, struct sockaddr_in *addr)
 {
     static Tcl_HashTable *hostTable = NULL;
     Tcl_HashEntry *hostEntry;
@@ -966,9 +915,7 @@ TnmSetIPAddress(interp, host, addr)
  */
 
 char *
-TnmGetIPName(interp, addr)
-    Tcl_Interp *interp;
-    struct sockaddr_in *addr;
+TnmGetIPName(Tcl_Interp *interp, struct sockaddr_in *addr)
 {
     static Tcl_HashTable *hostTable = NULL;
     Tcl_HashEntry *hostEntry;
@@ -1027,11 +974,7 @@ TnmGetIPName(interp, addr)
  */
 
 int
-TnmSetIPPort(interp, protocol, port, addr)
-    Tcl_Interp *interp;
-    char *protocol;
-    char *port;
-    struct sockaddr_in* addr;
+TnmSetIPPort(Tcl_Interp *interp, char *protocol, char *port, struct sockaddr_in* addr)
 {
     char *p = port;
     int isnum = 1;
@@ -1091,10 +1034,7 @@ TnmSetIPPort(interp, protocol, port, addr)
  */
 
 char *
-TnmGetIPPort(interp, protocol, addr)
-    Tcl_Interp *interp;
-    char *protocol;
-    struct sockaddr_in *addr;
+TnmGetIPPort(Tcl_Interp *interp, char *protocol, struct sockaddr_in *addr)
 {
     struct servent *serv;
 
@@ -1146,9 +1086,7 @@ TnmGetIPPort(interp, protocol, addr)
  */
 
 int
-TnmValidateIpHostName(interp, name)
-    Tcl_Interp *interp;
-    const char *name;
+TnmValidateIpHostName(Tcl_Interp *interp, const char *name)
 {
     const char *p = name;
     char last = ' ';
@@ -1207,9 +1145,7 @@ TnmValidateIpHostName(interp, name)
  */
 
 int
-TnmValidateIpAddress(interp, address)
-    Tcl_Interp *interp;
-    const char *address;
+TnmValidateIpAddress(Tcl_Interp *interp, const char *address)
 {
     const char *p = address;
     unsigned dots, a;
@@ -1257,8 +1193,7 @@ TnmValidateIpAddress(interp, address)
  */
 
 void
-TnmWriteMessage(msg)
-    CONST char *msg;
+TnmWriteMessage(CONST char *msg)
 {
     Tcl_Channel channel;
 
@@ -1285,8 +1220,7 @@ TnmWriteMessage(msg)
  */
 
 void
-TnmAttrClear(tablePtr)
-    Tcl_HashTable *tablePtr;
+TnmAttrClear(Tcl_HashTable *tablePtr)
 {
     Tcl_HashEntry *entryPtr;
     Tcl_HashSearch search;
@@ -1315,9 +1249,7 @@ TnmAttrClear(tablePtr)
  */
 
 void
-TnmAttrList(tablePtr, interp)
-    Tcl_HashTable *tablePtr;
-    Tcl_Interp *interp;
+TnmAttrList(Tcl_HashTable *tablePtr, Tcl_Interp *interp)
 {
     Tcl_HashEntry *entryPtr;
     Tcl_HashSearch search;
@@ -1350,11 +1282,7 @@ TnmAttrList(tablePtr, interp)
  */
 
 int
-TnmAttrSet(tablePtr, interp, name, value)
-    Tcl_HashTable *tablePtr;
-    Tcl_Interp *interp;
-    char *name;
-    char *value;
+TnmAttrSet(Tcl_HashTable *tablePtr, Tcl_Interp *interp, char *name, char *value)
 {
     Tcl_HashEntry *entryPtr;
     int isNew;
@@ -1417,10 +1345,7 @@ TnmAttrSet(tablePtr, interp, name, value)
  */
 
 void
-TnmAttrDump(tablePtr, name, dsPtr)
-    Tcl_HashTable *tablePtr;
-    char *name;
-    Tcl_DString *dsPtr;
+TnmAttrDump(Tcl_HashTable *tablePtr, char *name, Tcl_DString *dsPtr)
 {
     Tcl_HashEntry *entryPtr;
     Tcl_HashSearch search;
@@ -1460,10 +1385,7 @@ TnmAttrDump(tablePtr, name, dsPtr)
  */
 
 void
-TnmHexEnc(s, n, d)
-    char *s;
-    int n;
-    char *d;
+TnmHexEnc(char *s, int n, char *d)
 {
     while (n-- > 0) {
 	char c = *s++;
@@ -1545,10 +1467,7 @@ TnmHexDec(s, d, n)
  */
 
 char*
-TnmGetHandle(interp, prefix, id)
-    Tcl_Interp *interp;
-    char *prefix;
-    unsigned *id;
+TnmGetHandle(Tcl_Interp *interp, char *prefix, unsigned *id)
 {
     static char buffer[40];
     Tcl_CmdInfo cmdInfo;
@@ -1583,10 +1502,7 @@ TnmGetHandle(interp, prefix, id)
  */
 
 int
-TnmMatchTags(interp, tagListObj, patternListObj)
-    Tcl_Interp *interp;
-    Tcl_Obj *tagListObj;
-    Tcl_Obj *patternListObj;
+TnmMatchTags(Tcl_Interp *interp, Tcl_Obj *tagListObj, Tcl_Obj *patternListObj)
 {
     int i, j, code, tagLen, patLen;
     Tcl_Obj **tagPtrs, **patPtrs;
@@ -1633,9 +1549,7 @@ TnmMatchTags(interp, tagListObj, patternListObj)
  */
 
 int
-TnmMkDir(interp, obj)
-    Tcl_Interp *interp;
-    Tcl_Obj *obj;
+TnmMkDir(Tcl_Interp *interp, Tcl_Obj *obj)
 {
     int result = TCL_OK, j, pobjc;
     Tcl_Obj *split = NULL;
@@ -1700,3 +1614,4 @@ TnmMkDir(interp, obj)
     
     return result;
 }
+

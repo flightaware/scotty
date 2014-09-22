@@ -195,8 +195,7 @@ SaveAgentID		(TnmSnmp *session);
  */
 
 static void
-SessionDestroyProc(memPtr)
-    char *memPtr;
+SessionDestroyProc(char *memPtr)
 {
     TnmSnmp *session = (TnmSnmp *) memPtr;
     
@@ -258,8 +257,7 @@ SessionDestroyProc(memPtr)
  */
 
 static void
-RequestDestroyProc(memPtr)
-    char *memPtr;
+RequestDestroyProc(char *memPtr)
 {
     TnmSnmpRequest *request = (TnmSnmpRequest *) memPtr;
 
@@ -285,8 +283,7 @@ RequestDestroyProc(memPtr)
  */
 
 static int
-FindAuthKey(session)
-    TnmSnmp *session;
+FindAuthKey(TnmSnmp *session)
 {
     KeyCacheElem *keyPtr;
     
@@ -320,8 +317,7 @@ FindAuthKey(session)
  */
 
 static void
-SaveAuthKey(session)
-    TnmSnmp *session;
+SaveAuthKey(TnmSnmp *session)
 {
     KeyCacheElem *keyPtr;
     
@@ -354,8 +350,7 @@ SaveAuthKey(session)
  */
 
 static void 
-MakeAuthKey(session)
-    TnmSnmp *session;
+MakeAuthKey(TnmSnmp *session)
 {
     MD5_CTX MD;
     u_char *cp, password_buf[64];
@@ -442,8 +437,7 @@ MakeAuthKey(session)
  */
 
 static int
-FindAgentID(session)
-    TnmSnmp *session;
+FindAgentID(TnmSnmp *session)
 {
     AgentIDCacheElem *idPtr;
     
@@ -479,8 +473,7 @@ FindAgentID(session)
  */
 
 static void
-SaveAgentID(session)
-    TnmSnmp *session;
+SaveAgentID(TnmSnmp *session)
 {
     AgentIDCacheElem *idPtr;
     
@@ -523,8 +516,7 @@ SaveAgentID(session)
  */
 
 void
-TnmSnmpUsecSetAgentID(session)
-    TnmSnmp *session;
+TnmSnmpUsecSetAgentID(TnmSnmp *session)
 {
     if (session->qos & USEC_QOS_AUTH && session->password) {
 	MakeAuthKey(session);
@@ -552,8 +544,7 @@ TnmSnmpUsecSetAgentID(session)
  */
 
 void
-TnmSnmpUsecGetAgentID(session)
-    TnmSnmp *session;
+TnmSnmpUsecGetAgentID(TnmSnmp *session)
 {
     int found;
 
@@ -591,15 +582,7 @@ TnmSnmpUsecGetAgentID(session)
  */
 
 int
-TnmSnmpEvalCallback(interp, session, pdu, cmd, instance, oid, value, last)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    char *cmd;
-    char *instance;
-    char *oid;
-    char *value;
-    char *last;
+TnmSnmpEvalCallback(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, char *cmd, char *instance, char *oid, char *value, char *last)
 {
     char buf[20];
     int	code;
@@ -742,11 +725,7 @@ TnmSnmpEvalCallback(interp, session, pdu, cmd, instance, oid, value, last)
  */
 
 int
-TnmSnmpEvalBinding(interp, session, pdu, event)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    TnmSnmpPdu *pdu;
-    int event;
+TnmSnmpEvalBinding(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, int event)
 {
     int code = TCL_OK;
     TnmSnmpBinding *bindPtr = session->bindPtr;
@@ -784,9 +763,7 @@ TnmSnmpEvalBinding(interp, session, pdu, event)
  */
 
 void
-TnmSnmpDumpPDU(interp, pdu)
-    Tcl_Interp *interp;
-    TnmSnmpPdu *pdu;
+TnmSnmpDumpPDU(Tcl_Interp *interp, TnmSnmpPdu *pdu)
 {
     if (hexdump) {
 
@@ -865,11 +842,7 @@ TnmSnmpDumpPDU(interp, pdu)
  */
 
 void
-TnmSnmpMD5Digest(packet, length, key, digest)
-    u_char *packet;
-    int length;
-    u_char *key;
-    u_char *digest;
+TnmSnmpMD5Digest(u_char *packet, int length, u_char *key, u_char *digest)
 {
     MD5_CTX MD;
 
@@ -915,9 +888,7 @@ TnmSnmpMD5Digest(packet, length, key, digest)
  */
 
 TnmSnmp*
-TnmSnmpCreateSession(interp, type)
-    Tcl_Interp *interp;
-    char type;
+TnmSnmpCreateSession(Tcl_Interp *interp, char type)
 {
     TnmSnmp *session;
     const char *user;
@@ -991,8 +962,7 @@ TnmSnmpCreateSession(interp, type)
  */
 
 void
-TnmSnmpDeleteSession(session)
-    TnmSnmp *session;
+TnmSnmpDeleteSession(TnmSnmp *session)
 {
     TnmSnmpRequest **rPtrPtr;
 
@@ -1035,13 +1005,7 @@ TnmSnmpDeleteSession(session)
  */
 
 TnmSnmpRequest*
-TnmSnmpCreateRequest(id, packet, packetlen, proc, clientData, interp)
-    int id;
-    u_char *packet;
-    int packetlen;
-    TnmSnmpRequestProc *proc;
-    ClientData clientData;
-    Tcl_Interp *interp;
+TnmSnmpCreateRequest(int id, u_char *packet, int packetlen, TnmSnmpRequestProc *proc, ClientData clientData, Tcl_Interp *interp)
 {
     TnmSnmpRequest *request;
 
@@ -1083,8 +1047,7 @@ TnmSnmpCreateRequest(id, packet, packetlen, proc, clientData, interp)
  */
 
 TnmSnmpRequest*
-TnmSnmpFindRequest(id)
-    int id;
+TnmSnmpFindRequest(int id)
 {
     TnmSnmpRequest *rPtr;
 
@@ -1124,9 +1087,7 @@ TnmSnmpFindRequest(id)
  */
 
 int
-TnmSnmpQueueRequest(session, request)
-    TnmSnmp *session;
-    TnmSnmpRequest *request;
+TnmSnmpQueueRequest(TnmSnmp *session, TnmSnmpRequest *request)
 {
     int waiting = 0, active = 0;
     TnmSnmpRequest *rPtr, *lastPtr = NULL;
@@ -1202,8 +1163,7 @@ TnmSnmpQueueRequest(session, request)
  */
 
 void
-TnmSnmpDeleteRequest(request)
-    TnmSnmpRequest *request;
+TnmSnmpDeleteRequest(TnmSnmpRequest *request)
 {
     TnmSnmpRequest *rPtr, **rPtrPtr;
     TnmSnmp *session;
@@ -1316,11 +1276,7 @@ TnmSnmpGetRequestId()
  */
 
 int
-Tnm_SnmpSplitVBList(interp, list, varBindSizePtr, varBindPtrPtr)
-    Tcl_Interp *interp;
-    char *list;
-    int *varBindSizePtr;
-    SNMP_VarBind **varBindPtrPtr;
+Tnm_SnmpSplitVBList(Tcl_Interp *interp, char *list, int *varBindSizePtr, SNMP_VarBind **varBindPtrPtr)
 {
     int code, vblc, i;
     const char **vblv;
@@ -1388,9 +1344,7 @@ Tnm_SnmpSplitVBList(interp, list, varBindSizePtr, varBindPtrPtr)
  */
 
 char*
-Tnm_SnmpMergeVBList(varBindSize, varBindPtr)
-    int varBindSize;
-    SNMP_VarBind *varBindPtr;
+Tnm_SnmpMergeVBList(int varBindSize, SNMP_VarBind *varBindPtr)
 {
     static Tcl_DString list;
     int i;
@@ -1429,9 +1383,7 @@ Tnm_SnmpMergeVBList(varBindSize, varBindPtr)
  */
 
 void
-Tnm_SnmpFreeVBList(varBindSize, varBindPtr)
-    int varBindSize;
-    SNMP_VarBind *varBindPtr;
+Tnm_SnmpFreeVBList(int varBindSize, SNMP_VarBind *varBindPtr)
 {
     int i;
     
@@ -1464,10 +1416,7 @@ Tnm_SnmpFreeVBList(varBindSize, varBindPtr)
  */
 
 Tcl_Obj*
-TnmSnmpNorm(interp, objPtr, flags)
-    Tcl_Interp *interp;
-    Tcl_Obj *objPtr;
-    int flags;
+TnmSnmpNorm(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
 {
     int i, code, objc;
     Tcl_Obj **objv;
@@ -1775,3 +1724,4 @@ TnmSnmpSysUpTime()
     }
     return delta;
 }
+

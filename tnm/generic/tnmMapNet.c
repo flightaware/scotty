@@ -103,11 +103,7 @@ TnmMapItemType tnmNetworkType = {
  */
 
 static int
-NetworkCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+NetworkCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);
@@ -122,3 +118,4 @@ NetworkCmd(clientData, interp, objc, objv)
 
     return result;
 }
+

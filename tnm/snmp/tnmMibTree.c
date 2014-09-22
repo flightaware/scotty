@@ -85,9 +85,7 @@ HashNodeLabel		(char *label);
  */
 
 TnmMibNode*
-TnmMibNodeFromOid(oidPtr, nodeOidPtr)
-    TnmOid *oidPtr;
-    TnmOid *nodeOidPtr;
+TnmMibNodeFromOid(TnmOid *oidPtr, TnmOid *nodeOidPtr)
 {
     int i;
     TnmMibNode *p, *q = NULL;
@@ -145,11 +143,7 @@ TnmMibNodeFromOid(oidPtr, nodeOidPtr)
  */
 
 static TnmMibNode*
-LookupOID(root, label, offset, exact)
-    TnmMibNode *root;
-    char *label;
-    int *offset;
-    int exact;
+LookupOID(TnmMibNode *root, char *label, int *offset, int exact)
 {
     TnmOid oid;
     int i;
@@ -237,11 +231,7 @@ LookupOID(root, label, offset, exact)
  */
 
 static TnmMibNode*
-LookupLabelOID(root, label, offset, exact)
-    TnmMibNode *root;
-    char *label;
-    int *offset;
-    int exact;
+LookupLabelOID(TnmMibNode *root, char *label, int *offset, int exact)
 {
     Tcl_HashEntry *entryPtr = NULL;
     TnmMibNode *nodePtr = NULL;
@@ -330,14 +320,7 @@ LookupLabelOID(root, label, offset, exact)
  */
 
 static TnmMibNode*
-LookupLabel(root, start, label, moduleName, offset, exact, fuzzy)
-    TnmMibNode *root;
-    char *start;
-    char *label;
-    char *moduleName;
-    int *offset;
-    int exact;
-    int fuzzy;
+LookupLabel(TnmMibNode *root, char *start, char *label, char *moduleName, int *offset, int exact, int fuzzy)
 {
     char head[TNM_OID_MAX_SIZE * 8];
     char *tail = label, *p = head;
@@ -416,10 +399,7 @@ LookupLabel(root, start, label, moduleName, offset, exact, fuzzy)
  */
 
 TnmMibNode*
-TnmMibFindNode(name, offset, exact)
-    char *name;
-    int *offset;
-    int exact;
+TnmMibFindNode(char *name, int *offset, int exact)
 {
     TnmMibNode *nodePtr = NULL;
     char *expanded;
@@ -515,8 +495,7 @@ TnmMibFindNode(name, offset, exact)
  */
 
 TnmMibType*
-TnmMibAddType(typePtr)
-    TnmMibType *typePtr;
+TnmMibAddType(TnmMibType *typePtr)
 {
     Tcl_HashEntry *entryPtr;
     int isnew;
@@ -585,8 +564,7 @@ TnmMibAddType(typePtr)
  */
 
 TnmMibType*
-TnmMibFindType(name)
-    char *name;
+TnmMibFindType(char *name)
 {
     static TnmMibType snmpType;
     Tcl_HashEntry *entryPtr = NULL;
@@ -658,9 +636,7 @@ TnmMibFindType(name)
  */
 
 void
-TnmMibListTypes(pattern, listPtr)
-    char *pattern;
-    Tcl_Obj *listPtr;
+TnmMibListTypes(char *pattern, Tcl_Obj *listPtr)
 {
     TnmTable *tablePtr;
     Tcl_HashEntry *entryPtr = NULL;
@@ -708,8 +684,7 @@ TnmMibListTypes(pattern, listPtr)
  */
 
 TnmMibNode*
-TnmMibNewNode(label)
-    char *label;
+TnmMibNewNode(char *label)
 {
     TnmMibNode *nodePtr = (TnmMibNode *) ckalloc(sizeof(TnmMibNode));
     memset((char *) nodePtr, 0, sizeof(TnmMibNode));
@@ -739,8 +714,7 @@ TnmMibNewNode(label)
  */
 
 static void
-HashNode(nodePtr)
-    TnmMibNode *nodePtr;
+HashNode(TnmMibNode *nodePtr)
 {
     char *name = nodePtr->label;
     Tcl_HashEntry *entryPtr;
@@ -786,8 +760,7 @@ HashNode(nodePtr)
  */
 
 static TnmMibNode*
-BuildTree(nodeList)
-    TnmMibNode *nodeList;
+BuildTree(TnmMibNode *nodeList)
 {
     TnmMibNode *ccitt, *iso, *joint;
     
@@ -849,8 +822,7 @@ BuildTree(nodeList)
  */
 
 static void
-BuildSubTree(root)
-    TnmMibNode *root;
+BuildSubTree(TnmMibNode *root)
 {
     TnmMibNode **np, **ptr;
     int	hash = HashNodeLabel(root->label);
@@ -930,9 +902,7 @@ BuildSubTree(root)
  */
 
 int
-TnmMibAddNode(rootPtr, nodeList)
-    TnmMibNode **rootPtr;
-    TnmMibNode *nodeList;
+TnmMibAddNode(TnmMibNode **rootPtr, TnmMibNode *nodeList)
 {
     TnmMibNode *nodePtr;
     TnmMibNode *tree;
@@ -1021,8 +991,7 @@ TnmMibAddNode(rootPtr, nodeList)
  */
 
 static void
-HashNodeList(nodeList)
-    TnmMibNode *nodeList;
+HashNodeList(TnmMibNode *nodeList)
 {
     int	hash;
     TnmMibNode *nodePtr, *nextp;
@@ -1063,8 +1032,7 @@ HashNodeList(nodeList)
  */
 
 static int
-HashNodeLabel(label)
-    char *label;
+HashNodeLabel(char *label)
 {
     int hash = 0;
     char *cp;
@@ -1081,3 +1049,4 @@ HashNodeLabel(label)
  * compile-command: "make -k -C ../../unix"
  * End:
  */
+

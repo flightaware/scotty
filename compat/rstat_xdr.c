@@ -7,9 +7,7 @@
 #include "rstat.h"
 
 bool_t
-xdr_rstat_timeval(xdrs, objp)
-	XDR *xdrs;
-	rstat_timeval *objp;
+xdr_rstat_timeval(XDR *xdrs, rstat_timeval *objp)
 {
 	if (!xdr_u_int(xdrs, &objp->tv_sec)) {
 		return (FALSE);
@@ -21,9 +19,7 @@ xdr_rstat_timeval(xdrs, objp)
 }
 
 bool_t
-xdr_statstime(xdrs, objp)
-	XDR *xdrs;
-	statstime *objp;
+xdr_statstime(XDR *xdrs, statstime *objp)
 {
 	if (!xdr_vector(xdrs, (char *)objp->cp_time, CPUSTATES, sizeof(int), xdr_int)) {
 		return (FALSE);
@@ -77,9 +73,7 @@ xdr_statstime(xdrs, objp)
 }
 
 bool_t
-xdr_statsswtch(xdrs, objp)
-	XDR *xdrs;
-	statsswtch *objp;
+xdr_statsswtch(XDR *xdrs, statsswtch *objp)
 {
 	if (!xdr_vector(xdrs, (char *)objp->cp_time, CPUSTATES, sizeof(int), xdr_int)) {
 		return (FALSE);
@@ -130,9 +124,7 @@ xdr_statsswtch(xdrs, objp)
 }
 
 bool_t
-xdr_stats(xdrs, objp)
-	XDR *xdrs;
-	stats *objp;
+xdr_stats(XDR *xdrs, stats *objp)
 {
 	if (!xdr_vector(xdrs, (char *)objp->cp_time, CPUSTATES, sizeof(int), xdr_int)) {
 		return (FALSE);
@@ -172,3 +164,4 @@ xdr_stats(xdrs, objp)
 	}
 	return (TRUE);
 }
+

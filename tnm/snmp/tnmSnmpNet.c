@@ -85,9 +85,7 @@ AgentRecv		(Tcl_Interp *interp, TnmSnmp *session,
  */
 
 TnmSnmpSocket *
-TnmSnmpOpen(interp, addr)
-    Tcl_Interp *interp;
-    struct sockaddr_in *addr;
+TnmSnmpOpen(Tcl_Interp *interp, struct sockaddr_in *addr)
 {
     TnmSnmpSocket *sockPtr;
     struct sockaddr_in name;
@@ -166,8 +164,7 @@ TnmSnmpOpen(interp, addr)
  */
 
 void
-TnmSnmpClose(sockPtr)
-    TnmSnmpSocket *sockPtr;
+TnmSnmpClose(TnmSnmpSocket *sockPtr)
 {
     TnmSnmpSocket **sockPtrPtr = &tnmSnmpSocketList;
 
@@ -206,11 +203,7 @@ TnmSnmpClose(sockPtr)
  */
 
 void
-TnmSnmpDumpPacket(packet, packetlen, from, to)
-    u_char *packet;
-    int packetlen;
-    struct sockaddr_in *from;
-    struct sockaddr_in *to;
+TnmSnmpDumpPacket(u_char *packet, int packetlen, struct sockaddr_in *from, struct sockaddr_in *to)
 {
     u_char *cp;
     char buf[80];
@@ -260,9 +253,7 @@ TnmSnmpDumpPacket(packet, packetlen, from, to)
  */
 
 int
-TnmSnmpWait(ms, flags)
-    int ms;
-    int flags;
+TnmSnmpWait(int ms, int flags)
 {
     struct timeval wait;
     fd_set readfds;
@@ -307,8 +298,7 @@ TnmSnmpWait(ms, flags)
  */
 
 void
-TnmSnmpDelay(session)
-    TnmSnmp *session;
+TnmSnmpDelay(TnmSnmp *session)
 {
     static Tcl_Time lastTimeStamp;
     Tcl_Time currentTime;
@@ -356,8 +346,7 @@ TnmSnmpDelay(session)
  */
 
 int
-TnmSnmpManagerOpen(interp)
-    Tcl_Interp *interp;
+TnmSnmpManagerOpen(Tcl_Interp *interp)
 {
     struct sockaddr_in addr;
 
@@ -426,9 +415,7 @@ TnmSnmpManagerClose()
  */
 
 int
-TnmSnmpResponderOpen(interp, session)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
+TnmSnmpResponderOpen(Tcl_Interp *interp, TnmSnmp *session)
 {
     if (session->socket) {
 	TnmSnmpClose(session->socket);
@@ -459,8 +446,7 @@ TnmSnmpResponderOpen(interp, session)
  */
 
 void
-TnmSnmpResponderClose(session)
-    TnmSnmp *session;
+TnmSnmpResponderClose(TnmSnmp *session)
 {
     if (session->socket) {
 	TnmSnmpClose(session->socket);
@@ -487,9 +473,7 @@ TnmSnmpResponderClose(session)
  */
 
 int
-TnmSnmpListenerOpen(interp, session)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
+TnmSnmpListenerOpen(Tcl_Interp *interp, TnmSnmp *session)
 {
 #ifdef _TNMUNIXPORT
     if (ntohs(session->maddr.sin_port) == TNM_SNMP_TRAPPORT) {
@@ -526,8 +510,7 @@ TnmSnmpListenerOpen(interp, session)
  */
 
 void
-TnmSnmpListenerClose(session)
-    TnmSnmp *session;
+TnmSnmpListenerClose(TnmSnmp *session)
 {
 #ifdef _TNMUNIXPORT
     if (ntohs(session->maddr.sin_port) == TNM_SNMP_TRAPPORT) {
@@ -558,13 +541,7 @@ TnmSnmpListenerClose(session)
  */
 
 int
-TnmSnmpSend(interp, session, packet, packetlen, to, flags)
-    Tcl_Interp *interp;
-    TnmSnmp *session;
-    u_char *packet;
-    int packetlen;
-    struct sockaddr_in *to;
-    int flags;
+TnmSnmpSend(Tcl_Interp *interp, TnmSnmp *session, u_char *packet, int packetlen, struct sockaddr_in *to, int flags)
 {
     int code, sock;
 
@@ -636,12 +613,7 @@ TnmSnmpSend(interp, session, packet, packetlen, to, flags)
  */
 
 int
-TnmSnmpRecv(interp, packet, packetlen, from, flags)
-    Tcl_Interp *interp;
-    u_char *packet;
-    int	*packetlen;
-    struct sockaddr_in *from;
-    int flags;
+TnmSnmpRecv(Tcl_Interp *interp, u_char *packet, int	*packetlen, struct sockaddr_in *from, int flags)
 {
     int	sock, fromlen = sizeof(*from);
 
@@ -704,12 +676,7 @@ TnmSnmpRecv(interp, packet, packetlen, from, flags)
  */
 
 static int
-AgentRecv(interp, session, packet, packetlen, from)
-    Tcl_Interp	*interp;
-    TnmSnmp *session;
-    u_char *packet;
-    int *packetlen;
-    struct sockaddr_in *from;
+AgentRecv(Tcl_Interp	*interp, TnmSnmp *session, u_char *packet, int *packetlen, struct sockaddr_in *from)
 {
     int	sock = session->socket->sock, fromlen = sizeof(*from);
 
@@ -759,8 +726,7 @@ AgentRecv(interp, session, packet, packetlen, from)
  */
 
 void
-TnmSnmpTimeoutProc(clientData)
-    ClientData clientData;
+TnmSnmpTimeoutProc(ClientData clientData)
 {
     TnmSnmpRequest *request = (TnmSnmpRequest *) clientData;
     TnmSnmp *session = request->session;
@@ -839,9 +805,7 @@ TnmSnmpTimeoutProc(clientData)
  */
 
 static void
-ResponseProc(clientData, mask)
-    ClientData	clientData;
-    int mask;
+ResponseProc(ClientData	clientData, int mask)
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     u_char packet[TNM_SNMP_MAXSIZE];
@@ -882,9 +846,7 @@ ResponseProc(clientData, mask)
  */
 
 static void
-AgentProc(clientData, mask)
-    ClientData clientData;
-    int mask;
+AgentProc(ClientData clientData, int mask)
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     Tcl_Interp *interp = session->interp;
@@ -909,3 +871,4 @@ AgentProc(clientData, mask)
 	TnmWriteMessage("\n");
     }
 }
+

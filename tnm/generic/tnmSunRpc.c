@@ -145,8 +145,7 @@ PcnfsStatus		(Tcl_Interp *interp, char *host,
  */
 
 static void
-SunrpcCreateError(interp)
-    Tcl_Interp *interp;
+SunrpcCreateError(Tcl_Interp *interp)
 {
     char *p = clnt_spcreateerror("");
     if (strncmp(p, ": RPC: ", 7) == 0) p += 7;
@@ -173,9 +172,7 @@ SunrpcCreateError(interp)
  */
 
 static void
-SunrpcError(interp, res)
-    Tcl_Interp *interp;
-    int res;
+SunrpcError(Tcl_Interp *interp, int res)
 {
     Tcl_Obj *obj;
     char *p = clnt_sperrno(res);
@@ -205,9 +202,7 @@ SunrpcError(interp, res)
  */
 
 static char* 
-SunrpcGetHostname(interp, address)
-    Tcl_Interp *interp;
-    char *address;
+SunrpcGetHostname(Tcl_Interp *interp, char *address)
 {
     struct sockaddr_in addr;
 
@@ -235,9 +230,7 @@ SunrpcGetHostname(interp, address)
  */
 
 static int 
-SunrpcOpenEtherd(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcOpenEtherd(Tcl_Interp *interp, char *host)
 {
     int dummy;
     CLIENT *clnt;
@@ -309,9 +302,7 @@ SunrpcOpenEtherd(interp, host)
  */
 
 static int 
-SunrpcCloseEtherd(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcCloseEtherd(Tcl_Interp *interp, char *host)
 {
     int dummy;
     EtherClient *p;
@@ -362,9 +353,7 @@ SunrpcCloseEtherd(interp, host)
  */
 
 static int
-SunrpcEtherd(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcEtherd(Tcl_Interp *interp, char *host)
 {
     int dummy, tdiff, i;
     EtherClient *p;
@@ -471,9 +460,7 @@ SunrpcEtherd(interp, host)
  */
 
 static int
-SunrpcRstat(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcRstat(Tcl_Interp *interp, char *host)
 {
     struct statstime statp;
     struct timeval rpcTimeout;
@@ -582,9 +569,7 @@ SunrpcRstat(interp, host)
  */
 
 static int
-SunrpcInfo(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcInfo(Tcl_Interp *interp, char *host)
 {
     struct sockaddr_in _addr;
     struct sockaddr_in *addr = &_addr;
@@ -641,9 +626,7 @@ SunrpcInfo(interp, host)
  */
 
 static int
-SunrpcMount(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcMount(Tcl_Interp *interp, char *host)
 {
     mountlist ml = NULL;
     struct timeval rpcTimeout;
@@ -705,9 +688,7 @@ SunrpcMount(interp, host)
  */
 
 static int
-SunrpcExports(interp, host)
-    Tcl_Interp *interp;
-    char *host;
+SunrpcExports(Tcl_Interp *interp, char *host)
 {
     exports ex = NULL;
     groups gr;
@@ -776,12 +757,7 @@ SunrpcExports(interp, host)
  */
 
 static int
-SunrpcProbe(interp, host, prognum, version, protocol)
-    Tcl_Interp *interp;
-    char *host;
-    unsigned long prognum;
-    unsigned long version;
-    unsigned protocol;
+SunrpcProbe(Tcl_Interp *interp, char *host, unsigned long prognum, unsigned long version, unsigned protocol)
 {
     struct sockaddr_in _addr;
     struct sockaddr_in *addr = &_addr;
@@ -865,10 +841,7 @@ SunrpcProbe(interp, host, prognum, version, protocol)
  */
 
 static int
-PcnfsInfo(interp, host, array)
-    Tcl_Interp *interp;
-    char *host;
-    char *array;
+PcnfsInfo(Tcl_Interp *interp, char *host, char *array)
 {
     struct sockaddr_in _addr;
     struct sockaddr_in *addr = &_addr;
@@ -964,11 +937,7 @@ PcnfsInfo(interp, host, array)
  */
 
 static int 
-PcnfsQueue(interp, host, printer, array)
-    Tcl_Interp *interp;
-    char *host;
-    char *printer;
-    char *array;
+PcnfsQueue(Tcl_Interp *interp, char *host, char *printer, char *array)
 {
     struct sockaddr_in _addr;
     struct sockaddr_in *addr = &_addr;
@@ -1086,10 +1055,7 @@ PcnfsQueue(interp, host, printer, array)
  */
 
 static int 
-PcnfsList(interp, host, array)
-    Tcl_Interp *interp;
-    char *host;
-    char *array;
+PcnfsList(Tcl_Interp *interp, char *host, char *array)
 {
     struct sockaddr_in _addr;
     struct sockaddr_in *addr = &_addr;
@@ -1171,11 +1137,7 @@ PcnfsList(interp, host, array)
  */
 
 static int 
-PcnfsStatus(interp, host, printer, array)
-    Tcl_Interp *interp;
-    char *host;
-    char *printer;
-    char *array;
+PcnfsStatus(Tcl_Interp *interp, char *host, char *printer, char *array)
 {
     struct sockaddr_in _addr;
     struct sockaddr_in *addr = &_addr;
@@ -1268,11 +1230,7 @@ PcnfsStatus(interp, host, printer, array)
  */
 
 int
-Tnm_SunrpcObjCmd(clientData, interp, objc, objv)
-    ClientData clientData;
-    Tcl_Interp *interp;
-    int objc;
-    Tcl_Obj *CONST objv[];
+Tnm_SunrpcObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     int code, program, version, protocol;
     char *host;
@@ -1473,3 +1431,4 @@ Tnm_SunrpcObjCmd(clientData, interp, objc, objv)
 
     return TCL_OK;
 }
+
