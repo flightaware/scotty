@@ -495,6 +495,9 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
     char *bytes;
     int length;
 
+    // Not used but valgrind complains
+    memset(name.sin_zero, 0, sizeof(name.sin_zero));
+
     if (udpPtr->connected) {
 	if (objc != 3) {
 	    Tcl_WrongNumArgs(interp, 2, objv, "string");
