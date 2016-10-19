@@ -100,7 +100,7 @@ static int              ParseBarchartValues (ClientData
 static char *           PrintBarchartValues (ClientData 
                             clientData, Tk_Window tkwin, char *recordPtr, 
                             int offset, Tcl_FreeProc **freeProcPtr);
-static int              BarchartValues _ANSI_ARGS_ ((Tcl_Interp *interp,
+static int              BarchartValues (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
                             int argc, char **argv, int numPoints);
 static void             ScaleBarchart (Tk_Canvas canvas,

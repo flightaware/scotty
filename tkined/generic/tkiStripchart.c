@@ -119,7 +119,7 @@ static double           StripchartToPoint (Tk_Canvas canvas,
                             Tk_Item *itemPtr, double *pointPtr);
 static int              StripchartToPostscript (Tcl_Interp *interp,
                             Tk_Canvas canvas, Tk_Item *itemPtr, int prepass);
-static int              StripchartValues _ANSI_ARGS_ ((Tcl_Interp *interp,
+static int              StripchartValues (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
                             int argc, char **argv);
 static void             TranslateStripchart (Tk_Canvas canvas,
