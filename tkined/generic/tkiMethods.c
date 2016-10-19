@@ -28,7 +28,7 @@
  */
 
 EXTERN void TclGetAndDetachPids (Tcl_Interp * interp, 
-                                             Tcl_Channel chan));
+                                             Tcl_Channel chan);
 #else
 /*
  * This internal header is needed for TclGetAndDetachPids() :-(
