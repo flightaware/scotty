@@ -57,6 +57,8 @@ MANN_INSTALL_DIR =	$(MAN_INSTALL_DIR)/mann
 # To change the compiler switches, for example to change from -O
 # to -g, change the following line:
 CFLAGS = -O # -DINET6
+# for NetBSD is possible to add extra protection (not fully tested yet)
+# CFLAGS = -O2 -D_FORTIFY_SOURCE=1 -fstack-protector-all
 
 # NMICMPD should contain the full path to the installed nmicmpd binary.
 NMICMPD = $(BIN_INSTALL_DIR)/nmicmpd
