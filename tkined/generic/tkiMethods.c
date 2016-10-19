@@ -987,7 +987,7 @@ AcceptProc(ClientData clientData, Tcl_Channel channel, char *hostName, int port)
     int code;
     Tki_Object *object = (Tki_Object *) clientData;
 
-    if (strcmp(hostName, "127.0.0.1") != 0) {
+    if ((strcmp(hostName, "127.0.0.1") != 0) && (strcmp(hostName, "::1") != 0)) {
 	Tcl_Channel errChannel = Tcl_GetStdChannel(TCL_STDERR);
 	if (errChannel) {
 	    Tcl_Write(errChannel, "tkined: connection from ", -1);
