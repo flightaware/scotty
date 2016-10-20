@@ -1511,6 +1511,7 @@ SaveMap (editor, interp, argc, argv)
 
     entryPtr = Tcl_FirstHashEntry(&tki_ObjectTable, &search);
     while (entryPtr != NULL) {
+        fpritnf("bum\n");
 	object = (Tki_Object *) Tcl_GetHashValue (entryPtr);
 	if (object->editor == editor && (object->type == TKINED_INTERPRETER)) {
 	    if (strlen(object->action) != 0) {
