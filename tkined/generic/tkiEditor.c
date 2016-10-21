@@ -121,7 +121,7 @@ Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, char **ar
     sprintf(buffer, "tkined%d", lastid++);
 
     if (argc != 1) {
-	interp->result = "wrong # args";
+	Tcl_SetResult(interp, "wrong # args", TCL_STATIC);
         return TCL_ERROR;
     }
 
@@ -159,14 +159,14 @@ Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, char **ar
     /* get the colormodel for this editor */
 
     Tcl_Eval (interp, "winfo depth . ");
-    editor->color = atoi (interp->result) > 2;
+    editor->color = atoi (Tcl_GetStringResult(interp)) > 2;
     Tcl_ResetResult (interp);
 
     ClearEditor (editor, interp, 0, (char **) NULL);
 
     numEditors++;
 
-    interp->result = editor->id;
+    Tcl_SetResult(interp, editor->id, TCL_STATIC);
 
     return TCL_OK;
 }
@@ -329,7 +329,7 @@ WriteHistory (editor, interp)
 static int 
 GetId (Tki_Editor *editor, Tcl_Interp *interp, int argc, char **argv)
 {
-    interp->result = editor->id;
+    Tcl_SetResult(interp, editor->id, TCL_STATIC);
     return TCL_OK;
 }
 
@@ -348,11 +348,11 @@ Toplevel (editor, interp, argc, argv)
     if (argc > 0 ) {
         STRCOPY (editor->toplevel, argv[0]);
 	Tcl_VarEval (interp, "Editor__toplevel ", editor->id, (char *) NULL);
-	fprintf (stderr, interp->result);
+	fprintf (stderr, Tcl_GetStringResult(interp));
 	Tcl_ResetResult (interp);
     }
 
-    interp->result = editor->toplevel;
+    Tcl_SetResult(interp, editor->toplevel, TCL_STATIC);
     return TCL_OK;
 }
 
@@ -452,8 +452,7 @@ GetColor (editor, interp, argc, argv)
     int argc;
     char **argv;
 {
-    sprintf (interp->result, "%d", editor->color);
-
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(editor->color));
     return TCL_OK;
 }
 
@@ -468,7 +467,7 @@ GetWidth (editor, interp, argc, argv)
     int argc;
     char **argv;
 {
-    sprintf (interp->result, "%d", editor->width);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(editor->width));
     return TCL_OK;
 }
 
@@ -483,7 +482,7 @@ GetHeight (editor, interp, argc, argv)
     int argc;
     char **argv;
 {
-    sprintf (interp->result, "%d", editor->height);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(editor->height));
     return TCL_OK;
 }
 
@@ -498,7 +497,7 @@ GetPageWidth (editor, interp, argc, argv)
     int argc;
     char **argv;
 {
-    sprintf (interp->result, "%d", editor->pagewidth);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(editor->pagewidth));
     return TCL_OK;
 }
 
@@ -513,7 +512,7 @@ GetPageHeight (editor, interp, argc, argv)
     int argc;
     char **argv;
 {
-    sprintf (interp->result, "%d", editor->pageheight);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(editor->pageheight));
     return TCL_OK;
 }
 
@@ -617,7 +616,7 @@ Tki_EditorPageSize (editor, interp, argc, argv)
 	Tcl_ResetResult (interp);
     }
 
-    interp->result = editor->pagesize;
+    Tcl_SetResult(interp, editor->pagesize, TCL_STATIC);
 
     return TCL_OK;
 }
@@ -662,9 +661,9 @@ Tki_EditorOrientation (editor, interp, argc, argv)
     }
 
     if (editor->landscape) {
-	interp->result = "landscape";
+	Tcl_SetResult(interp, "landscape", TCL_STATIC);
     } else {
-	interp->result = "portrait";
+	Tcl_SetResult(interp, "portrait", TCL_STATIC);
     }
 
     return TCL_OK;
@@ -698,7 +697,7 @@ Tki_EditorAttribute (editor, interp, argc, argv)
 
     entryPtr = Tcl_FindHashEntry (&(editor->attr), argv[0]);
     if (entryPtr != NULL) {
-	interp->result = (char *) Tcl_GetHashValue (entryPtr);
+	Tcl_SetResult(interp, (char *) Tcl_GetHashValue (entryPtr), TCL_STATIC);
     } else {
 	Tcl_ResetResult (interp);
     }
@@ -709,7 +708,7 @@ Tki_EditorAttribute (editor, interp, argc, argv)
 		     editor->id, argv[0], argv[1]);
 	} else {
 	    fprintf (stderr, "-- %s attribute %s (%s)\n",
-		      editor->id, argv[0], interp->result);
+                     editor->id, argv[0], Tcl_GetStringResult(interp));
 	}
     }
 
@@ -790,6 +789,8 @@ do_dump (editor, interp, object, dstp)
     Tki_Object *object;
     Tcl_DString *dstp;
 {
+    char *result;
+
     if (! object || object->done) return;
 
     switch (object->type) {
@@ -852,8 +853,10 @@ do_dump (editor, interp, object, dstp)
       default:
 	Tcl_ResetResult (interp);
     }
-    if (*interp->result != '\0') {
-	Tcl_DStringAppend (dstp, interp->result, -1);
+
+    result = Tcl_GetStringResult(interp);
+    if (*result != '\0') {
+	Tcl_DStringAppend (dstp, result, -1);
 	Tcl_DStringAppend (dstp, "\n", 1);
     }
 
@@ -996,9 +999,9 @@ do_set (Tki_Editor *editor, Tcl_Interp *interp, char *line)
     line[len] = '\0';
 
     if (do_ined (editor, interp, line) == TCL_OK) {
-	line = Tcl_SetVar (interp, var, interp->result, TCL_GLOBAL_ONLY);
+	line = Tcl_SetVar (interp, var, Tcl_GetStringResult(interp), TCL_GLOBAL_ONLY);
 	if (line) {
-	    Tki_Object *object = Tki_LookupObject (interp->result);
+	    Tki_Object *object = Tki_LookupObject (Tcl_GetStringResult(interp));
 	    if (object) object->loaded = 1;
 	    return TCL_OK;
 	}
@@ -1408,7 +1411,7 @@ LoadMap (editor, interp, argc, argv)
     char *p;
 
     if (argc != 1) {
-	interp->result = "wrong # args";
+	Tcl_SetResult(interp,"wrong # args", TCL_STATIC);
         return TCL_ERROR;
     }
 
@@ -1476,7 +1479,7 @@ SaveMap (editor, interp, argc, argv)
     Tki_Object *object;
 
     if (argc != 1) {
-	interp->result = "wrong # args";
+	Tcl_SetResult(interp, "wrong # args", TCL_STATIC);
         return TCL_ERROR;
     }
 
@@ -1511,12 +1514,11 @@ SaveMap (editor, interp, argc, argv)
 
     entryPtr = Tcl_FirstHashEntry(&tki_ObjectTable, &search);
     while (entryPtr != NULL) {
-        fpritnf("bum\n");
 	object = (Tki_Object *) Tcl_GetHashValue (entryPtr);
 	if (object->editor == editor && (object->type == TKINED_INTERPRETER)) {
 	    if (strlen(object->action) != 0) {
 		Tki_DumpObject (interp, object);
-		fputs (interp->result, f);
+		fputs (Tcl_GetStringResult(interp), f);
 		fputs ("\n", f);
 		Tcl_ResetResult (interp);
 	    }
@@ -1645,7 +1647,7 @@ EditorCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     Method *ds;
 
     if (argc < 2) {
-	interp->result = "wrong # args";
+	Tcl_SetResult(interp, "wrong # args", TCL_STATIC);
 	return TCL_ERROR;
     }
 
