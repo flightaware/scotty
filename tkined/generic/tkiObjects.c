@@ -373,6 +373,8 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     Tcl_HashSearch ht_search;
     int update = 1;
     Tcl_CmdInfo	info;
+
+    char tbuf[1024];
     
     /* ignore everything not starting with the key word 'ined' */
     
@@ -442,8 +444,9 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 		}
 	    }
 	    Tcl_ResetResult (interp);
-	    sprintf (interp->result, "%s %s", object->editor->pagesize, 
-		     object->editor->landscape ? "landscape" : "portrait");
+	    snprintf (tbuf, sizeof(tbuf), "%s %s", object->editor->pagesize, 
+		      object->editor->landscape ? "landscape" : "portrait");
+            Tcl_SetResult(interp, tbuf, TCL_VOLATILE);
 	}
 	ignoretrace = 0;
 	return TCL_OK;
@@ -484,7 +487,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	    if (strcmp (obj->canvas, object->canvas) == 0) {
 		result = m_retrieve (interp, obj, 0, (char **) NULL);
 		if (result == TCL_OK) {
-		    Tcl_DStringAppendElement (&ds, interp->result);
+		    Tcl_DStringAppendElement(&ds, Tcl_GetStringResult(interp));
 		}
 		Tcl_ResetResult (interp);
 	    }
@@ -504,7 +507,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	    Tki_EditorPostScript (object->editor, interp, 0, (char **) NULL);
 	}
 
-	Tcl_SetResult (interp, ckstrdupnn(interp->result), TCL_DYNAMIC);
+        Tcl_SetResult (interp, ckstrdupnn(Tcl_GetStringResult(interp)), TCL_DYNAMIC);
 	return TCL_OK;
     }
 
@@ -515,10 +518,11 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
         && (strcmp (argv[1], "size") == 0)) {
 	if (object->editor) {
 	    Tcl_ResetResult (interp);
-	    sprintf (interp->result, "0 0 %d %d", 
+	    snprintf(tbuf, sizeof(tbuf), "0 0 %d %d", 
 		     object->editor->width, object->editor->height);
+            Tcl_SetResult(interp, tbuf, TCL_VOLATILE);
 	    if (tki_Debug) 
-	      do_debug (object, interp, argc, argv, interp->result);
+	      do_debug (object, interp, argc, argv, tbuf);
 	}
 	ignoretrace = 0;
 	return TCL_OK;
@@ -587,7 +591,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 		ckfree (cmd);
 
 		if (result == TCL_OK) {
-		    obj = Tki_LookupObject (interp->result);
+		    obj = Tki_LookupObject(Tcl_GetStringResult(interp));
 		    if (obj->type == TKINED_MENU) {
 			STRCOPY (obj->links, object->id);
 		    }
@@ -601,7 +605,8 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 			Tki_EditorGraph (obj->editor, interp, 
 					 0, (char **) NULL);
 			Tcl_AppendResult (interp, ".blt", (char *) NULL);
-			m_canvas (interp, obj, 1, &interp->result);
+			//m_canvas (interp, obj, 1, &interp->result);
+			m_canvas (interp, obj, 1, Tcl_GetStringResult(interp));
 		    } else {
 			m_canvas (interp, obj, 1, &object->canvas);
 		    }
@@ -610,6 +615,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
           } else if ((argv[2][0] == 'e') && (strcmp(argv[2], "eval") == 0)) {
 
 	      char *p;
+              char *tp;
 
               /* 
 	       * Hand the rest of the command off for evaluation in
@@ -628,9 +634,13 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	       * semicolons to keep the Tcl parser happy later on.
 	       */
 
-	      for (p = interp->result; *p; p++) {
+              /* XXX probably it should be Tcl_GetStringResult / SetResult */
+	      //for (p = interp->result; *p; p++) {
+              tp = Tcl_GetStringResult(interp);
+              for (p = tp; *p; p++) {
 		  if (*p == '\n') *p = ';';
 	      }
+              Tcl_SetResult(interp, tp, TCL_VOLATILE);
 
               tmp = argv[1]; argv[1] = argv[2]; argv[2] = tmp;
 
@@ -657,7 +667,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     }
 
     if (update) {
-	tmp = ckstrdup (interp->result);
+	tmp = ckstrdup (Tcl_GetStringResult(interp));
         Tcl_Eval (interp, "update idletask");
 	Tcl_SetResult (interp, tmp, TCL_DYNAMIC);
     }
@@ -764,7 +774,7 @@ receive(clientData, mask)
 	/* write back an acknowledge and the result */
 	    
 	if (Tcl_DStringLength (&buf) > 0) {
-	    Tcl_DStringAppend (&buf, interp->result, -1);
+	    Tcl_DStringAppend (&buf, Tcl_GetStringResult(interp), -1);
 	    Tcl_DStringAppend (&buf, "\n", 1);
 	    
 	    len = Tcl_DStringLength (&buf);
@@ -1002,7 +1012,7 @@ ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	res = (ds->fnx)(interp, object, argc-2, argv+2);
 	if (res == TCL_OK) {
 	    if (tki_Debug && (strcmp(argv[1], "create") != 0)) {
-		do_debug (object, interp, argc-1, argv+1, interp->result);
+		do_debug (object, interp, argc-1, argv+1, Tcl_GetStringResult(interp));
 	    }
 	}
 

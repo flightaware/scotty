@@ -77,7 +77,6 @@ typedef long LONG;
  */
 
 #define TKI_VERSION "1.5.0"
-#define USE_INTERP_RESULT
 
 #include <tcl.h>
 #include <tk.h>

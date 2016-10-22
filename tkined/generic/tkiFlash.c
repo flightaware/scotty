@@ -78,12 +78,15 @@ FlashProc (ClientData clientData)
 
 #if 1
 	if (object->editor) {
+
+
 	    Tki_EditorAttribute(object->editor, interp, 1, &flashIcon);
-	    if ((*interp->result != '\0') &&
-		(strcmp(interp->result, "yes") == 0 
-		 || strcmp(interp->result, "true") == 0
-		 || strcmp(interp->result, "on") == 0
-		 || strcmp(interp->result, "1") == 0)) {
+            const char *tresult = Tcl_GetStringResult(interp);
+	    if ((*tresult != '\0') &&
+		(strcmp(tresult, "yes") == 0 
+		 || strcmp(tresult, "true") == 0
+		 || strcmp(tresult, "on") == 0
+		 || strcmp(tresult, "1") == 0)) {
 		char *buf = (object->flash % 2) ? "icon" : "noicon";
 		Tcl_VarEval(interp, "if ![winfo ismapped ", 
 			    object->editor->toplevel,

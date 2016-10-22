@@ -290,7 +290,7 @@ tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **a
     ret = Tcl_VarEval (interp, argv[1], " coords ", argv[2], (char *) NULL);
     if (ret != TCL_OK) return ret;
 
-    Tcl_SplitList (interp, interp->result, &largc, &largv);
+    Tcl_SplitList (interp, Tcl_GetStringResult(interp), &largc, &largv);
 
     x = (double *) ckalloc (largc * sizeof(double));
     y = (double *) ckalloc (largc * sizeof(double));
@@ -346,7 +346,7 @@ tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **arg
     ret = Tcl_VarEval (interp, argv[1], " bbox ", argv[2], (char *) NULL);
     if (ret != TCL_OK) return ret;
 
-    Tcl_SplitList (interp, interp->result, &largc, &largv);
+    Tcl_SplitList (interp, Tcl_GetStringResult(interp), &largc, &largv);
 
     Tcl_GetDouble (interp, largv[0], &x1);
     Tcl_GetDouble (interp, largv[1], &y1);
@@ -386,6 +386,7 @@ blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     double val;
     time_t clock;
     struct tm *ltime;
+    char tmpbuf[256];
 
     if (argc != 3 ) return TCL_ERROR;
 
@@ -393,7 +394,8 @@ blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 
     clock = (time_t) val;
     ltime = localtime(&clock);
-    sprintf(interp->result, "%02d:%02d", ltime->tm_hour, ltime->tm_min);
+    snprintf(tmpbuf, sizeof(tmpbuf), "%02d:%02d", ltime->tm_hour, ltime->tm_min);
+    Tcl_SetResult(interp, tmpbuf, TCL_VOLATILE);
 
     return TCL_OK;
 }
