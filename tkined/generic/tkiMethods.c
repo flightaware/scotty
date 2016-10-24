@@ -3624,14 +3624,21 @@ m_send (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int len, code;
     char *args;
+    char *tbuf;
 
     if (argc > 0) {
 
-	args = Tcl_Merge(argc, argv);
-	len = strlen(args);
-	args[len] = '\n';
-	args[++len] = '\0';
-	code = Tcl_Write(object->channel, args, len);
+        args = Tcl_Merge(argc, argv);
+        len = strlen(args);
+        tbuf = ckalloc(len+2);
+        strncpy(tbuf, args, len);
+        //fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, args);
+        ckfree(args);
+
+	tbuf[len] = '\n';
+	tbuf[++len] = '\0';
+	//fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, tbuf);
+	code = Tcl_Write(object->channel, tbuf, len);
 
 #if 0
     {
@@ -3651,12 +3658,12 @@ m_send (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 	    Tcl_ResetResult(interp);
 	    Tcl_AppendResult(interp, "write failed: ", 
 			     Tcl_PosixError(interp), (char *) NULL);
-	    ckfree(args);
+	    ckfree(tbuf);
             return TCL_ERROR;
 	}
-	ckfree(args);
     }
 
+    ckfree(tbuf);
     return TCL_OK;
 }
 
