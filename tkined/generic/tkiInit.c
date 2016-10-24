@@ -40,16 +40,16 @@
 
 static int 
 tkined_mark_box       (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+				   int argc, const char **argv);
 static int 
 tkined_mark_points    (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+				   int argc, const char **argv);
 static void 
 mark_one_item         (Tcl_Interp *interp, double x, double y, 
-				   char *canvas, char *item);
+				   const char *canvas, const char *item);
 static int 
 blt_axes_time	      (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+				   int argc, const char **argv);
 
 /*
  * Linkage to some external funtions and global variables.
@@ -68,7 +68,7 @@ int
 TkiInit(Tcl_Interp *interp)
 {
     int code;
-    char *library, *tmp;
+    const char *library, *tmp;
 
 #ifdef USE_TCL_STUBS
     if (Tcl_InitStubs(interp, "8.4", 0) == NULL) {
@@ -262,8 +262,8 @@ static void
 mark_one_item(interp, x, y, canvas, item)
     Tcl_Interp *interp;
     double x,y;
-    char *canvas;
-    char *item;
+    const char *canvas;
+    const char *item;
 {
     sprintf(buffer, 
 	    "%s create rectangle %f %f %f %f -fill black -tags mark%s", 
@@ -273,11 +273,11 @@ mark_one_item(interp, x, y, canvas, item)
 }
 
 static int 
-tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     int ret;
     int largc;
-    char **largv;
+    const char **largv;
     int i, n;
     double *x;
     double *y;
@@ -331,11 +331,11 @@ tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **a
 }
 
 static int 
-tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     int ret;
     int largc;
-    char **largv;
+    const char **largv;
     double x1, x2, y1, y2, xm, ym;
 
     if (argc != 3) {
@@ -381,7 +381,7 @@ tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **arg
  */
 
 static int
-blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     double val;
     time_t clock;

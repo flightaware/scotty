@@ -13,6 +13,7 @@
 
 #ifndef _TKINED
 #define _TKINED
+#define tkiDebug
 
 /*
  *----------------------------------------------------------------
@@ -153,7 +154,7 @@ typedef struct Tki_Editor {
 
 int 
 Tki_CreateEditor	(ClientData clientData, Tcl_Interp *interp,
-				     int argc, char **argv);
+				     int argc, const char **argv);
 void
 Tki_DeleteEditor	(ClientData clientData);
 
@@ -270,7 +271,7 @@ typedef struct Tki_Object {
 
 int
 Tki_CreateObject	(ClientData clientData, Tcl_Interp *interp,
-				     int argc, char **argv);
+				     int argc, const char **argv);
 void
 Tki_DeleteObject	(ClientData clientData);
 
@@ -405,7 +406,7 @@ extern void TkiFlash        (Tcl_Interp *interp,
 
 extern char *findfile       (Tcl_Interp *interp, char *name);
 extern char *type_to_string (unsigned type);
-extern unsigned string_to_type   (char *str);
+extern unsigned string_to_type   (const char *str);
 
 extern void TkiMarkRectangle (Display *display,
 				  Drawable drawable, GC gc,
@@ -452,7 +453,7 @@ extern Tcl_DString clip;
 EXTERN Tcl_HashTable tki_ObjectTable;
 
 EXTERN Tki_Object* 
-Tki_LookupObject	(char *id);
+Tki_LookupObject	(const char *id);
 
 /*
  * This variable shows if we run in debug mode. It corresponds to

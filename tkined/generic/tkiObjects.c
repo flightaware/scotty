@@ -37,13 +37,13 @@ ObjectCommand	      (ClientData clientData, Tcl_Interp *interp,
 				   int argc, char **argv);
 static void 
 do_debug              (Tki_Object *object, Tcl_Interp *interp,
-				   int argc, char **argv, char *result);
+				   int argc, const char **argv, const char *result);
 /* 
  * Find an object by its id.
  */
 
 Tki_Object* 
-Tki_LookupObject (char *id)
+Tki_LookupObject (const char *id)
 {
     Tcl_HashEntry *entryPtr;
 
@@ -190,7 +190,7 @@ TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, char **ar
  */
 
 static void 
-do_debug (Tki_Object *object, Tcl_Interp *interp, int argc, char **argv, char *result)
+do_debug (Tki_Object *object, Tcl_Interp *interp, int argc, const char **argv, const char *result)
 {
     int i;
 
@@ -224,7 +224,7 @@ do_debug (Tki_Object *object, Tcl_Interp *interp, int argc, char **argv, char *r
  */
 
 int 
-Tki_CreateObject (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+Tki_CreateObject (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     Tki_Object *object;
     Tcl_HashEntry *entryPtr;
@@ -587,6 +587,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	    if ((argv[2][0] == 'c') && (strcmp(argv[2], "create") == 0)) {
 
 		cmd = Tcl_Merge (argc-1, argv+1);
+                //fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, cmd);
 		result = Tcl_Eval (interp, cmd);
 		ckfree (cmd);
 
@@ -615,7 +616,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
           } else if ((argv[2][0] == 'e') && (strcmp(argv[2], "eval") == 0)) {
 
 	      char *p;
-              char *tp;
+              const char *tp;
 
               /* 
 	       * Hand the rest of the command off for evaluation in
@@ -637,7 +638,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
               /* XXX probably it should be Tcl_GetStringResult / SetResult */
 	      //for (p = interp->result; *p; p++) {
               tp = Tcl_GetStringResult(interp);
-              for (p = tp; *p; p++) {
+              for (p = (char *)tp; *p; p++) {
 		  if (*p == '\n') *p = ';';
 	      }
               Tcl_SetResult(interp, tp, TCL_VOLATILE);
@@ -696,7 +697,7 @@ receive(clientData, mask)
     char *p;
     int count, len, code;
     int argc;
-    char **argv;
+    const char **argv;
     Tcl_DString buf;
 
     if (object->done) {

@@ -107,13 +107,13 @@ QuitEditor	(Tki_Editor *editor, Tcl_Interp *interp,
 			     int argc, char **argv);
 static int 
 EditorCommand	(ClientData clientData, Tcl_Interp *interp,
-			     int argc, char **argv);
+			     int argc, const char **argv);
 /*
  * Create a new editor object. No Parameters are expected.
  */
 
 int 
-Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     Tki_Editor *editor;
     static unsigned lastid = 0;
@@ -726,7 +726,7 @@ do_delete (editor, interp, dstp)
     Tcl_DString *dstp;
 {
     int largc, i;
-    char **largv;
+    const char **largv;
     
     Tcl_SplitList (interp, Tcl_DStringValue(dstp), &largc, &largv);
     for (i = 0; i < largc; i++) {
@@ -789,7 +789,7 @@ do_dump (editor, interp, object, dstp)
     Tki_Object *object;
     Tcl_DString *dstp;
 {
-    char *result;
+    const char *result;
 
     if (! object || object->done) return;
 
@@ -923,7 +923,7 @@ do_ined (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 {
     int largc;
     char **largv;
-    char *p;
+    const char *p;
     int i, res;
     Tki_Object dummy;
 
@@ -941,7 +941,7 @@ do_ined (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 	    if (p == NULL) {
 		largv[i] = "";
 	    } else {
-		largv[i] = p;
+		largv[i] = (char *)p;
 	    }
 	}
     }
@@ -968,6 +968,7 @@ do_set (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 {
     int len;
     char *var;
+    const char *tmpline;
 
     line += 3;                                       /* skip the word set   */
     while (*line && isspace(*line)) line++;
@@ -999,8 +1000,8 @@ do_set (Tki_Editor *editor, Tcl_Interp *interp, char *line)
     line[len] = '\0';
 
     if (do_ined (editor, interp, line) == TCL_OK) {
-	line = Tcl_SetVar (interp, var, Tcl_GetStringResult(interp), TCL_GLOBAL_ONLY);
-	if (line) {
+	tmpline = Tcl_SetVar (interp, var, Tcl_GetStringResult(interp), TCL_GLOBAL_ONLY);
+	if (tmpline) {
 	    Tki_Object *object = Tki_LookupObject (Tcl_GetStringResult(interp));
 	    if (object) object->loaded = 1;
 	    return TCL_OK;
@@ -1371,7 +1372,7 @@ ReadDefaultFile (Tki_Editor *editor, Tcl_Interp *interp, char *filename)
 static void
 ReadDefaults (Tki_Editor *editor, Tcl_Interp *interp, int argc, char **argv)
 {
-    char *library;
+    const char *library;
     char *fname;
 
     library = Tcl_GetVar2(interp, "tkined", "library", TCL_GLOBAL_ONLY);
@@ -1641,7 +1642,7 @@ static Method methodTable[] = {
  */
 
 static int
-EditorCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+EditorCommand (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     Tki_Editor *editor = (Tki_Editor *) clientData;
     Method *ds;

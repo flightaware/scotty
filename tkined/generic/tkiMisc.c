@@ -83,7 +83,8 @@ char*
 findfile (Tcl_Interp *interp, char *name)
 {
     int i;
-    char *library, *file;
+    const char *library;
+    char *file;
     static Tcl_DString *dsPtr = NULL;
     static char *dirs[] = { "/bitmaps/", "/site/", "/apps/", "/", NULL };
 
@@ -161,7 +162,7 @@ type_to_string (unsigned type)
 }
 
 unsigned 
-string_to_type (char *str)
+string_to_type (const char *str)
 {
     unsigned type = TKINED_NONE;
 
@@ -216,7 +217,7 @@ void
 ldelete (Tcl_Interp *interp, char *slist, char *item)
 {
     int largc, i;
-    char **largv;
+    const char **largv;
 
     if (item == NULL) return;
 
