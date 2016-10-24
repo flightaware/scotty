@@ -3620,7 +3620,7 @@ m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **arg
  */
 
 int
-m_send (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+m_send (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 {
     int len, code;
     char *args;
@@ -3810,7 +3810,8 @@ m_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
      * of a group (that if it has a valid parent).
      */
 
-    if (object->parent && object->parent->member) {
+    if (object->parent) {
+       if (object->parent->member) { /* object-ip-trouble-netmask-close-panic */
 #if 0
 	int i, j;
 	for (i = 0, j = 0; object->parent->member[i]; i++) {
@@ -3822,7 +3823,8 @@ m_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 	    object->parent->member[j++] = NULL;
 	}
 #else
-	RemoveObject (object->parent->member, object);
+	  RemoveObject (object->parent->member, object);
+       }
 #endif
     }
 

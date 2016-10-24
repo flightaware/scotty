@@ -378,7 +378,7 @@ int m_network_labelxy  (Tcl_Interp *interp, Tki_Object *object,
 int m_interpreter      (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_send             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_bell             (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_editor           (Tcl_Interp *interp, Tki_Object *object,
