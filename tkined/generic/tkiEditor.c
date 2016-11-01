@@ -1504,6 +1504,7 @@ SaveMap (editor, interp, argc, argv)
     Copy (editor, interp, 0, (char **) NULL);
     if (fputs (Tcl_DStringValue(&clip), f) == EOF) {
 	Tcl_PosixError (interp);
+        fclose(f);
 	return TCL_ERROR;
     }
     clip = tmp;
