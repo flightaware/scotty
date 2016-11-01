@@ -1446,6 +1446,7 @@ LoadMap (editor, interp, argc, argv)
 	Tcl_DStringFree (&clip);
 	clip = tmp;
 	Tcl_SetResult (interp, "not a valid tkined save file", TCL_STATIC);
+        fclose (f);
 	return TCL_ERROR;
     }
     
