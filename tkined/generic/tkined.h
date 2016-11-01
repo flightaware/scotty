@@ -354,7 +354,7 @@ int m_clear            (Tcl_Interp *interp, Tki_Object *object,
 int m_scale            (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_values           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_jump             (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_member           (Tcl_Interp *interp, Tki_Object *object,

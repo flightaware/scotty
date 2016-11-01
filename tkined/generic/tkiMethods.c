@@ -115,7 +115,7 @@ m_interpreter_create  (Tcl_Interp *interp, Tki_Object *object,
 				   int argc, char **argv);
 static int 
 m_menu_create         (Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv);
+				   int argc, const char **argv);
 static int 
 m_log_create          (Tcl_Interp *interp, Tki_Object *object,
 				   int argc, char **argv);
@@ -484,7 +484,7 @@ update_links (Tcl_Interp *interp, Tki_Object *object)
       case TKINED_NETWORK:
 	{
 	    int largc, i;
-            char **largv;
+            const char **largv;
             Tcl_SplitList (interp, object->links, &largc, &largv);
             for (i=0; i < largc; i++) {
                 Tki_Object *link = Tki_LookupObject (largv[i]);
@@ -1243,7 +1243,7 @@ m_interpreter_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **a
  */
 
 static int 
-m_menu_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+m_menu_create (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 {
     static unsigned lastid = 0;
     char *freeme;
@@ -2027,7 +2027,7 @@ int
 m_icon (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     char *tmp = "reset";
-    char *objectIcon;
+    const char *objectIcon;
 
     int selected = object->selected;
 
@@ -2626,7 +2626,7 @@ m_interpreter_dump (Tcl_Interp *interp, Tki_Object *object)
 
     if (strlen(object->action) > 0) {
 	int largc, i;
-	char **largv;
+	const char **largv;
 
 	Tcl_SplitList (interp, object->action, &largc, &largv);
 	for (i = 0; i < largc; i++) {
@@ -3097,13 +3097,13 @@ m_scale (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
  */
 
 int
-m_values (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+m_values (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 {
 #define MAX_STATIC_POINTS 256
     if (object->type == TKINED_GRAPH) {
 
 	int largc, i;
-	char **largv;
+	const char **largv;
 	double Xval, Yval;
 	char buf[80];
 	Tcl_DString dst;
@@ -3326,7 +3326,7 @@ m_collapse (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 		
 		if (object->x == 0 && object->y == 0) {
 		    int sargc;
-		    char **sargv;
+		    const char **sargv;
 		    m_size (interp, member, 0, (char **) NULL);
 		    Tcl_SplitList (interp, member->size, &sargc, &sargv);
 		    if (sargc == 4) {
@@ -3550,7 +3550,7 @@ m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **arg
     int found = 0;
     int i, j, n;
     int largc;
-    char **largv;
+    const char **largv;
     double *x;
     double *y;
     double lx, ly;
@@ -3661,9 +3661,10 @@ m_send (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 	    ckfree(tbuf);
             return TCL_ERROR;
 	}
+
+    	ckfree(tbuf);
     }
 
-    ckfree(tbuf);
     return TCL_OK;
 }
 
@@ -3692,7 +3693,7 @@ static void
 m_linked_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int i, largc;
-    char **largv;
+    const char **largv;
     Tki_Object *link;
 
     Tcl_SplitList (interp, object->links, &largc, &largv);
