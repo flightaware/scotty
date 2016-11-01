@@ -2483,7 +2483,7 @@ m_node_dump (Tcl_Interp *interp, Tki_Object *object)
 static int
 m_group_dump (Tcl_Interp *interp, Tki_Object *object)
 {
-    int i;
+    int i = 0;
     double dx = 0, dy = 0;
 
     Tcl_AppendResult (interp, "set ", object->id, 
@@ -2495,8 +2495,10 @@ m_group_dump (Tcl_Interp *interp, Tki_Object *object)
 	    dx += object->member[i]->x;
 	    dy += object->member[i]->y;
 	}
-	dx = dx / -i;
-	dy = dy / -i;
+	if (i != 0) {
+	    dx = dx / -i;
+	    dy = dy / -i;
+	}
     }
     Tcl_AppendResult (interp, " ]\n", (char *) NULL);
 
