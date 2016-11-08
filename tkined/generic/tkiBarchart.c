@@ -100,7 +100,7 @@ static int              ParseBarchartValues (ClientData
 static char *           PrintBarchartValues (ClientData 
                             clientData, Tk_Window tkwin, char *recordPtr, 
                             int offset, Tcl_FreeProc **freeProcPtr);
-static int              BarchartValues _ANSI_ARGS_ ((Tcl_Interp *interp,
+static int              BarchartValues (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
                             int argc, char **argv, int numPoints);
 static void             ScaleBarchart (Tk_Canvas canvas,
@@ -393,7 +393,7 @@ ConfigureBarchart(interp, canvas, itemPtr, objc, objv, flags)
     Tk_Window tkwin = Tk_CanvasTkwin(canvas);
     Display *display = Tk_Display(Tk_CanvasTkwin(canvas));
  
-    if (Tk_ConfigureWidget(interp, tkwin, configSpecs, objc, (char **) objv,
+    if (Tk_ConfigureWidget(interp, tkwin, configSpecs, objc, (const char **) objv,
 		   (char *) barPtr, flags|TK_CONFIG_OBJS) != TCL_OK) {
 	return TCL_ERROR;
     }
@@ -996,7 +996,7 @@ ParseBarchartValues(clientData, interp, tkwin, value, recordPtr, offset)
     int argc;
     char **argv = NULL;
 
-    if (Tcl_SplitList(interp, value, &argc, &argv) != TCL_OK) {
+    if (Tcl_SplitList(interp, value, &argc, (const char ***)&argv) != TCL_OK) {
         syntaxError:
         Tcl_ResetResult(interp);
         Tcl_AppendResult(interp, "bad barchart value \"", value,

@@ -229,15 +229,17 @@ TnmInitDns(Tcl_Interp *interp)
 {
     char domain[MAXDNAME], *p;
 
-    res_init();
-    _res.options |= RES_RECURSE | RES_DNSRCH | RES_DEFNAMES | RES_AAONLY;
+    res_state res = malloc(sizeof(struct __res_state));
+
+    res_ninit(res);
+    res->options |= RES_RECURSE | RES_DNSRCH | RES_DEFNAMES | RES_AAONLY;
 
     /*
      * Remove any trailing dots or white spaces and save the
      * result in tnm(domain).
      */
 
-    strcpy(domain, _res.defdname);
+    strcpy(domain, res->defdname);
     p = domain + strlen(domain) - 1;
     while ((*p == '.' || isspace(*p)) && p > domain) {
 	*p-- = '\0';

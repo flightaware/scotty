@@ -28,7 +28,7 @@
  */
 
 EXTERN void TclGetAndDetachPids (Tcl_Interp * interp, 
-                                             Tcl_Channel chan));
+                                             Tcl_Channel chan);
 #else
 /*
  * This internal header is needed for TclGetAndDetachPids() :-(
@@ -115,7 +115,7 @@ m_interpreter_create  (Tcl_Interp *interp, Tki_Object *object,
 				   int argc, char **argv);
 static int 
 m_menu_create         (Tcl_Interp *interp, Tki_Object *object,
-				   int argc, char **argv);
+				   int argc, const char **argv);
 static int 
 m_log_create          (Tcl_Interp *interp, Tki_Object *object,
 				   int argc, char **argv);
@@ -484,7 +484,7 @@ update_links (Tcl_Interp *interp, Tki_Object *object)
       case TKINED_NETWORK:
 	{
 	    int largc, i;
-            char **largv;
+            const char **largv;
             Tcl_SplitList (interp, object->links, &largc, &largv);
             for (i=0; i < largc; i++) {
                 Tki_Object *link = Tki_LookupObject (largv[i]);
@@ -717,6 +717,7 @@ m_link_update (interp, object, argc, argv)
     if (strlen(object->points) > 0) {
 	int i,largc;
 	char **largv;
+        char tbuf[128];
 	Tcl_SplitList (interp, object->points, &largc, &largv);
 
 	if (largc > 0) {
@@ -726,7 +727,8 @@ m_link_update (interp, object, argc, argv)
 	    if (x == NULL || y == NULL) {
 		ckfree ((char*) largv);
 		Tcl_ResetResult (interp);
-		sprintf (interp->result, "%f %f", object->x, object->y);
+		snprintf(tbuf, sizeof(tbuf), "%f %f", object->x, object->y);
+                Tcl_SetResult(interp, tbuf, TCL_VOLATILE);
 		return TCL_OK;
 	    }
 	    
@@ -987,7 +989,7 @@ AcceptProc(ClientData clientData, Tcl_Channel channel, char *hostName, int port)
     int code;
     Tki_Object *object = (Tki_Object *) clientData;
 
-    if (strcmp(hostName, "127.0.0.1") != 0) {
+    if ((strcmp(hostName, "127.0.0.1") != 0) && (strcmp(hostName, "::1") != 0)) {
 	Tcl_Channel errChannel = Tcl_GetStdChannel(TCL_STDERR);
 	if (errChannel) {
 	    Tcl_Write(errChannel, "tkined: connection from ", -1);
@@ -1228,7 +1230,7 @@ m_interpreter_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **a
     return TCL_OK;
 
   errorExit:
-    bang = ckstrdup(interp->result);
+    bang = ckstrdup(Tcl_GetStringResult(interp));
     m_delete(interp, object, 0, (char **) NULL);
     Tcl_SetResult(interp, bang, TCL_DYNAMIC);
     return TCL_ERROR;
@@ -1241,7 +1243,7 @@ m_interpreter_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **a
  */
 
 static int 
-m_menu_create (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+m_menu_create (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 {
     static unsigned lastid = 0;
     char *freeme;
@@ -1936,7 +1938,7 @@ m_oid (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
     }
 
     Tcl_ResetResult (interp);
-    sprintf (interp->result, "%d", object->oid);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(object->oid));
     return TCL_OK;
 }
 
@@ -2012,7 +2014,7 @@ int
 m_selected (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_ResetResult (interp);
-    sprintf (interp->result, "%d", object->selected);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(object->selected));
     return TCL_OK;
 }
 
@@ -2025,6 +2027,7 @@ int
 m_icon (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     char *tmp = "reset";
+    const char *objectIcon;
 
     int selected = object->selected;
 
@@ -2037,8 +2040,9 @@ m_icon (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 		 type_to_string (object->type), argv[0]);
 
 	Tki_EditorAttribute (editor, interp, 1, &buffer);
-	if (*interp->result != '\0') {
-	    STRCOPY (object->icon, interp->result);
+        objectIcon = Tcl_GetStringResult(interp);
+	if (*objectIcon != '\0') {
+	    STRCOPY (object->icon, objectIcon);
 	} else {
 	    if (argv[0][0] != '\0') {
 		STRCOPY (object->icon, argv[0]);
@@ -2228,8 +2232,8 @@ m_color (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 	sprintf (buffer, "color-%s", argv[0]);
 
 	Tki_EditorAttribute (editor, interp, 1, &buffer);
-	if (*interp->result != '\0') {
-	    STRCOPY (object->color, interp->result);
+	if (*Tcl_GetStringResult(interp) != '\0') {
+	    STRCOPY (object->color, Tcl_GetStringResult(interp));
 	} else {
 	    if (argv[0][0] != '\0') {
 		STRCOPY (object->color, argv[0]);
@@ -2264,6 +2268,8 @@ m_color (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 int
 m_move (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
+    char tbuf[128];
+
     if (argc == 2) {
 
 	double x, y;
@@ -2333,7 +2339,8 @@ m_move (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
     }
 
     Tcl_ResetResult (interp);
-    sprintf (interp->result, "%f %f", object->x, object->y);
+    snprintf (tbuf, sizeof(tbuf), "%f %f", object->x, object->y);
+    Tcl_SetResult(interp, tbuf, TCL_VOLATILE);
     return TCL_OK;
 }
 
@@ -2435,8 +2442,8 @@ m_size (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
     ret = Tcl_VarEval (interp, type_to_string (object->type),
 		       "__size ", object->id, (char *) NULL);
 
-    if (ret == TCL_OK && strlen(interp->result) > 0) {
-	STRCOPY (object->size, interp->result);
+    if (ret == TCL_OK && strlen(Tcl_GetStringResult(interp)) > 0) {
+	STRCOPY (object->size, Tcl_GetStringResult(interp));
     }
 
     Tcl_SetResult (interp, object->size, TCL_STATIC);
@@ -2476,7 +2483,7 @@ m_node_dump (Tcl_Interp *interp, Tki_Object *object)
 static int
 m_group_dump (Tcl_Interp *interp, Tki_Object *object)
 {
-    int i;
+    int i = 0;
     double dx = 0, dy = 0;
 
     Tcl_AppendResult (interp, "set ", object->id, 
@@ -2488,8 +2495,10 @@ m_group_dump (Tcl_Interp *interp, Tki_Object *object)
 	    dx += object->member[i]->x;
 	    dy += object->member[i]->y;
 	}
-	dx = dx / -i;
-	dy = dy / -i;
+	if (i != 0) {
+	    dx = dx / -i;
+	    dy = dy / -i;
+	}
     }
     Tcl_AppendResult (interp, " ]\n", (char *) NULL);
 
@@ -2619,7 +2628,7 @@ m_interpreter_dump (Tcl_Interp *interp, Tki_Object *object)
 
     if (strlen(object->action) > 0) {
 	int largc, i;
-	char **largv;
+	const char **largv;
 
 	Tcl_SplitList (interp, object->action, &largc, &largv);
 	for (i = 0; i < largc; i++) {
@@ -2808,7 +2817,7 @@ m_data_dump (Tcl_Interp *interp, Tki_Object *object)
     m_size (interp, object, 0, (char **) NULL);
     Tcl_VarEval (interp, type_to_string (object->type), "__values ",
 		 object->id, (char *) NULL);
-    values = ckstrdup (interp->result);
+    values = ckstrdup (Tcl_GetStringResult(interp));
     Tcl_ResetResult (interp);
 
     Tcl_AppendResult (interp, "set ", object->id, 
@@ -2888,12 +2897,16 @@ Tki_DumpObject (Tcl_Interp *interp, Tki_Object *object)
 int m_dump (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     char *p;
+    char *tp;
 
     Tki_DumpObject (interp, object);
 
-    for (p = interp->result; *p; p++) {
+    //for (p = interp->result; *p; p++) {
+    tp = Tcl_GetStringResult(interp);
+    for (p = tp; *p; p++) {
 	if (*p == '\n') *p = ';';
     }
+    Tcl_SetResult(interp, tp, TCL_VOLATILE);
 
     return TCL_OK;
 }
@@ -3076,7 +3089,8 @@ m_scale (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
     }
 
     Tcl_ResetResult (interp);
-    sprintf (interp->result, "%f", object->scale);
+    //sprintf (interp->result, "%f", object->scale);
+    Tcl_SetObjResult(interp, Tcl_NewDoubleObj(object->scale));
     return TCL_OK;
 }
 
@@ -3085,13 +3099,13 @@ m_scale (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
  */
 
 int
-m_values (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+m_values (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 {
 #define MAX_STATIC_POINTS 256
     if (object->type == TKINED_GRAPH) {
 
 	int largc, i;
-	char **largv;
+	const char **largv;
 	double Xval, Yval;
 	char buf[80];
 	Tcl_DString dst;
@@ -3314,7 +3328,7 @@ m_collapse (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 		
 		if (object->x == 0 && object->y == 0) {
 		    int sargc;
-		    char **sargv;
+		    const char **sargv;
 		    m_size (interp, member, 0, (char **) NULL);
 		    Tcl_SplitList (interp, member->size, &sargc, &sargv);
 		    if (sargc == 4) {
@@ -3434,7 +3448,7 @@ int
 m_collapsed (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     Tcl_ResetResult (interp);
-    sprintf (interp->result, "%d", object->collapsed);
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(object->collapsed));
     return TCL_OK;
 }
 
@@ -3538,11 +3552,12 @@ m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **arg
     int found = 0;
     int i, j, n;
     int largc;
-    char **largv;
+    const char **largv;
     double *x;
     double *y;
     double lx, ly;
     double sx = 0, sy = 0, slen = 0;
+    char tbuf[1024];
 
     Tcl_SplitList (interp, network->points, &largc, &largv);
 
@@ -3552,7 +3567,8 @@ m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **arg
     if (x == NULL || y == NULL) {
 	ckfree ((char*) largv);
 	Tcl_ResetResult (interp);
-	sprintf (interp->result, "%f %f", network->x, network->y);
+	snprintf (tbuf, sizeof(tbuf), "%f %f", network->x, network->y);
+        Tcl_SetResult(interp, tbuf, TCL_VOLATILE);
 	return TCL_OK;
     }
 
@@ -3594,7 +3610,9 @@ m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **arg
     ckfree ((char *) largv);
 
     Tcl_ResetResult (interp);
-    sprintf (interp->result, "%f %f", sx, sy+1);
+
+    snprintf (tbuf, sizeof(tbuf), "%f %f", sx, sy+1);
+    Tcl_SetResult(interp, tbuf, TCL_VOLATILE);
     return TCL_OK;
 }
 
@@ -3604,18 +3622,25 @@ m_network_labelxy (Tcl_Interp *interp, Tki_Object *network, int argc, char **arg
  */
 
 int
-m_send (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+m_send (Tcl_Interp *interp, Tki_Object *object, int argc, const char **argv)
 {
     int len, code;
     char *args;
+    char *tbuf;
 
     if (argc > 0) {
 
-	args = Tcl_Merge(argc, argv);
-	len = strlen(args);
-	args[len] = '\n';
-	args[++len] = '\0';
-	code = Tcl_Write(object->channel, args, len);
+        args = Tcl_Merge(argc, argv);
+        len = strlen(args);
+        tbuf = ckalloc(len+2);
+        strncpy(tbuf, args, len);
+        //fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, args);
+        ckfree(args);
+
+	tbuf[len] = '\n';
+	tbuf[++len] = '\0';
+	//fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, tbuf);
+	code = Tcl_Write(object->channel, tbuf, len);
 
 #if 0
     {
@@ -3635,10 +3660,11 @@ m_send (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 	    Tcl_ResetResult(interp);
 	    Tcl_AppendResult(interp, "write failed: ", 
 			     Tcl_PosixError(interp), (char *) NULL);
-	    ckfree(args);
+	    ckfree(tbuf);
             return TCL_ERROR;
 	}
-	ckfree(args);
+
+    	ckfree(tbuf);
     }
 
     return TCL_OK;
@@ -3669,7 +3695,7 @@ static void
 m_linked_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 {
     int i, largc;
-    char **largv;
+    const char **largv;
     Tki_Object *link;
 
     Tcl_SplitList (interp, object->links, &largc, &largv);
@@ -3787,7 +3813,8 @@ m_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
      * of a group (that if it has a valid parent).
      */
 
-    if (object->parent && object->parent->member) {
+    if (object->parent) {
+       if (object->parent->member) { /* object-ip-trouble-netmask-close-panic */
 #if 0
 	int i, j;
 	for (i = 0, j = 0; object->parent->member[i]; i++) {
@@ -3799,7 +3826,8 @@ m_delete (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 	    object->parent->member[j++] = NULL;
 	}
 #else
-	RemoveObject (object->parent->member, object);
+	  RemoveObject (object->parent->member, object);
+       }
 #endif
     }
 
@@ -3829,7 +3857,7 @@ m_postscript (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 	rc = Tcl_VarEval (interp, "__postscript ", object->id, (char *) NULL);
     }
 
-    Tcl_SetResult (interp, ckstrdupnn(interp->result), TCL_DYNAMIC);
+    Tcl_SetResult (interp, ckstrdupnn(Tcl_GetStringResult(interp)), TCL_DYNAMIC);
     return rc;
 }
 
@@ -3884,7 +3912,7 @@ m_attribute (Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
 
     ht_entry = Tcl_FindHashEntry (&(object->attr), argv[0]);
     if (ht_entry != NULL) {
-	interp->result = (char *) Tcl_GetHashValue (ht_entry);
+	Tcl_SetResult(interp, (char *) Tcl_GetHashValue (ht_entry), TCL_VOLATILE);
     }
 
     return TCL_OK;
