@@ -231,6 +231,7 @@ TnmInitDns(Tcl_Interp *interp)
 
     res_state res = malloc(sizeof(struct __res_state));
 
+    memset(res, 0, sizeof(res));
     res_ninit(res);
     res->options |= RES_RECURSE | RES_DNSRCH | RES_DEFNAMES | RES_AAONLY;
 
