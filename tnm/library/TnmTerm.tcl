@@ -18,7 +18,7 @@
 package require Tnm 3.0
 package require TnmInet 3.0
 package require TnmDialog 3.0
-package provide TnmTerm 3.0.0
+package provide TnmTerm 3.0.1
 
 namespace eval TnmTerm {
     namespace export Open Close Clear Write SetName SetIcon

@@ -11,7 +11,7 @@
 # @(#) $Id: TnmInet.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
 package require Tnm 3.0
-package provide TnmInet 3.0.0
+package provide TnmInet 3.0.1
 
 namespace eval TnmInet {
     namespace export GetIpAddress GetIpName DayTime Finger TraceRoute
