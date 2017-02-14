@@ -18,6 +18,7 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#include <config.h>
 #include "tkined.h"
 #include "tkiPort.h"
 
@@ -33,7 +34,11 @@ EXTERN void TclGetAndDetachPids (Tcl_Interp * interp,
 /*
  * This internal header is needed for TclGetAndDetachPids() :-(
  */
-#include <TclPort.h>
+/* #include <TclPort.h> */
+/* leg20170213: maybe in the last century this was the name of the include file.
+ *     Right now it seems to be:
+ */
+#include <tclPort.h>
 #endif 
  
 
