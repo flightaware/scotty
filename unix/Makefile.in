@@ -218,7 +218,7 @@ DOC_DIR =		$(TOP_DIR)/doc
 UNIX_DIR =		$(TOP_DIR)/unix
 WIN_DIR =		$(TOP_DIR)/win
 TNM_DIR =		$(TOP_DIR)/tnm
-TKI_DIR =		$(TOP_DIR)/tkined
+TKI_DIR =		$(TOP_DIR)/tki
 NEW_DIR =		$(TOP_DIR)/new
 
 TNM_AGENT_DIR =		$(TNM_DIR)/agents

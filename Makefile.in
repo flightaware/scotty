@@ -131,6 +131,11 @@ LIBS = @LIBS@ # -lresolv
 # automatically as well, but you can override it).
 NM_LIBS = @NM_LIBS@ # -lresolv
 
+# Autoconf magic to use ranlib if available
+RANLIB		= @RANLIB@
+# Autoconf magic for static/shared, stub linking
+SHLIB_LD_LIBS	= @SHLIB_LD_LIBS@
+
 # To disable ANSI-C procedure prototypes reverse the comment 
 # characters on the following lines:
 PROTO_FLAGS =
@@ -212,7 +217,11 @@ RPCGEN =		@RPCGEN@
 LEX =			@LEX@
 YACC =			@YACC@
 
-srcdir =		@srcdir@
+# VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win
+
+srcdir		= @srcdir@
+top_builddir	= .
+
 TOP_DIR =		@srcdir@
 DOC_DIR =		$(TOP_DIR)/doc
 UNIX_DIR =		$(TOP_DIR)/unix
@@ -496,8 +505,21 @@ tkined: tkined$(SHLIB_SUFFIX) $(TKI_DIR)/tkined.in
 	    -e 's+%TKI_VERSION%+$(TKI_VERSION)+' \
 	    $(UNIX_DIR)/tkined.in > tkined
 
+# tkined$(SHLIB_SUFFIX): $(TKI_GENERIC_OBJS)
+#	$(SHLIB_LD) $(TKI_GENERIC_OBJS) -o tkined$(SHLIB_SUFFIX) $(LIBS)
+#
+
+# TODO: by now modeled after the recipe in TEA 3.10 for PKG_LIB_FILE
+#       and injecting the object files needed for tkined
+PKG_OBJECTS	= $(TKI_GENERIC_OBJS)
+MAKE_LIB	= @MAKE_LIB@
 tkined$(SHLIB_SUFFIX): $(TKI_GENERIC_OBJS)
-	$(SHLIB_LD) $(TKI_GENERIC_OBJS) -o tkined$(SHLIB_SUFFIX) $(LIBS)
+	-rm -f tkined$(SHLIB_SUFFIX)
+	${MAKE_LIB}
+	$(RANLIB) tkined$(SHLIB_SUFFIX)
+
+tkined-check:
+	TCLLIBPATH=$(LIB_INSTALL_DIR) $(BIN_INSTALL_DIR)/tkined$(TKI_VERSION)
 
 test:
 	@echo
@@ -939,6 +961,10 @@ configure: configure.in aclocal.m4
 
 depend:
 	makedepend -- -I$(TNM_SNMP_DIR) -- $(TNM_SRCS)
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 tnm.ps:
 	(cd $(DOC_DIR); groff -man $(TNM_DOCS_1) $(TNM_DOCS_8) $(TNM_DOCS_N)) > tnm.ps
