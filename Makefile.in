@@ -168,7 +168,8 @@ PKG_CFLAGS	= @PKG_CFLAGS@
 DEFS		= @DEFS@ $(PKG_CFLAGS)
 
 # Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
-CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl scotty config.h.in
+CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl scotty config.h.in \
+			ether.x mount.x pcnfsd.x rstat.x
 CLEANFILES	= @CLEANFILES@
 
 CPPFLAGS	= @CPPFLAGS@
@@ -200,8 +201,17 @@ TNM_GENERIC_DIR	= $(TNM_DIR)/generic
 RPCGEN		= @RPCGEN@
 PKG_LIBS	= @PKG_LIBS@
 
-%_xdr.c %_clnt.c %.h: %.x
-	$(RPCGEN) $<
+#%_xdr.c %_clnt.c %.h: %.x
+#	$(RPCGEN) $<
+.SUFFIXES:	.x
+.x.h:
+	-cp $< .
+	$(RPCGEN) ${@:.h=.x}
+
+ether_clnt.c ether_xdr.c: ether.h
+mount_clnt.c mount_xdr.c: mount.h
+pcnfsd_clnt.c pcnfsd_xdr.c: pcnfsd.h
+rstat_clnt.c rstat_xdr.c: rstat.h
 
 tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
 

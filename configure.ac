@@ -309,14 +309,14 @@ TEA_ADD_SOURCES([
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
 TEA_ADD_LIBS([
-		tnm/generic/mount_clnt.o 
-		tnm/generic/mount_xdr.o 
-		tnm/generic/ether_clnt.o 
-		tnm/generic/ether_xdr.o 
-		tnm/generic/rstat_clnt.o 
-		tnm/generic/rstat_xdr.o 
-		tnm/generic/pcnfsd_clnt.o 
-		tnm/generic/pcnfsd_xdr.o
+		mount_clnt.o 
+		mount_xdr.o 
+		ether_clnt.o 
+		ether_xdr.o 
+		rstat_clnt.o 
+		rstat_xdr.o 
+		pcnfsd_clnt.o 
+		pcnfsd_xdr.o
 	    ])
 TEA_ADD_CFLAGS([-I. -Itnm -Itnm/generic -Itnm/snmp])
 TEA_ADD_STUB_SOURCES([])
@@ -337,10 +337,10 @@ TEA_ADD_TCL_SOURCES([])
 #--------------------------------------------------------------------
 
 CLEANFILES="$CLEANFILES nmicmpd nmtrapd"
-CLEANFILES="$CLEANFILES tnm/generic/ether_* tnm/generic/ether.h"
-CLEANFILES="$CLEANFILES tnm/generic/mount_* tnm/generic/mount.h"
-CLEANFILES="$CLEANFILES tnm/generic/pcnfsd_* tnm/generic/pcnfsd.h"
-CLEANFILES="$CLEANFILES tnm/generic/rstat_* tnm/generic/rstat.h"
+CLEANFILES="$CLEANFILES ether_* ether.h"
+CLEANFILES="$CLEANFILES mount_* mount.h"
+CLEANFILES="$CLEANFILES pcnfsd_* pcnfsd.h"
+CLEANFILES="$CLEANFILES rstat_* rstat.h"
 
 if test "${TEA_PLATFORM}" = "windows" ; then
     # Ensure no empty if clauses
