@@ -1,0 +1,28 @@
+# -*- mode: markdown -*-
+
+Bugs:
+=====
+
+- macOS:
+    - -lresolv not issued by ./configure.
+- Debian:
+    - Installing libsmi2-dev makes build break.
+
+- Generic
+    - Build
+      - Should we revamp directory tree of installed files to reflect FHS
+        or so (`share` instead of `library` ...)?
+      - Definitely eliminate legacy names and replace with "standard"
+        autoconf/TEA names in Makefile.in.
+      - Man files must be installed in their corresponding sections
+        (nmicmpd..); install-doc target.
+      - test target: note that it 'works' as is (almost) if we link
+        tnm/tests to top_builddir.  However tests most probably don't
+        work as expected when the respective accessories are not
+        installed where they are expected.
+      - shell target: does not work.  Make the SCRIPT variable load
+        Tnm.
+      - Implement missing uninstall targets.
+      - Check for missing install targets/routines.  Notably: scotty
+        invocation after installing MIBs
+	  

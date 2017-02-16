@@ -4,8 +4,9 @@ dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
 
 #-----------------------------------------------------------------------
-# configure.ac for the Tnm Tcl Extension.  The only places you should
-# need to modify this file are marked by the string __CHANGE__
+# configure.ac for the Tnm Tcl Extension.
+# The only places you should  need to modify this file are marked by
+# the string __CHANGE__
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -28,6 +29,7 @@ AC_INIT([Tnm], [3.0.1])
 TNM_VERSION=3.0.1
 TKI_VERSION=1.5.0
 
+# disabled config.h generation, since this inhibits stub compilation
 # AC_CONFIG_HEADER([config.h])
 
 #--------------------------------------------------------------------
@@ -55,7 +57,6 @@ if test "$RPCGEN" = "echo" ; then
     cp $srcdir/../compat/pcnfsd* .
     cp $srcdir/../compat/rstat* .
 fi
-
 
 #----------------------------------------------------------------------------
 #	Check for the existence of various libraries.
@@ -317,8 +318,10 @@ TEA_ADD_LIBS([
 		tnm/generic/pcnfsd_clnt.o 
 		tnm/generic/pcnfsd_xdr.o
 	    ])
-TEA_ADD_CFLAGS([-Itnm -I. -Itnm/generic -Itnm/snmp])
+TEA_ADD_CFLAGS([-I. -Itnm -Itnm/generic -Itnm/snmp])
 TEA_ADD_STUB_SOURCES([])
+# This would be nice to use, but the current setup hardcodes related
+# Tcl files to reside under $(pkglibdir)/library.
 TEA_ADD_TCL_SOURCES([])
 
 #--------------------------------------------------------------------
@@ -333,7 +336,11 @@ TEA_ADD_TCL_SOURCES([])
 # TEA_ADD_* any platform specific compiler/build info here.
 #--------------------------------------------------------------------
 
-CLEANFILES="$CLEANFILES pkgIndex.tcl scotty nmicmpd nmtrapd"
+CLEANFILES="$CLEANFILES nmicmpd nmtrapd"
+CLEANFILES="$CLEANFILES tnm/generic/ether_* tnm/generic/ether.h"
+CLEANFILES="$CLEANFILES tnm/generic/mount_* tnm/generic/mount.h"
+CLEANFILES="$CLEANFILES tnm/generic/pcnfsd_* tnm/generic/pcnfsd.h"
+CLEANFILES="$CLEANFILES tnm/generic/rstat_* tnm/generic/rstat.h"
 
 if test "${TEA_PLATFORM}" = "windows" ; then
     # Ensure no empty if clauses
@@ -344,11 +351,11 @@ else
     # Ensure no empty else clauses
     :
     TEA_ADD_SOURCES([
-		       $(UNIX_DIR)/tnmUnixInit.c
-		       $(UNIX_DIR)/tnmUnixLog.c
-		       $(UNIX_DIR)/tnmUnixSocket.c
-		       $(UNIX_DIR)/tnmUnixIcmp.c
-		       $(UNIX_DIR)/tnmUnixSnmp.c
+		       unix/tnmUnixInit.c
+		       unix/tnmUnixLog.c
+		       unix/tnmUnixSocket.c
+		       unix/tnmUnixIcmp.c
+		       unix/tnmUnixSnmp.c
 		   ])
     #TEA_ADD_LIBS([-lsuperfly])
 fi
@@ -425,6 +432,7 @@ AC_SUBST(TNM_VERSION)
 AC_SUBST(TKI_VERSION)
 
 AC_SUBST(RPCGEN)
+AC_SUBST(NM_LIBS)
 
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.

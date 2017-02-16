@@ -19,8 +19,14 @@
 
 #SAMPLE_NEW_VAR	= @SAMPLE_NEW_VAR@
 
+# Used to version stamp several files
 TNM_VERSION =	@TNM_VERSION@
+
+# Used to pin calls to tclsh to the version used in the build.
+# TODO: with stubs build this should not be needed.
 TCL_VERSION =	@TCL_VERSION@
+
+# Used to hardcode the path to tkined inside libTnm.
 TK_VERSION  =	@TK_VERSION@
 
 #========================================================================
@@ -162,7 +168,7 @@ PKG_CFLAGS	= @PKG_CFLAGS@
 DEFS		= @DEFS@ $(PKG_CFLAGS)
 
 # Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
-CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl
+CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl scotty config.h.in
 CLEANFILES	= @CLEANFILES@
 
 CPPFLAGS	= @CPPFLAGS@
@@ -188,8 +194,7 @@ all: binaries libraries doc
 #========================================================================
 
 # SunRpc needs headers and stubs to be generated
-#========================================================================
-
+#--------------------------------------------------------------------
 TNM_DIR 	= $(top_builddir)/tnm
 TNM_GENERIC_DIR	= $(TNM_DIR)/generic
 RPCGEN		= @RPCGEN@
@@ -203,7 +208,7 @@ tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
 # tnmUnixInit initialize tkined(library) with TKI_INSTALL_DIR and uses
 # TNM_INSTALL_DIR
 # So we need a special treatment of this target.
-#========================================================================
+#--------------------------------------------------------------------
 
 # Directory in which to install library files belonging to the extension.
 # TNM_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tnm$(TNM_VERSION)
@@ -226,19 +231,18 @@ tnmUnixSnmp.o: tnmUnixSnmp.c
 
 
 # scotty et al
-#========================================================================
+#--------------------------------------------------------------------
+NM_LIBS		= @NM_LIBS@
+nmicmpd: unix/nmicmpd.c
+	$(COMPILE)  -o nmicmpd $(NM_LIBS) unix/nmicmpd.c
 
-nmicmpd: nmicmpd.o
-	@rm -f nmicmpd
-	$(CC) $(LD_FLAGS) -o nmicmpd nmicmpd.o $(LIBS)
+nmtrapd: unix/nmtrapd.c
+	$(COMPILE) -o nmtrapd $(NM_LIBS) unix/nmtrapd.c
 
-nmtrapd: nmtrapd.o
-	@rm -f nmtrapd
-	$(CC) $(LD_FLAGS) -o nmtrapd nmtrapd.o $(LIBS)
-
-# scotty: $(PKG_LIB_FILE) nmicmpd nmtrapd scotty.o
-# 	$(CC) $(LD_FLAGS) -o scotty scotty.o $(SHLIB_LD_LIBS)
-
+# compilation fails with:
+# unix/scotty.c:143: undefined reference to `Tcl_FindExecutable'
+# scotty: $(PKG_LIB_FILE) nmicmpd nmtrapd unix/scotty.c
+#	$(COMPILE)  unix/scotty.c -o scotty $(PKG_LIB_FILE) $(SHLIB_LD_LIBS)
 
 tnm-install-bin: scotty
 	chmod 755 scotty
@@ -260,8 +264,8 @@ sinstall: nmicmpd nmtrapd
 	    $(INSTALL_PROGRAM) -o root -m 4755 $$i $(bindir)/$$i; \
 	    done
 
-# install accesories
-#========================================================================
+# install tnm accesories
+#--------------------------------------------------------------------
 
 tnm-install: tnm-install-mibs tnm-install-library tnm-install-agents \
 	tnm-install-site tnm-install-bin
@@ -377,9 +381,9 @@ tnm-install-site:
 	fi
 
 # run tests on tnm
-#========================================================================
+#--------------------------------------------------------------------
 
-tnm-check: scotty
+tnm-check: scotty tnm-install
 	@TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
 	pwd=`pwd`; cd tnm/tests; $$pwd/scotty all.tcl
@@ -421,7 +425,7 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 # The list=...; for p in $$list handles the empty list case x-platform.
 #========================================================================
 
-install-libraries: libraries
+install-libraries: libraries tnm-install
 	@$(INSTALL_DATA_DIR) $(DESTDIR)$(includedir)
 	@echo "Installing header files in $(DESTDIR)$(includedir)"
 	@list='$(PKG_HEADERS)'; for i in $$list; do \
