@@ -12,11 +12,6 @@ if [ -n "$1" ]; then
     shift
 fi
 
-# autoheader checks if we want stubs.  Stubs do not work for now, so
-# we just use autoconf with a pre-compiled and manually modified
-# config.h.in
-
-# autoheader
-
+autoheader
 autoconf
 ./configure --prefix=$PREFIX --exec-prefix=$PREFIX "$@"

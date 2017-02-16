@@ -19,7 +19,7 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([tnm], [3.0.1])
+AC_INIT([Tnm], [3.0.1])
 
 #-----------------------------------------------------------------------
 # Scotty specific definitions and checks
@@ -28,7 +28,7 @@ AC_INIT([tnm], [3.0.1])
 TNM_VERSION=3.0.1
 TKI_VERSION=1.5.0
 
-AC_CONFIG_HEADER([config.h])
+# AC_CONFIG_HEADER([config.h])
 
 #--------------------------------------------------------------------
 #       Check for various system specific things.
@@ -260,11 +260,64 @@ TEA_SETUP_COMPILER
 # and PKG_TCL_SOURCES.
 #-----------------------------------------------------------------------
 
-TEA_ADD_SOURCES([])
+# generic tnm
+TEA_ADD_SOURCES([
+		   tnm/generic/tnmInit.c 
+		   tnm/generic/tnmUtil.c 
+		   tnm/generic/tnmJob.c 
+		   tnm/generic/tnmIned.c 
+		   tnm/generic/tnmSyslog.c 
+		   tnm/generic/tnmIcmp.c 
+		   tnm/generic/tnmDns.c 
+		   tnm/generic/tnmUdp.c 
+		   tnm/generic/tnmSunRpc.c 
+		   tnm/generic/tnmNtp.c 
+		   tnm/generic/tnmNetdb.c 
+		   tnm/generic/tnmMap.c 
+		   tnm/generic/tnmMapUtil.c 
+		   tnm/generic/tnmMapEvent.c 
+		   tnm/generic/tnmMapNode.c 
+		   tnm/generic/tnmMapNet.c 
+		   tnm/generic/tnmMapLink.c 
+		   tnm/generic/tnmMapPort.c 
+		   tnm/generic/tnmMapGroup.c 
+		   tnm/generic/tnmObj.c 
+		   tnm/generic/tnmSmx.c
+	       ])
+# snmp
+TEA_ADD_SOURCES([
+		   tnm/snmp/tnmAsn1.c 
+		   tnm/snmp/tnmOidObj.c 
+		   tnm/snmp/tnmMD5.c 
+		   tnm/snmp/tnmSHA.c 
+		   tnm/snmp/tnmSnmpNet.c 
+		   tnm/snmp/tnmSnmpUtil.c 
+		   tnm/snmp/tnmSnmpUsm.c 
+		   tnm/snmp/tnmSnmpInst.c 
+		   tnm/snmp/tnmSnmpTcl.c 
+		   tnm/snmp/tnmSnmpSend.c 
+		   tnm/snmp/tnmSnmpRecv.c 
+		   tnm/snmp/tnmSnmpAgent.c 
+		   tnm/snmp/tnmMibUtil.c 
+		   tnm/snmp/tnmMibParser.c 
+		   tnm/snmp/tnmMibTree.c 
+		   tnm/snmp/tnmMibFrozen.c 
+		   tnm/snmp/tnmMibTcl.c 
+		   tnm/snmp/tnmSmiTcl.c 
+	       ])
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
-TEA_ADD_LIBS([])
-TEA_ADD_CFLAGS([])
+TEA_ADD_LIBS([
+		tnm/generic/mount_clnt.o 
+		tnm/generic/mount_xdr.o 
+		tnm/generic/ether_clnt.o 
+		tnm/generic/ether_xdr.o 
+		tnm/generic/rstat_clnt.o 
+		tnm/generic/rstat_xdr.o 
+		tnm/generic/pcnfsd_clnt.o 
+		tnm/generic/pcnfsd_xdr.o
+	    ])
+TEA_ADD_CFLAGS([-Itnm -I. -Itnm/generic -Itnm/snmp])
 TEA_ADD_STUB_SOURCES([])
 TEA_ADD_TCL_SOURCES([])
 
@@ -280,7 +333,8 @@ TEA_ADD_TCL_SOURCES([])
 # TEA_ADD_* any platform specific compiler/build info here.
 #--------------------------------------------------------------------
 
-#CLEANFILES="$CLEANFILES pkgIndex.tcl"
+CLEANFILES="$CLEANFILES pkgIndex.tcl scotty nmicmpd nmtrapd"
+
 if test "${TEA_PLATFORM}" = "windows" ; then
     # Ensure no empty if clauses
     :
@@ -289,7 +343,13 @@ if test "${TEA_PLATFORM}" = "windows" ; then
 else
     # Ensure no empty else clauses
     :
-    #TEA_ADD_SOURCES([unix/unixFile.c])
+    TEA_ADD_SOURCES([
+		       $(UNIX_DIR)/tnmUnixInit.c
+		       $(UNIX_DIR)/tnmUnixLog.c
+		       $(UNIX_DIR)/tnmUnixSocket.c
+		       $(UNIX_DIR)/tnmUnixIcmp.c
+		       $(UNIX_DIR)/tnmUnixSnmp.c
+		   ])
     #TEA_ADD_LIBS([-lsuperfly])
 fi
 
@@ -361,23 +421,10 @@ TEA_PROG_TCLSH
 #       The list of symbols to substitute.
 #----------------------------------------------------------------------------
 
-AC_SUBST(SHLIB_SUFFIX)
-AC_SUBST(LD_FLAGS)
-AC_SUBST(NM_LIBS)
-AC_SUBST(DL_LIBS)
-AC_SUBST(LD_SEARCH_FLAGS)
-
-AC_SUBST(TK_INCLUDES)
-AC_SUBST(TK_XINCLUDES)
-
 AC_SUBST(TNM_VERSION)
 AC_SUBST(TKI_VERSION)
 
-AC_SUBST(TCL_EXEC_PREFIX)
-AC_SUBST(TK_EXEC_PREFIX)
-
-AC_SUBST(BUILD_TARGETS)
-AC_SUBST(INSTALL_TARGETS)
+AC_SUBST(RPCGEN)
 
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
@@ -385,5 +432,5 @@ AC_SUBST(INSTALL_TARGETS)
 # which require substituting th AC variables in.  Include these here.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile pkgIndex.tcl])
+AC_OUTPUT([Makefile pkgIndex.tcl scotty])
 
