@@ -55,8 +55,12 @@ typedef size_t socklen_t;
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
+
+/* malloc.h is deprecated, stdlib.h declares the malloc function  */
+#ifndef HAVE_STDLIB_H
 #ifdef HAVE_MALLOC_H
 # include <malloc.h>
+#endif
 #endif
 #ifdef DB_MALLOC
 # include <dbmalloc.h>

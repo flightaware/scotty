@@ -43,8 +43,11 @@
 #include <errno.h>
 #include <sys/types.h>
 
+/* malloc.h is deprecated, stdlib.h declares the malloc function  */
+#ifndef HAVE_STDLIB_H
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif
 #endif
 
 #ifdef HAVE_STDLIB_H
