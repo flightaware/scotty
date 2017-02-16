@@ -13,8 +13,12 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+/* added as a (failed) intent to make scotty compile with stubs support */
+#include <tcl.h>
+
 #include "tnmInt.h"
 #include "tnmPort.h"
+
 
 static Tcl_Interp *interp;      /* Interpreter for this application. */
 static Tcl_DString command;	/* Used to assemble lines of terminal input
