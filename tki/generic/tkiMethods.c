@@ -35,10 +35,12 @@ EXTERN void TclGetAndDetachPids (Tcl_Interp * interp,
  * This internal header is needed for TclGetAndDetachPids() :-(
  */
 
-/* 
- * This breaks build with stubs, and is apparently not needed.
-#include <TclPort.h>
+/* leg20170217:
+ *     The following include used <TclPort.h>
+ *     In current Tcl 8.6 all include files start with lowercase 'tcl'.
+ *     tclPort.h is not satisfying the need for TclGetAndDetachPids(). 
  */
+#include <tclInt.h>
 #endif 
  
 

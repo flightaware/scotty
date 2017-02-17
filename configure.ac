@@ -147,7 +147,7 @@ fi
 #--------------------------------------------------------------------
 
 TEA_PUBLIC_TCL_HEADERS
-#TEA_PRIVATE_TCL_HEADERS
+TEA_PRIVATE_TCL_HEADERS
 
 TEA_PUBLIC_TK_HEADERS
 #TEA_PRIVATE_TK_HEADERS
