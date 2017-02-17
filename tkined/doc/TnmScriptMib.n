@@ -1,0 +1,202 @@
+'\"
+'\" Copyright (c) 1998-2000 Technical University of Braunschweig.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+'\" @(#) $Id: TnmScriptMib.n,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+'\" 
+.so man.macros
+.TH TnmScriptMib n "September 2000" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+TnmScriptMib \- A Tcl package of procedures for interacting with the IETF remote scripting MIB.
+.BE
+
+.SH DESCRIPTION
+
+The TnmScriptMib package provides a set of Tcl command procedures that
+interact with SNMP agents implementing the remote scripting MIB
+standardized by the Distributed Management (DISMAN) working group of
+the IETF. Most of the commands work synchronously which means that
+they might block the process for a while if there are communication
+problems.
+
+.SH USING THE PACKAGE
+
+The TnmScriptMib package is loaded into a Tcl interpreter by using the
+following sequence of Tcl commands:
+
+.CS
+package require Tnm
+.br
+package require TnmScriptMib $tnm(version)
+.CE
+
+All the TnmScriptMib commands live in the TnmScriptMib namespace. You
+can import these commands into the current namespace by using the
+following Tcl command:
+
+.CS
+namespace import TnmScriptMib::*
+.CE
+
+It is however suggested to import commands explicitely or to use the
+full name in scripts to avoid name clashes.
+
+.SH COMMANDS
+
+.TP
+.B TnmScriptMib::GetLanguages \fIsession\fR
+The TnmScriptMib::GetLanguages procedure returns the list of languages
+supported by an SNMP agent identified by the SNMP \fIsession\fR
+handle. Each element in the result list contains the language index
+(smLangIndex) and the language identification (smLangLanguage).
+
+.TP
+.B TnmScriptMib::GetExtensions \fIsession\fR \fIlanguage\fR
+The TnmScriptMib::GetExtensions procedure returns the list of extensions
+for a given language supported by an SNMP agent identified by the SNMP
+\fIsession\fR handle. The \fIlanguage\fR parameter is the language
+index (smLangIndex) which identfies a language within an agent. Each
+element in the result list contains the extension index (smExtsnIndex)
+and the extension identification (smExtsnExtension).
+
+.TP
+.B TnmScriptMib::InstallScript \fIsession\fR \fIowner\fR \fIname\fR \fIlanguage\fR \fIsource\fR \fIdescription\fR 
+The TnmScriptMib::InstallScript procedure installs a new script at the
+agent identified by the SNMP \fIsession\fR handle. The new script will
+be owned by \fIowner\fR and named \fIname\fR. These two attributes
+uniquely identify the script. The script is written in the language
+identified by the \fIlanguage\fR parameter. Upon a subsequent
+TnmScriptMib::EnableScript call the agent will retrieve the script
+file from the URL specified by the \fIsource\fR parameter. The
+\fIdescription\fR parameter can be used to pass a verbose description
+of the script.
+
+.TP
+.B TnmScriptMib::DeleteScript \fIsession\fR \fIowner\fR \fIname\fR
+The TnmScriptMib::DeleteScript procedure deletes a script owned by
+\fIowner\fR and named \fIname\fR from the agent identified by the SNMP
+\fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::EnableScript \fIsession\fR \fIowner\fR \fIname\fR
+The TnmScriptMib::EnableScript procedure adminstratively enables the
+script owned by \fIowner\fR and named \fIname\fR at the agent
+identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::DisableScript \fIsession\fR \fIowner\fR \fIname\fR
+The TnmScriptMib::DisableScript procedure adminstratively disables the
+script owned by \fIowner\fR and named \fIname\fR at the agent
+identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::SetScriptStorage \fIsession\fR \fIowner\fR \fIname\fR \fIstorage\fR
+The TnmScriptMib::SetScriptStorage procedure sets the storage
+type (smScriptStorageType) of the script owned by \fIowner\fR and
+named \fIname\fR at the agent identified by the SNMP \fIsession\fR handle
+to the value \fIstorage\fR.
+
+.TP
+.B TnmScriptMib::SetScriptDescription \fIsession\fR \fIowner\fR \fIname\fR \fIdescription\fR
+The TnmScriptMib::SetScriptDescription procedure sets the description
+string (smScriptDescr) of the script owned by \fIowner\fR and
+named \fIname\fR at the agent identified by the SNMP \fIsession\fR handle
+to the value \fIdescription\fR.
+
+.TP
+.B TnmScriptMib::SetScriptSource \fIsession\fR \fIowner\fR \fIname\fR \fIsource\fR
+The TnmScriptMib::SetScriptSource procedure sets the source URL
+string (smScriptSource) of the script owned by \fIowner\fR and
+named \fIname\fR at the agent identified by the SNMP \fIsession\fR handle
+to the value \fIsource\fR.
+
+.TP
+.B TnmScriptMib::SetScriptLanguage \fIsession\fR \fIowner\fR \fIname\fR \fIlanguage\fR
+The TnmScriptMib::SetScriptLanguage procedure sets the language
+index (smScriptLanguage) of the script owned by \fIowner\fR and
+named \fIname\fR at the agent identified by the SNMP \fIsession\fR handle
+to the language index \fIlanguage\fR.
+
+'\" TnmScriptMib::GetScriptOwners
+
+'\" TnmScriptMib::GetScripts
+
+.TP
+.B TnmScriptMib::InstallLaunch \fIsession\fR \fIowner\fR \fIname\fR \fIscriptowner\fR \fIscriptname\fR \fIargument\fR \fIlifetime\fR  \fIexpiretime\fR  \fImaxrunning\fR \fImaxcompleted\fR
+The TnmScriptMib::InstallLaunch procedure installs a new launch button
+at the agent identified by the SNMP \fIsession\fR handle. The new
+launch button will be owned by \fIowner\fR and named \fIname\fR.
+These two attributes uniquely identify the launch button.  It will
+launch the script owned by \fIscriptowner\fR and named
+\fIscriptname\fR. When the script is launch it will get passed the
+argument string \fIargument\fR. The initial values of the maximum
+lifetime and the time until terminated scripts expire for running
+instances of scripts started from this launch button will be
+\fIlifetime\fR and \fIexpiretime\fR. The maximum number of running
+scripts started from this launch button will be \fImaxrunning\fR.
+The maximum number of terminated scripts that have been started from
+this launch button and remain in the smRunTable will be \fImaxcompleted\fR.
+
+.TP
+.B TnmScriptMib::DeleteLaunch \fIsession\fR \fIowner\fR \fIname\fR
+The TnmScriptMib::DeleteLaunch procedure deletes a launch button owned by
+\fIowner\fR and named \fIname\fR from the agent identified by the SNMP
+\fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::EnableLaunch \fIsession\fR \fIowner\fR \fIname\fR
+The TnmScriptMib::EnableLaunch procedure adminstratively enables the
+launch button owned by \fIowner\fR and named \fIname\fR at the agent
+identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::DisableLaunch \fIsession\fR \fIowner\fR \fIname\fR
+The TnmScriptMib::DisableLaunch procedure adminstratively disables the
+launch button owned by \fIowner\fR and named \fIname\fR at the agent
+identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::SuspendRun \fIsession\fR \fIowner\fR \fIname\fR \fIindex\fR
+The TnmScriptMib::SuspendRun procedure suspends the
+running script that has been started from the launch button 
+owned by \fIowner\fR and named \fIname\fR and that has the smRunIndex
+value \fIundex\fR at the agent identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::ResumeRun \fIsession\fR \fIowner\fR \fIname\fR \fIindex\fR
+The TnmScriptMib::ResumeRun procedure resumes the suspended
+running script that has been started from the launch button 
+owned by \fIowner\fR and named \fIname\fR and that has the smRunIndex
+value \fIundex\fR at the agent identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::AbortRun \fIsession\fR \fIowner\fR \fIname\fR \fIindex\fR
+The TnmScriptMib::AbortRun procedure aborts the
+running script that has been started from the launch button 
+owned by \fIowner\fR and named \fIname\fR and that has the smRunIndex
+value \fIundex\fR at the agent identified by the SNMP \fIsession\fR handle.
+
+.TP
+.B TnmScriptMib::DeleteRun \fIsession\fR \fIowner\fR \fIname\fR \fIindex\fR
+The TnmScriptMib::DeleteRun procedure deletes the terminated
+running script that has been started from the launch button 
+owned by \fIowner\fR and named \fIname\fR and that has the smRunIndex
+value \fIundex\fR at the agent identified by the SNMP \fIsession\fR handle.
+
+.SH NOTES
+
+The TnmScriptMib package is still missing some useful procedures, e.g.
+for starting scripts. These functions have to be achieved by issueing
+lower level SNMP operations from the application.
+
+.SH SEE ALSO
+scotty(1), Tnm(n), Tcl(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+.br
+Frank Strauss <strauss@ibr.cs.tu-bs.de>

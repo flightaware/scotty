@@ -1,0 +1,113 @@
+'\"
+'\" Copyright (c) 1996-1997 University of Twente.
+'\" Copyright (c) 1997-1998 Technical University of Braunschweig.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+'\" @(#) $Id: TnmMap.n,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+'\" 
+.so man.macros
+.TH TnmMap n "February 1998" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+TnmMap \- A Tcl/Tk package for manipulating network maps.
+.BE
+
+.SH DESCRIPTION
+
+The Tnm map(n) command provides a common infrastructure used to build
+simple but powerful network management tools which can easily exchange
+their configuration databases. This package extends the map(n) command
+with a library of Tcl procedures that are used to implement common
+functions used within different applications.
+
+.SH USING THE PACKAGE
+
+The TnmMap package is loaded into a Tcl interpreter by using the
+following sequence of Tcl commands:
+
+.CS
+package require Tnm
+.br
+package require TnmInet $tnm(version)
+.br
+package require TnmMap $tnm(version)
+.CE
+
+All the TnmMap commands live in the TnmMap namespace. You can import
+these commands into the current namespace by using the following Tcl
+command:
+
+.CS
+namespace import TnmMap::*
+.CE
+
+It is however suggested to import commands explicitely or to use the
+full name in scripts to avoid name clashes.
+
+.SH COMMANDS
+
+.TP
+.B TnmMap::GetIpAddress \fInode\fR
+The \fBTnmMap::GetIpAddress\fR procedure returns the IP address of a
+map item. It first checks whether the first element of the value of
+the -address option contains a valid IP address. If not, it tries to
+lookup an IP address by using the value of the -address option as an
+argument to TnmInet::GetIpAddress. The next attempt is to call
+TnmInet::GetIpAddress with the value of the -name option. An error is
+generated if all lookup attempts fail. The \fBTnmMap::GetIpAddress\fR
+procedure saves the IP address in the -address option if the lookup
+was successful and the option has been empty to ensure that future
+lookups are faster.
+
+.TP
+.B TnmMap::GetIpName \fInode\fR
+The \fBTnmMap::GetIpName\fR procedure returns the IP name of a map
+item. It first checks whether the -name option contains a suitable
+value. If this test fails, an attempt is made to convert the value in
+the -address option into a name. The -name option will be updated if
+the conversion is successful and the -name option is currently empty.
+An error is thrown if all attempts to retrieve an IP name fail.
+
+.TP
+.B TnmMap::GetSnmpSession \fInode\fR
+The \fBTnmMap::GetSnmpSession\fR procedure returns an SNMP session
+handle which can be used to send SNMP requests to a map item. This
+procedure first checks whether the Tnm:Snmp:Alias attribute is
+defined. It tries to create an SNMP session using the value of
+Tnm:Snmp:Alias as an alias name if it is not empty. The procedure
+looks at the attribute Tnm:Snmp:Config if the attribute Tnm:Snmp:Alias
+is not defined. It tries to create an SNMP session using the value of
+Tnm:Snmp:Config as a list of configuration options if it is not empty.
+Finally, the procedure tries to get the IP address using the
+\fBTnmMap::GetIpAddress\fR procedure and it initializes an SNMP
+session with this IP address and the default parameters. Errors are
+generated if the attempts to create a session fail.
+
+.TP
+.B TnmMap::TraceRoute \fInode\fR [\fImaxlength\fR [\fIretries\fR]]
+The \fBTnmMap::TraceRoute\fR procedure traces an IP route using the
+van Jacobsen algorithm. The procedure creates one or more events while
+tracing the route to \fInode\fR. The \fImaxlength\fR parameter defines
+the maximum route length and the \fIretries\fR parameter the number of
+retries per hop. The default values are a maximum length of 32 hops
+and 3 retries per hop.
+
+The procedure generates a series of \fITnmMap:TraceRoute:Value\fR
+events to report the result of each tracing step. The end of the
+routing trace is signalled by a \fITnmMap:TraceRoute:Done\fR
+event. The node should have appropriate event bindings to handle these
+events.
+
+The \fBTnmMap::TraceRoute\fR procedure will throw an error if it fails
+to retrieve an IP address for the node or there is an error while
+sending and receiving ICMP messages.
+
+.SH SEE ALSO
+scotty(1), Tnm(n), Tcl(n), map(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+.br

@@ -1,0 +1,82 @@
+This is the directory where you configure, compile, test, and install
+UNIX versions of the scotty extension for Tcl/Tk and the tkined
+network editor. This directory also contains source files specific to
+UNIX.
+
+The rest of this file contains instructions on how to do this.  The
+release should compile and run either "out of the box" or with trivial
+changes on many UNIX-like systems. We know that it runs on
+workstations from Sun, H-P, DEC, IBM, and SGI, as well as PCs running
+Linux, BSDI, and SCO UNIX.
+
+
+1. How To Compile And Install Tnm And Tkined:
+---------------------------------------------
+
+(a) Make sure you have Tcl8.4 and Tk8.4 installed on your system.
+    This release will not work with earlier versions of Tcl/Tk.
+    Also, make sure that dynamic loading is enabled in your Tcl/Tk
+    installation (that is, Tcl and Tk have been configured with
+    --enable-shared).
+
+(b) Type "./configure". This runs a configuration script created by GNU
+    autoconf, which configures scotty and tkined for your system and 
+    creates a Makefile.  The configure script allows you to customize 
+    the scotty and tkined configuration for your site; for details on 
+    how you can do this, type "./configure -help".
+
+(c) Type "make".  This will create dynamic loadable modules called 
+    "tnm.so" and "tkined.so" and a new Tcl interpreter called "scotty".
+    (Note, the loadable modules may have different extensions on some
+    UNIX systems.)
+
+(d) Type "make install" to install scotty and tkined binaries, modules
+    and script files in standard places.  You'll need write permission
+    on the installation directories to do this.  The installation 
+    directories are determined by the "configure" script and may be
+    specified with the --prefix and --exec-prefix options to "configure".
+    See the Makefile for information on what directories were chosen; you
+    can override these choices by modifying the "prefix" and "exec-prefix"
+    variables in the Makefile.
+
+    To install in the default locations (under /usr/local) on many
+    systems you have to be root (although only the ntping and straps
+    binaries actually have to be installed with root permissions). To
+    ensure files installed by root are readable set umask to 022
+    before typing "make install".  If you do not have permissions to
+    install in the default locations then you can select alternative
+    installation as described above.
+
+(e) Type "make sinstall" to install the utility programs that require
+    root privileges.  Please consult your system administrator on how 
+    to do this. Root permissions are needed because these little programs
+    need to open privileged sockets. The programs that need special
+    permissions are very short so it is easy to verify that they do
+    not cause security problems regarding your security policy.
+
+(f) At this point you can play with scotty and tkined by invoking the
+    "scotty" or the "tkined" program and typing Tcl commands.
+
+If you have trouble compiling Tcl, read through the file" porting.notes".
+It contains information that people have provided about changes they had
+to make to compile Tcl in various environments. If you get Tcl running on 
+a new configuration, we would be happy to receive new information to add
+to "porting.notes". We're also interested
+in hearing how to change the configuration setup so that Tcl compiles out
+of the box on more platforms.
+
+
+2. Optional Features:
+---------------------
+
+This distribution also contains some optional features that not used
+on every site. 
+
+(1) MULTICAST
+
+    This version of the Tnm extension supports SNMP multicasts on
+    operating systems that support UDP multicasts in the kernel.
+    The configure script will not automatically check whether your
+    system supports multicasts. You have to use the --enable-multicast
+    configure option to enable this feature on systems that support
+    UDP multicasts.

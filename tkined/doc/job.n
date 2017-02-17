@@ -1,0 +1,162 @@
+'\"
+'\" Copyright (c) 1994-1996 Technical University of Braunschweig.
+'\" Copyright (c) 1996-1997 University of Twente.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+'\" @(#) $Id: job.n,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+'\" 
+.so man.macros
+.TH Tnm::job n "December 1997" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+Tnm::job \- Invoke Tcl procedures at regular intervals.
+.BE
+
+.SH DESCRIPTION
+The Tnm::job command provides a convenient mechanism to invoke Tcl
+procedures at regular intervals. Jobs are activated from the Tcl event
+loop. It is therefore necessary that the Tcl event loop has been
+entered in order to execute jobs. Jobs are never interrupted due to
+the event-driven nature of Tcl. This means that long computations or
+blocking Tcl or Tnm commands can change the scheduling order
+noticeably.
+
+Every job can have arbitrary attributes to store job specific state
+information between two invocations. These attributes help to avoid
+global variables in order to keep the Tcl name-space clean. Jobs can
+also have a set of tags which allows to group jobs and to relate jobs
+to other parts of an application.
+
+The job scheduler itself relies heavily on the Tcl timer interface
+which itself depends on the system clock. Moving the system clock
+backwards can have the effect that jobs are not activated for the
+amount of time the system clock was moved backwards. Similarly, moving
+the system clock forward can have the effect that jobs are activated
+earlier for the amount of time the system clock was moved forward.
+
+.SH JOB COMMANDS
+The Tnm::job command allows to create new jobs and to wait for jobs to
+complete. The Tnm::job command can also be used to retrieve status
+information from the job scheduler.
+.TP
+.B Tnm::job create \fR[\fIoption value\fR ...]
+The \fBTnm::job create\fR command creates a new job object. The
+\fIoptions\fR can be used to configure the behaviour of the new
+job. See the configure command below for the details.
+.TP
+.B Tnm::job current
+The \fBTnm::job current\fR command returns the name of the currently
+running job. An empty string is returned if no job is running.
+.TP
+.B Tnm::job find \fR[\fB-status \fIstate\fR] \fR[\fB-tags \fIpatternList\fR]
+The \fBTnm::job find\fR command returns lists of job names. The list
+will contain all jobs known by the Tcl interpreter if no options are
+present. The \fB-status\fR option restricts the list to those jobs
+which are currently in the state \fIstate\fR. The \fB-tags\fR option
+matches the tags associated with a job against the pattern contained
+in the \fIpatternList\fR. Matching is done according to the rules
+defined for the Tcl string match command. Every pattern in the 
+patternList must match at least one tag in the tag list.
+.TP
+.B Tnm::job schedule
+The \fBTnm::job schedule\fR command invokes the scheduler. This is
+usually done automatically from the event loop. This command may be
+used during long computations to invoke the scheduler explicitly.
+Note that this command can cause arbitrary side effects and should be
+used with care.
+.TP
+.B Tnm::job wait
+The \fBTnm::job wait\fR command blocks until all existing jobs in this
+interpreter have been finished. The command will wait infinitely if
+there is at least one job left. Events are processed while waiting for
+the jobs to finish, which can have arbitrary side effects.
+
+.SH JOB INSTANCE COMMANDS
+Every single job is represented by a job object command which allows
+to manipulate the job.
+.TP
+.B job# attribute \fR[\fIname \fR[\fIvalue\fR]\fR]
+The \fBjob# attribute\fR command allows to save job specific state
+information in job attributes. If called without any arguments, all
+existing attribute names for this job will be returned. If called with
+a name argument, the current value of the attribute will be
+returned. Non-existing attributes do not produce an error. Instead, an
+empty string is returned. Calling the option with a name and a value
+causes the value to be saved in the job attribute.
+.TP
+.B job# cget \fIoption\fR
+The \fBjob# cget\fR command returns the current value of a
+configuration option. See the description of supported options below.
+.TP
+.B job# configure \fR[\fIoption value\fR ...]
+The \fBjob# configure\fR command manipulates configuration options.
+See the description of supported options below. A list describing all
+options is returned if the optional arguments are absent.
+.TP
+.B job# destroy
+The \fBjob# destroy\fR command destroys the job object. This command
+forces the object to change into the expired state. The scheduler will
+cleanup this object the next time it is active.
+.TP
+.B job# wait
+The \fBjob# wait\fR command blocks and processes events until the
+current job changes into the expired state.
+
+.SH JOB OPTIONS
+Every job has associated configuration options which control when a
+job is activated and which Tcl command is bound to the job.
+.TP
+.BI "-command " command
+The \fB-command\fR option defines the Tcl command that is evaluated 
+whenever the job is activated.
+.TP
+.BI "-error " command
+The \fB-error\fR option defines the Tcl command that is evaluated 
+whenever the job causes an error. An empty error command causes Tnm
+to abort the running job and to call the Tcl bgerror procedure in order
+to signal this exception. Setting this option to a non-empty string
+causes Tnm evaluate the string without aborting the running job.
+.TP
+.BI "-exit " command
+The \fB-exit\fR option defines the Tcl command that is evaluated 
+whenever the job ends its execution. This command allows to free
+resources that are associated with a job.
+.TP
+.BI "-interval " time
+The \fB-interval\fR option defines the time interval between two job 
+activations in milliseconds. This number must be a positive integer
+value.
+.TP
+.BI "-iterations " number
+The \fB-iterations\fR option defines the total number of times that a
+job is activated. If this value reaches 0, the job will change its
+state to expired. Note, if the \fB-iterations\fR option is never used, it
+will also have the value 0 but nothing special happens to the job
+object.
+.TP
+.BI "-status " state
+The \fB-status\fR option provides access to the current job state. A
+job is always in one of the states waiting, suspended, running and
+expired. A job in the expired state will be removed from the system
+once the scheduler gets activated again. Suspended jobs are not
+activated by the job scheduler. A suspended job can be resumed by
+changing its state to running.
+.TP
+.BI "-tags " tagList
+The \fB-tags\fR option is used to tag jobs. Tags are a convenient way
+to group jobs together that perform a single task together. Tags are
+also convenient to relate jobs to network map objects and/or management
+functions.
+.TP
+.BI "-time " time
+The \fB-time\fR option returns the number of milliseconds until this
+job is activated the next time. This option is read-only.
+
+.SH SEE ALSO
+scotty(1), Tnm(n), Tcl(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>

@@ -1,0 +1,21 @@
+#!/bin/sh
+# the next line restarts using tclsh \
+exec tclsh "$0" ${1+"$@"}
+#
+# leg20170215 emulate the behavior of the scotty.1 program in Tcl.
+
+package require -exact Tnm @TNM_VERSION@
+
+if {$argc>0} {
+    incr argc -1
+    set argv [lassign $argv argv0]
+    source $argv0
+} else {
+    # pure man's tcl repl loop
+    while 1 {
+	puts -nonewline "scotty% "; flush stdout ;#-- prompt - can be more elaborated
+	gets stdin line
+	catch $line res
+	puts $res
+    }
+}

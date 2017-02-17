@@ -1,0 +1,55 @@
+#!/bin/sh
+# the next line restarts using wish \
+exec %WISH% "$0" "$@"
+
+# Load all the packages that make up Tkined. Note, the order is
+# important here because the Tkined package initializes the search
+# path so that the Tcl modules are found automatically.
+
+package require Tcl %TCL_VERSION%
+package require Tk %TK_VERSION%
+
+package require -exact Tkined %TKI_VERSION%
+package require TkinedCommand $tkined(version)
+package require TkinedDiagram $tkined(version)
+package require TkinedDialog $tkined(version)
+package require TkinedEditor $tkined(version)
+package require TkinedEvent $tkined(version)
+package require TkinedHelp $tkined(version)
+package require TkinedMisc $tkined(version)
+package require TkinedObjects $tkined(version)
+package require TkinedTool $tkined(version)
+
+# I dont like the fat font Tk uses per default. So here 
+# is good old fixed font.
+
+option add Tkined*Text.font        fixed startupFile
+option add *Menu.tearOff	off	startupFile
+
+# Read the site specific initialization file.
+
+if [file exists [file join $tkined(library) site init.tcl]] {
+    source [file join $tkined(library) site init.tcl]
+}
+
+# And here we start. Unmap the . widget and start an editor
+# for each file metioned in the command line.
+
+wm withdraw .
+
+foreach f $argv {
+    if [file readable $f] {
+	set v [EDITOR]
+	Command__Open $v $f
+        lappend views $v
+    }
+}
+if {! [info exists views]} {
+    set views [EDITOR]
+}
+
+if {[info exists geometry]} {
+    foreach view $views {
+	puts "should set geometry of $view to $geometry"
+    }
+}

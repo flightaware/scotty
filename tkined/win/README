@@ -1,0 +1,81 @@
+This is the directory where you can compile the Windows NT versions of
+the Tnm extension for Tcl/Tk and the Tkined network editor. This
+directory also contains source files specific to Windows NT.
+
+
+1. Introduction
+---------------
+
+This is the directory where you configure and compile the Windows
+version of the Tnm Tcl extension. This directory also contains source
+files for Tnm that are specific to Microsoft Windows. The rest of
+this file contains information specific to the Windows version of Tcl.
+
+
+2. Distribution notes
+---------------------
+
+The Windows port of the Tnm extension is distributed as part of the
+common source release. It contains a makefile which assume that you
+have installed the Tcl/Tk binary release available from Sun
+Microsystems in C:\Tcl. You need to make some adjustments in case you
+have installed Tcl/Tk somewhere else. The Tnm extension will be
+compiled into a dynamic loadable library (dll). No main scotty program
+is compiled since there is no support for a completely event driven
+Tcl interpreter on the Windows platform in the current Tcl/Tk release.
+
+
+3. Compiling Tnm and Tkined
+---------------------------
+
+In order to compile Scotty for Windows, you need the following items:
+
+	Tcl 8.3 Binary Distribution (plus any patches)
+
+	Visual C++ 2.x/4.x/6.x
+
+In this "win" subdirectory of the source release, you will find a
+makefile suitable for MS Visual C++. You can use "nmake" to build the
+dynamic link libraries.
+
+You also need to install the oncrpc.lib file derived from the ONC RPC
+port to Windows NT done by Martin F. Gergeleit and the resolv.lib file
+derived from the bind-4.9.4 port to NT. These files are available from
+ftp.ibr.cs.tu-bs.de in /pub/local/tkined/Win32 for the Visual C++
+compiler (vclibs.zip). The URL is:
+
+	ftp://ftp.ibr.cs.tu-bs.de/pub/local/tkined/Win32/vclibs.zip
+
+More information about the oncrpc port to NT can be found at:
+
+	http://www.plt.rwth-aachen.de/ks/english/oncrpc.html
+
+Information about the bind resolver and the port to Windows NT
+can be found at:
+
+	http://www.vix.com/isc/bind.html
+
+Note that you have to hack the sources a bit in order to compile the
+oncrpc.lib and resolv.lib archives needed for the Tnm port.
+
+
+4. Open Tnm portability problems
+--------------------------------
+
+1. The snmp command crashes in the snmp test suite.
+
+2. The snmp command does not allow to receive traps by more than one
+   application.
+
+3. The icmp command does not support all options (timestamp, mask).
+
+
+
+6. Acknowledgements:
+--------------------
+
+The Windows NT porting project has been sponsored by Optical Data
+Systems (http://www.ods.com). Gaertner Datensysteme sponsored further
+development of the Windows NT port and provides a binary installer
+version which is easy to install and use.
+

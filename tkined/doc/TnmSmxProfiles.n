@@ -1,0 +1,71 @@
+'\"
+'\" Copyright (c) 1998-2000 Technical University of Braunschweig.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+'\" @(#) $Id: TnmSmxProfiles.n,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
+'\" 
+.so man.macros
+.TH TnmSmxProfiles n "January 2001" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+TnmSmxProfiles \- A Tcl package of procedures that implement common SMX runtime security profiles.
+.BE
+
+.SH DESCRIPTION
+
+The TnmSmxProfiles package provides a set of Tcl command procedures
+which implement SMX runtime security profiles.
+
+.SH USING THE PACKAGE
+
+The TnmSmxProfiles package is loaded into a Tcl interpreter by using
+the following sequence of Tcl commands:
+
+.CS
+package require Tnm
+.br
+package require TnmSmxProfiles $tnm(version)
+.CE
+
+All the TnmSmxProfiles commands live in the TnmSmxProfiles
+namespace. You can import these commands into the current namespace by
+using the following Tcl command:
+
+.CS
+namespace import TnmSmxProfiles::*
+.CE
+
+Note that it is actually required to import the procedures into the
+global namespace since the SMX protocol is not capable to transfer
+runtime security profile names with a namespace separator.
+
+.SH COMMANDS
+
+.TP
+.B TnmSmxProfiles::safe \fIslave\fR
+The TnmSmxProfiles::safe procedure implements a safe runtime security
+profile which only supports safe Tcl commands.
+
+.TP
+.B TnmSmxProfiles::snmp \fIslave\fR
+The TnmSmxProfiles::snmp procedure implements a safe runtime security
+profile which provides access to the Tnm::snmp and the Tnm::mib commands.
+
+.TP
+.B TnmSmxProfiles::tnm \fIslave\fR
+The TnmSmxProfiles::tnm procedure implements a runtime security
+profile which supports all Tnm commands. This is not a very safe
+profile since it allows scripts arbitrary use of the network.
+Furthermore, scripts can issue syslog messages and disturb the system
+in other unpleasant ways.
+
+
+.SH SEE ALSO
+scotty(1), Tnm(n), Tcl(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+
