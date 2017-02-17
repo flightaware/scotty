@@ -1,7 +1,7 @@
 # -*- mode: markdown -*-
 
-Bugs:
-=====
+Bugs
+====
 
 - macOS:
     - -lresolv not issued by ./configure.
@@ -25,4 +25,21 @@ Bugs:
       - Implement missing uninstall targets.
       - Check for missing install targets/routines.  Notably: scotty
         invocation after installing MIBs
-	  
+      - scotty does not build: unix/scotty.c:143: undefined reference
+        to `Tcl_FindExecutable'
+
+
+Tests
+=====
+
+- All Platforms:
+    - SunRpc test segfault.
+
+
+Wishlist
+========
+
+- Port to:
+  - OpenIndiana (Solaris)
+  - Alpine Linux
+  - Windows

@@ -83,11 +83,12 @@ AC_CHECK_LIB([resolv], [res_mkquery], [], [
     AC_MSG_CHECKING([if res_mkquery is provided by libresolv with mangled symbols])
     save_LIBS="$LIBS"
     LIBS="-lresolv $LIBS"
-    NM_LIBS="$NM_LIBS -lresolv"
     AC_TRY_LINK([#include <resolv.h>],
                 [res_mkquery(0,NULL,0,0,NULL,0,NULL,NULL,0);], [
                     AC_DEFINE(HAVE_LIBRESOLV, [1], [Define if your libresolv provides res_mkquery.])
-		    AC_MSG_RESULT(yes)], [
+		    AC_MSG_RESULT(yes)
+		    NM_LIBS="$NM_LIBS -lresolv"
+		], [
 		    LIBS="$save_LIBS"
 		    AC_MSG_RESULT(no)])])
 

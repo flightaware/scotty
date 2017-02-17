@@ -201,8 +201,6 @@ TNM_GENERIC_DIR	= $(TNM_DIR)/generic
 RPCGEN		= @RPCGEN@
 PKG_LIBS	= @PKG_LIBS@
 
-#%_xdr.c %_clnt.c %.h: %.x
-#	$(RPCGEN) $<
 .SUFFIXES:	.x
 .x.h:
 	-cp $< .
@@ -393,7 +391,7 @@ tnm-install-site:
 # run tests on tnm
 #--------------------------------------------------------------------
 
-tnm-check: scotty tnm-install
+tnm-check: scotty
 	@TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
 	pwd=`pwd`; cd tnm/tests; $$pwd/scotty all.tcl
