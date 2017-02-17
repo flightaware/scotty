@@ -74,9 +74,22 @@ TEA_TCL_LINK_LIBS
 AX_CHECK_ZLIB([LIBS="$LIBS -lz"],no)
 
 AC_CHECK_LIB(rpc, main, [LIBS="$LIBS -lrpc"])
-AC_CHECK_FUNC(res_mkquery, ,
-	AC_CHECK_LIB(resolv, res_mkquery, [LIBS="$LIBS -lresolv";
-					   NM_LIBS="$NM_LIBS -lresolv"]))
+
+# See Alex Chernyakhovsky's article:
+# http://blog.achernya.com/2013/03/os-x-has-silly-libsystem.html
+# We have taken his solution from here:
+# https://github.com/achernya/hesiod/blob/master/configure.ac
+AC_CHECK_LIB([resolv], [res_mkquery], [], [
+    AC_MSG_CHECKING([if res_mkquery is provided by libresolv with mangled symbols])
+    save_LIBS="$LIBS"
+    LIBS="-lresolv $LIBS"
+    NM_LIBS="$NM_LIBS -lresolv"
+    AC_TRY_LINK([#include <resolv.h>],
+                [res_mkquery(0,NULL,0,0,NULL,0,NULL,NULL,0);], [
+                    AC_DEFINE(HAVE_LIBRESOLV, [1], [Define if your libresolv provides res_mkquery.])
+		    AC_MSG_RESULT(yes)], [
+		    LIBS="$save_LIBS"
+		    AC_MSG_RESULT(no)])])
 
 #----------------------------------------------------------------------------
 #	Check for new socklen_t type which is not yet universally available.
