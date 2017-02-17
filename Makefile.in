@@ -205,13 +205,13 @@ tkiUnixInit.o: tkiUnixInit.c
 # tkined
 #--------------------------------------------------------------------
 
-tkined: $(PKG_LIB_FILE) tki/tkined.in
+tkined: $(PKG_LIB_FILE) tkined.in
 	@sed -e 's+%WISH%+$(WISH_PROG)+' \
 	    -e 's+%TCL_VERSION%+$(TCL_VERSION)+' \
 	    -e 's+%TK_VERSION%+$(TK_VERSION)+' \
 	    -e 's+%TKI_VERSION%+$(TKI_VERSION)+' \
-	    tki/tkined.in > tkined
-	chmod +x tkined	
+	    tkined.in > tkined
+	@chmod +x tkined	
 
 
 # install tki accesories
@@ -222,6 +222,8 @@ tkined: $(PKG_LIB_FILE) tki/tkined.in
 MKDIR =		mkdir
 
 tki-install:	tki-install-library tki-install-bitmaps tki-install-apps
+	echo " Install tkined.defaults $(DESTDIR)$(pkglibdir)"; \
+	$(INSTALL_DATA) tkined.defaults $(DESTDIR)$(pkglibdir); \
 
 TKI_LIBRARY_DIR	= tki/library
 TKI_LIBRARY =	$(TKI_LIBRARY_DIR)/Editor.tcl \
@@ -313,8 +315,8 @@ tki-install-apps:
 	    echo "Installing $$i"; \
 	    base=`basename $$i`; \
 	    rm -f $(TKI_INSTALL_DIR)/apps/$$base; \
-	    sed -e 's+^exec tclsh.*$$+exec $(TCL_TCLSH) "$$0" "$$@"+'\
-		-e 's+^exec wish.*$$+exec $(TK_WISH) "$$0" "$$@"+'\
+	    sed -e 's+^exec tclsh.*$$+exec $(TCLSH_PROG) "$$0" "$$@"+'\
+		-e 's+^exec wish.*$$+exec $(WISH_PROG) "$$0" "$$@"+'\
 		    $$i > $(TKI_INSTALL_DIR)/apps/$$base; \
 	    chmod 755 $(TKI_INSTALL_DIR)/apps/$$base; \
 	    done
