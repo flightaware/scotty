@@ -19,15 +19,11 @@
 
 #SAMPLE_NEW_VAR	= @SAMPLE_NEW_VAR@
 
-# Used to version stamp several files
-TNM_VERSION =	@TNM_VERSION@
+TKI_VERSION =	@TKI_VERSION@
 
 # Used to pin calls to tclsh to the version used in the build.
 # TODO: with stubs build this should not be needed.
 TCL_VERSION =	@TCL_VERSION@
-
-# Used to hardcode the path to tkined inside libTnm.
-TK_VERSION  =	@TK_VERSION@
 
 #========================================================================
 # Nothing of the variables below this line should need to be changed.
@@ -71,7 +67,8 @@ PKG_LIB_FILE	= @PKG_LIB_FILE@
 PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
 
 lib_BINARIES	= $(PKG_LIB_FILE)
-BINARIES	= $(lib_BINARIES)
+bin_BINARIES	= tkined
+BINARIES	= $(lib_BINARIES) $(bin_BINARIES)
 
 SHELL		= @SHELL@
 
@@ -124,8 +121,8 @@ STLIB_LD	= @STLIB_LD@
 #TCL_DEFS	= @TCL_DEFS@
 TCL_BIN_DIR	= @TCL_BIN_DIR@
 TCL_SRC_DIR	= @TCL_SRC_DIR@
-#TK_BIN_DIR	= @TK_BIN_DIR@
-#TK_SRC_DIR	= @TK_SRC_DIR@
+TK_BIN_DIR	= @TK_BIN_DIR@
+TK_SRC_DIR	= @TK_SRC_DIR@
 
 # Not used, but retained for reference of what libs Tcl required
 #TCL_LIBS	= @TCL_LIBS@
@@ -138,7 +135,7 @@ TCL_SRC_DIR	= @TCL_SRC_DIR@
 #========================================================================
 
 EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR)
-#EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR):$(TK_BIN_DIR)
+EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR):$(TK_BIN_DIR)
 TCLLIBPATH	= $(top_builddir)
 TCLSH_ENV	= TCL_LIBRARY=`@CYGPATH@ $(TCL_SRC_DIR)/library`
 PKG_ENV		= @LD_LIBRARY_PATH_VAR@="$(EXTRA_PATH):$(@LD_LIBRARY_PATH_VAR@)" \
@@ -148,16 +145,16 @@ PKG_ENV		= @LD_LIBRARY_PATH_VAR@="$(EXTRA_PATH):$(@LD_LIBRARY_PATH_VAR@)" \
 TCLSH_PROG	= @TCLSH_PROG@
 TCLSH		= $(PKG_ENV) $(TCLSH_ENV) $(TCLSH_PROG)
 
-#WISH_ENV	= TK_LIBRARY=`@CYGPATH@ $(TK_SRC_DIR)/library`
-#WISH_PROG	= @WISH_PROG@
-#WISH		= $(PKG_ENV) $(TCLSH_ENV) $(WISH_ENV) $(WISH_PROG)
+WISH_ENV	= TK_LIBRARY=`@CYGPATH@ $(TK_SRC_DIR)/library`
+WISH_PROG	= @WISH_PROG@
+WISH		= $(PKG_ENV) $(TCLSH_ENV) $(WISH_ENV) $(WISH_PROG)
 
 SHARED_BUILD	= @SHARED_BUILD@
 
-INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@
-#INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@ @TK_INCLUDES@ @TK_XINCLUDES@
+#INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@
+INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@ @TK_INCLUDES@ @TK_XINCLUDES@
 
-PKG_CFLAGS	= @PKG_CFLAGS@
+KG_CFLAGS	= @PKG_CFLAGS@
 
 # TCL_DEFS is not strictly need here, but if you remove it, then you
 # must make sure that configure.ac checks for the necessary components
@@ -168,8 +165,7 @@ PKG_CFLAGS	= @PKG_CFLAGS@
 DEFS		= @DEFS@ $(PKG_CFLAGS)
 
 # Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
-CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl scotty config.h.in \
-			ether.x mount.x pcnfsd.x rstat.x
+CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl config.h.in
 CLEANFILES	= @CLEANFILES@
 
 CPPFLAGS	= @CPPFLAGS@
@@ -194,127 +190,52 @@ all: binaries libraries doc
 # Start of user-definable TARGETS section
 #========================================================================
 
-# SunRpc needs headers and stubs to be generated
-#--------------------------------------------------------------------
-TNM_DIR 	= $(top_builddir)/tnm
-TNM_GENERIC_DIR	= $(TNM_DIR)/generic
-RPCGEN		= @RPCGEN@
-PKG_LIBS	= @PKG_LIBS@
-
-.SUFFIXES:	.x
-.x.h:
-	-cp $< .
-	$(RPCGEN) ${@:.h=.x}
-
-ether_clnt.c ether_xdr.c: ether.h
-mount_clnt.c mount_xdr.c: mount.h
-pcnfsd_clnt.c pcnfsd_xdr.c: pcnfsd.h
-rstat_clnt.c rstat_xdr.c: rstat.h
-
-tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
-
-# tnmUnixInit initialize tkined(library) with TKI_INSTALL_DIR and uses
-# TNM_INSTALL_DIR
-# So we need a special treatment of this target.
+# tkiUnixInit initializes tkined(library) and auto_path using
+# TKI_INSTALL_DIR. So we need a special treatment of this target.
 #--------------------------------------------------------------------
 
 # Directory in which to install library files belonging to the extension.
-# TNM_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tnm$(TNM_VERSION)
-TNM_INSTALL_DIR	= $(DESTDIR)$(pkglibdir)
+# TKI_INSTALL_DIR =       $(INSTALL_ROOT)$(prefix)/lib/tkined$(TKI_VERSION)
+TKI_INSTALL_DIR = $(DESTDIR)$(pkglibdir)
 
-TKI_VERSION =	@TKI_VERSION@
-# Directory in which to install the library of tkined scripts.
-TKI_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tkined$(TKI_VERSION)
-
-tnmUnixInit.o: tnmUnixInit.c
-	$(COMPILE) -DTNMLIB=\"$(TNM_INSTALL_DIR)\" -DTKINEDLIB=\"$(TKI_INSTALL_DIR)\" -c `@CYGPATH@ $<` -o $@
-
-NMICMPD	= $(bindir)/nmicmpd
-tnmUnixIcmp.o: tnmUnixIcmp.c
-	$(COMPILE) -DNMICMPD=\"$(NMICMPD)\" -c `@CYGPATH@ $<` -o $@
-
-NMTRAPD	= $(bindir)/nmtrapd
-tnmUnixSnmp.o: tnmUnixSnmp.c
-	$(COMPILE) -DNMTRAPD=\"$(NMICMPD)\" -c `@CYGPATH@ $<` -o $@
+tkiUnixInit.o: tkiUnixInit.c
+	$(COMPILE) -DTKINEDLIB=\"$(TKI_INSTALL_DIR)\" -c `@CYGPATH@ $<` -o $@
 
 
-# scotty et al
-#--------------------------------------------------------------------
-NM_LIBS		= @NM_LIBS@
-nmicmpd: unix/nmicmpd.c
-	$(COMPILE)  -o nmicmpd $(NM_LIBS) unix/nmicmpd.c
-
-nmtrapd: unix/nmtrapd.c
-	$(COMPILE) -o nmtrapd $(NM_LIBS) unix/nmtrapd.c
-
-# compilation fails with:
-# unix/scotty.c:143: undefined reference to `Tcl_FindExecutable'
-# scotty: $(PKG_LIB_FILE) nmicmpd nmtrapd unix/scotty.c
-#	$(COMPILE)  unix/scotty.c -o scotty $(PKG_LIB_FILE) $(SHLIB_LD_LIBS)
-
-tnm-install-bin: scotty
-	chmod 755 scotty
-	$(INSTALL_PROGRAM) scotty $(bindir)/scotty$(TNM_VERSION)
-
-sinstall: nmicmpd nmtrapd
-	@for i in $(bindir) ; \
-	    do \
-	    if [ ! -d $$i ] ; then \
-		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
-		else true; \
-		fi; \
-	    done;
-	@for i in nmicmpd nmtrapd ; \
-	    do \
-	    echo "Installing $$i"; \
-	    $(INSTALL_PROGRAM) -o root -m 4755 $$i $(bindir)/$$i; \
-	    done
-
-# install tnm accesories
+# tkined
 #--------------------------------------------------------------------
 
-tnm-install: tnm-install-mibs tnm-install-library tnm-install-agents \
-	tnm-install-site tnm-install-bin
+tkined: $(PKG_LIB_FILE) tki/tkined.in
+	@sed -e 's+%WISH%+$(WISH_PROG)+' \
+	    -e 's+%TCL_VERSION%+$(TCL_VERSION)+' \
+	    -e 's+%TK_VERSION%+$(TK_VERSION)+' \
+	    -e 's+%TKI_VERSION%+$(TKI_VERSION)+' \
+	    tki/tkined.in > tkined
+	chmod +x tkined	
+
+
+# install tki accesories
+#--------------------------------------------------------------------
 
 # Some systems have broken mkdir commands. The definition below allows
 # you to use a replacement (e.g. GNU mkdir) during the install process.
-MKDIR		= mkdir
-tnm-install-mibs:
-	@for i in $(TNM_INSTALL_DIR)/mibs ; \
-	    do \
-	    if [ ! -d $$i ] ; then \
-		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
-		else true; \
-		fi; \
-	    done;
-	@for e in -SMI -TC -TM -MIB -CONF -TYPES ;  \
-	    do \
-	    	for i in tnm/mibs/*$$e ; \
-		    do \
-		    echo "Installing $$i"; \
-		    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/mibs ; \
-		done ; \
-	    done
+MKDIR =		mkdir
 
-TNM_LIBRARY_DIR	= tnm/library
-TNM_LIBRARY =	$(TNM_LIBRARY_DIR)/TnmDialog.tcl \
-		$(TNM_LIBRARY_DIR)/TnmTerm.tcl \
-		$(TNM_LIBRARY_DIR)/TnmMap.tcl \
-		$(TNM_LIBRARY_DIR)/TnmInet.tcl \
-		$(TNM_LIBRARY_DIR)/TnmMib.tcl \
-		$(TNM_LIBRARY_DIR)/TnmSmxProfiles.tcl \
-		$(TNM_LIBRARY_DIR)/TnmSnmp.tcl \
-		$(TNM_LIBRARY_DIR)/TnmScriptMib.tcl \
-		$(TNM_LIBRARY_DIR)/TnmIetf.tcl \
-		$(TNM_LIBRARY_DIR)/TnmEther.tcl \
-		$(TNM_LIBRARY_DIR)/TnmMonitor.tcl \
-		$(TNM_LIBRARY_DIR)/init.tcl
-tnm-install-library:
-	@for i in $(TNM_INSTALL_DIR)/library ; \
+tki-install:	tki-install-library tki-install-bitmaps tki-install-apps
+
+TKI_LIBRARY_DIR	= tki/library
+TKI_LIBRARY =	$(TKI_LIBRARY_DIR)/Editor.tcl \
+		$(TKI_LIBRARY_DIR)/Diagram.tcl \
+		$(TKI_LIBRARY_DIR)/Command.tcl \
+		$(TKI_LIBRARY_DIR)/Tool.tcl \
+		$(TKI_LIBRARY_DIR)/Objects.tcl \
+		$(TKI_LIBRARY_DIR)/Dialog.tcl \
+		$(TKI_LIBRARY_DIR)/Event.tcl \
+		$(TKI_LIBRARY_DIR)/Help.tcl \
+		$(TKI_LIBRARY_DIR)/Misc.tcl
+TKI_INSTALL_DIR	= $(pkglibdir)
+tki-install-library:
+	@for i in $(TKI_INSTALL_DIR)/library ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
@@ -323,19 +244,16 @@ tnm-install-library:
 		else true; \
 		fi; \
 	    done;
-	@for i in tnm/library/README $(TNM_LIBRARY) ; \
+	@for i in $(TKI_LIBRARY) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/library; \
+	    $(INSTALL_DATA) $$i $(TKI_INSTALL_DIR)/library; \
 	    done
-	@$(INSTALL_DATA) $(TNM_LIBRARY_DIR)/pkgIndex.tcl $(TNM_INSTALL_DIR)/library
+	@$(INSTALL_DATA) $(TKI_LIBRARY_DIR)/pkgIndex.tcl $(TKI_INSTALL_DIR)/library
 
-TNM_AGENT_DIR	= tnm/agents
-TNM_AGENTS =	$(TNM_AGENT_DIR)/snmpd-tnm.tcl \
-		$(TNM_AGENT_DIR)/snmpd-nfs.tcl \
-		$(TNM_AGENT_DIR)/snmpd-proc.tcl
-tnm-install-agents:
-	@for i in $(TNM_INSTALL_DIR)/agents ; \
+TKI_DIR		= tki
+tki-install-bitmaps:
+	@for i in $(TKI_INSTALL_DIR)/bitmaps ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
@@ -344,57 +262,81 @@ tnm-install-agents:
 		else true; \
 		fi; \
 	    done;
-	@for i in $(TNM_AGENT_DIR)/snmpd ; \
+	@for i in $(TKI_DIR)/bitmaps/*.xbm ; \
+	    do \
+	    echo "Installing $$i"; \
+	    $(INSTALL_DATA) $$i $(TKI_INSTALL_DIR)/bitmaps ; \
+	    done
+
+TKI_APPS_DIR	= tki/apps
+TKI_APPS =	$(TKI_APPS_DIR)/manager.tcl \
+		$(TKI_APPS_DIR)/event.tcl \
+		$(TKI_APPS_DIR)/movie.tcl \
+		$(TKI_APPS_DIR)/ip_trouble.tcl \
+		$(TKI_APPS_DIR)/ip_monitor.tcl \
+		$(TKI_APPS_DIR)/ip_layout.tcl \
+		$(TKI_APPS_DIR)/ip_discover.tcl \
+		$(TKI_APPS_DIR)/ip_world.tcl \
+		$(TKI_APPS_DIR)/snmp_trouble.tcl \
+		$(TKI_APPS_DIR)/snmp_config.tcl \
+		$(TKI_APPS_DIR)/snmp_scriptmib.tcl \
+		$(TKI_APPS_DIR)/snmp_monitor.tcl \
+		$(TKI_APPS_DIR)/snmp_browser.tcl \
+		$(TKI_APPS_DIR)/snmp_host.tcl \
+		$(TKI_APPS_DIR)/snmp_cisco.tcl \
+		$(TKI_APPS_DIR)/snmp_hp.tcl \
+		$(TKI_APPS_DIR)/snmp_ucd.tcl \
+		$(TKI_APPS_DIR)/clock.tcl \
+		$(TKI_APPS_DIR)/game.tcl
+
+TKI_MISC =	$(TKI_APPS_DIR)/library.tcl \
+		$(TKI_APPS_DIR)/README \
+		$(TKI_APPS_DIR)/world-map.xbm \
+		$(TKI_APPS_DIR)/usa-map.xbm \
+		$(TKI_APPS_DIR)/germany-map.xbm \
+		$(TKI_APPS_DIR)/netherlands-map.xbm \
+		$(TKI_APPS_DIR)/locations
+
+TNM_EXAMPLES_DIR	= tnm/examples
+tki-install-apps:
+	@for i in $(TKI_INSTALL_DIR)/apps ; \
+	    do \
+	    if [ ! -d $$i ] ; then \
+		echo "Making directory $$i"; \
+		$(MKDIR) -p $$i; \
+		chmod 755 $$i; \
+		else true; \
+		fi; \
+	    done;
+	@for i in $(TKI_APPS) $(TNM_EXAMPLES_DIR)/mibtree ; \
 	    do \
 	    echo "Installing $$i"; \
 	    base=`basename $$i`; \
-	    rm -f $(TNM_INSTALL_DIR)/agents/$$base; \
+	    rm -f $(TKI_INSTALL_DIR)/apps/$$base; \
 	    sed -e 's+^exec tclsh.*$$+exec $(TCL_TCLSH) "$$0" "$$@"+'\
-		    $$i > $(TNM_INSTALL_DIR)/agents/$$base; \
-	    chmod 755 $(TNM_INSTALL_DIR)/agents/$$base; \
+		-e 's+^exec wish.*$$+exec $(TK_WISH) "$$0" "$$@"+'\
+		    $$i > $(TKI_INSTALL_DIR)/apps/$$base; \
+	    chmod 755 $(TKI_INSTALL_DIR)/apps/$$base; \
 	    done
-	@for i in $(TNM_AGENTS) $(TNM_AGENT_DIR)/README ; \
+	@for i in $(TKI_MISC) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/agents; \
+	    $(INSTALL_DATA) $$i $(TKI_INSTALL_DIR)/apps; \
 	    done
-
-tnm-install-site:
-	@for i in $(TNM_INSTALL_DIR)/site ; \
-	    do \
-	    if [ ! -d $$i ] ; then \
-		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
-		else true; \
-		fi; \
-	    done;
-	@if [ ! -f $(TNM_INSTALL_DIR)/site/init.tcl ] ; then \
-	    f=$(TNM_INSTALL_DIR)/site/init.tcl; \
-	    echo "# Site specific Tnm configuration file." >> $$f; \
-	    echo "" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-SMI.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-TC.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-PRODUCTS-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-ISDN-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-FLASH-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-CDP-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-IMAGE-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-CALL-HISTORY-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-QUEUE-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-CONFIG-MAN-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-MEMORY-POOL-MIB.my" >> $$f; \
-	    echo "#" >> $$f; \
-	    echo "# lappend tnm(mibs) cisco-10-mib.my" >> $$f; \
-	fi
-
-# run tests on tnm
-#--------------------------------------------------------------------
-
-tnm-check: scotty
 	@TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
-	pwd=`pwd`; cd tnm/tests; $$pwd/scotty all.tcl
+	echo 'cd $(TKI_INSTALL_DIR)/apps; auto_mkindex . library.tcl; exit' | \
+		$(TCLSH_PROG)
+
+
+
+# run tkined
+#--------------------------------------------------------------------
+
+tki-check: 
+	TCLLIBPATH="$(libdir) $$TCLLIBPATH"; \
+	export TCLLIBPATH; \
+	./tkined
 
 #========================================================================
 # The binaries target builds executable programs, Windows .dll's, unix
@@ -419,12 +361,7 @@ doc:
 	@echo "        xml2nroff sample.xml > sample.n"
 	@echo "        xml2html sample.xml > sample.html"
 
-install: all install-binaries install-libraries install-doc tnm-install
-	@echo ""
-	@echo "The Tnm extension includes two programs (nmicmpd, nmtrapd)"
-	@echo "which require root permissions. Please get root permissions"
-	@echo "and type >> make sinstall << to install them setuid root."
-	@echo ""
+install: all install-binaries install-libraries install-doc
 
 install-binaries: binaries install-lib-binaries install-bin-binaries
 
@@ -433,7 +370,7 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 # The list=...; for p in $$list handles the empty list case x-platform.
 #========================================================================
 
-install-libraries: libraries tnm-install
+install-libraries: libraries tki-install
 	@$(INSTALL_DATA_DIR) $(DESTDIR)$(includedir)
 	@echo "Installing header files in $(DESTDIR)$(includedir)"
 	@list='$(PKG_HEADERS)'; for i in $$list; do \
@@ -487,8 +424,7 @@ depend:
 # source files above.
 #========================================================================
 
-# leg20170215: add PKG_LIB as dependencies to build rpc 
-$(PKG_LIB_FILE): $(PKG_OBJECTS) $(PKG_LIBS)
+$(PKG_LIB_FILE): $(PKG_OBJECTS)
 	-rm -f $(PKG_LIB_FILE)
 	${MAKE_LIB}
 	$(RANLIB) $(PKG_LIB_FILE)
@@ -513,7 +449,7 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 # As necessary, add $(srcdir):$(srcdir)/compat:....
 #========================================================================
 
-VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx:$(srcdir)/tnm/generic:$(srcdir)/tnm/snmp
+VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx:$(srcdir)/tki/generic
 
 .c.@OBJEXT@:
 	$(COMPILE) -c `@CYGPATH@ $<` -o $@

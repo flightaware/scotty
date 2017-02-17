@@ -20,14 +20,10 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([Tnm], [3.0.1])
+AC_INIT([Tkined], [1.5.0])
 
-#-----------------------------------------------------------------------
-# Scotty specific definitions and checks
-#-----------------------------------------------------------------------
-
-TNM_VERSION=3.0.1
 TKI_VERSION=1.5.0
+
 
 # disabled config.h generation, since this inhibits stub compilation
 # AC_CONFIG_HEADER([config.h])
@@ -36,96 +32,6 @@ TKI_VERSION=1.5.0
 #       Check for various system specific things.
 #--------------------------------------------------------------------
 
-AC_TYPE_SIZE_T
-AC_CHECK_SIZEOF([int])
-AC_CHECK_SIZEOF([unsigned int])
-AC_CHECK_SIZEOF([long])
-AC_CHECK_SIZEOF([unsigned long])
-AC_CHECK_SIZEOF([unsigned long long])
-
-
-#----------------------------------------------------------------------------
-#	Check if rpcgen is available. If not, use the files in 
-#	$srcdir/../compat/.
-#----------------------------------------------------------------------------
-
-AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen,echo)
-if test "$RPCGEN" = "echo" ; then
-    AC_WARN(couldn\'t find rpcgen. Will use precompiled files)
-    cp $srcdir/../compat/ether* .
-    cp $srcdir/../compat/mount* .
-    cp $srcdir/../compat/pcnfsd* .
-    cp $srcdir/../compat/rstat* .
-fi
-
-#----------------------------------------------------------------------------
-#	Check for the existence of various libraries.
-#       sin, ieee, inet, net/errno.h, socket, nsl 
-#----------------------------------------------------------------------------
-
-TEA_TCL_LINK_LIBS
-
-#----------------------------------------------------------------------------
-#	Check for the existence of various libraries.
-#       zlib, rpc, resolv
-#----------------------------------------------------------------------------
-
-
-AX_CHECK_ZLIB([LIBS="$LIBS -lz"],no)
-
-AC_CHECK_LIB(rpc, main, [LIBS="$LIBS -lrpc"])
-
-# See Alex Chernyakhovsky's article:
-# http://blog.achernya.com/2013/03/os-x-has-silly-libsystem.html
-# We have taken his solution from here:
-# https://github.com/achernya/hesiod/blob/master/configure.ac
-AC_CHECK_LIB([resolv], [res_mkquery], [], [
-    AC_MSG_CHECKING([if res_mkquery is provided by libresolv with mangled symbols])
-    save_LIBS="$LIBS"
-    LIBS="-lresolv $LIBS"
-    AC_TRY_LINK([#include <resolv.h>],
-                [res_mkquery(0,NULL,0,0,NULL,0,NULL,NULL,0);], [
-                    AC_DEFINE(HAVE_LIBRESOLV, [1], [Define if your libresolv provides res_mkquery.])
-		    AC_MSG_RESULT(yes)
-		    NM_LIBS="$NM_LIBS -lresolv"
-		], [
-		    LIBS="$save_LIBS"
-		    AC_MSG_RESULT(no)])])
-
-#----------------------------------------------------------------------------
-#	Check for new socklen_t type which is not yet universally available.
-#	Check for sin_len field in struct sockaddr (BSD-ish).
-#----------------------------------------------------------------------------
-
-AC_CHECK_HEADERS([sys/socket.h])
-
-AC_CHECK_TYPE(socklen_t,AC_DEFINE([HAVE_SOCKLEN_T], 1, [socklen_t available]),, [
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
-#endif
-])
-
-AC_CACHE_CHECK([for 'sa_len' in 'struct sockaddr'], ac_cv_struct_sa_len, 
-[AC_TRY_COMPILE([#include <sys/types.h> 
-#include <sys/socket.h>], [struct sockaddr sa; sa.sa_len = 0; ], 
-        ac_cv_struct_sa_len=yes, ac_cv_struct_sa_len=no)]) 
-if test "$ac_cv_struct_sa_len" = yes; then 
-  AC_DEFINE([HAVE_SA_LEN], 1, [sa_len present]) 
-fi 
-
-#----------------------------------------------------------------------------
-#	Checks for various IPv6 related functions.
-#----------------------------------------------------------------------------
-
-AC_CHECK_FUNCS(inet_pton inet_ntop getaddrinfo getnameinfo)
-
-#----------------------------------------------------------------------------
-#	Checks for various include files missing on some machines.
-#----------------------------------------------------------------------------
-
 AC_CHECK_HEADERS(stdlib.h unistd.h malloc.h sys/select.h zlib.h)
 
 #----------------------------------------------------------------------------
@@ -133,86 +39,6 @@ AC_CHECK_HEADERS(stdlib.h unistd.h malloc.h sys/select.h zlib.h)
 #----------------------------------------------------------------------------
 
 AC_CHECK_FUNC(strerror, AC_DEFINE([HAVE_STRERROR], 1, [strerror function available]))
-# TODO gethostent is deprecated by POSIX, instead use getaddrinfo et.al.
-AC_CHECK_FUNC(gethostent, AC_DEFINE([HAVE_GETHOSTENT], 1, [gethostent function available]))
-AC_CHECK_FUNC(getnetent, AC_DEFINE([HAVE_GETNETENT], 1, [getnetent function available]))
-AC_CHECK_FUNC(getprotoent, AC_DEFINE([HAVE_GETPROTOENT], 1, [getprotoent function available] ))
-AC_CHECK_FUNC(getservent, AC_DEFINE([HAVE_GETSERVENT], 1, [getservent function available]))
-AC_CHECK_FUNC(getrpcent, AC_DEFINE([HAVE_GETRPCENT], 1, [getrpcent function available]))
-
-#----------------------------------------------------------------------------
-#       Some older SUN RPC implementations are really ugly.
-#----------------------------------------------------------------------------
-
-AC_MSG_CHECKING(for struct rpcent)
-AC_EGREP_CPP([^struct * rpcent],[
-#include <netdb.h>
-#include <rpc/rpc.h>
-], AC_MSG_RESULT(yes); AC_DEFINE([HAVE_RPCENT], 1, [rpcent structure defined in system libraries]), AC_MSG_RESULT(no))
-
-
-#----------------------------------------------------------------------------
-#       Checking for multicast options.
-#----------------------------------------------------------------------------
-
-AC_ARG_ENABLE(multicast, 
-	[  --enable-multicast      enable support for multicasts],
-	[mcast_ok=$enableval], [mcast_ok=no])
-if test "$mcast_ok" = "yes"; then
-    AC_MSG_CHECKING(for multicast support)
-    AC_TRY_COMPILE([#include <sys/types.h>
-#include <netinet/in.h>
-#include <sys/socket.h>], [int i=IP_MULTICAST_TTL, j=IP_ADD_MEMBERSHIP;],
-    AC_MSG_RESULT(yes); AC_DEFINE([HAVE_MULTICAST], 1, [multicast enabled]), AC_MSG_RESULT(no))
-fi
-
-#----------------------------------------------------------------------------
-#       Checking for the libsmi library.
-#----------------------------------------------------------------------------
-
-AC_CHECK_HEADERS(smi.h)
-AC_CHECK_LIB(smi, smiInit, [LIBS="$LIBS -lsmi"])
-AC_MSG_CHECKING([whether to enable libsmi])
-        AC_TRY_RUN([ /* libsmi available check */
-#include <smi.h>
-main()
-{
-  int current, revision, age, n;
-  const int required = 2;
-  if (smiInit("")) 
-    exit(1);
-  if (strcmp(SMI_LIBRARY_VERSION, smi_library_version))
-    exit(2);
-  n = sscanf(smi_library_version, "%d:%d:%d", &current, &revision, &age);
-  if (n != 3)
-    exit(3);
-  if (required < current - age || required > current)
-    exit(4);
-  exit(0);
-}
-],
-[ AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_SMI_H)
-  AC_DEFINE([LIBSMI], 1, [libsmi available])
-  libsmi=yes],
-[ AC_MSG_RESULT(no)
-  libsmi=no],
-[ AC_MSG_RESULT(not when cross-compiling)
-  libsmi=no]
-)
-
-#----------------------------------------------------------------------------
-#       Some more libraries for OSes that want your attention.
-#----------------------------------------------------------------------------
-
-AC_FUNC_GETMNTENT
-
-#----------------------------------------------------------------------------
-#       Required programs
-#----------------------------------------------------------------------------
-
-AC_PROG_LEX
-AC_PROG_YACC
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -231,23 +57,12 @@ AC_CONFIG_AUX_DIR(tclconfig)
 TEA_PATH_TCLCONFIG
 TEA_LOAD_TCLCONFIG
 
-if test "x${TCL_BIN_DIR}" != x ; then
-    BUILD_TARGETS="$BUILD_TARGETS scotty"
-    INSTALL_TARGETS="$INSTALL_TARGETS tnm-install"
-fi
-
-
 #--------------------------------------------------------------------
 # Load the tkConfig.sh file if necessary (Tk extension)
 #--------------------------------------------------------------------
 
 TEA_PATH_TKCONFIG
 TEA_LOAD_TKCONFIG
-
-if test "x${TK_BIN_DIR}" != x ; then
-    BUILD_TARGETS="$BUILD_TARGETS tkined"
-    INSTALL_TARGETS="$INSTALL_TARGETS tki-install"
-fi
 
 #-----------------------------------------------------------------------
 # Handle the --prefix=... option by defaulting to what Tcl gave.
@@ -277,62 +92,20 @@ TEA_SETUP_COMPILER
 
 # generic tnm
 TEA_ADD_SOURCES([
-		   tnm/generic/tnmInit.c 
-		   tnm/generic/tnmUtil.c 
-		   tnm/generic/tnmJob.c 
-		   tnm/generic/tnmIned.c 
-		   tnm/generic/tnmSyslog.c 
-		   tnm/generic/tnmIcmp.c 
-		   tnm/generic/tnmDns.c 
-		   tnm/generic/tnmUdp.c 
-		   tnm/generic/tnmSunRpc.c 
-		   tnm/generic/tnmNtp.c 
-		   tnm/generic/tnmNetdb.c 
-		   tnm/generic/tnmMap.c 
-		   tnm/generic/tnmMapUtil.c 
-		   tnm/generic/tnmMapEvent.c 
-		   tnm/generic/tnmMapNode.c 
-		   tnm/generic/tnmMapNet.c 
-		   tnm/generic/tnmMapLink.c 
-		   tnm/generic/tnmMapPort.c 
-		   tnm/generic/tnmMapGroup.c 
-		   tnm/generic/tnmObj.c 
-		   tnm/generic/tnmSmx.c
-	       ])
-# snmp
-TEA_ADD_SOURCES([
-		   tnm/snmp/tnmAsn1.c 
-		   tnm/snmp/tnmOidObj.c 
-		   tnm/snmp/tnmMD5.c 
-		   tnm/snmp/tnmSHA.c 
-		   tnm/snmp/tnmSnmpNet.c 
-		   tnm/snmp/tnmSnmpUtil.c 
-		   tnm/snmp/tnmSnmpUsm.c 
-		   tnm/snmp/tnmSnmpInst.c 
-		   tnm/snmp/tnmSnmpTcl.c 
-		   tnm/snmp/tnmSnmpSend.c 
-		   tnm/snmp/tnmSnmpRecv.c 
-		   tnm/snmp/tnmSnmpAgent.c 
-		   tnm/snmp/tnmMibUtil.c 
-		   tnm/snmp/tnmMibParser.c 
-		   tnm/snmp/tnmMibTree.c 
-		   tnm/snmp/tnmMibFrozen.c 
-		   tnm/snmp/tnmMibTcl.c 
-		   tnm/snmp/tnmSmiTcl.c 
+	       tki/generic/tkiEditor.c 
+	       tki/generic/tkiObjects.c 
+	       tki/generic/tkiMethods.c 
+	       tki/generic/tkiMisc.c 
+	       tki/generic/tkiFlash.c 
+	       tki/generic/tkiStripchart.c 
+	       tki/generic/tkiBarchart.c 
+	       tki/generic/tkiUtil.c 
+	       tki/generic/tkiInit.c 
 	       ])
 TEA_ADD_HEADERS([])
-TEA_ADD_INCLUDES([])
-TEA_ADD_LIBS([
-		mount_clnt.o 
-		mount_xdr.o 
-		ether_clnt.o 
-		ether_xdr.o 
-		rstat_clnt.o 
-		rstat_xdr.o 
-		pcnfsd_clnt.o 
-		pcnfsd_xdr.o
-	    ])
-TEA_ADD_CFLAGS([-I. -Itnm -Itnm/generic -Itnm/snmp])
+TEA_ADD_INCLUDES([-I. -Itki/generic])
+TEA_ADD_LIBS([])
+TEA_ADD_CFLAGS([])
 TEA_ADD_STUB_SOURCES([])
 # This would be nice to use, but the current setup hardcodes related
 # Tcl files to reside under $(pkglibdir)/library.
@@ -350,12 +123,6 @@ TEA_ADD_TCL_SOURCES([])
 # TEA_ADD_* any platform specific compiler/build info here.
 #--------------------------------------------------------------------
 
-CLEANFILES="$CLEANFILES nmicmpd nmtrapd"
-CLEANFILES="$CLEANFILES ether_* ether.h"
-CLEANFILES="$CLEANFILES mount_* mount.h"
-CLEANFILES="$CLEANFILES pcnfsd_* pcnfsd.h"
-CLEANFILES="$CLEANFILES rstat_* rstat.h"
-
 if test "${TEA_PLATFORM}" = "windows" ; then
     # Ensure no empty if clauses
     :
@@ -365,11 +132,7 @@ else
     # Ensure no empty else clauses
     :
     TEA_ADD_SOURCES([
-		       unix/tnmUnixInit.c
-		       unix/tnmUnixLog.c
-		       unix/tnmUnixSocket.c
-		       unix/tnmUnixIcmp.c
-		       unix/tnmUnixSnmp.c
+		       tkiUnixInit.c
 		   ])
     #TEA_ADD_LIBS([-lsuperfly])
 fi
@@ -384,12 +147,11 @@ fi
 #--------------------------------------------------------------------
 
 TEA_PUBLIC_TCL_HEADERS
-# Needed for TclGetAndDetachPids()
 #TEA_PRIVATE_TCL_HEADERS
 
 TEA_PUBLIC_TK_HEADERS
 #TEA_PRIVATE_TK_HEADERS
-#TEA_PATH_X
+TEA_PATH_X
 
 #--------------------------------------------------------------------
 # Check whether --enable-threads or --disable-threads was given.
@@ -436,7 +198,7 @@ TEA_MAKE_LIB
 #--------------------------------------------------------------------
 
 TEA_PROG_TCLSH
-#TEA_PROG_WISH
+TEA_PROG_WISH
 
 #----------------------------------------------------------------------------
 #       The list of symbols to substitute.
@@ -445,14 +207,11 @@ TEA_PROG_TCLSH
 AC_SUBST(TNM_VERSION)
 AC_SUBST(TKI_VERSION)
 
-AC_SUBST(RPCGEN)
-AC_SUBST(NM_LIBS)
-
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
 # You may alternatively have a special pkgIndex.tcl.in or other files
 # which require substituting th AC variables in.  Include these here.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile pkgIndex.tcl scotty])
+AC_OUTPUT([Makefile pkgIndex.tcl])
 
