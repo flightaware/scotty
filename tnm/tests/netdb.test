@@ -51,7 +51,10 @@ test netdb-2.6 {check "netdb hosts" command} {
 test netdb-2.7 {check "netdb hosts" command} {
     set result ""
     foreach {name address} [join [netdb hosts]] {
-	foreach alias [netdb hosts aliases $address] {
+	# on (Free)BSD we get 0.0.0.0 as address, but the hosts
+	# aliases command failes with 'unknown IP address "0.0.0.0"'
+	if {[catch {netdb hosts aliases $address} aliases]} continue
+	foreach alias $aliases {
 	    if {[netdb hosts address $alias] != $address} {
 		lappend result $alias
 	    }

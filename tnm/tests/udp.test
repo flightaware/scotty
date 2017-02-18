@@ -69,15 +69,18 @@ test udp-3.2 {udp create} {
 test udp-3.3 {udp create} {
     [udp create] configure
 } {-address 0.0.0.0 -port 0 -myaddress 0.0.0.0 -myport 0 -read {} -write {} -tags {}}
+# On (Free)BSD you must assign individual addresses within 127/8 to the loopback
+# interface.  This requires root privileges, so better let's rewrite 127.1.2.3 in
+# the following test to 127.0.0.1
 test udp-3.4 {udp create} {
-    [udp create -myaddress 127.1.2.3 -myport 1234] configure
-} {-address 0.0.0.0 -port 0 -myaddress 127.1.2.3 -myport 1234 -read {} -write {} -tags {}}
+    [udp create -myaddress 127.0.0.1 -myport 1234] configure
+} {-address 0.0.0.0 -port 0 -myaddress 127.0.0.1 -myport 1234 -read {} -write {} -tags {}}
 test udp-3.5 {udp create} {
-    [udp create -myaddress 127.1.2.3 -myport 1235] cget -myport
+    [udp create -myaddress 127.0.0.1 -myport 1235] cget -myport
 } {1235}
 test udp-3.6 {udp create} {
-    [udp create -myaddress 127.1.2.3 -myport 1236] cget -myaddress
-} {127.1.2.3}
+    [udp create -myaddress 127.0.0.1 -myport 1236] cget -myaddress
+} {127.0.0.1}
 
 foreach u [udp find] { $u destroy }
 
@@ -165,7 +168,13 @@ test udp-8.1 {udp bind} {
 
 foreach u [udp find] { $u destroy }
 
-test udp-9.1 {udp says hello} {
+# Nowadays we care a lot about privacy, so we shouldn't involuntarily
+# send private data to an unknown host.  Also: do we know, if
+# 134.169.34.12 (zfs0.ibr.cs.tu-bs.de) still wants to receive this
+# fingers?
+testConstraint sayHelloToBraunschweigUniversity 0
+
+test udp-9.1 {udp says hello} sayHelloToBraunschweigUniversity {
     global tnm
     set date [clock format [clock seconds] -format "%b %d %T"]
     set me "$tnm(user)@$tnm(host).$tnm(domain)"
