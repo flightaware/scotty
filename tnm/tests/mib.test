@@ -23,7 +23,7 @@ catch {
     namespace import Tnm::mib
 }
 
-configure -verbose {body error pass skip}
+configure -verbose {body error skip}
 
 # The following MIB modules provide test cases and must be loaded
 # in order to run the tests below.

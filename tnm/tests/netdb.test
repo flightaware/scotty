@@ -81,7 +81,7 @@ test netdb-3.6 {check "netdb services" command} {
 test netdb-3.7 {check "netdb services" command} {
     netdb services aliases 21 tcp
 } {}
-test netdb-3.8 {check "netdb services" command} {
+test netdb-3.8 {check "netdb services" command} knownBug {
     set result ""
     foreach {name number protocol} [join [netdb services]] {
 	if {$protocol != "udp" && $protocol != "tcp"} continue
@@ -96,7 +96,7 @@ test netdb-3.8 {check "netdb services" command} {
     }
     set result
 } {}
-test netdb-3.9 {check "netdb services" command} {
+test netdb-3.9 {check "netdb services" command} knownBug {
     set result ""
     foreach {name number protocol} [join [netdb services]] {
 	foreach alias [netdb services aliases $number $protocol] {
@@ -204,7 +204,7 @@ test netdb-7.3 {check "netdb networks" command} {
 test netdb-7.4 {check "netdb networks" command} {
     list [catch {netdb networks foo} msg] $msg
 } {1 {bad option "foo": must be address, aliases, or name}}
-test netdb-7.5 {check "netdb networks" command} {
+test netdb-7.5 {check "netdb networks" command} knownBug {
     set result ""
     foreach {name address} [join [netdb networks]] {
 	if {[string compare $address "0.0.0.0"] == 0} continue
@@ -219,7 +219,7 @@ test netdb-7.5 {check "netdb networks" command} {
     }
     set result
 } {}
-test netdb-7.6 {check "netdb networks" command} {
+test netdb-7.6 {check "netdb networks" command} knownBug {
     set result ""
     foreach {name address} [join [netdb networks]] {
 	if {[string compare $address "0.0.0.0"] == 0} continue
@@ -244,7 +244,7 @@ test netdb-8.3 {check "netdb protocols" command} {
 test netdb-8.4 {check "netdb protocols" command} {
     list [catch {netdb protocols foo} msg] $msg
 } {1 {bad option "foo": must be aliases, name, or number}}
-test netdb-8.5 {check "netdb protocols" command} {
+test netdb-8.5 {check "netdb protocols" command} knownBug {
     set result ""
     foreach {name number} [join [netdb protocols]] {
 	if {[netdb protocols name $number] != $name} {

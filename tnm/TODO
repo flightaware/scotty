@@ -88,6 +88,124 @@ Tnm::mib
   specifications with one exact value.  In this case
   'SNMPv2TC!MacAddress' with: `SYNTAX       OCTET STRING (SIZE (6))`.
 
+Tnm::netdb
+----------
+
+- services: check netdb-3.8 fails when ports are doubly assigned -
+  check disabled.  Should be rewritten.
+  
+  Some ports are double assigned: e.g. 'pipe-server' and 'search' to
+  port 2010.  The first check fail on these.
+
+  Some service names double as aliases: e.g.: dicom
+
+  `acr-nema              104/tcp dicom`
+
+  `dicom                 11112/tcp`
+
+  The second check fail on these.
+
+- services: check netdb-3.9 fail when protocols are doubly
+  assigned - check disabled.
+
+- networks: check netdb-7.5 fails entirely, disabled.  Looked up
+  results seem strange:
+
+	`
+	scotty% netdb networks address loopback
+	0.0.0.127
+	`
+
+- networks: check netdb-7.6 ditto (as netdb-7.5)
+
+- protcols: check netdp-8.5 disabled.  Protocols ip and hopopt have
+  the same number, check should be rewritten.
+ 
+  `
+  ip                    0 IP
+  hopopt                0 HOPOPT
+  `
+
+Tnm::ntp
+--------
+
+Seems not to work at all.  I get my time synchronized on my network
+via pool.ntp.org, but Tnm::ntp does not reach any of the hosts.
+
+Tnm::smx
+--------
+
+Doesn't work at all: `smx peer gone away`.
+
+Test suite disabled smx.test -> l.smx.test
+
+
+Tnm::snmp
+---------
+
+- snmp-2.8 snmp alias FAIlLED
+- snmp-2.9 snmp alias FAILED
+
+  `snmp generator -alias focal` does not return a SNMP generator
+  session handle at all.
+
+- snmp-X.21 snmp Counter64 type FAILED
+	`
+	list [catch {snmp expand {{1.3 Counter64 18446744073709551616}}} msg] $msg
+	---- Result was:
+	0 {{1.3 Counter64 18446744073709551616}}
+	---- Result should have been (exact matching):
+	1 {unsigned value too large to represent}
+	`
+
+-  snmp-X.31 snmp ObjectIdentifier type FAILED
+   list [catch {snmp expand {!@#foo!@#} msg} ] $msg
+	   `---- Result was:
+	   1 {invalid object identifier "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1"}
+	   ---- Result should have been (exact matching):
+	   1 {invalid object identifier "!@#foo!@#"}
+	   `
+   Strange: this is exactly the result expected by snmp-x30!
+
+
+- snmp-5.7 snmp varbind list expansion FAILED
+- snmp-5.8 snmp varbind list expansion FAILED
+
+	`---- Result was:
+	{1.3.6.1.2.1.2.2.1.3 Integer32 rfc877x25}
+	---- Result should have been (exact matching):
+	{1.3.6.1.2.1.2.2.1.3 Integer32 5}
+	`
+
+Should this be a MIB related problem?
+
+- snmp-8.3 snmp oid FAILED
+- snmp-8.4 snmp oid FAILED
+- snmp-9.4 snmp type FAILED
+- snmp-10.4 snmp value FAILED
+
+  Probably MIB related problems too
+
+- snmp.test file has an annex section of tests.  Merge/cleanup?
+
+Tnm::sunrpc
+-----------
+
+All subcommands of sunrpc segfault when called
+- with wrong arguments
+- inside a catch {} argument
+- if there are less then the required number of arguments
+- on the first run.
+
+If you catch a call with *more* then the required numbers of
+arguments, or a catch with any nonsense e.g.: `catch {bad workaround}`
+no more segfault occurs.  Hover n the test file, at any other time we
+got another segfault.  So the respective tests are disabled with the
+custom constraint: `runWithEvilCatchCrashWorkaround`
+
+This seems like some initialization (missing) issue.
+
+
 Tests
 =====
 
@@ -103,8 +221,9 @@ Wishlist
 Port to
 -------
 
-- OpenIndiana (Solaris)
 - Alpine Linux
+- OpenIndiana (Solaris)
+- Minix
 - Windows
 
 Functionality

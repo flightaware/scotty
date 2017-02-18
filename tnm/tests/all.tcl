@@ -30,8 +30,8 @@ if {[llength $::tcltest::matchFiles] > 0} {
     puts stdout "Only sourcing test files that match:  $::tcltest::matchFiles"
 }
 
-set timeCmd {clock format [clock seconds]}
-puts stdout "Tests began at [eval $timeCmd]"
+set startTime [clock seconds]
+puts stdout "Tests began at [clock format $startTime]"
 
 # source each of the specified tests
 foreach file [lsort [::tcltest::getMatchingFiles]] {
@@ -43,7 +43,10 @@ foreach file [lsort [::tcltest::getMatchingFiles]] {
 }
 
 # cleanup
-puts stdout "\nTests ended at [eval $timeCmd]"
+set endTime [clock seconds]
+puts stdout "\nTests ended at [clock format $endTime]"
+puts stdout "Elapsed: [expr {$endTime -$startTime}] seconds."
+
 ::tcltest::cleanupTests 1
 return
 
