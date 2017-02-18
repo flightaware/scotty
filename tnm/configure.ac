@@ -277,48 +277,48 @@ TEA_SETUP_COMPILER
 
 # generic tnm
 TEA_ADD_SOURCES([
-		   tnm/generic/tnmInit.c 
-		   tnm/generic/tnmUtil.c 
-		   tnm/generic/tnmJob.c 
-		   tnm/generic/tnmIned.c 
-		   tnm/generic/tnmSyslog.c 
-		   tnm/generic/tnmIcmp.c 
-		   tnm/generic/tnmDns.c 
-		   tnm/generic/tnmUdp.c 
-		   tnm/generic/tnmSunRpc.c 
-		   tnm/generic/tnmNtp.c 
-		   tnm/generic/tnmNetdb.c 
-		   tnm/generic/tnmMap.c 
-		   tnm/generic/tnmMapUtil.c 
-		   tnm/generic/tnmMapEvent.c 
-		   tnm/generic/tnmMapNode.c 
-		   tnm/generic/tnmMapNet.c 
-		   tnm/generic/tnmMapLink.c 
-		   tnm/generic/tnmMapPort.c 
-		   tnm/generic/tnmMapGroup.c 
-		   tnm/generic/tnmObj.c 
-		   tnm/generic/tnmSmx.c
+		   generic/tnmInit.c 
+		   generic/tnmUtil.c 
+		   generic/tnmJob.c 
+		   generic/tnmIned.c 
+		   generic/tnmSyslog.c 
+		   generic/tnmIcmp.c 
+		   generic/tnmDns.c 
+		   generic/tnmUdp.c 
+		   generic/tnmSunRpc.c 
+		   generic/tnmNtp.c 
+		   generic/tnmNetdb.c 
+		   generic/tnmMap.c 
+		   generic/tnmMapUtil.c 
+		   generic/tnmMapEvent.c 
+		   generic/tnmMapNode.c 
+		   generic/tnmMapNet.c 
+		   generic/tnmMapLink.c 
+		   generic/tnmMapPort.c 
+		   generic/tnmMapGroup.c 
+		   generic/tnmObj.c 
+		   generic/tnmSmx.c
 	       ])
 # snmp
 TEA_ADD_SOURCES([
-		   tnm/snmp/tnmAsn1.c 
-		   tnm/snmp/tnmOidObj.c 
-		   tnm/snmp/tnmMD5.c 
-		   tnm/snmp/tnmSHA.c 
-		   tnm/snmp/tnmSnmpNet.c 
-		   tnm/snmp/tnmSnmpUtil.c 
-		   tnm/snmp/tnmSnmpUsm.c 
-		   tnm/snmp/tnmSnmpInst.c 
-		   tnm/snmp/tnmSnmpTcl.c 
-		   tnm/snmp/tnmSnmpSend.c 
-		   tnm/snmp/tnmSnmpRecv.c 
-		   tnm/snmp/tnmSnmpAgent.c 
-		   tnm/snmp/tnmMibUtil.c 
-		   tnm/snmp/tnmMibParser.c 
-		   tnm/snmp/tnmMibTree.c 
-		   tnm/snmp/tnmMibFrozen.c 
-		   tnm/snmp/tnmMibTcl.c 
-		   tnm/snmp/tnmSmiTcl.c 
+		   snmp/tnmAsn1.c 
+		   snmp/tnmOidObj.c 
+		   snmp/tnmMD5.c 
+		   snmp/tnmSHA.c 
+		   snmp/tnmSnmpNet.c 
+		   snmp/tnmSnmpUtil.c 
+		   snmp/tnmSnmpUsm.c 
+		   snmp/tnmSnmpInst.c 
+		   snmp/tnmSnmpTcl.c 
+		   snmp/tnmSnmpSend.c 
+		   snmp/tnmSnmpRecv.c 
+		   snmp/tnmSnmpAgent.c 
+		   snmp/tnmMibUtil.c 
+		   snmp/tnmMibParser.c 
+		   snmp/tnmMibTree.c 
+		   snmp/tnmMibFrozen.c 
+		   snmp/tnmMibTcl.c 
+		   snmp/tnmSmiTcl.c 
 	       ])
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
@@ -332,7 +332,7 @@ TEA_ADD_LIBS([
 		pcnfsd_clnt.o 
 		pcnfsd_xdr.o
 	    ])
-TEA_ADD_CFLAGS([-I. -Itnm -Itnm/generic -Itnm/snmp])
+TEA_ADD_CFLAGS([-I. -Igeneric -Isnmp])
 TEA_ADD_STUB_SOURCES([])
 # This would be nice to use, but the current setup hardcodes related
 # Tcl files to reside under $(pkglibdir)/library.
