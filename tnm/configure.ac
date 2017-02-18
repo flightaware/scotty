@@ -211,9 +211,6 @@ AC_FUNC_GETMNTENT
 #       Required programs
 #----------------------------------------------------------------------------
 
-AC_PROG_LEX
-AC_PROG_YACC
-
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
 # This will define a ${TEA_PLATFORM} variable == "unix" or "windows"
@@ -231,23 +228,12 @@ AC_CONFIG_AUX_DIR(tclconfig)
 TEA_PATH_TCLCONFIG
 TEA_LOAD_TCLCONFIG
 
-if test "x${TCL_BIN_DIR}" != x ; then
-    BUILD_TARGETS="$BUILD_TARGETS scotty"
-    INSTALL_TARGETS="$INSTALL_TARGETS tnm-install"
-fi
-
-
 #--------------------------------------------------------------------
 # Load the tkConfig.sh file if necessary (Tk extension)
 #--------------------------------------------------------------------
 
-TEA_PATH_TKCONFIG
-TEA_LOAD_TKCONFIG
-
-if test "x${TK_BIN_DIR}" != x ; then
-    BUILD_TARGETS="$BUILD_TARGETS tkined"
-    INSTALL_TARGETS="$INSTALL_TARGETS tki-install"
-fi
+#TEA_PATH_TKCONFIG
+#TEA_LOAD_TKCONFIG
 
 #-----------------------------------------------------------------------
 # Handle the --prefix=... option by defaulting to what Tcl gave.
@@ -321,7 +307,7 @@ TEA_ADD_SOURCES([
 		   snmp/tnmSmiTcl.c 
 	       ])
 TEA_ADD_HEADERS([])
-TEA_ADD_INCLUDES([])
+TEA_ADD_INCLUDES([-I. -Igeneric -Isnmp])
 TEA_ADD_LIBS([
 		mount_clnt.o 
 		mount_xdr.o 
@@ -332,7 +318,7 @@ TEA_ADD_LIBS([
 		pcnfsd_clnt.o 
 		pcnfsd_xdr.o
 	    ])
-TEA_ADD_CFLAGS([-I. -Igeneric -Isnmp])
+TEA_ADD_CFLAGS([])
 TEA_ADD_STUB_SOURCES([])
 # This would be nice to use, but the current setup hardcodes related
 # Tcl files to reside under $(pkglibdir)/library.
@@ -384,10 +370,9 @@ fi
 #--------------------------------------------------------------------
 
 TEA_PUBLIC_TCL_HEADERS
-# Needed for TclGetAndDetachPids()
 #TEA_PRIVATE_TCL_HEADERS
 
-TEA_PUBLIC_TK_HEADERS
+#TEA_PUBLIC_TK_HEADERS
 #TEA_PRIVATE_TK_HEADERS
 #TEA_PATH_X
 
@@ -454,5 +439,7 @@ AC_SUBST(NM_LIBS)
 # which require substituting th AC variables in.  Include these here.
 #--------------------------------------------------------------------
 
+# For now we have a Tcl only scotty.  Remove from where when it
+# gets built from scotty.c
 AC_OUTPUT([Makefile pkgIndex.tcl scotty])
 
