@@ -71,7 +71,8 @@ PKG_LIB_FILE	= @PKG_LIB_FILE@
 PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
 
 lib_BINARIES	= $(PKG_LIB_FILE)
-BINARIES	= $(lib_BINARIES)
+bin_BINARIES	= nmicmpd nmtrapd
+BINARIES	= $(lib_BINARIES) $(bin_BINARIES)
 
 SHELL		= @SHELL@
 
@@ -252,36 +253,26 @@ nmtrapd: unix/nmtrapd.c
 # scotty: $(PKG_LIB_FILE) nmicmpd nmtrapd unix/scotty.c
 #	$(COMPILE)  unix/scotty.c -o scotty $(PKG_LIB_FILE) $(SHLIB_LD_LIBS)
 
-tnm-install-bin: scotty
+install-bin: scotty
 	chmod 755 scotty
 	$(INSTALL_PROGRAM) scotty $(bindir)/scotty$(TNM_VERSION)
 
-sinstall: nmicmpd nmtrapd
-	@for i in $(bindir) ; \
+sinstall:
+	@for i in $(bin_BINARIES) ; \
 	    do \
-	    if [ ! -d $$i ] ; then \
-		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
-		else true; \
-		fi; \
-	    done;
-	@for i in nmicmpd nmtrapd ; \
-	    do \
-	    echo "Installing $$i"; \
-	    $(INSTALL_PROGRAM) -o root -m 4755 $$i $(bindir)/$$i; \
+	        chown root $(bindir)/$$i ; \
+	        chmod 4755 $(bindir)/$$i ; \
 	    done
 
 # install tnm accesories
 #--------------------------------------------------------------------
 
-tnm-install: tnm-install-mibs tnm-install-library tnm-install-agents \
-	tnm-install-site tnm-install-bin
+tnm-install: install-mibs install-library install-agents install-site install-bin
 
 # Some systems have broken mkdir commands. The definition below allows
 # you to use a replacement (e.g. GNU mkdir) during the install process.
 MKDIR		= mkdir
-tnm-install-mibs:
+install-mibs:
 	@for i in $(TNM_INSTALL_DIR)/mibs ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
@@ -293,14 +284,14 @@ tnm-install-mibs:
 	    done;
 	@for e in -SMI -TC -TM -MIB -CONF -TYPES ;  \
 	    do \
-	    	for i in tnm/mibs/*$$e ; \
+	    	for i in mibs/*$$e ; \
 		    do \
 		    echo "Installing $$i"; \
 		    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/mibs ; \
 		done ; \
 	    done
 
-TNM_LIBRARY_DIR	= tnm/library
+TNM_LIBRARY_DIR	= library
 TNM_LIBRARY =	$(TNM_LIBRARY_DIR)/TnmDialog.tcl \
 		$(TNM_LIBRARY_DIR)/TnmTerm.tcl \
 		$(TNM_LIBRARY_DIR)/TnmMap.tcl \
@@ -313,7 +304,7 @@ TNM_LIBRARY =	$(TNM_LIBRARY_DIR)/TnmDialog.tcl \
 		$(TNM_LIBRARY_DIR)/TnmEther.tcl \
 		$(TNM_LIBRARY_DIR)/TnmMonitor.tcl \
 		$(TNM_LIBRARY_DIR)/init.tcl
-tnm-install-library:
+install-library:
 	@for i in $(TNM_INSTALL_DIR)/library ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
@@ -323,18 +314,18 @@ tnm-install-library:
 		else true; \
 		fi; \
 	    done;
-	@for i in tnm/library/README $(TNM_LIBRARY) ; \
+	@for i in library/README $(TNM_LIBRARY) ; \
 	    do \
 	    echo "Installing $$i"; \
 	    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/library; \
 	    done
 	@$(INSTALL_DATA) $(TNM_LIBRARY_DIR)/pkgIndex.tcl $(TNM_INSTALL_DIR)/library
 
-TNM_AGENT_DIR	= tnm/agents
+TNM_AGENT_DIR	= agents
 TNM_AGENTS =	$(TNM_AGENT_DIR)/snmpd-tnm.tcl \
 		$(TNM_AGENT_DIR)/snmpd-nfs.tcl \
 		$(TNM_AGENT_DIR)/snmpd-proc.tcl
-tnm-install-agents:
+install-agents:
 	@for i in $(TNM_INSTALL_DIR)/agents ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
@@ -359,7 +350,7 @@ tnm-install-agents:
 	    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/agents; \
 	    done
 
-tnm-install-site:
+install-site:
 	@for i in $(TNM_INSTALL_DIR)/site ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
@@ -388,13 +379,35 @@ tnm-install-site:
 	    echo "# lappend tnm(mibs) cisco-10-mib.my" >> $$f; \
 	fi
 
-# run tests on tnm
+# Run tests on tnm
 #--------------------------------------------------------------------
 
-tnm-check: scotty
+check: scotty
 	@TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
-	pwd=`pwd`; cd tnm/tests; $$pwd/scotty all.tcl
+	pwd=`pwd`; cd tests; $$pwd/scotty all.tcl
+
+
+# Uninstall tnm
+#--------------------------------------------------------------------
+
+tnm-uninstall:
+	@echo "Removing scotty$(TNM_VERSION) and tnm$(TNM_VERSION)$(SHLIB_SUFFIX)"
+	@rm -f $(bindir)/scotty$(TNM_VERSION)
+	@for i in $(pkglibdir)/* ; \
+	    do \
+	    if [ "`basename $$i`" != "site" ] ; then \
+		echo "Removing $$i"; \
+		rm -rf $$i; \
+		else true; \
+	        fi; \
+	    done
+	@if [ -d $(pkglibdir)/site ] ; then \
+	    echo "Preserving $(pkglibdir)/site"; \
+	    else rm -rf $(pkglibdir); \
+	    fi
+
+uninstall: uninstall-binaries tnm-uninstall
 
 #========================================================================
 # The binaries target builds executable programs, Windows .dll's, unix
@@ -421,9 +434,9 @@ doc:
 
 install: all install-binaries install-libraries install-doc tnm-install
 	@echo ""
-	@echo "The Tnm extension includes two programs (nmicmpd, nmtrapd)"
-	@echo "which require root permissions. Please get root permissions"
-	@echo "and type >> make sinstall << to install them setuid root."
+	@echo "The Tnm extension installed two programs (nmicmpd, nmtrapd)"
+	@echo "which require root permissions to run."
+	@echo "Type 'make sinstall' as root to make them setuid root."
 	@echo ""
 
 install-binaries: binaries install-lib-binaries install-bin-binaries
@@ -513,7 +526,7 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 # As necessary, add $(srcdir):$(srcdir)/compat:....
 #========================================================================
 
-VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx:$(srcdir)/tnm/generic:$(srcdir)/tnm/snmp
+VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx:$(srcdir)/generic:$(srcdir)/snmp
 
 .c.@OBJEXT@:
 	$(COMPILE) -c `@CYGPATH@ $<` -o $@
