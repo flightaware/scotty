@@ -44,6 +44,50 @@ Tnm::dns
 	sns.dns.icann.org
 	`
 
+Tnm::mib
+--------
+
+- At the end of tnmOidObj.c there is a #if/else/endif where
+  inconditionally the Oid strings are glued together with '::' instead
+  of '!'.  Thus, the returned strings do not conform to the standard
+  notation and cannot be used as direct input to Tnm::mib function.
+
+  Ok: not so fast.  The following tests show, that at least some input
+  on `mib macro` is allowed to use '::'. 
+
+	`
+	scotty% mib macro SNMPv2-MIB::sysDescr
+	OBJECT-TYPE
+	scotty% mib macro SNMPv2-MIB!sysDescr
+	OBJECT-TYPE
+	scotty% mib macro SNMPv2-MIB::coldStart
+	NOTIFICATION-TYPE
+	scotty% mib macro SNMPv2-MIB!coldStart
+	NOTIFICATION-TYPE
+	scotty% mib macro SNMPv2-MIB!DisplayString
+	TYPE-ASSIGNEMENT
+	scotty% mib macro SNMPv2-MIB::DisplayString
+	unknown MIB node or type "SNMPv2-MIB::DisplayString"
+    `
+
+	Setting the "1" to "0" in tnmOidObj.c yields an error in test case
+    mit-31-23:
+
+	`UpdateStringProc for type 'tnmOid' failed to create a valid string rep`
+
+- mib parser hangs, in test cases mib-9.1, mib-9.2
+
+- mib walk hangs, test case mib-21.6
+
+- Test case mib-5.5 shows a "TEXTUAL-CONVENTION" for
+  SNMPv2-TC!DisplayString, however `mib macro` returns:
+  TYPE-ASSIGNMENT.  This might be traceable to: tnmMibParser.c:929,
+  see the surrounding text there.
+
+- Test case mib-37.3 seems to indicate, that `mib size` files on SIZE
+  specifications with one exact value.  In this case
+  'SNMPv2TC!MacAddress' with: `SYNTAX       OCTET STRING (SIZE (6))`.
+
 Tests
 =====
 
@@ -72,3 +116,4 @@ Functionality
 - Add all currently in use lookups.
 - Add possibility to craft a lookup type.
 - Add IPv6 lookups.
+

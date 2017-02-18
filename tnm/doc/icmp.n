@@ -111,8 +111,15 @@ than \fIsize\fR ICMP requests are on the wire. Setting the size to 0
 turns the windowing mechanism off. The default window size is 10.
 The maximum window size is 65535.
 
+.SH ENVIRONMENT VARIABLES
+
+Tnm::icmp forks the nmicmpd(8) daemon to do the real work. It looks up
+the path to nmicmpd(8) in the environment variable
+.BI TNM_NMICMPD
+if it exists, otherwise a compiled in path is tried.
+
 .SH BUGS
-The Tnm::icmp command requires the setuid root program tnmicmpd(8) on
+The Tnm::icmp command requires the setuid root program nmicmpd(8) on
 UNIX systems because sending icmp packets requires access to raw
 sockets. The Windows version of this command uses the icmp.dll which
 does not support accurate round trip time measurements. The icmp.dll
@@ -123,7 +130,7 @@ implementation also requires longer time intervals to timeout icmp
 requests than the UNIX version.
 
 .SH SEE ALSO
-scotty(1), tnmicmpd(8), Tnm(n), Tcl(n)
+scotty(1), nmicmpd(8), Tnm(n), Tcl(n)
 
 .SH AUTHORS
 Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
