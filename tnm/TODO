@@ -5,7 +5,106 @@ Bugs
 
 Debian
 ------
+
 - Installing libsmi2-dev makes build break.
+
+MacOSX
+------
+
+### Tmn::dns
+
+The `dns -server arg` option seems to mess up name server resolution
+on MacOSX, so we disable all tests and uses in tests/dns.test with
+knownBugMacOSX.
+
+
+### Tnm::icmp
+
+There seems to be a problem with `nmicmpd`/Tnm::icmp for unreachable
+IP's.  While on the other (two) platforms the command times out
+gracefully, on MacOSX an error is thrown:
+
+`nmicmpd: failed to send ICMP message`
+
+Disabled with knownBugMacOSX in 8 occurrencies in tests/icmp.test
+
+### Tnm::mib
+
+The `mib format BinaryValue` command fails strangely and is disabled
+with knownBugMacOSX.
+
+`
+==== mib-7.14 FAILED
+mib format BinaryValue 12345
+---- Result was:
+1100000011100100000000000000000011000000111001
+---- Result should have been (exact matching):
+11000000111001
+
+==== mib-7.15 mib format FAILED
+mib format BinaryValue -12345
+---- Result was:
+-1100000011100100000000000000000011000000111001
+---- Result should have been (exact matching):
+-11000000111001
+`
+
+### Tnm::snmp
+
+The `snmp expand` command fails on *32 types and on TimeTicks type for
+some values.  Respective testcases are disabled with knownBugMacOSX.
+
+`
+==== snmp-X.1 snmp Unsigned32 type FAILED
+list [catch {snmp expand {{1.3 Unsigned32 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 Unsigned32 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+
+==== snmp-X.6 snmp Gauge32 type FAILED
+list [catch {snmp expand {{1.3 Gauge32 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 Gauge32 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+
+==== snmp-X.11 snmp Counter32 type FAILED
+list [catch {snmp expand {{1.3 Counter32 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 Counter32 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+
+==== snmp-X.16 snmp TimeTicks type FAILED
+list [catch {snmp expand {{1.3 TimeTicks 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 TimeTicks 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+`
+
+### Tnm::udp
+
+Two of the three `udp receive` tests fail: udp-7.1, udp-7.3, with:
+
+`errorCode: POSIX EAGAIN {resource temporarily unavailable}`
+
+on the final `u receive`.  They are disabled with knownBugMacOSX.
+
+- upd-7.1:
+  `udp create -myaddress 127.0.0.1 -myport 1234`
+  `send 127.0.0.1 1234 "nase"`
+
+- upd-7.3:
+  `udp create -myaddress 127.0.0.1 -myport 1234`
+  `send 127.0.0.1 1234  [binary format "H*" "000102030405060708090a0b0c0d0e0f"]`
+
+Note: upd-7.2 uses -myport 1235, then -myport 1236 and connects the
+    latter to 1235.
+
+- udp-7.2 is "flaky" - sometimes it works, sometimes it fails like the above.
+  For now we disable it too.
 
 Generic
 -------
@@ -22,6 +121,9 @@ Generic
   invocation after installing MIBs, man pages
 - scotty does not build: unix/scotty.c:143: undefined reference to
   `Tcl_FindExecutable'
+- On MacOSX we get two directories which should be cleaned:
+  `nmicmpd.dSYM` and `nmtrapd.dSYM`.
+
 
 Tnm::dns
 --------
@@ -43,6 +145,23 @@ Tnm::dns
 	`scotty% dns hinfo iana.org
 	sns.dns.icann.org
 	`
+
+- If a dns lookup for an Internet host in a test fails we should skip
+  further tests with Internet lookups since they probably will fail
+  too.
+
+
+Tnm::icmp
+---------
+
+- test/icmp.test seems to use 182.168.173.173 as invalid (never
+  reachable) IP addresses.  Maybe because 173 is a prime number.
+  Well, when configuring private networks I always use prime numbers
+  since nobobdy else does, right?  The computer where I write this
+  note has IP 192.168.173.53...
+
+  We should use invalid IP's from RFC5737: 192.0.2.0 instead.
+ 
 
 Tnm::mib
 --------
@@ -206,15 +325,6 @@ custom constraint: `runWithEvilCatchCrashWorkaround`
 This seems like some initialization (missing) issue.
 
 
-Tests
-=====
-
-All Platforms
--------------
-
-- SunRpc test segfault.
-
-
 Wishlist
 ========
 
@@ -236,3 +346,4 @@ Functionality
 - Add possibility to craft a lookup type.
 - Add IPv6 lookups.
 
+ 

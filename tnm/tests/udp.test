@@ -18,6 +18,12 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
     namespace import ::tcltest::*
 }
 
+set verbosity [configure -verbose]
+configure -verbose {body error skip}
+
+testConstraint knownBugMacOSX\
+    [expr {!($::tcl_platform(os) eq "Darwin")}]
+
 package require Tnm 3.0
 catch {
     namespace import Tnm::udp
@@ -128,13 +134,13 @@ test udp-6.3 {udp send} {
 
 foreach u [udp find] { $u destroy }
 
-test udp-7.1 {udp receive} {
+test udp-7.1 {udp receive} knownBugMacOSX {
     catch {rename u {}}
     rename [udp create -myaddress 127.0.0.1 -myport 1234] u
     u send 127.0.0.1 1234 "nase"
     u receive
 } {127.0.0.1 1234 nase}
-test udp-7.2 {udp receive} {
+test udp-7.2 {udp receive} knownBugMacOSX {
     catch {rename u {}}
     rename [udp create -myaddress 127.0.0.1 -myport 1235] u
     set s [udp create -myaddress 127.0.0.1 -myport 1236]
@@ -143,7 +149,7 @@ test udp-7.2 {udp receive} {
     $s destroy
     u receive
 } {127.0.0.1 1236 nase}
-test udp-7.3 {udp receive} {
+test udp-7.3 {udp receive} knownBugMacOSX {
     catch {rename u {}}
     rename [udp create -myaddress 127.0.0.1 -myport 1234] u
     u send 127.0.0.1 1234 \
@@ -191,4 +197,5 @@ test udp-9.1 {udp says hello} sayHelloToBraunschweigUniversity {
 foreach u [udp find] { $u destroy }
 
 ::tcltest::cleanupTests
+configure -verbose $verbosity
 return

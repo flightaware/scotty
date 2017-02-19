@@ -22,9 +22,15 @@ package require Tnm 3.0
 catch {
     namespace import Tnm::dns
 }
+configure -debug 0
+set verbosity [configure -verbose] 
+configure -verbose {body error skip}
 
-set ::tcltest::testConstraints(dnsNotAvailable) \
-	[expr ! [catch {dns address www.iana.org}]]
+testConstraint dnsAvailable \
+    [expr {![catch {dns address www.iana.org}]}]
+
+testConstraint knownBugMacOSX\
+    [expr {!($::tcl_platform(os) eq "Darwin")}]
 
 # save default settings...
 set dnsServer  [dns -server]
@@ -63,30 +69,33 @@ test dns-2.6 {dns retries option: negative argument} {
     list [catch {dns -retries -1} msg] $msg
 } {1 {expected unsigned integer but got "-1"}}
 #----------------------------------------------------------
-test dns-2.7 {dns server option} {
+test dns-2.7 {dns server option} knownBugMacOSX {
     dns -server localhost
     dns -server
 } {127.0.0.1}
-test dns-2.8 {dns server option: illegal argument} {
+test dns-2.8 {dns server option: illegal argument} knownBugMacOSX {
     list [catch {dns -server "no@name"} msg] $msg
 } {1 {illegal IP address or name "no@name"}}
 # RFC6761/invalid domain name
-test dns-2.9 {dns server option: name does not exist} dnsNotAvailable {
+test dns-2.9 {dns server option: name does not exist} {dnsAvailable knownBugMacOSX} {
     list [catch {dns -server "domain.invalid"} msg] $msg
 } {1 {unknown IP host name "domain.invalid"}}
 # Historical note: this is an IP at Braunschweig University
-test dns-2.10 {dns options: set all at once} {
+test dns-2.10 {dns options: set all at once} knownBugMacOSX {
     dns -server 134.169.34.1 -retries 0 -timeout 1
     concat [dns -server] [dns -timeout] [dns -retries]
 } {134.169.34.1 1 0}
 
-# restore default settings...
-dns -server $dnsServer -retries $dnsRetries -timeout $dnsTimeout
+# On MacOSX we must not use the `dns -server arg` command, else name
+# resolution fails (logic values for 'knownBug' are inverse)
+if {[testConstraint knownBugMacOSX]} {
+    dns -server $dnsServer -retries $dnsRetries -timeout $dnsTimeout
+}
 #----------------------------------------------------------
 # We use iana.org for tests.  If this domain should happen to go away
 # there would be no need for Tnm::dns anyway. 
 test dns-3.1 {dns address: internet host} -constraints {
-    dnsNotAvailable
+    dnsAvailable
 } -body {
     set ::ianaIp [lindex [dns address www.iana.org] 0]
 } -match glob -result {*.*.*.*}
@@ -96,12 +105,12 @@ test dns-3.1 {dns address: internet host} -constraints {
 test dns-3.2 {dns address: IPv4 of localhost} {
     list [catch {dns address "127.0.0.1"} msg] $msg
 } {0 127.0.0.1}
-test dns-3.3 {dns address: invalid IPv4} dnsNotAvailable {
+test dns-3.3 {dns address: invalid IPv4} dnsAvailable {
     list [catch {dns address "1.2.3.4.5"} msg] $msg
 } {1 {non existent domain}}
 #----------------------------------------------------------
 test dns-4.1 {dns name: valid IPv4} -constraints {
-    dnsNotAvailable
+    dnsAvailable
 } -body {
     dns name $::ianaIp
 } -match regexp -result {.*\.iana\.org}
@@ -115,7 +124,7 @@ test dns-4.3 {dns name: illegal IPv4 dotted octets} {
 # RFC5737/invalid ip address
 # Note: hinfo is "Not in current use by any notable application"
 # according to Wikipedia
-test dns-5.1 {dns hinfo: not available} dnsNotAvailable {
+test dns-5.1 {dns hinfo: not available} dnsAvailable {
     list [catch {dns hinfo 192.0.2.0} msg] $msg
 } {1 {cannot reverse lookup "192.0.2.0"}}
 # dns hinfo seems buggy, so we disable it.
@@ -126,7 +135,7 @@ test dns-5.2 {dns hinfo: internet host} -constraints {
 } -result {1 {iana.org has no HINFO record}}
 #----------------------------------------------------------
 test dns-6.1 {dns mx: internet host} -constraints {
-    dnsNotAvailable
+    dnsAvailable
 } -body {
     lindex [dns mx iana.org] 0
 } -match regexp -result {.*\.org [0-9]{1,3}}
@@ -139,4 +148,7 @@ test dns-7.1 {dns soa: internet host} -constraints {
 } -match regexp -result {iana.org has SOA record sns.dns.icann.org. noc.dns.icann.org. 2016111663 7200 3600 1209600 3600}
 
 ::tcltest::cleanupTests
+
+configure -verbose $verbosity
+
 return

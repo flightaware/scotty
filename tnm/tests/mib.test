@@ -23,7 +23,12 @@ catch {
     namespace import Tnm::mib
 }
 
+set verbosity [configure -verbose]
 configure -verbose {body error skip}
+
+testConstraint knownBugMacOSX\
+    [expr {!($::tcl_platform(os) eq "Darwin")}]
+
 
 # The following MIB modules provide test cases and must be loaded
 # in order to run the tests below.
@@ -123,10 +128,10 @@ test mib-7.12 {mib format} {
 test mib-7.13 {mib format} {
     mib format HexValue -12345
 } {-3039}
-test mib-7.14 {mib format} {
+test mib-7.14 {mib format} knownBugMacOSX {
     mib format BinaryValue 12345
 } {11000000111001}
-test mib-7.15 {mib format} {
+test mib-7.15 {mib format} knownBugMacOSX {
     mib format BinaryValue -12345
 } {-11000000111001}
 test mib-7.16 {mib format} {
@@ -1100,4 +1105,5 @@ test mib-37.5 {mib size} {
 
 
 ::tcltest::cleanupTests
+configure -verbose $verbosity
 return

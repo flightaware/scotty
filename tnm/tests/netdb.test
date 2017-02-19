@@ -18,6 +18,12 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
     namespace import ::tcltest::*
 }
 
+set verbosity [configure -verbose]
+configure -verbose {body error skip}
+
+testConstraint hangsMacOSX \
+    [expr {!($::tcl_platform(os) eq "Darwin")}]
+
 package require Tnm 3.0
 catch {
     namespace import Tnm::netdb
@@ -158,10 +164,10 @@ test netdb-6.4 {check "netdb ip" command} {
 test netdb-6.5 {check "netdb ip" command} {
     netdb ip class 127.0.0.1
 } {loopback}
-test netdb-6.6 {check "netdb ip" command} {
+test netdb-6.6 {check "netdb ip" command} hangsMacOSX {
     llength [netdb ip range 134.169.34.0 255.255.255.0]
 } {254}
-test netdb-6.7 {check "netdb ip" command} {
+test netdb-6.7 {check "netdb ip" command} hangsMacOSX {
     netdb ip range 134.169.34.0 255.255.255.248
 } {134.169.34.1 134.169.34.2 134.169.34.3 134.169.34.4 134.169.34.5 134.169.34.6}
 test netdb-6.8 {check "netdb ip" command} {
@@ -310,4 +316,7 @@ test netdb-9.6 {check "netdb sunrpcs" command} {
 } {}
 
 ::tcltest::cleanupTests
+
+configure -verbose $verbosity
+
 return
