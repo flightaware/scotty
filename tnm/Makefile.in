@@ -27,7 +27,7 @@ TNM_VERSION =	@TNM_VERSION@
 TCL_VERSION =	@TCL_VERSION@
 
 # Used to hardcode the path to tkined inside libTnm.
-TK_VERSION  =	@TK_VERSION@
+TKI_VERSION  =	@TKI_VERSION@
 
 #========================================================================
 # Nothing of the variables below this line should need to be changed.
@@ -125,8 +125,18 @@ STLIB_LD	= @STLIB_LD@
 #TCL_DEFS	= @TCL_DEFS@
 TCL_BIN_DIR	= @TCL_BIN_DIR@
 TCL_SRC_DIR	= @TCL_SRC_DIR@
+TCL_LIB_SPEC	= @TCL_LIB_SPEC@
+TCL_STUB_LIB_SPEC	= @TCL_STUB_LIB_SPEC@
+THREADS_LIBS	= @THREADS_LIBS@
 #TK_BIN_DIR	= @TK_BIN_DIR@
 #TK_SRC_DIR	= @TK_SRC_DIR@
+
+# Additional search flags needed to find the various shared libraries at
+# run-time.
+LD_SEARCH_FLAGS	= @LD_SEARCH_FLAGS@
+
+# Path to use at runtime to refer to LIB_INSTALL_DIR:
+LIB_RUNTIME_DIR     = $(libdir)
 
 # Not used, but retained for reference of what libs Tcl required
 #TCL_LIBS	= @TCL_LIBS@
@@ -223,7 +233,6 @@ tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
 # TNM_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tnm$(TNM_VERSION)
 TNM_INSTALL_DIR	= $(DESTDIR)$(pkglibdir)
 
-TKI_VERSION =	@TKI_VERSION@
 # Directory in which to install the library of tkined scripts.
 TKI_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tkined$(TKI_VERSION)
 
@@ -250,12 +259,16 @@ nmtrapd: unix/nmtrapd.c
 
 # compilation fails with:
 # unix/scotty.c:143: undefined reference to `Tcl_FindExecutable'
-# scotty: $(PKG_LIB_FILE) nmicmpd nmtrapd unix/scotty.c
-#	$(COMPILE)  unix/scotty.c -o scotty $(PKG_LIB_FILE) $(SHLIB_LD_LIBS)
+scotty.o: unix/scotty.c
+	$(COMPILE) -c $(APP_CC_SWITCHES) $(CFLAGS_DEFAULT) $(CFLAGS_WARNING) \
+	    unix/scotty.c
+scotty: scotty.o
+	$(CC) -o $@ scotty.o $(CFLAGS) $(CFLAGS_DEFAULT) $(CFLAGS_WARNING) \
+	    $(TCL_LIB_SPEC) $(TCL_STUB_LIB_SPEC) $(TRHEADS_LIBS) $(LD_SEARCH_FLAGS)
 
-install-bin: scotty
-	chmod 755 scotty
-	$(INSTALL_PROGRAM) scotty $(bindir)/scotty$(TNM_VERSION)
+install-bin: tclscotty
+	chmod 755 tclscotty
+	$(INSTALL_PROGRAM) tclscotty $(bindir)/scotty$(TNM_VERSION)
 
 sinstall:
 	@for i in $(bin_BINARIES) ; \

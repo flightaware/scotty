@@ -430,8 +430,13 @@ TEA_PROG_TCLSH
 AC_SUBST(TNM_VERSION)
 AC_SUBST(TKI_VERSION)
 
+
+
 AC_SUBST(RPCGEN)
 AC_SUBST(NM_LIBS)
+
+AC_SUBST(THREADS_LIBS)
+AC_SUBST(LD_SEARCH_FLAGS)
 
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
@@ -441,5 +446,4 @@ AC_SUBST(NM_LIBS)
 
 # For now we have a Tcl only scotty.  Remove from where when it
 # gets built from scotty.c
-AC_OUTPUT([Makefile pkgIndex.tcl scotty])
-
+AC_OUTPUT([Makefile pkgIndex.tcl])

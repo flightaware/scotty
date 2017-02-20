@@ -1,0 +1,124 @@
+#!/bin/sh
+# the next line restarts using tclsh \
+    exec tclsh "$0" ${1+"$@"}
+#
+# Pure Tcl scotty, modelled closely after the C program.
+# Note:  The event loop in the C programm is crafted especially to
+# handle file events con priority.  This emulation just uses the
+# standard event loop.
+#
+# The C scotty takes care, not to write to stdout/stderr if these have
+# been transferred to another interp.
+
+
+if {$argc>0} {
+    set sfn [lindex $argv 0]
+    if {[string index $sfn 0] ne "-"} {
+	incr argc -1
+	set argv [lassign $argv argv0]
+    } else {
+	unset sfn
+    }
+}
+if {[set tty [expr ![catch {fconfigure stdin -mode}]]]
+    && ![info exists sfn]} {
+    set tcl_interactive 1
+}
+
+if {[catch {package require Tnm} msg]} {
+    if {[string match "*can't find package*" $msg]} {
+	append msg "
+
+  This usually means that you have to define the TCLLIBPATH
+  environment variable to point to the tnm library directory or you
+  have to include the path to the tnm library directory in Tcl's
+  auto_path variable.
+"	
+    }
+    puts stderr "initialization failed: $msg"
+    exit 1
+}
+if {[info exists sfn]} {
+    source $sfn
+    vwait forever
+    exit
+}
+# we are interactive
+puts "Hello, this is Tcl Scotty.  Loaded Tnm $msg."
+
+source "~/.tclshrc"
+
+chan configure stdin -blocking false -buffering line
+
+chan event stdin readable readLine
+
+putPrompt
+
+vwait forever
+exit
+
+# --- event handlers
+
+proc readLine chan {
+    set script {}
+    set count 0
+    set partial false
+    
+    if {[gets $chan line] < 0} {
+	if {$tty} {
+	    exit
+	} else {
+	    chan event stdin {}
+	}
+	return
+    } else {
+	set count 0
+    }
+    append script $line \n
+
+    if {count} {
+	if {[info complete $cmd]} {
+	    set partial true
+	    putPrompt $partial
+	}
+    }
+    set partial false
+    chan event stdin {}
+    if {[catch {eval $cmd} $result] || $tty} {
+	puts $result
+    }
+    if {$tty} {
+	putPrompt $partial
+    }
+}
+
+
+proc putPrompt partial {
+    if {[catch {expr {$partial ? $tcl_prompt2 : $tcl_prompt1}} promptCmd]} {
+	if {!$partial} {
+	    if {![catch {chan configure stdout}]} {
+		puts "% "
+	    }
+	}
+    } else {
+	if {[catch {eval $promptCmd} msg]} {
+	    append msg \n "    (script that generates prompt)\n"
+	    if {![catch {chan configure stderr}]} {
+		puts stderr $msg
+		if {!$partial} {
+		    if {![catch {chan configure stdout}]} {
+			puts "% "
+		    }
+		}
+	    }
+	}
+    }
+    if {![catch {chan configure  stdout}]} {
+	flush stdout
+    }
+}
+
+
+# Local Variables:
+# mode: tcl
+# End:

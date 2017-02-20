@@ -125,6 +125,18 @@ Generic
   `nmicmpd.dSYM` and `nmtrapd.dSYM`.
 
 
+Scotty binary
+-------------
+
+With a 'standard' build (shared, stubs) we get an immediate segfault
+as soon as `Tcl_CreateInterp()` is called.
+
+If configured with `--disable-shared --disable-stubs` scotty just runs
+fine.  However it segfaults somewhere later. e.g. `./scotty
+tests/all.tcl` fails after running all tests and idling about half a
+minute.
+
+
 Tnm::dns
 --------
 

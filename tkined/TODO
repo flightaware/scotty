@@ -17,7 +17,10 @@ Tests
 =====
 
 - Debian
-    - tkined starts up, but the icon bar is not shown
+    - tkined starts up, but the Tools menu is not shown.  This seems
+      due to the fact, that any `ined` command is hanging in the
+      initialization scripts, until the main editor window is closed.
+	  Event loop?
 
 Wishlist
 ========
