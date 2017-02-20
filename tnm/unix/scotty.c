@@ -51,7 +51,7 @@ StdinProc		(ClientData clientData, int mask);
  *	This procedure is main event loop. Tcl_DoOneEvent() favours 
  *      timer events over file events. This can create problems if 
  *	e.g. async. SNMP requests become timed out before the answer 
- *	is processed. We therefore check for a dending file event 
+ *	is processed. We therefore check for a pending file event 
  *	inside of the while loop.
  *
  * Results:

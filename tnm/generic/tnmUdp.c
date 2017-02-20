@@ -24,6 +24,8 @@ typedef struct Udp {
     int sock;			/* The socket we are using.	       */
     int connected:1;		/* Flag set if connected.	       */
     int nameChanged:1;		/* Flag set if the name changed.       */
+    int addrConfigured:1;       /* Flag set if (remote) address configured */
+    int portConfigured:1;       /* Flag set if (remote) port configured */
     struct sockaddr_in name;	/* Name of the local socket.           */
     struct sockaddr_in peer;	/* Name of the peer.		       */
     Tcl_Obj *readCmd;		/* Command to execute if readable.     */
@@ -754,6 +756,20 @@ SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 #endif
 
     switch ((enum options) option) {
+    case optAddress:
+	if (TnmSetIPAddress(interp, Tcl_GetStringFromObj(objPtr, NULL),
+			    &udpPtr->peer) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	udpPtr->addrConfigured = 1;
+	break;
+    case optPort:
+	if (TnmSetIPPort(interp, "udp", Tcl_GetStringFromObj(objPtr, NULL),
+			 &udpPtr->peer) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	udpPtr->portConfigured = 1;
+	break;
     case optMyAddress:
 	if (TnmSetIPAddress(interp, Tcl_GetStringFromObj(objPtr, NULL),
 			    &udpPtr->name) != TCL_OK) {
@@ -892,6 +908,14 @@ UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 				 Tcl_PosixError(interp), (char *) NULL);
 		return TCL_ERROR;
 	    }
+	}
+	if (udpPtr->portConfigured && udpPtr->addrConfigured) {
+	    if (connect(udpPtr->sock, (struct sockaddr *) &udpPtr->peer, sizeof(udpPtr->peer)) < 0) {
+		Tcl_AppendResult(interp, "can not connect: ", 
+				 Tcl_PosixError(interp), (char *) NULL);
+		return TCL_ERROR;
+	    }
+	    udpPtr->connected = 1;
 	}
 	break;
 
@@ -1067,6 +1091,7 @@ Tnm_UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 /*
  * Local Variables:
  * compile-command: "make -k -C ../../unix"
+ * c-basic-offset: 4
  * End:
  */
 
