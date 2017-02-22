@@ -212,8 +212,7 @@ TnmInitPath(Tcl_Interp *interp)
  *
  * TnmInitDns --
  *
- *	This procedure is called to initialize the DNS resolver and to
- *	save the domain name in the global tnm(domain) Tcl variable.
+ *	This procedure is called to initialize the DNS resolver.
  *
  * Results:
  *	None.
@@ -227,25 +226,7 @@ TnmInitPath(Tcl_Interp *interp)
 void
 TnmInitDns(Tcl_Interp *interp)
 {
-    char domain[MAXDNAME], *p;
-
-    res_state res = malloc(sizeof(struct __res_state));
-
-    memset(res, 0, sizeof(struct __res_state));
-    res_ninit(res);
-    res->options |= RES_RECURSE | RES_DNSRCH | RES_DEFNAMES | RES_AAONLY;
-
-    /*
-     * Remove any trailing dots or white spaces and save the
-     * result in tnm(domain).
-     */
-
-    strcpy(domain, res->defdname);
-    p = domain + strlen(domain) - 1;
-    while ((*p == '.' || isspace(*p)) && p > domain) {
-	*p-- = '\0';
-    }
-    Tcl_SetVar2(interp, "tnm", "domain", domain, TCL_GLOBAL_ONLY);
+    res_init();
 }
 
 /*

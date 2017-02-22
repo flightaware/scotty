@@ -321,8 +321,7 @@ TnmInitPath(Tcl_Interp *interp)
  *
  * TnmInitDns --
  *
- *	This procedure is called to initialize the DNS resolver and to
- *	save the domain name in the global tnm(domain) Tcl variable.
+ *	This procedure is called to initialize the DNS resolver.
  *
  * Results:
  *	None.
@@ -336,92 +335,7 @@ TnmInitPath(Tcl_Interp *interp)
 void
 TnmInitDns(Tcl_Interp *interp)
 {
-    char domain[MAXDNAME], *p;
-    char *nameServer = NULL, *domainName = NULL;
-    int i,j;
-
-    char *paths[] = {
-	"System\\CurrentControlSet\\Services\\TcpIP\\Parameters",
-	"System\\CurrentControlSet\\Services\\Tcpip\\Parameters",
-	"System\\CurrentControlSet\\Services\\VxD\\MSTCP",
-	NULL
-    };
-
-    char *entries[] = {
-	"NameServer",
-	"DhcpNameServer",
-	NULL
-	};
-
-    char *default_dns = "127.0.0.1";
-
     res_init();
-    _res.options |= RES_RECURSE | RES_DNSRCH | RES_DEFNAMES | RES_AAONLY;
-    
-    /*
-     * Get the list of name servers from the Windows registry and set
-     * the list of default DNS servers. Note, this should be done
-     * automatically by the resolver but it is obviously not on
-     * Windows machines.
-     */
-
-    for (i = 0; paths[i] && ! nameServer; i++) {
-	for (j = 0; entries[j] && ! nameServer; j++) {
-	    nameServer = GetRegValue(paths[i], entries[j]);
-	    if (nameServer) {
-		int n = 0;
-		char *s = NULL;
-		if (*nameServer == '\0') {
-		nameServer = NULL;
-		continue;
-		}
-		s = strtok(nameServer, ", ");
-		while (s && n < MAXNS) {
-		    TnmSetIPAddress((Tcl_Interp *) NULL,
-				    s, &_res.nsaddr_list[n]);
-		    s = strtok(NULL, ", ");
-		    n++;
-		}
-		_res.nscount = n;
-	    }
-	}
-    }
-
-    if (! nameServer || (nameServer && *nameServer == '\0')) {
-	TnmSetIPAddress((Tcl_Interp *) NULL, 
-			default_dns, &_res.nsaddr_list[0]);
-	_res.nscount = 1;
-        nameServer = default_dns;
-    }
-    Tcl_SetVar2(interp, "tnm", "dns", nameServer, TCL_GLOBAL_ONLY);
-
-    /* Get the domain name from the Windows registry and set the
-     * default domain name for the resolver, if not done
-     * automatically.
-     */
-
-    for (i = 0; paths[i] && ! domainName; i++) {
-	domainName = GetRegValue(paths[i], "Domain");
-        if (domainName && *domainName == '\0') {
-            domainName = NULL;
-        }
-    }
-
-    if (! _res.defdname[0] && domainName && strlen(domainName) < MAXDNAME) {
-	strcpy(_res.defdname, domainName);
-    }
-
-    /*
-     * Remove the any trailing dots or white spaces and save the
-     * result in tnm(domain).
-     */
-
-    strcpy(domain, _res.defdname);
-    p = domain + strlen(domain) - 1;
-    while ((*p == '.' || isspace(*p)) && p > domain) {
-	*p-- = '\0';
-    }
-    Tcl_SetVar2(interp, "tnm", "domain", domain, TCL_GLOBAL_ONLY);
 }
 
 /*
