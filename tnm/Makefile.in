@@ -373,24 +373,6 @@ install-site:
 		else true; \
 		fi; \
 	    done;
-	@if [ ! -f $(TNM_INSTALL_DIR)/site/init.tcl ] ; then \
-	    f=$(TNM_INSTALL_DIR)/site/init.tcl; \
-	    echo "# Site specific Tnm configuration file." >> $$f; \
-	    echo "" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-SMI.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-TC.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-PRODUCTS-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-ISDN-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-FLASH-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-CDP-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-IMAGE-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-CALL-HISTORY-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-QUEUE-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-CONFIG-MAN-MIB.my" >> $$f; \
-	    echo "# lappend tnm(mibs) CISCO-MEMORY-POOL-MIB.my" >> $$f; \
-	    echo "#" >> $$f; \
-	    echo "# lappend tnm(mibs) cisco-10-mib.my" >> $$f; \
-	fi
 
 # Run tests on tnm
 #--------------------------------------------------------------------
@@ -415,9 +397,10 @@ tnm-uninstall:
 		else true; \
 	        fi; \
 	    done
-	@if [ -d $(pkglibdir)/site ] ; then \
+	@if test -d $(pkglibdir)/site/ && test $$(ls -A $(pkglibdir)/site/) ; then \
 	    echo "Preserving $(pkglibdir)/site"; \
-	    else rm -rf $(pkglibdir); \
+	    else \
+	      rm -rf $(pkglibdir)/site; \
 	    fi
 
 uninstall: uninstall-binaries tnm-uninstall
