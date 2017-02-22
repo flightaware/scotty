@@ -73,8 +73,6 @@ TEA_TCL_LINK_LIBS
 
 AX_CHECK_ZLIB([LIBS="$LIBS -lz"],no)
 
-AC_CHECK_LIB(rpc, main, [LIBS="$LIBS -lrpc"])
-
 # See Alex Chernyakhovsky's article:
 # http://blog.achernya.com/2013/03/os-x-has-silly-libsystem.html
 # We have taken his solution from here:
@@ -139,6 +137,23 @@ AC_CHECK_FUNC(getnetent, AC_DEFINE([HAVE_GETNETENT], 1, [getnetent function avai
 AC_CHECK_FUNC(getprotoent, AC_DEFINE([HAVE_GETPROTOENT], 1, [getprotoent function available] ))
 AC_CHECK_FUNC(getservent, AC_DEFINE([HAVE_GETSERVENT], 1, [getservent function available]))
 AC_CHECK_FUNC(getrpcent, AC_DEFINE([HAVE_GETRPCENT], 1, [getrpcent function available]))
+
+#----------------------------------------------------------------------------
+#       Check if we want/need to use the libtirpc alternative rpc
+#       implementation.
+#----------------------------------------------------------------------------
+
+AC_ARG_WITH([tirpc], AS_HELP_STRING([--with-tirpc], [Build with the tirpc rpc implementation]))
+
+AS_IF([test "x$with_tirpc" = "xyes"], [
+	  if pkg-config libtirpc; then
+	      TIRPC_CFLAGS=`pkg-config --cflags libtirpc`
+	      TIRPC_LIBS=`pkg-config --libs libtirpc`
+	      CPPFLAGS="$TIRPC_CFLAGS $CPPFLAGS"
+	  else
+	      AC_MSG_ERROR(could not determine how to configure tirpc)
+	  fi
+      ])
 
 #----------------------------------------------------------------------------
 #       Some older SUN RPC implementations are really ugly.
@@ -307,7 +322,7 @@ TEA_ADD_SOURCES([
 		   snmp/tnmSmiTcl.c 
 	       ])
 TEA_ADD_HEADERS([])
-TEA_ADD_INCLUDES([-I. -Igeneric -Isnmp])
+TEA_ADD_INCLUDES([${TIRPC_CFLAGS} -I. -Igeneric -Isnmp])
 TEA_ADD_LIBS([
 		mount_clnt.o 
 		mount_xdr.o 
@@ -357,7 +372,7 @@ else
 		       unix/tnmUnixIcmp.c
 		       unix/tnmUnixSnmp.c
 		   ])
-    #TEA_ADD_LIBS([-lsuperfly])
+    TEA_ADD_LIBS([${TIRPC_LIBS}])
 fi
 
 #--------------------------------------------------------------------

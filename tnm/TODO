@@ -123,6 +123,8 @@ Generic
   `Tcl_FindExecutable'
 - On MacOSX we get two directories which should be cleaned:
   `nmicmpd.dSYM` and `nmtrapd.dSYM`.
+- Consider eliminating the zlib check.  zlib seems not to be used
+  at all.
 
 
 Scotty binary
