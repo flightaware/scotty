@@ -225,19 +225,18 @@ tki-install:	tki-install-library tki-install-bitmaps tki-install-apps
 	echo " Install tkined.defaults $(DESTDIR)$(pkglibdir)"; \
 	$(INSTALL_DATA) tkined.defaults $(DESTDIR)$(pkglibdir); \
 
-TKI_LIBRARY_DIR	= tki/library
-TKI_LIBRARY =	$(TKI_LIBRARY_DIR)/Editor.tcl \
-		$(TKI_LIBRARY_DIR)/Diagram.tcl \
-		$(TKI_LIBRARY_DIR)/Command.tcl \
-		$(TKI_LIBRARY_DIR)/Tool.tcl \
-		$(TKI_LIBRARY_DIR)/Objects.tcl \
-		$(TKI_LIBRARY_DIR)/Dialog.tcl \
-		$(TKI_LIBRARY_DIR)/Event.tcl \
-		$(TKI_LIBRARY_DIR)/Help.tcl \
-		$(TKI_LIBRARY_DIR)/Misc.tcl
-TKI_INSTALL_DIR	= $(pkglibdir)
+TKI_LIBRARY =	library/Editor.tcl \
+		library/Diagram.tcl \
+		library/Command.tcl \
+		library/Tool.tcl \
+		library/Objects.tcl \
+		library/Dialog.tcl \
+		library/Event.tcl \
+		library/Help.tcl \
+		library/Misc.tcl
+
 tki-install-library:
-	@for i in $(TKI_INSTALL_DIR)/library ; \
+	@for i in $(pkglibdir)/library ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
@@ -249,13 +248,12 @@ tki-install-library:
 	@for i in $(TKI_LIBRARY) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TKI_INSTALL_DIR)/library; \
+	    $(INSTALL_DATA) $$i $(pkglibdir)/library; \
 	    done
-	@$(INSTALL_DATA) $(TKI_LIBRARY_DIR)/pkgIndex.tcl $(TKI_INSTALL_DIR)/library
+	@$(INSTALL_DATA) library/pkgIndex.tcl $(pkglibdir)/library
 
-TKI_DIR		= tki
 tki-install-bitmaps:
-	@for i in $(TKI_INSTALL_DIR)/bitmaps ; \
+	@for i in $(pkglibdir)/bitmaps ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
@@ -264,44 +262,43 @@ tki-install-bitmaps:
 		else true; \
 		fi; \
 	    done;
-	@for i in $(TKI_DIR)/bitmaps/*.xbm ; \
+	@for i in bitmaps/*.xbm ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TKI_INSTALL_DIR)/bitmaps ; \
+	    $(INSTALL_DATA) $$i $(pkglibdir)/bitmaps ; \
 	    done
 
-TKI_APPS_DIR	= tki/apps
-TKI_APPS =	$(TKI_APPS_DIR)/manager.tcl \
-		$(TKI_APPS_DIR)/event.tcl \
-		$(TKI_APPS_DIR)/movie.tcl \
-		$(TKI_APPS_DIR)/ip_trouble.tcl \
-		$(TKI_APPS_DIR)/ip_monitor.tcl \
-		$(TKI_APPS_DIR)/ip_layout.tcl \
-		$(TKI_APPS_DIR)/ip_discover.tcl \
-		$(TKI_APPS_DIR)/ip_world.tcl \
-		$(TKI_APPS_DIR)/mibtree \
-		$(TKI_APPS_DIR)/snmp_trouble.tcl \
-		$(TKI_APPS_DIR)/snmp_config.tcl \
-		$(TKI_APPS_DIR)/snmp_scriptmib.tcl \
-		$(TKI_APPS_DIR)/snmp_monitor.tcl \
-		$(TKI_APPS_DIR)/snmp_browser.tcl \
-		$(TKI_APPS_DIR)/snmp_host.tcl \
-		$(TKI_APPS_DIR)/snmp_cisco.tcl \
-		$(TKI_APPS_DIR)/snmp_hp.tcl \
-		$(TKI_APPS_DIR)/snmp_ucd.tcl \
-		$(TKI_APPS_DIR)/clock.tcl \
-		$(TKI_APPS_DIR)/game.tcl
+TKI_APPS =	apps/manager.tcl \
+		apps/event.tcl \
+		apps/movie.tcl \
+		apps/ip_trouble.tcl \
+		apps/ip_monitor.tcl \
+		apps/ip_layout.tcl \
+		apps/ip_discover.tcl \
+		apps/ip_world.tcl \
+		apps/mibtree \
+		apps/snmp_trouble.tcl \
+		apps/snmp_config.tcl \
+		apps/snmp_scriptmib.tcl \
+		apps/snmp_monitor.tcl \
+		apps/snmp_browser.tcl \
+		apps/snmp_host.tcl \
+		apps/snmp_cisco.tcl \
+		apps/snmp_hp.tcl \
+		apps/snmp_ucd.tcl \
+		apps/clock.tcl \
+		apps/game.tcl
 
-TKI_MISC =	$(TKI_APPS_DIR)/library.tcl \
-		$(TKI_APPS_DIR)/README \
-		$(TKI_APPS_DIR)/world-map.xbm \
-		$(TKI_APPS_DIR)/usa-map.xbm \
-		$(TKI_APPS_DIR)/germany-map.xbm \
-		$(TKI_APPS_DIR)/netherlands-map.xbm \
-		$(TKI_APPS_DIR)/locations
+TKI_MISC =	apps/library.tcl \
+		apps/README \
+		apps/world-map.xbm \
+		apps/usa-map.xbm \
+		apps/germany-map.xbm \
+		apps/netherlands-map.xbm \
+		apps/locations
 
 tki-install-apps:
-	@for i in $(TKI_INSTALL_DIR)/apps ; \
+	@for i in $(pkglibdir)/apps ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
@@ -314,23 +311,42 @@ tki-install-apps:
 	    do \
 	    echo "Installing $$i"; \
 	    base=`basename $$i`; \
-	    rm -f $(TKI_INSTALL_DIR)/apps/$$base; \
+	    rm -f $(pkglibdir)/apps/$$base; \
 	    sed -e 's+^exec tclsh.*$$+exec $(TCLSH_PROG) "$$0" "$$@"+'\
 		-e 's+^exec wish.*$$+exec $(WISH_PROG) "$$0" "$$@"+'\
-		    $$i > $(TKI_INSTALL_DIR)/apps/$$base; \
-	    chmod 755 $(TKI_INSTALL_DIR)/apps/$$base; \
+		    $$i > $(pkglibdir)/apps/$$base; \
+	    chmod 755 $(pkglibdir)/apps/$$base; \
 	    done
 	@for i in $(TKI_MISC) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TKI_INSTALL_DIR)/apps; \
+	    $(INSTALL_DATA) $$i $(pkglibdir)/apps; \
 	    done
-	@TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
+	@TCLLIBPATH="$(libdir) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
-	echo 'cd $(TKI_INSTALL_DIR)/apps; auto_mkindex . library.tcl; exit' | \
+	echo 'cd $(pkglibdir)/apps; auto_mkindex . library.tcl; exit' | \
 		$(TCLSH_PROG)
 
+# uninstall
+#--------------------------------------------------------------------
 
+tki-uninstall: tki-uninstall-lib
+
+tki-uninstall-lib:
+	@for i in $(pkglibdir)/* ; \
+	    do \
+	    if [ "`basename $$i`" != "site" ] ; then \
+		echo "Removing $$i"; \
+		rm -rf $$i; \
+		else true; \
+	        fi; \
+	    done
+	@if test -d $(pkglibdir)/site/ && test $$(ls -A $(pkglibdir)/site/) ; then \
+	    echo "Preserving $(pkglibdir)/site"; \
+	    else rm -rf $(pkglibdir); \
+	    fi
+
+uninstall: uninstall-binaries tki-uninstall
 
 # run tkined
 #--------------------------------------------------------------------
@@ -451,7 +467,7 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 # As necessary, add $(srcdir):$(srcdir)/compat:....
 #========================================================================
 
-VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx:$(srcdir)/tki/generic
+VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx:$(srcdir)/generic
 
 .c.@OBJEXT@:
 	$(COMPILE) -c `@CYGPATH@ $<` -o $@
