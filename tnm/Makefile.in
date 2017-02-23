@@ -234,7 +234,7 @@ tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
 TNM_INSTALL_DIR	= $(DESTDIR)$(pkglibdir)
 
 # Directory in which to install the library of tkined scripts.
-TKI_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tkined$(TKI_VERSION)
+TKI_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/Tkined$(TKI_VERSION)
 
 tnmUnixInit.o: tnmUnixInit.c
 	$(COMPILE) -DTNMLIB=\"$(TNM_INSTALL_DIR)\" -DTKINEDLIB=\"$(TKI_INSTALL_DIR)\" -c `@CYGPATH@ $<` -o $@
