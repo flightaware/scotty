@@ -279,6 +279,7 @@ TKI_APPS =	$(TKI_APPS_DIR)/manager.tcl \
 		$(TKI_APPS_DIR)/ip_layout.tcl \
 		$(TKI_APPS_DIR)/ip_discover.tcl \
 		$(TKI_APPS_DIR)/ip_world.tcl \
+		$(TKI_APPS_DIR)/mibtree \
 		$(TKI_APPS_DIR)/snmp_trouble.tcl \
 		$(TKI_APPS_DIR)/snmp_config.tcl \
 		$(TKI_APPS_DIR)/snmp_scriptmib.tcl \
@@ -299,7 +300,6 @@ TKI_MISC =	$(TKI_APPS_DIR)/library.tcl \
 		$(TKI_APPS_DIR)/netherlands-map.xbm \
 		$(TKI_APPS_DIR)/locations
 
-TNM_EXAMPLES_DIR	= tnm/examples
 tki-install-apps:
 	@for i in $(TKI_INSTALL_DIR)/apps ; \
 	    do \
@@ -310,7 +310,7 @@ tki-install-apps:
 		else true; \
 		fi; \
 	    done;
-	@for i in $(TKI_APPS) $(TNM_EXAMPLES_DIR)/mibtree ; \
+	@for i in $(TKI_APPS); \
 	    do \
 	    echo "Installing $$i"; \
 	    base=`basename $$i`; \
