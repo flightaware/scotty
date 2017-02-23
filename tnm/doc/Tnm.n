@@ -7,7 +7,7 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 '\" 
 .so man.macros
-.TH Tnm n "September 1998" Tnm "Tnm Tcl Extension"
+.TH Tnm n "February 2017" Tnm "Tnm Tcl Extension"
 .BS
 '\" Note:  do not modify the .SH NAME line immediately below!
 .SH NAME
@@ -200,7 +200,7 @@ The URL where additional information about the Tnm extension can be
 found.
 .TP 18
 \fBtnm(start)\fR
-The start time in seconds when the Tnm extension was loaded.
+The start time in seconds since epoch when the Tnm extension was loaded.
 
 .SH FILES
 .TP 18
@@ -220,21 +220,24 @@ Archive of SNMP MIB modules.
 
 .SH AVAILABILITY
 
-The Tnm Tcl extension is freely available in source form via anonymous
-FTP. The source distribution is available from:
+The Tnm Tcl extension is freely available in source form from several
+locations.  The historical homepage does not exist anymore.
+FlightAware has done significant maintenance of the software.  The
+FlightAware version is available from:
 .PP
 .RS
-ftp://ftp.ibr.cs.tu-bs.de/pub/local/tkined/
+https://github.com/flightaware/scotty
 .RE
 .PP
-The Tnm extension is contained in the scotty.tar.gz file which is
-a link to the latest public-ally available version of this software.
-Additional information about the Tnm extension is available on the
-World Wide Web. The URL to the home-page of the scotty package is:
+
+This particular version, motivated by FlightAware, adapts the build
+system to recent versions of operating systems and Tcl/Tk versions and
+is available from:
 .PP
-.RS
-http://wwwsnmp.cs.utwente.nl/~schoenw/scotty/
+.RS https://github.com/jorge-leon/scotty
 .RE
+.PP
+See the top level README file for systems where it is known to build.
 
 .SH LICENSE
 This software is copyrighted by Juergen Schoenwaelder, the Technical
@@ -273,7 +276,7 @@ The Tnm extension includes work contributed by students at the
 Technical University of Braunschweig. The names of individuals who
 provided major contributions are listed on the man pages for every
 command. The current version also includes many improvements and bug
-fixes contributed by the user community. Please read the README file
+fixes contributed by the user community. Please read the CREDITS file
 contained in the sources for a more complete list of individuals.
 .PP
 Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>

@@ -18,12 +18,21 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedHelp 1.5.0
+package provide TkinedHelp 1.5.1
 
 proc Help__general { editor } {
     set w [$editor toplevel]
     Dialog__browse $w.canvas \
 	"Welcome to Tkined -- a Tk based interactive network editor." {
+	"This is the February 2017 version, based on the GitHub repository"
+	"maintained by FlightAware.  For more information please read the"
+	"documentation in the source tree at:"
+	""
+	"  https://github.com/jorge-leon/scotty"
+	""
+	"The following are historic notes by the original author, the web"
+	"references are likely all dead links."
+        ""
 	"This version has been written based on the original ined version"
 	"that was build on top of the Unidraw/Interviews framework. Many"
 	"thanks to the developers of the original version, Thomas Birke"
