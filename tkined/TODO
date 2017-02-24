@@ -3,15 +3,12 @@
 Bugs
 ====
 
-- Generic
-    - Build
-        - Should we revamp directory tree of installed files to
-        reflect FHS or so (`share` instead of `library` ...)?
-
-        - Definitely eliminate legacy names and replace with "standard"
-                    autoconf/TEA names in Makefile.in.
-
-        - Man files must be installed in their corresponding sections; install-doc target.
+* Generic
+    * Build
+         * Should we revamp directory tree of installed files to
+		 reflect FHS or so (`share` instead of `library` ...)?
+         * We could clean things up, and put in order, as we now
+         build everything ok.
 
 Tests
 =====
@@ -27,5 +24,4 @@ Wishlist
 
 - Port to:
   - OpenIndiana (Solaris)
-  - Alpine Linux
   - Windows

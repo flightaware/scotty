@@ -45,25 +45,20 @@ geolocation and others.
 About and Status
 ----------------
 
-This source distribution is targetted at the current available (2017)
-toolchains and Tcl versions.  The default is to build shared libraries
-with Tcl stubs support.
+This source distribution is targetted at the current available
+(February 2017) toolchains and Tcl versions.  The default is to build
+shared libraries with Tcl stubs support.
 
 At this moment, only the _Tnm_ extension is working as expected.
 The `scotty` binary is replace by a pure Tcl emulation.
 
-The `tkined` program starts up fine, however the packaged network
-management applications do not load, so the only available
-functionality is the graphical network editor, except for the MacOSX
-port.
+`tkined` is working fine on all tested platform, except for Debian,
+where it hangs on the first invocatio of ined.
 
 Note that the organisation of the source tree has been modified
 heavily, to account for current policies of extension building.  Each
 extension is given its own subdirectory, where they can be built
 independently.
-
-At this moment, the man pages are not installed and the _Tkined_
-extension has no `uninstall` target.
 
 _Tnm_ tests have been updated and problems singled out and documented
 in the `tnm/TODO` file.  Running `make test` should succeed without
@@ -128,6 +123,12 @@ Obtain, Compile, Install
 Clone the repository or download the source as zip archive and unpack
 to any destination directory of your liking.
 
+There is a convenience Makefile in the top level directory, which
+automates build, install and uninstall for the tested platforms.  See
+the file PORTS for platform specific details.
+
+The following are detailed build instructions.
+
 Enter the `tnm` directory and run the almost common place:
 ```
 ./configure
@@ -152,28 +153,22 @@ Uninstall
 You can uninstall the _Tnm_ extension and `scotty` by running `make
 uninstall` in the `tnm` directory.
 
-To remove the _Tkined_ extension from your system find out where it
-was installed, typically something like `/usr/local/lib/Tkined1.5.x`
-where 'x' is the respective sub sub version number.  Simply remove
-this directory.
-
-`tkined` would be installed respectively in `/usr/local/bin/` from
-where you just can delete it.
+The _Tkined_ extension and `tkined` are uninstalled by running `make
+uninstall` in the `tkined` directory.
 
 
 Documentation
 =============
 
-The `doc` subdirectory of each extension contains the respective
-manual pages.
+Man files are installed in the respective system locations after
+install.  To see what is available see the respective `doc`
+subdirectory in `tnm` and `tkined`.
 
-For a starter look at `tnm/doc/Tnm.n` which gives an overview over the
-Tcl commands provided by the Tnm extension and the
-`tkined/doc/tkined.1` page which describes the Tkined network
-editor. A short description of the API which is used to write new
-applications for the Tkined editor is available in the
-`tnm/doc/ined.n` page.  You should be able to read them by invoking
-`man -l install path` where 'path' is the respective file.
+For a starter look at Tnm(n) which gives an overview over the Tcl
+commands provided by the Tnm extension and the tkined(1) page which
+describes the Tkined network editor. A short description of the API
+which is used to write new applications for the Tkined editor is
+available in the ined(n) man page.
 
 An overview about the Tnm extension has been presented at the 3rd
 Tcl/Tk workshop in 1995. A PostScript copy of this paper is available
@@ -197,7 +192,7 @@ specific directories, you will find a INSTALL instructions file in
 `tnm/unix`.
 
 The _Tkined_ library and applications have their own change logs in
-`tkined/tki/changes` and `tkined/tki/apps/changes`.
+`tkined/changes` and `tkined/apps/changes`.
 
 The file PORTS holds notes about building _scotty_ on different
 platforms, `tnm/TODO` and `tkined/TODO` list bugs and improvement
