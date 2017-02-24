@@ -412,7 +412,7 @@ install-man:
 	    done;
 
 clean-man:
-	rm $(DOC_DIR)/*.n
+	rm -f $(DOC_DIR)/*.n
 
 # Run tests on tnm
 #--------------------------------------------------------------------
