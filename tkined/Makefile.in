@@ -196,7 +196,7 @@ all: binaries libraries doc
 
 # Directory in which to install library files belonging to the extension.
 # TKI_INSTALL_DIR =       $(INSTALL_ROOT)$(prefix)/lib/tkined$(TKI_VERSION)
-TKI_INSTALL_DIR = $(DESTDIR)$(pkglibdir)
+TKI_INSTALL_DIR = $(pkglibdir)
 
 tkiUnixInit.o: tkiUnixInit.c
 	$(COMPILE) -DTKINEDLIB=\"$(TKI_INSTALL_DIR)\" -c `@CYGPATH@ $<` -o $@
@@ -221,7 +221,7 @@ tkined: $(PKG_LIB_FILE) tkined.in
 # you to use a replacement (e.g. GNU mkdir) during the install process.
 MKDIR =		mkdir
 
-tki-install:	tki-install-library tki-install-bitmaps tki-install-apps
+tki-install:	install-lib install-bitmaps install-apps
 	echo " Install tkined.defaults $(DESTDIR)$(pkglibdir)"; \
 	$(INSTALL_DATA) tkined.defaults $(DESTDIR)$(pkglibdir); \
 
@@ -235,37 +235,37 @@ TKI_LIBRARY =	library/Editor.tcl \
 		library/Help.tcl \
 		library/Misc.tcl
 
-tki-install-library:
+install-lib:
 	@for i in $(pkglibdir)/library ; \
 	    do \
-	    if [ ! -d $$i ] ; then \
+	    if [ ! -d $(DESTDIR)$$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
 	@for i in $(TKI_LIBRARY) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(pkglibdir)/library; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(pkglibdir)/library; \
 	    done
-	@$(INSTALL_DATA) library/pkgIndex.tcl $(pkglibdir)/library
+	@$(INSTALL_DATA) library/pkgIndex.tcl $(DESTDIR)$(pkglibdir)/library
 
-tki-install-bitmaps:
+install-bitmaps:
 	@for i in $(pkglibdir)/bitmaps ; \
 	    do \
-	    if [ ! -d $$i ] ; then \
+	    if [ ! -d $(DESTDIR)$$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
 	@for i in bitmaps/*.xbm ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(pkglibdir)/bitmaps ; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(pkglibdir)/bitmaps ; \
 	    done
 
 TKI_APPS =	apps/manager.tcl \
@@ -297,13 +297,13 @@ TKI_MISC =	apps/library.tcl \
 		apps/netherlands-map.xbm \
 		apps/locations
 
-tki-install-apps:
+install-apps:
 	@for i in $(pkglibdir)/apps ; \
 	    do \
-	    if [ ! -d $$i ] ; then \
+	    if [ ! -d $(DESTDIR)$$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
@@ -311,29 +311,55 @@ tki-install-apps:
 	    do \
 	    echo "Installing $$i"; \
 	    base=`basename $$i`; \
-	    rm -f $(pkglibdir)/apps/$$base; \
+	    rm -f $(DESTDIR)$(pkglibdir)/apps/$$base; \
 	    sed -e 's+^exec tclsh.*$$+exec $(TCLSH_PROG) "$$0" "$$@"+'\
 		-e 's+^exec wish.*$$+exec $(WISH_PROG) "$$0" "$$@"+'\
-		    $$i > $(pkglibdir)/apps/$$base; \
-	    chmod 755 $(pkglibdir)/apps/$$base; \
+		    $$i > $(DESTDIR)$(pkglibdir)/apps/$$base; \
+	    chmod 755 $(DESTDIR)$(pkglibdir)/apps/$$base; \
 	    done
 	@for i in $(TKI_MISC) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(pkglibdir)/apps; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(pkglibdir)/apps; \
 	    done
-	@TCLLIBPATH="$(libdir) $$TCLLIBPATH"; \
+	@TCLLIBPATH="$(DESTDIR)$(libdir) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
-	echo 'cd $(pkglibdir)/apps; auto_mkindex . library.tcl; exit' | \
+	echo 'cd $(DESTDIR)$(pkglibdir)/apps; auto_mkindex . library.tcl; exit' | \
 		$(TCLSH_PROG)
+
+TNM_DOCS_1	= tkined.1
+
+MAN1_INSTALL_DIR = $(mandir)/man1
+DOC_DIR = $(top_builddir)/doc
+# note: mann is installed by standard target
+install-man:
+	@for i in $(mandir) $(MAN1_INSTALL_DIR); \
+	    do \
+	    if [ ! -d $(DESTDIR)$$i ] ; then \
+		echo "Making directory $$i"; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
+		else true; \
+		fi; \
+	    done;
+	@cd $(DOC_DIR); for i in $(TNM_DOCS_1); \
+	    do \
+	    echo "Installing $(DOC_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    sed -e '/man\.macros/r man.macros' -e '/man\.macros/d' \
+		-e 's/%TKI_VERSION%/$(TKI_VERSION)/' \
+		    $$i > $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    chmod 444 $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    done;
+
+clean-man:
+	rm $(DOC_DIR)/*.n
 
 # uninstall
 #--------------------------------------------------------------------
 
-tki-uninstall: tki-uninstall-lib
-
-tki-uninstall-lib:
-	@for i in $(pkglibdir)/* ; \
+uninstall-lib:
+	@for i in $(DESTDIR)$(pkglibdir)/* ; \
 	    do \
 	    if [ "`basename $$i`" != "site" ] ; then \
 		echo "Removing $$i"; \
@@ -341,17 +367,42 @@ tki-uninstall-lib:
 		else true; \
 	        fi; \
 	    done
-	@if test -d $(pkglibdir)/site/ && test $$(ls -A $(pkglibdir)/site/) ; then \
-	    echo "Preserving $(pkglibdir)/site"; \
-	    else rm -rf $(pkglibdir); \
+	@if test -d $(DESTDIR)$(pkglibdir)/site/ \
+	      && test $$(ls -A $(DESTDIR)$(pkglibdir)/site/) ; then \
+	    echo "Preserving $(DESTDIR)$(pkglibdir)/site"; \
+	    else rm -rf $(DESTDIR)$(pkglibdir); \
 	    fi
 
-uninstall: uninstall-binaries tki-uninstall
+
+MANN_INSTALL_DIR = $(mandir)/mann
+uninstall-doc:
+	@for i in $(TNM_DOCS_1); \
+	    do \
+            echo "Removing $(MAN1_INSTALL_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    done
+	@TNM_DOCS_N=$$(cd $(DOC_DIR) && ls *.n); \
+	  for i in $${TNM_DOCS_N}; \
+	    do \
+            echo "Removing $(MANN_INSTALL_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MANN_INSTALL_DIR)/$$i; \
+	    done
+	@for d in $(MAN1_INSTALL_DIR) \
+	      $(MANN_INSTALL_DIR) $(mandir); \
+	    do \
+	    echo "Removing $$d if empty"; \
+	    if test -d $(DESTDIR)$$d \
+	          && test -z "$$(ls -A $(DESTDIR)$$d 2>/dev/null)" ; then \
+	        rmdir $(DESTDIR)$$d; fi ;\
+	    done
+
+
+uninstall: uninstall-binaries uninstall-lib uninstall-doc
 
 # run tkined
 #--------------------------------------------------------------------
 
-tki-check: 
+check: 
 	TCLLIBPATH="$(libdir) $$TCLLIBPATH"; \
 	export TCLLIBPATH; \
 	./tkined
@@ -374,10 +425,15 @@ libraries:
 #========================================================================
 
 doc:
-	@echo "If you have documentation to create, place the commands to"
-	@echo "build the docs in the 'doc:' target.  For example:"
-	@echo "        xml2nroff sample.xml > sample.n"
-	@echo "        xml2html sample.xml > sample.html"
+	@echo Converting manual files
+	@TKI_DOCS_N=$$(cd $(DOC_DIR) && ls *.n.in); \
+	  for i in $${TKI_DOCS_N}; \
+	    do \
+	    sed -e '/man\.macros/r man.macros' -e '/man\.macros/d' \
+	        -e 's/%TKI_VERSION%/$(TKI_VERSION)/' \
+	        $(DOC_DIR)/$$i > $(DOC_DIR)/$${i%%.in}; \
+	    done
+
 
 install: all install-binaries install-libraries
 
@@ -524,7 +580,7 @@ dist: dist-clean
 # variable in configure.ac
 #========================================================================
 
-clean:
+clean: clean-man
 	-test -z "$(BINARIES)" || rm -f $(BINARIES)
 	-rm -f *.$(OBJEXT) core *.core
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)

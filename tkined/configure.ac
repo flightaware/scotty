@@ -92,18 +92,18 @@ TEA_SETUP_COMPILER
 
 # generic tnm
 TEA_ADD_SOURCES([
-	       tki/generic/tkiEditor.c 
-	       tki/generic/tkiObjects.c 
-	       tki/generic/tkiMethods.c 
-	       tki/generic/tkiMisc.c 
-	       tki/generic/tkiFlash.c 
-	       tki/generic/tkiStripchart.c 
-	       tki/generic/tkiBarchart.c 
-	       tki/generic/tkiUtil.c 
-	       tki/generic/tkiInit.c 
+	       generic/tkiEditor.c 
+	       generic/tkiObjects.c 
+	       generic/tkiMethods.c 
+	       generic/tkiMisc.c 
+	       generic/tkiFlash.c 
+	       generic/tkiStripchart.c 
+	       generic/tkiBarchart.c 
+	       generic/tkiUtil.c 
+	       generic/tkiInit.c 
 	       ])
 TEA_ADD_HEADERS([])
-TEA_ADD_INCLUDES([-I. -Itki/generic])
+TEA_ADD_INCLUDES([-I. -Igeneric])
 TEA_ADD_LIBS([])
 TEA_ADD_CFLAGS([])
 TEA_ADD_STUB_SOURCES([])

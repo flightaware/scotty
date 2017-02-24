@@ -231,7 +231,7 @@ tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
 
 # Directory in which to install library files belonging to the extension.
 # TNM_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/tnm$(TNM_VERSION)
-TNM_INSTALL_DIR	= $(DESTDIR)$(pkglibdir)
+TNM_INSTALL_DIR	= $(pkglibdir)
 
 # Directory in which to install the library of tkined scripts.
 TKI_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/lib/Tkined$(TKI_VERSION)
@@ -268,19 +268,19 @@ scotty: scotty.o
 
 install-bin: tclscotty
 	chmod 755 tclscotty
-	$(INSTALL_PROGRAM) tclscotty $(bindir)/scotty$(TNM_VERSION)
+	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
 
 sinstall:
 	@for i in $(bin_BINARIES) ; \
 	    do \
-	        chown root $(bindir)/$$i ; \
-	        chmod 4755 $(bindir)/$$i ; \
+	        chown root $(DESTDIR)$(bindir)/$$i ; \
+	        chmod 4755 $(DESTDIR)$(bindir)/$$i ; \
 	    done
 
 # install tnm accesories
 #--------------------------------------------------------------------
 
-tnm-install: install-mibs install-library install-agents install-site install-bin
+tnm-install: install-mibs install-lib install-agents install-site install-bin
 
 # Some systems have broken mkdir commands. The definition below allows
 # you to use a replacement (e.g. GNU mkdir) during the install process.
@@ -290,8 +290,8 @@ install-mibs:
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
@@ -300,7 +300,7 @@ install-mibs:
 	    	for i in mibs/*$$e ; \
 		    do \
 		    echo "Installing $$i"; \
-		    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/mibs ; \
+		    $(INSTALL_DATA) $$i $(DESTDIR)$(TNM_INSTALL_DIR)/mibs ; \
 		done ; \
 	    done
 
@@ -317,22 +317,22 @@ TNM_LIBRARY =	$(TNM_LIBRARY_DIR)/TnmDialog.tcl \
 		$(TNM_LIBRARY_DIR)/TnmEther.tcl \
 		$(TNM_LIBRARY_DIR)/TnmMonitor.tcl \
 		$(TNM_LIBRARY_DIR)/init.tcl
-install-library:
+install-lib:
 	@for i in $(TNM_INSTALL_DIR)/library ; \
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
 	@for i in library/README $(TNM_LIBRARY) ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/library; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(TNM_INSTALL_DIR)/library; \
 	    done
-	@$(INSTALL_DATA) $(TNM_LIBRARY_DIR)/pkgIndex.tcl $(TNM_INSTALL_DIR)/library
+	@$(INSTALL_DATA) $(TNM_LIBRARY_DIR)/pkgIndex.tcl $(DESTDIR)$(TNM_INSTALL_DIR)/library
 
 TNM_AGENT_DIR	= agents
 TNM_AGENTS =	$(TNM_AGENT_DIR)/snmpd-tnm.tcl \
@@ -343,8 +343,8 @@ install-agents:
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
@@ -352,15 +352,15 @@ install-agents:
 	    do \
 	    echo "Installing $$i"; \
 	    base=`basename $$i`; \
-	    rm -f $(TNM_INSTALL_DIR)/agents/$$base; \
+	    rm -f $(DESTDIR)$(TNM_INSTALL_DIR)/agents/$$base; \
 	    sed -e 's+^exec tclsh.*$$+exec $(TCL_TCLSH) "$$0" "$$@"+'\
-		    $$i > $(TNM_INSTALL_DIR)/agents/$$base; \
-	    chmod 755 $(TNM_INSTALL_DIR)/agents/$$base; \
+		    $$i > $(DESTDIR)$(TNM_INSTALL_DIR)/agents/$$base; \
+	    chmod 755 $(DESTDIR)$(TNM_INSTALL_DIR)/agents/$$base; \
 	    done
 	@for i in $(TNM_AGENTS) $(TNM_AGENT_DIR)/README ; \
 	    do \
 	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i $(TNM_INSTALL_DIR)/agents; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(TNM_INSTALL_DIR)/agents; \
 	    done
 
 install-site:
@@ -368,11 +368,51 @@ install-site:
 	    do \
 	    if [ ! -d $$i ] ; then \
 		echo "Making directory $$i"; \
-		$(MKDIR) -p $$i; \
-		chmod 755 $$i; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
 		else true; \
 		fi; \
 	    done;
+
+TNM_DOCS_1 	= scotty.1
+TNM_DOCS_8 	= nmicmpd.8 \
+		  nmtrapd.8
+
+MAN1_INSTALL_DIR = $(mandir)/man1
+MAN8_INSTALL_DIR = $(mandir)/man8
+DOC_DIR = $(top_builddir)/doc
+# note: mann is installed by standard target
+install-man:
+	@for i in $(mandir) $(MAN1_INSTALL_DIR) $(MAN8_INSTALL_DIR) ; \
+	    do \
+	    if [ ! -d $(DESTDIR)$$i ] ; then \
+		echo "Making directory $$i"; \
+		$(MKDIR) -p $(DESTDIR)$$i; \
+		chmod 755 $(DESTDIR)$$i; \
+		else true; \
+		fi; \
+	    done;
+	@cd $(DOC_DIR); for i in $(TNM_DOCS_1); \
+	    do \
+	    echo "Installing $(DOC_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    sed -e '/man\.macros/r man.macros' -e '/man\.macros/d' \
+		-e 's/%TNM_VERSION%/$(TNM_VERSION)/' \
+		    $$i > $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    chmod 444 $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    done;
+	@cd doc; for i in $(TNM_DOCS_8); \
+	    do \
+	    echo "Installing $(DOC_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MAN8_INSTALL_DIR)/$$i; \
+	    sed -e '/man\.macros/r man.macros' -e '/man\.macros/d' \
+		-e 's/%TNM_VERSION%/$(TNM_VERSION)/' \
+		    $$i > $(DESTDIR)$(MAN8_INSTALL_DIR)/$$i; \
+	    chmod 444 $(DESTDIR)$(MAN8_INSTALL_DIR)/$$i; \
+	    done;
+
+clean-man:
+	rm $(DOC_DIR)/*.n
 
 # Run tests on tnm
 #--------------------------------------------------------------------
@@ -386,10 +426,10 @@ check: scotty
 # Uninstall tnm
 #--------------------------------------------------------------------
 
-tnm-uninstall:
+uninstall-lib:
 	@echo "Removing scotty$(TNM_VERSION) and tnm$(TNM_VERSION)$(SHLIB_SUFFIX)"
-	@rm -f $(bindir)/scotty$(TNM_VERSION)
-	@for i in $(pkglibdir)/* ; \
+	@rm -f $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
+	@for i in $(DESTDIR)$(pkglibdir)/* ; \
 	    do \
 	    if [ "`basename $$i`" != "site" ] ; then \
 		echo "Removing $$i"; \
@@ -397,13 +437,46 @@ tnm-uninstall:
 		else true; \
 	        fi; \
 	    done
-	@if test -d $(pkglibdir)/site/ && test $$(ls -A $(pkglibdir)/site/) ; then \
+	@if test -d $(DESTDIR)$(pkglibdir)/site/ \
+              && test $$(ls -A $(DESTDIR)$(pkglibdir)/site/ 2>/dev/null) ; then \
 	    echo "Preserving $(pkglibdir)/site"; \
 	    else \
-	      rm -rf $(pkglibdir)/site; \
+	      rm -rf $(DESTDIR)$(pkglibdir)/site; \
 	    fi
+	@echo "Removing $(pkglibdir) if empty"
+	@if test -d $(DESTDIR)$(pkglibdir) \
+	      && test -z "$$(ls -A $(DESTDIR)$(pkglibdir) 2>/dev/null)"; \
+	    then rmdir $(DESTDIR)$(pkglibdir); fi
 
-uninstall: uninstall-binaries tnm-uninstall
+MANN_INSTALL_DIR = $(mandir)/mann
+uninstall-doc:
+	@for i in $(TNM_DOCS_1); \
+	    do \
+            echo "Removing $(MAN1_INSTALL_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
+	    done
+	@for i in $(TNM_DOCS_8); \
+	    do \
+            echo "Removing $(MAN8_INSTALL_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MAN8_INSTALL_DIR)/$$i; \
+	    done
+	@TNM_DOCS_N=$$(cd $(DOC_DIR) && ls *.n); \
+	  for i in $${TNM_DOCS_N}; \
+	    do \
+            echo "Removing $(MANN_INSTALL_DIR)/$$i"; \
+	    rm -f $(DESTDIR)$(MANN_INSTALL_DIR)/$$i; \
+	    done
+	@for d in $(MAN1_INSTALL_DIR) $(MAN8_INSTALL_DIR) \
+	      $(MANN_INSTALL_DIR) $(mandir); \
+	    do \
+	    echo "Removing $$d if empty"; \
+	    if test -d $(DESTDIR)$$d \
+	          && test -z "$$(ls -A $(DESTDIR)$$d 2>/dev/null)" ; then \
+	        rmdir $(DESTDIR)$$d; fi ;\
+	    done
+
+
+uninstall: uninstall-binaries uninstall-lib uninstall-doc
 
 #========================================================================
 # The binaries target builds executable programs, Windows .dll's, unix
@@ -423,10 +496,14 @@ libraries:
 #========================================================================
 
 doc:
-	@echo "If you have documentation to create, place the commands to"
-	@echo "build the docs in the 'doc:' target.  For example:"
-	@echo "        xml2nroff sample.xml > sample.n"
-	@echo "        xml2html sample.xml > sample.html"
+	@echo Converting manual files
+	@TNM_DOCS_N=$$(cd $(DOC_DIR) && ls *.n.in); \
+	  for i in $${TNM_DOCS_N}; \
+	    do \
+	    sed -e '/man\.macros/r man.macros' -e '/man\.macros/d' \
+	        -e 's/%TNM_VERSION%/$(TNM_VERSION)/' \
+	        $(DOC_DIR)/$$i > $(DOC_DIR)/$${i%%.in}; \
+	    done
 
 install: all install-binaries install-libraries install-doc tnm-install
 	@echo ""
@@ -579,7 +656,7 @@ dist: dist-clean
 # variable in configure.ac
 #========================================================================
 
-clean:
+clean:	clean-man
 	-test -z "$(BINARIES)" || rm -f $(BINARIES)
 	-rm -f *.$(OBJEXT) core *.core
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
