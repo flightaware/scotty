@@ -497,13 +497,13 @@ libraries:
 
 doc:
 	@echo Converting manual files
-	@TNM_DOCS_N=$$(cd $(DOC_DIR) && ls *.n.in); \
+	@(cd $(DOC_DIR) && TNM_DOCS_N=$$(ls *.n.in); \
 	  for i in $${TNM_DOCS_N}; \
 	    do \
 	    sed -e '/man\.macros/r man.macros' -e '/man\.macros/d' \
 	        -e 's/%TNM_VERSION%/$(TNM_VERSION)/' \
-	        $(DOC_DIR)/$$i > $(DOC_DIR)/$${i%%.in}; \
-	    done
+	        $$i > $${i%%.in}; \
+	    done)
 
 install: all install-binaries install-libraries install-doc tnm-install
 	@echo ""
