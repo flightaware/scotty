@@ -7,7 +7,7 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 '\" 
 .so man.macros
-.TH Tnm::udp n "November 2003" Tnm "Tnm Tcl Extension"
+.TH Tnm::udp n "February 2017" Tnm "Tnm Tcl Extension %TNM_VERSION%"
 .BS
 '\" Note:  do not modify the .SH NAME line immediately below!
 .SH NAME
@@ -27,7 +27,7 @@ The \fBTnm::udp create\fR command creates a new udp endpoint. The
 \fIoptions\fR can be used to configure the new endpoint. See the
 description of supported options below.
 .TP
-.B Tnm::udp find \fR[\fB-tags \fIpatternList\fR]
+.B Tnm::udp find \fR[\fB\-tags \fIpatternList\fR]
 The \fBTnm::udp find\fR command retrieves a list of udp endpoints that
 match the search options. If no options are present, the list of all
 existing udp endpoints will be returned. The \fB-tags\fR option
@@ -49,28 +49,79 @@ See the description of supported options below. A list describing all
 options is returned if the optional arguments are absent.
 .TP
 .B udp# connect \fIhost\fR \fIport\fR
-The \fBudp# connect\fR command connects an unconnected udp endpoint
-it to a \fIport\fR on a remote \fIhost\fR. A connected udp endpoint
-only allows to send messages to a single destination. This may be
-useful to shorten scripts since there is no need to specify the 
-destination address for each \fBudp# send\fR command on a connected 
-udp socket.
+The \fBudp# connect\fR command connects an \fIunconnected\fR udp
+endpoint to a \fIport\fR on a remote \fIhost\fR. A connected udp
+endpoint only allows to send messages to a single destination. This
+may be useful to shorten scripts since there is no need to specify the
+destination address for each \fBudp# send\fR command on a connected
+udp socket.  After issuing an \fBudp# connect\fR command, the endpoint
+is in \fIconnected\fR state.
+.PP
+.RS
+.VS
+When an endpoint is created it is in \fIunconnected\fR state, the
+\fBudp# send\fR command must specify both \fIhost\fR and \fIport\fR
+before the \fImessage\fR, unless the destination address \fBand\fR port have
+been configured.  A connected endpoint can be unconnected, by
+(re-)configuring \fI-address\fR and \fI-port\fR.
+The connection state can be verified with the \fBudp# info\fI command.
+.RE
+.VE
 .TP
 .B udp# destroy
-The \fBudp$ destroy\fR command destroys the udp object and the udp
+The \fBudp# destroy\fR command destroys the udp object and the udp
 endpoint it represents.
+.TP
+.VS
+.B udp# info
+The \fBudp# info\fR command returns information about the current
+state of the udp endpoint in form of list:
+.PP
+.RS
+{connect \fI0|-1\fR address \fIa.b.c.d\fR port \fIn\fR}
+.PP
+If connect is followed by 0 the enpoint is not connected, if it is
+followed by -1 it is connected, see \fBudp# connect\fR for details.
+\fIaddress\fR and \fIport\fR indicate the ip address and port of the
+remote host associated with the endpoint.
+.RE
+.VE
+.TP
+.VS
+.B udp# join group port ?interface?
+The \fBudp# join\fR command allows to join a multicast group.  It is
+only available if Tnm has been compiled with multicast support.
+.VE
 .TP
 .B udp# receive
 The \fBudp# receive\fR command receives a datagram from the udp 
-endpoint. This command blocks until a datagram is ready to be received.
+endpoint. This command blocks until a datagram is ready to be
+received (Note: or it returns with an error).
+.PP
+.RS
+.VS
+The return value of \fBudp# receive\fR is a list in the following
+form:
+.PP
+{address port message}
+.PP
+Where \fIaddress\fR and \fIport\fR indicate the ip address and port of
+the sending host and \fImessage\fR is the received udp datagram.
+.VE
+.RE
 .TP
 .B udp# send \fR [\fIhost port\fR] \fImessage\fR
 The \fBudp# send\fR command sends a datagram containing \fImessage\fR
-to the destination specified by \fIhost\fR and \fIport\fR. The
+to the destination specified by \fIhost\fR and \fIport\fR.  The
 \fIhost\fR and \fIport\fR arguments may not be used if the udp
-endpoint is connected to a remote udp endpoint.  If the udp endpoint
-is not connected, you must use \fIhost\fR and \fIport\fR arguments to
-specify the destination of the datagram.
+endpoint is \fIconnected\fR to a remote udp endpoint.  If the udp
+endpoint is not connected, you must use \fIhost\fR and \fIport\fR
+arguments to specify the destination of the datagram,
+.VS
+unless you have previously configured \fI\-address\fR \fBand\fR
+\fI\-port\fR.  See \fBudp# connect\fR for details on connected and
+unconnected endpoints.
+.VE
 
 .SH UDP OPTIONS
 Every udp endpoint has associated configuration options which control
@@ -109,5 +160,7 @@ map objects and/or management functions.
 scotty(1), Tnm(n), Tcl(n)
 
 .SH AUTHORS
-Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+Juergen\ Schoenwaelder\ <schoenw@ibr.cs.tu-bs.de>
+.br
+Georg\ Lehner\ <jorge@at.anteris.net>
 .br

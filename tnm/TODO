@@ -357,3 +357,9 @@ Functionality
 - Add all currently in use lookups.
 - Add possibility to craft a lookup type.
 - Add IPv6 lookups.
+
+### New Tnm::interfaces
+
+See this example for getting interface information on Linux/BSD/MacOSX
+
+https://gist.github.com/OrangeTide/909204

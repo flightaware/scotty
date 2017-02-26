@@ -26,6 +26,7 @@ typedef struct Udp {
     int nameChanged:1;		/* Flag set if the name changed.       */
     int addrConfigured:1;       /* Flag set if (remote) address configured */
     int portConfigured:1;       /* Flag set if (remote) port configured */
+    struct sockaddr_in remote;  /* Configured remote address/port */
     struct sockaddr_in name;	/* Name of the local socket.           */
     struct sockaddr_in peer;	/* Name of the peer.		       */
     Tcl_Obj *readCmd;		/* Command to execute if readable.     */
@@ -470,6 +471,8 @@ UdpConnect(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
     (void) getpeername(udpPtr->sock, (struct sockaddr *) &udpPtr->peer, &len);
 
     udpPtr->connected = 1;
+    udpPtr->addrConfigured = 0;
+    udpPtr->portConfigured = 0;
     return TCL_OK;
 }
 
@@ -494,60 +497,93 @@ static int
 UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in name;
+    struct sockaddr_in *to;
+    int msgArg;
     char *bytes;
-    int length;
+    int len;
+    char *host, *port;
+    char addr[INET_ADDRSTRLEN];
+    char p[6];
 
     // Not used but valgrind complains
     memset(name.sin_zero, 0, sizeof(name.sin_zero));
 
-    if (udpPtr->connected) {
-	if (objc != 3) {
-	    Tcl_WrongNumArgs(interp, 2, objv, "string");
+    switch (objc) {
+    case 3: /* either we have a configured remote address, or we are connected */
+	if (!udpPtr->connected && !(udpPtr->addrConfigured && udpPtr->portConfigured)) {
+		Tcl_WrongNumArgs(interp, 2, objv,
+				 "host port string."
+				 " UDP endpoint must either be connected, or"
+				 " -address and -port configured.");
+		/* Tcl_AppendResult(interp, "\nconnected:", */
+		/* 		 (udpPtr->connected)?"yes":"no", */
+		/* 		 " addrConfigured: ", */
+		/* 		 (udpPtr->addrConfigured)?"yes":"no", */
+		/* 		 " portConfigured: ", */
+		/* 		 (udpPtr->portConfigured)?"yes":"no", */
+		/* 		 (char *) NULL); */
+		return TCL_ERROR;
+	    }
+	break;
+	
+    case 5: /* we must not be connected */
+	if (udpPtr->connected) {
+	    Tcl_WrongNumArgs(interp, 2, objv,
+			     "string. UDP endpoint is in connected state.");
 	    return TCL_ERROR;
 	}
-    } else {
-	if (objc != 5) {
-	    Tcl_WrongNumArgs(interp, 2, objv, "host port string");
-	    return TCL_ERROR;
-	}
-    }
-
-    if (objc == 5) {
-
-	int len;
-	char *host, *port;
-
 	host = Tcl_GetStringFromObj(objv[2], NULL);
+	port = Tcl_GetStringFromObj(objv[3], NULL);
 	if (TnmSetIPAddress(interp, host, &name) != TCL_OK) {
 	    return TCL_ERROR;
 	}
-
-	port = Tcl_GetStringFromObj(objv[3], NULL);
 	if (TnmSetIPPort(interp, "udp", port, &name) != TCL_OK) {
 	    return TCL_ERROR;
 	}
+	to = &name;
+	msgArg = 4;
+	break;
+	
+    default:
+	Tcl_WrongNumArgs(interp, 2, objv,
+			 "string | host port string.");
+	return TCL_ERROR;
+    }
 
-	bytes = Tcl_GetByteArrayFromObj(objv[4], &length);
-	len = TnmSocketSendTo(udpPtr->sock, bytes, length, 0, 
-			      (struct sockaddr *) &name, sizeof(name));
+    switch (objc) {
+
+    case 3:
+	if (udpPtr->connected) {
+	    bytes = Tcl_GetByteArrayFromObj(objv[2], &len);
+	    if (send(udpPtr->sock, bytes, len, 0) < 0) {
+		Tcl_AppendResult(interp, "udp send failed: ", 
+				 Tcl_PosixError(interp), (char *) NULL);
+		return TCL_ERROR;
+	    } else {
+		return TCL_OK;
+	    }
+	}
+	to = &udpPtr->remote;
+	msgArg = 2;
+	/* prep remote info in case we fail */
+	host = &addr;
+	inet_ntop(AF_INET, &to->sin_addr, host, INET_ADDRSTRLEN);
+	port = p;
+	snprintf(port, sizeof(p), "%d", htons(to->sin_port));
+	/* fall through */
+	
+    case 5:
+
+	bytes = Tcl_GetByteArrayFromObj(objv[msgArg], &len);
+	len = TnmSocketSendTo(udpPtr->sock, bytes, len, 0, 
+			      (struct sockaddr *) to, sizeof(*to));
 	if (len == TNM_SOCKET_ERROR) {
 	    Tcl_AppendResult(interp, "udp send to host \"", host, 
 			     "\" port \"", port, "\" failed: ",
 			     Tcl_PosixError(interp), (char *) NULL);
 	    return TCL_ERROR;
 	}
-
-    } else {
-
-	bytes = Tcl_GetByteArrayFromObj(objv[2], &length);
-	if (send(udpPtr ->sock, bytes, length, 0) < 0) {
-	    Tcl_AppendResult(interp, "udp send failed: ", 
-			     Tcl_PosixError(interp), (char *) NULL);
-	    return TCL_ERROR;
-	}
-
-    }
-    
+    }    
     return TCL_OK;
 }
 
@@ -702,9 +738,9 @@ GetOption(Tcl_Interp *interp, ClientData object, int option)
  
     switch ((enum options) option) {
     case optAddress:
-	return TnmNewIpAddressObj(&udpPtr->peer.sin_addr);
+	return TnmNewIpAddressObj(&udpPtr->remote.sin_addr);
     case optPort:
-	return Tcl_NewIntObj((int) ntohs(udpPtr->peer.sin_port));
+	return Tcl_NewIntObj((int) ntohs(udpPtr->remote.sin_port));
     case optMyAddress:
 	return TnmNewIpAddressObj(&udpPtr->name.sin_addr);
     case optMyPort:
@@ -758,17 +794,23 @@ SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
     switch ((enum options) option) {
     case optAddress:
 	if (TnmSetIPAddress(interp, Tcl_GetStringFromObj(objPtr, NULL),
-			    &udpPtr->peer) != TCL_OK) {
+			    &udpPtr->remote) != TCL_OK) {
 	    return TCL_ERROR;
 	}
 	udpPtr->addrConfigured = 1;
+	if (udpPtr->portConfigured) {
+	    udpPtr->connected = 0;
+	}
 	break;
     case optPort:
 	if (TnmSetIPPort(interp, "udp", Tcl_GetStringFromObj(objPtr, NULL),
-			 &udpPtr->peer) != TCL_OK) {
+			 &udpPtr->remote) != TCL_OK) {
 	    return TCL_ERROR;
 	}
 	udpPtr->portConfigured = 1;
+	if (udpPtr->addrConfigured) {
+	    udpPtr->connected = 0;
+	}
 	break;
     case optMyAddress:
 	if (TnmSetIPAddress(interp, Tcl_GetStringFromObj(objPtr, NULL),
@@ -845,6 +887,56 @@ SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 /*
  *----------------------------------------------------------------------
  *
+ * UdpInfo --
+ *
+ *	This procedure returns info about the state of the UDP socket:
+ *      remote address/port and connected state.
+ *	It basically implements the "udp# info" command.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+UdpInfo(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
+{
+    Tcl_Obj *objPtr;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 2, objv, (char *) NULL);
+	return TCL_ERROR;
+    }
+    
+    /* return {connect 0|1 address a.b.c.d port e}  */
+    
+    objPtr = Tcl_GetObjResult(interp);
+
+    Tcl_ListObjAppendElement(interp, objPtr,
+			     Tcl_NewStringObj("connected",-1));
+    Tcl_ListObjAppendElement(interp, objPtr,
+			     Tcl_NewIntObj(udpPtr->connected));
+
+    Tcl_ListObjAppendElement(interp, objPtr,
+			     Tcl_NewStringObj("address",-1));
+    Tcl_ListObjAppendElement(interp, objPtr,
+			     TnmNewIpAddressObj(&udpPtr->peer.sin_addr));
+
+    Tcl_ListObjAppendElement(interp, objPtr,
+			     Tcl_NewStringObj("port",-1));
+    Tcl_ListObjAppendElement(interp, objPtr,
+			     Tcl_NewIntObj((int) ntohs(udpPtr->peer.sin_port)));
+   
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
  * UdpObjCmd --
  *
  *	This procedure implements the udp object command.
@@ -865,14 +957,14 @@ UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
     Udp *udpPtr = (Udp *) clientData;
 
     enum commands {
-	cmdCget, cmdConfigure, cmdConnect, cmdDestroy, cmdReceive, cmdSend
+	cmdCget, cmdConfigure, cmdConnect, cmdDestroy, cmdInfo, cmdReceive, cmdSend,
 #ifdef HAVE_MULTICAST
 	, cmdJoin
 #endif
     } cmd;
 
     static CONST char *cmdTable[] = {
-	"cget", "configure", "connect", "destroy", "receive", "send",
+	"cget", "configure", "connect", "destroy", "info", "receive", "send",
 #ifdef HAVE_MULTICAST
 	"join",
 #endif
@@ -909,14 +1001,6 @@ UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 		return TCL_ERROR;
 	    }
 	}
-	if (udpPtr->portConfigured && udpPtr->addrConfigured) {
-	    if (connect(udpPtr->sock, (struct sockaddr *) &udpPtr->peer, sizeof(udpPtr->peer)) < 0) {
-		Tcl_AppendResult(interp, "can not connect: ", 
-				 Tcl_PosixError(interp), (char *) NULL);
-		return TCL_ERROR;
-	    }
-	    udpPtr->connected = 1;
-	}
 	break;
 
     case cmdCget:
@@ -935,6 +1019,10 @@ UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 	    break;
 	}
         result = Tcl_DeleteCommandFromToken(interp, udpPtr->token);
+	break;
+
+    case cmdInfo:
+        result = UdpInfo(interp, udpPtr, objc, objv);
 	break;
 
     case cmdReceive:
