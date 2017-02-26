@@ -221,7 +221,7 @@ tkined: $(PKG_LIB_FILE) tkined.in
 # you to use a replacement (e.g. GNU mkdir) during the install process.
 MKDIR =		mkdir
 
-tki-install:	install-lib install-bitmaps install-apps
+tki-install:	install-lib install-bitmaps install-apps install-man
 	echo " Install tkined.defaults $(DESTDIR)$(pkglibdir)"; \
 	$(INSTALL_DATA) tkined.defaults $(DESTDIR)$(pkglibdir); \
 
@@ -327,7 +327,7 @@ install-apps:
 	echo 'cd $(DESTDIR)$(pkglibdir)/apps; auto_mkindex . library.tcl; exit' | \
 		$(TCLSH_PROG)
 
-TNM_DOCS_1	= tkined.1
+TKI_DOCS_1	= tkined.1
 
 MAN1_INSTALL_DIR = $(mandir)/man1
 DOC_DIR = $(top_builddir)/doc
@@ -342,7 +342,7 @@ install-man:
 		else true; \
 		fi; \
 	    done;
-	@cd $(DOC_DIR); for i in $(TNM_DOCS_1); \
+	@cd $(DOC_DIR); for i in $(TKI_DOCS_1); \
 	    do \
 	    echo "Installing $(DOC_DIR)/$$i"; \
 	    rm -f $(DESTDIR)$(MAN1_INSTALL_DIR)/$$i; \
