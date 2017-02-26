@@ -35,7 +35,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedObjects 1.5.0
+package provide TkinedObjects 1.5.1
 
 ##
 ## These procs are of general interest and are called by the

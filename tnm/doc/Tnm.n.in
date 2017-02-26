@@ -1,0 +1,282 @@
+'\"
+'\" Copyright (c) 1994-1996 Technical University of Braunschweig.
+'\" Copyright (c) 1996-1997 University of Twente.
+'\" Copyright (c) 1997-1998 Technical University of Braunschweig.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+.so man.macros
+.TH Tnm n "February 2017" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+Tnm \- Tcl extensions for network management applications.
+.BE
+
+.SH DESCRIPTION
+The Tnm Tcl extensions has been written to simplify the development of
+network management applications. The primary goal of the Tnm extension
+is to provide a string-based API to access network protocols and
+services relevant for network management applications.  Some of the
+Tcl commands provided by the Tnm extension are useful for more general
+networked applications as well.
+.PP
+A string-based API simplifies the development of site specific
+management solutions because higher-level interfaces encapsulate the
+complexity of some of the protocols supported by the Tnm extension.
+The use of the Tcl language allows to integrate this extension with
+the Tk toolkit. Management applications can thus be prototyped in a
+cost-effective and platform independent way.
+
+.SH COMMAND OVERVIEW
+Below is a short overview over the Tcl commands provided by the Tnm
+extension. There is a separate man page for each command listed below
+which describes the command and its options in more detail.
+.TP 14
+.B Tnm::dns
+Query the Domain Name System of the Internet.
+.TP
+.B Tnm::icmp
+Send ICMP messages to hosts on the Internet.
+.TP
+.B Tnm::ined
+Access and manipulate tkined objects.
+.TP
+.B Tnm::job
+Invoke Tcl procedures at regular intervals.
+.TP
+.B Tnm::map
+Create and manipulate network maps.
+.TP
+.B Tnm::mib
+Load and query SNMP MIB definitions.
+.TP
+.B Tnm::netdb
+Access the local network databases.
+.TP
+.B Tnm::ntp
+Retrieve control variables from NTP peers.
+.TP
+.B Tnm::snmp
+Send SNMP messages to devices on the Internet.
+.TP
+.B Tnm::sunrpc
+Call and probe selected Sun RPC services.
+.TP
+.B Tnm::syslog
+Write messages to the system logger.
+.TP
+.B Tnm::udp
+Send and receive UDP datagrams.
+
+.SH USING THE TNM EXTENSION 
+
+The Tnm extension can be used with any Tcl interpreter that supports
+dynamic loadable modules. The recommended way to load the Tnm extension
+is to use the Tcl package command:
+
+.CS
+package require Tnm 3.0
+.CE
+
+Tcl will automatically search for the pkgIndex.tcl file of the Tnm
+extension. This file describes the loading procedure. Once the Tnm
+extension has been loaded into the running process, the Tnm
+initialization procedure starts. This initialization procedure is
+controlled by the init.tcl files in the Tnm library directory.
+
+All of the Tnm commands listed above live in the ::Tnm namespace. You
+can use them directly by calling them with the Tnm:: prefix, or you
+can import them into your current namespace using the Tnm import
+command. A script, which would like to use the Tnm::icmp command
+would for example evaluate
+
+.CS
+namespace import Tnm::icmp
+.CE
+
+in order to get the Tnm::icmp command registered into the local
+namespace. You can import all the exported Tnm commands by using the
+following command:
+
+.CS
+namespace import Tnm::*
+.CE
+
+.SH ADDITIONAL PACKAGES
+
+The Tnm package comes with a set of utility packages that simplify the
+implementation of management applications. Every package comes with
+its own man page which describes the exported Tcl procedures. The
+following packages are provided:
+.TP 14
+.B TnmDialog
+A collection of Tcl/Tk dialog boxes.
+.TP
+.B TnmIetf
+A database of information about IETF RFCs and working groups.
+.TP
+.B TnmInet
+A Tcl package to use and probe TCP/IP services.
+.TP
+.B TnmMap
+A collection of utilities for Tnm maps.
+.TP
+.B TnmMib
+A collection of utilities to retrieve SNMP MIB information.
+.TP
+.B TnmSnmp
+A collection of utilities to talk to SNMP agents.
+.TP
+.B TnmTerm
+A simple terminal frequently used to display results.
+
+.SH ENVIRONMENT VARIABLES
+.TP 18
+TNM_LIBRARY
+Path to the Tnm library directory.
+.TP 18
+TNM_NMICMPD
+Path and name of nmicmpd executable.
+.TP 18
+TNM_NMTRAPD
+Path and name of nmtrapd executable.
+.TP 18
+TNM_RCFILE
+Path and name of the initialization file.
+
+.SH TCL VARIABLES
+The Tnm extension defines the following global Tcl variables:
+.TP 18
+\fBtnm(library)\fR
+The path to the Tnm library directory. This variable is
+initialized to the compiled in default. You can overwrite this
+default by setting the TNM_LIBRARY environment variable.
+.TP 18
+\fBtnm(version)\fR
+The version number of the Tnm extension.
+.TP 18
+\fBtnm(arch)\fR
+A string that identifies the architecture and operating system.
+Note, this will only work with Tcl version 7.5 and higher.
+.TP 18
+\fBtnm(host)\fR
+The name of the local host executing the Tcl process.
+.TP 18
+\fBtnm(domain)\fR
+The DNS domain name of the local host executing the Tcl process.
+.TP 18
+\fBtnm(user)\fR
+The name of the user running the Tcl process.
+.TP 18
+\fBtnm(mibs)\fR
+This variable contains a list of SNMP MIB files that are loaded
+automatically if not preceded by a mib load command.
+.TP 18
+\fBtnm(mibs:core)\fR
+This variable contains a list of core SNMP MIB files that are
+loaded even if the first mib command is a load command.
+.TP 18
+\fBtnm(tclsh)\fR
+This variable contains the path to the tclsh program on this system.
+.TP 18
+\fBtnm(wish)\fR
+This variable contains the path to the wish program on this system
+if the Tnm extension is loaded into a Tcl interpreter with the Tk
+extension.
+.TP 18
+\fBtnm(tmp)\fR
+This variable contains the path to a directory where temporary files
+can be created.
+.TP 18
+\fBtnm(cache)\fR
+This variable contains the path to a directory where the Tnm extension
+caches intermediate files, such as frozen SNMP MIB files. The default
+value of this path is ~/.tnm$tnm(version).
+.TP 18
+\fBtnm(url)\fR
+The URL where additional information about the Tnm extension can be
+found.
+.TP 18
+\fBtnm(start)\fR
+The start time in seconds since epoch when the Tnm extension was loaded.
+
+.SH FILES
+.TP 18
+~/.tnmrc
+Personal initialization file. May be overwritten by the TNM_RCFILE
+environment variable.
+.TP 18
+$tnm(library)/site/init.tcl
+Site initialization file. Use this file to customize Tnm to your
+site specific needs.
+.TP 18
+$tnm(library)/library/init.tcl
+Tnm initialization file. Do not edit.
+.TP 18
+$tnm(library)/mibs
+Archive of SNMP MIB modules.
+
+.SH AVAILABILITY
+
+The Tnm Tcl extension is freely available in source form from several
+locations.  The historical homepage does not exist anymore.
+FlightAware has done significant maintenance of the software.  The
+FlightAware version is available from:
+.PP
+.RS
+https://github.com/flightaware/scotty
+.RE
+.PP
+
+This particular version, motivated by FlightAware, adapts the build
+system to recent versions of operating systems and Tcl/Tk versions and
+is available from:
+.PP
+.RS https://github.com/jorge-leon/scotty
+.RE
+.PP
+See the top level README file for systems where it is known to build.
+
+.SH LICENSE
+This software is copyrighted by Juergen Schoenwaelder, the Technical
+University of Braunschweig, the University of Twente and other parties.
+The following terms apply to all files associated with the software
+unless explicitly disclaimed in individual files.
+.PP
+The authors hereby grant permission to use, copy, modify, distribute,
+and license this software and its documentation for any purpose, provided
+that existing copyright notices are retained in all copies and that this
+notice is included verbatim in any distributions. No written agreement,
+license, or royalty fee is required for any of the authorized uses.
+Modifications to this software may be copyrighted by their authors
+and need not follow the licensing terms described here, provided that
+the new terms are clearly indicated on the first page of each file where
+they apply.
+.PP
+IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY PARTY
+FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION, OR ANY
+DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+.PP
+THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  THIS SOFTWARE
+IS PROVIDED ON AN "AS IS" BASIS, AND THE AUTHORS AND DISTRIBUTORS HAVE
+NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+MODIFICATIONS.
+ 
+.SH SEE ALSO
+scotty(1), Tcl(n)
+
+.SH AUTHORS
+The Tnm extension includes work contributed by students at the
+Technical University of Braunschweig. The names of individuals who
+provided major contributions are listed on the man pages for every
+command. The current version also includes many improvements and bug
+fixes contributed by the user community. Please read the CREDITS file
+contained in the sources for a more complete list of individuals.
+.PP
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>

@@ -18,7 +18,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedEvent 1.5.0
+package provide TkinedEvent 1.5.1
 
 ##
 ## The following set of procedures handle EVENT objects.

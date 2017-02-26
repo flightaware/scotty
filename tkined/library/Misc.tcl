@@ -16,7 +16,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedMisc 1.5.0
+package provide TkinedMisc 1.5.1
 
 ##
 ## This is ined implemented on top of tk. This file contains only

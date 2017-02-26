@@ -142,19 +142,19 @@ proc write {{txt ""} {cmd ""}} {
 ## into a another body if we get an error.
 ##
 
-proc try {body args} {
-    if {$args != "" && [llength $args] != 2} {
-	error "wrong # args: should be \"try body ?msg handler?\""
-    }
-    if {$args == ""} {
-	catch [list uplevel 1 $body]
-    } else {
-	upvar [lindex $args 0] msg
-	if {[catch [list uplevel 1 $body] msg]} { 
-	    catch [list uplevel 1 [lindex $args 1]]
-	}
-    }
-}
+# proc try {body args} {
+#     if {$args != "" && [llength $args] != 2} {
+# 	error "wrong # args: should be \"try body ?msg handler?\""
+#     }
+#     if {$args == ""} {
+# 	catch [list uplevel 1 $body]
+#     } else {
+# 	upvar [lindex $args 0] msg
+# 	if {[catch [list uplevel 1 $body] msg]} { 
+# 	    catch [list uplevel 1 [lindex $args 1]]
+# 	}
+#     }
+# }
 
 ##
 ## Print messages if running in debug mode.

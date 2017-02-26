@@ -78,13 +78,13 @@ typedef long LONG;
  *----------------------------------------------------------------
  */
 
-#define TNM_VERSION "3.0.1"
+#define TNM_VERSION "3.0.2"
 #ifndef TKI_VERSION
-#define TKI_VERSION "1.5.0"
+#define TKI_VERSION "1.5.1"
 #endif
 
 #ifndef TNM_URL
-#define TNM_URL	"http://wwwsnmp.cs.utwente.nl/~schoenw/scotty/"
+#define TNM_URL	"https://github.com/jorge-leon/scotty"
 #endif
 
 #include <tcl.h>

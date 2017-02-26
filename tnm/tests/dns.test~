@@ -1,0 +1,108 @@
+# Commands covered:  dns				-*- tcl -*-
+#
+# This file contains a collection of tests for one or more of the Tnm
+# commands. Sourcing this file into scotty runs the tests and generates
+# output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1994-1996 Technical University of Braunschweig.
+# Copyright (c) 1996-1997 University of Twente.
+# Copyright (c) 1997-1998 Technical University of Braunschweig.
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# @(#) $Id: dns.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+package require Tnm 3.0
+catch {
+    namespace import Tnm::dns
+}
+
+set ::tcltest::testConstraints(dnsNotAvailable) \
+	[expr ! [catch {dns name 134.169.34.15}]]
+
+# save default settings...
+set dnsServer  [dns -server]
+set dnsTimeout [dns -timeout]
+set dnsRetries [dns -retries]
+
+test dns-1.1 {dns no arguments} {
+    list [catch {dns} msg] $msg
+} {1 {wrong # args: should be "dns ?-timeout t? ?-retries r? ?-server hosts? option arg"}}
+test dns-1.2 {dns too many arguments} {
+    list [catch {dns foo bar boo} msg] $msg
+} {1 {wrong # args: should be "dns ?-timeout t? ?-retries r? ?-server hosts? option arg"}}
+test dns-1.3 {dns wrong option} {
+    list [catch {dns foo bar} msg] $msg
+} {1 {bad option "foo": must be address, hinfo, mx, name, or soa}}
+
+test dns-2.1 {dns timeout option} {
+    dns -timeout 11
+    dns -timeout
+} {11}
+test dns-2.2 {dns timeout option} {
+    list [catch {dns -timeout foo} msg] $msg
+} {1 {expected positive integer but got "foo"}}
+test dns-2.3 {dns timeout option} {
+    list [catch {dns -timeout 0} msg] $msg
+} {1 {expected positive integer but got "0"}}
+test dns-2.4 {dns retries option} {
+    dns -retries 7
+    dns -retries
+} {7}
+test dns-2.5 {dns retries option} {
+    list [catch {dns -retries foo} msg] $msg
+} {1 {expected unsigned integer but got "foo"}}
+test dns-2.6 {dns retries option} {
+    list [catch {dns -retries -1} msg] $msg
+} {1 {expected unsigned integer but got "-1"}}
+test dns-2.7 {dns server option} {
+    dns -server localhost
+    dns -server
+} {127.0.0.1}
+test dns-2.8 {dns server option} {
+    list [catch {dns -server "no@name"} msg] $msg
+} {1 {illegal IP address or name "no@name"}}
+test dns-2.9 {dns server option} {
+    list [catch {dns -server "n.o.n.a.m.e"} msg] $msg
+} {1 {unknown IP host name "n.o.n.a.m.e"}}
+test dns-2.10 {dns server option} {
+    dns -server 134.169.34.1 -retries 0 -timeout 1
+    concat [dns -server] [dns -timeout] [dns -retries]
+} {134.169.34.1 1 0}
+
+# restore default settings...
+dns -server $dnsServer -retries $dnsRetries -timeout $dnsTimeout
+
+test dns-3.1 {dns address option} dnsNotAvailable {
+    dns address www.ibr.cs.tu-bs.de
+} {134.169.34.240}
+test dns-3.2 {dns address option} dnsNotAvailable {
+    list [catch {dns address "127.0.0.1"} msg] $msg
+} {0 127.0.0.1}
+test dns-3.3 {dns address option} dnsNotAvailable {
+    list [catch {dns address "1.2.3.4.5"} msg] $msg
+} {1 {non existent domain}}
+test dns-3.4 {dns name option} dnsNotAvailable {
+    dns name 134.169.34.240
+} {www.ibr.cs.tu-bs.de}
+test dns-3.5 {dns name option} {
+    list [catch {dns name "no name"} msg] $msg
+} {1 {illegal IP address "no name"}}
+test dns-3.6 {dns name option} {
+    list [catch {dns name "1.2.3.4.5"} msg] $msg
+} {1 {illegal IP address "1.2.3.4.5"}}
+test dns-3.7 {dns hinfo option} dnsNotAvailable {
+    list [catch {dns hinfo "1.2.3.4"} msg] $msg
+} {1 {cannot reverse lookup "1.2.3.4"}}
+
+# restore default settings...
+dns -server $dnsServer -retries $dnsRetries -timeout $dnsTimeout
+
+::tcltest::cleanupTests
+return

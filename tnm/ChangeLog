@@ -1,0 +1,30 @@
+$Id: ChangeLog,v 1.3 2008/02/13 16:44:05 karl Exp $
+
+2/9/12 karl
+    * fix the call to syslog to specify a format of "%s" and the text
+      as an argument to that, rather than the text argument being
+      interpreted as the format, which could cause unwanted %-substitutions
+
+2/13/08 karl
+    * Fix numerous compiler warnings about discarding qualifiers on pointers.
+
+2/5/08 karl
+    * Add README for configuring with FreeBSD.
+
+2/4/08 karl
+    * Fix formatting on the UDP manpage.
+
+7/16/07 karl
+    * unix/configure.in: Modernize the check for socklen_t to work with
+      with versions of autoconf created after 1999.  As an added feature,
+      the check is more likely to actually work!
+
+
+12/7/06 karl
+    * tnm/snmp/tnmSnmpRecv.c: Take out the thing where it copies over
+      the from address with the address read from within the trap
+      packet received.  This quotes NAT addresses through firewalls
+      that otherwise would have been translated, that is, un-messed-with,
+      we'd be using the IP we received the packet from and all would
+      be well.
+

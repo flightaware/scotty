@@ -14,9 +14,13 @@
 # @(#) $Id: sunrpc.test,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
 
 if {[lsearch [namespace children] ::tcltest] == -1} {
-    package require tcltest
+    package require tcltest 2
     namespace import ::tcltest::*
 }
+
+testConstraint runWithEvilCatchCrash 0
+
+configure -verbose {body error skip}
 
 package require Tnm 3.0
 catch {
@@ -26,8 +30,8 @@ catch {
 #set target localhost
 set target $tnm(host)
 
-set ::tcltest::testConstraints(rpcServerNotAvailable) \
-	[expr ! [catch {sunrpc info $target}]]
+testConstraint rpcServerAvailable \
+    [expr {! [catch {sunrpc info $target}]}]
 
 proc running {target service} {
     foreach {number version proto port name} [join [sunrpc info $target]] {
@@ -38,24 +42,28 @@ proc running {target service} {
     return 0
 }
 
-if {$::tcltest::testConstraints(rpcServerNotAvailable)} {
-    set ::tcltest::testConstraints(etherdNotAvailable) \
-	    [expr ! [running $target "etherd"]]
-    set ::tcltest::testConstraints(mountdNotAvailable) \
-	    [expr ! [running $target "mountd"]]
-    set ::tcltest::testConstraints(rstatdNotAvailable) \
-	    [expr ! [running $target "rstatd"]]
+if {[testConstraint rpcServerAvailable]} {
+    testConstraint etherdAvailable \
+	[running $target "etherd"]
+    testConstraint mountdAvailable \
+	[running $target "mountd"]
+    testConstraint rstatdAvailable \
+	[running $target "rstatd"]
 }
-
 
 test sunrpc-1.1 {sunrpc command} {
     list [catch {sunrpc} msg] $msg
 } {1 {wrong # args: should be "sunrpc option host ?args?"}}
-test sunrpc-1.2 {sunrpc command} {
-    list [catch {sunrpc foo} msg] $msg
-} {1 {bad option "foo": must be ether, exports, info, mount, pcnfs, probe, or stat}}
+test sunrpc-1.2 {sunrpc command} -constraints {
+} -body {
+    catch {bad workaround}
+    sunrpc foo
+} -returnCodes 1 \
+    -result {bad option "foo": must be ether, exports, info, mount, pcnfs, probe, or stat}
+#  -errorOutput \
+    {bad option "foo": must be ether, exports, info, mount, pcnfs, probe, or stat}
 
-test sunrpc-2.1 {sunrpc ether commands} {
+test sunrpc-2.1 {sunrpc ether commands} runWithEvilCatchCrash {
     list [catch {sunrpc ether} msg] $msg
 } {1 {wrong # args: should be "sunrpc ether host option"}}
 test sunrpc-2.2 {sunrpc ether commands} {
@@ -73,16 +81,17 @@ test sunrpc-2.4 {sunrpc ether commands} {
 test sunrpc-2.5 {sunrpc ether command} {
     list [catch {sunrpc ether !@#$% stat} msg] $msg
 } {1 {illegal IP address or name "!@#$%"}}
-test sunrpc-2.6 {sunrpc ether command} etherdNotAvailable {
+test sunrpc-2.6 {sunrpc ether command} \
+    -constraints etherdAvailable -body {
     global target
     set stats {}
     sunrpc ether $target open
     set stats [sunrpc ether $target stat]
     sunrpc ether $target close
     expr [llength $stats] % 3
-} {0}
+} -result {0}
 
-test sunrpc-3.1 {sunrpc exports command} {
+test sunrpc-3.1 {sunrpc exports command} runWithEvilCatchCrash {
     list [catch {sunrpc exports} msg] $msg
 } {1 {wrong # args: should be "sunrpc exports host"}}
 test sunrpc-3.2 {sunrpc exports command} {
@@ -92,13 +101,13 @@ test sunrpc-3.2 {sunrpc exports command} {
 test sunrpc-3.3 {sunrpc exports command} {
     list [catch {sunrpc exports !@#$%} msg] $msg
 } {1 {illegal IP address or name "!@#$%"}}
-test sunrpc-3.4 {sunrpc exports command} mountdNotAvailable {
+test sunrpc-3.4 {sunrpc exports command} mountdAvailable {
     global target
     set exports [sunrpc exports $target]
     expr [llength $exports] % 2
 } {0}
 
-test sunrpc-4.1 {sunrpc info command} {
+test sunrpc-4.1 {sunrpc info command} runWithEvilCatchCrash {
     list [catch {sunrpc info} msg] $msg
 } {1 {wrong # args: should be "sunrpc info host"}}
 test sunrpc-4.2 {sunrpc info command} {
@@ -108,15 +117,18 @@ test sunrpc-4.2 {sunrpc info command} {
 test sunrpc-4.3 {sunrpc info command} {
     list [catch {sunrpc info !@#$%} msg] $msg
 } {1 {illegal IP address or name "!@#$%"}}
-test sunrpc-4.4 {sunrpc info command} rpcServerNotAvailable {
+test sunrpc-4.4 {sunrpc info command} rpcServerAvailable {
     global target
     catch {sunrpc info $target}
 } {0}
-test sunrpc-4.5 {sunrpc info command} rpcServerNotAvailable {
+test sunrpc-4.5 {sunrpc info command} rpcServerAvailable {
     global target
     expr {[llength [sunrpc info $target]] > 0}
 } {1}
-test sunrpc-4.6 {sunrpc info command} rpcServerNotAvailable {
+# account for version 2 and version 4 of portmapper
+test sunrpc-4.6 {sunrpc info command} -constraints {
+    rpcServerAvailable
+} -body {
     global target
     set number {}
     foreach {number version proto port name} [join [sunrpc info $target]] {
@@ -125,9 +137,9 @@ test sunrpc-4.6 {sunrpc info command} rpcServerNotAvailable {
 	}
     }
     list $number $version $name
-} {100000 2 portmapper}
+} -match regexp -result {100000 [24] portmapper}
 
-test sunrpc-5.1 {sunrpc mount command} {
+test sunrpc-5.1 {sunrpc mount command} runWithEvilCatchCrash {
     list [catch {sunrpc mount} msg] $msg
 } {1 {wrong # args: should be "sunrpc mount host"}}
 test sunrpc-5.2 {sunrpc mount command} {
@@ -137,13 +149,13 @@ test sunrpc-5.2 {sunrpc mount command} {
 test sunrpc-5.3 {sunrpc mount command} {
     list [catch {sunrpc mount !@#$%} msg] $msg
 } {1 {illegal IP address or name "!@#$%"}}
-test sunrpc-5.4 {sunrpc mount command} mountdNotAvailable {
+test sunrpc-5.4 {sunrpc mount command} mountdAvailable {
     global target
     set mounts [sunrpc mount $target]
     expr [llength $mounts] % 2
 } {0}
 
-test sunrpc-6.1 {sunrpc pcnfs command} {
+test sunrpc-6.1 {sunrpc pcnfs command} runWithEvilCatchCrash {
     list [catch {sunrpc pcnfs} msg] $msg
 } {1 {wrong # args: should be "sunrpc pcnfs host option"}}
 test sunrpc-6.2 {sunrpc pcnfs command} {
@@ -178,7 +190,7 @@ test sunrpc-6.9 {sunrpc pcnfs command} {
     list [catch {sunrpc pcnfs !@#$% list} msg] $msg
 } {1 {illegal IP address or name "!@#$%"}}
 
-test sunrpc-7.1 {sunrpc probe command} {
+test sunrpc-7.1 {sunrpc probe command} runWithEvilCatchCrash {
     list [catch {sunrpc probe} msg] $msg
 } {1 {wrong # args: should be "sunrpc probe host program version protocol"}}
 test sunrpc-7.2 {sunrpc probe command} {
@@ -205,7 +217,7 @@ test sunrpc-7.8 {sunrpc probe command} {
     global target
     list [catch {sunrpc probe $target 100000 2 foo} msg] $msg
 } {1 {unknown protocol "foo": should be tcp, or udp}}
-test sunrpc-7.9 {sunrpc probe command (udp)} rpcServerNotAvailable {
+test sunrpc-7.9 {sunrpc probe command (udp)} rpcServerAvailable {
     global target
     list [catch {
 	foreach {number version proto port name} [join [sunrpc info $target]] {
@@ -215,7 +227,7 @@ test sunrpc-7.9 {sunrpc probe command (udp)} rpcServerNotAvailable {
 	}
     } msg] $msg
 } {0 {}}
-test sunrpc-7.10 {sunrpc probe command (tcp)} rpcServerNotAvailable {
+test sunrpc-7.10 {sunrpc probe command (tcp)} rpcServerAvailable {
     global target
     list [catch {
 	foreach {number version proto port name} [join [sunrpc info $target]] {
@@ -226,7 +238,7 @@ test sunrpc-7.10 {sunrpc probe command (tcp)} rpcServerNotAvailable {
     } msg] $msg
 } {0 {}}
 
-test sunrpc-8.1 {sunrpc stat} {
+test sunrpc-8.1 {sunrpc stat} runWithEvilCatchCrash {
     list [catch {sunrpc stat} msg] $msg
 } {1 {wrong # args: should be "sunrpc stat host"}}
 test sunrpc-8.2 {sunrpc stat command} {
@@ -236,7 +248,7 @@ test sunrpc-8.2 {sunrpc stat command} {
 test sunrpc-8.3 {sunrpc stat command} {
     list [catch {sunrpc stat !@#$%} msg] $msg
 } {1 {illegal IP address or name "!@#$%"}}
-test sunrpc-8.4 {sunrpc stat command} rstatdNotAvailable {
+test sunrpc-8.4 {sunrpc stat command} rstatdAvailable {
     global target
     set stats [sunrpc stat $target]
     expr [llength $stats] % 3

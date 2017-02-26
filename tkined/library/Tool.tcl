@@ -21,7 +21,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedTool 1.5.0
+package provide TkinedTool 1.5.1
 
 ## Some virtual events that make our life a bit more easier - especially
 ## for mouse impaired people. :-)

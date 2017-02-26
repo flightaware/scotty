@@ -138,8 +138,14 @@ InitVars(Tcl_Interp *interp)
     p = strchr(tmp, '.');
     if (p) *p = '\0';
     Tcl_SetVar2(interp, "tnm", "host", tmp, TCL_GLOBAL_ONLY);
-    ckfree(tmp);
 
+    /*
+     * Set the default domain name, if any
+     */
+    Tcl_SetVar2(interp, "tnm", "domain", ++p, TCL_GLOBAL_ONLY);
+
+    ckfree(tmp);
+    
     /*
      * Get the user name. We try a sequence of different environment
      * variables in the hope to find something which works on all

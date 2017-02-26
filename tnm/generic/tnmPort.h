@@ -16,9 +16,9 @@
 #define _TNMPORT
 
 #if defined(__WIN32__) || defined(_WIN32)
-#   include "../../win/tnmWinPort.h"
+#   include "../win/tnmWinPort.h"
 #else
-#   include "../../unix/tnmUnixPort.h"
+#   include "../unix/tnmUnixPort.h"
 #endif
 
 #endif /* _TNMPORT */

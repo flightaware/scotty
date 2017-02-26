@@ -1,0 +1,27 @@
+# -*- mode: markdown -*-
+
+Bugs
+====
+
+* Generic
+    * Build
+         * Should we revamp directory tree of installed files to
+		 reflect FHS or so (`share` instead of `library` ...)?
+         * We could clean things up, and put in order, as we now
+         build everything ok.
+
+Tests
+=====
+
+- Debian
+    - tkined starts up, but the Tools menu is not shown.  This seems
+      due to the fact, that any `ined` command is hanging in the
+      initialization scripts, until the main editor window is closed.
+	  Event loop?
+
+Wishlist
+========
+
+- Port to:
+  - OpenIndiana (Solaris)
+  - Windows
