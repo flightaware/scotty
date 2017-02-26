@@ -106,6 +106,51 @@ Note: upd-7.2 uses -myport 1235, then -myport 1236 and connects the
 - udp-7.2 is "flaky" - sometimes it works, sometimes it fails like the above.
   For now we disable it too.
 
+### Test
+
+### Tnm::udp
+
+Tests:
+- udp-11.2.1 udp configure/send: send to configured, w/o connect
+- udp-11.2.2 udp configure/send: send to connected
+- udp-11.2.3 udp configure/send: send to configured, connected
+
+Fail with: POSIX EADDRINUSE {address already in use}.
+
+Note: these use the same udp endpoint to send and receive.  Might just
+rewrite the tests.
+
+
+### Build
+
+Manuals are install in /Library/Tcl/share/man, where they are not
+found by man(1).
+
+
+FreeBSD 11
+----------
+
+### Tnm::udp
+
+Tests:
+- udp-11.2.2 udp configure/send: send to connected
+- udp-11.2.3 udp configure/send: send to configured, connected
+
+Fail with: POSIX EADDRINUSE {address already in use}.
+
+Note: these use the same udp endpoint to send and receive.  Might just
+rewrite the tests.
+
+### Tests
+
+If tests are run with: `scotty3.0.2 all.tcl` we get a segfault on exit.
+
+### Build
+
+Man files are install in a place, where they cannot be seen
+(`/usr/local/share/man/mann`).
+
+
 Generic
 -------
 
