@@ -266,8 +266,12 @@ scotty: scotty.o
 	$(CC) -o $@ scotty.o $(CFLAGS) $(CFLAGS_DEFAULT) $(CFLAGS_WARNING) \
 	    $(TCL_LIB_SPEC) $(TCL_STUB_LIB_SPEC) $(TRHEADS_LIBS) $(LD_SEARCH_FLAGS)
 
-install-bin: tclscotty
-	chmod 755 tclscotty
+# tclscotty is a pure Tcl implementation of the scotty program.  It
+# does however not feature a fileevent prioritzed eventloop.
+#install-bin: tclscotty
+#	chmod 755 tclscotty
+#	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
+install-bin: scotty
 	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
 
 sinstall:
@@ -417,8 +421,10 @@ clean-man:
 # Run tests on tnm
 #--------------------------------------------------------------------
 
+# @TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
+
 check: scotty
-	@TCLLIBPATH="$(TNM_INSTALL_DIR) $$TCLLIBPATH"; \
+	TCLLIBPATH="."; \
 	export TCLLIBPATH; \
 	pwd=`pwd`; cd tests; $$pwd/scotty all.tcl
 
