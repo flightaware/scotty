@@ -272,7 +272,7 @@ scotty: scotty.o
 #	chmod 755 tclscotty
 #	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
 install-bin: scotty
-	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
+	$(INSTALL_PROGRAM) scotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
 
 sinstall:
 	@for i in $(bin_BINARIES) ; \
