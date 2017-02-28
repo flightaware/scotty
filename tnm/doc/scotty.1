@@ -17,14 +17,17 @@ scotty \- A Tcl shell including the Tnm extensions.
 
 .SH DESCRIPTION
 
+.VS
 \fBScotty\fR is a shell-like application that reads Tcl commands from
 its standard input or from a file and evaluates them similar to
 tclsh(1). The main difference between tclsh(1) and \fBscotty\fR is
 that scotty loads the Tnm(n) extension at startup time and that scotty
 runs in an event-driven mode while tclsh(1) needs a special command to
 enable the event loop. \fBScotty\fR evaluates the commands stored in
-the files \fB.tnmrc\fR and \fB.tclshrc\fR at startup if these files
-exist in the home directory of the user.
+the files \fB.tnmrc\fR or \fB.scottyrc\fR if the former not exists and
+finally \fB.tclshrc\fR at startup, looking them up in the home
+directory of the user.
+.VE
 
 .SH "SCRIPT FILES"
 .PP
