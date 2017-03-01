@@ -343,9 +343,10 @@ static int
 UdpCreate(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 {
     static unsigned nextId = 0;
-    int code, len;
+    int code;
     Udp *udpPtr, *p;
     char *cmdName;
+    socklen_t len;
     UdpControl *control = (UdpControl *) 
 	Tcl_GetAssocData(interp, tnmUdpControl, NULL);
 
@@ -443,7 +444,7 @@ UdpConnect(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in name;
     char *host, *port;
-    int len;
+    socklen_t len;
 
     if (objc != 4) {
 	Tcl_WrongNumArgs(interp, 2, objv, "host port");
@@ -498,9 +499,8 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     struct sockaddr_in name;
     struct sockaddr_in *to;
-    int msgArg;
+    int msgArg, len;
     char *bytes;
-    int len;
     char *host, *port;
     char addr[INET_ADDRSTRLEN];
     char p[6];
@@ -566,7 +566,7 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 	to = &udpPtr->remote;
 	msgArg = 2;
 	/* prep remote info in case we fail */
-	host = &addr;
+	host = addr;
 	inet_ntop(AF_INET, &to->sin_addr, host, INET_ADDRSTRLEN);
 	port = p;
 	snprintf(port, sizeof(p), "%d", htons(to->sin_port));
@@ -608,7 +608,7 @@ static int
 UdpReceive(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
     char msg[65535];
-    int clen, len;
+    socklen_t clen, len;
     struct sockaddr_in client;
     Tcl_Obj *objPtr;
 

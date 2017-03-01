@@ -44,6 +44,10 @@ uninstall:
 	(cd tnm && make uninstall)
 	(cd tkined && make uninstall)
 
+clean:
+	(cd tnm && make clean)
+	(cd tkined && make clean)
+
 distclean:
 	(cd tnm && make distclean)
 	(cd tkined && make distclean)

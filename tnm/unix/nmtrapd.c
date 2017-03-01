@@ -203,7 +203,8 @@ main(int argc, char *argv[])
     struct servent *se;
     struct sockaddr_in taddr, laddr;
     struct sockaddr_in saddr, daddr;
-    int trap_s, serv_s, dlen, llen, rc, i;
+    int trap_s, serv_s, rc, i;
+    socklen_t dlen, llen;
     fd_set fds;
     static int cl_addr[FD_SETSIZE];
     char buf[8192];

@@ -703,7 +703,7 @@ ReceivePacket()
     struct udphdr *udph;		/* for ttl's */
     struct timeval tp1, tp2;
     struct sockaddr_in sfrom;
-    int fromlen = sizeof(sfrom);
+    socklen_t fromlen = sizeof(sfrom);
     int hlen = 0, cc, ttl_is_done = 0;
     int type = -1;
     jobElem *job = 0;
@@ -1188,7 +1188,7 @@ InitSockets()
 #endif
 #ifdef USE_DLPI
     struct sockaddr_in tmp_addr;
-    int ta_len = sizeof(tmp_addr);
+    socklen_t ta_len = sizeof(tmp_addr);
 #endif
     
     /* 

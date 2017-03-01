@@ -273,7 +273,8 @@ NtpFetch(Tcl_Interp *interp, struct sockaddr_in *daddr, int op, int retries, int
 {
     struct ntp_control qpkt, pkt;
     struct sockaddr_in saddr;
-    int i, rc, slen = sizeof(saddr);
+    int i, rc;
+    socklen_t slen = sizeof(saddr);
     int timeout = (timeo * 1000) / (retries + 1);
 
     static unsigned short seq = 1;			/* sequence number */
