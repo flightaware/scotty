@@ -138,12 +138,6 @@ InitVars(Tcl_Interp *interp)
     p = strchr(tmp, '.');
     if (p) *p = '\0';
     Tcl_SetVar2(interp, "tnm", "host", tmp, TCL_GLOBAL_ONLY);
-
-    /*
-     * Set the default domain name, if any
-     */
-    Tcl_SetVar2(interp, "tnm", "domain", ++p, TCL_GLOBAL_ONLY);
-
     ckfree(tmp);
     
     /*

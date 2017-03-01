@@ -26,7 +26,7 @@ static char*
 FindPath		(Tcl_Interp *interp, char *path,
 				     char *name, char* version);
 static void
-FindProc		(Tcl_Interp *interp, char *name, char *version);
+FindProc		(Tcl_Interp *interp, char *name, const char *version);
 EXTERN int
 Tnm_Init		(Tcl_Interp *interp);
 
@@ -54,9 +54,9 @@ Tnm_SafeInit		(Tcl_Interp *interp);
 static char*
 FindPath(Tcl_Interp *interp, char *path, char *name, char *version)
 {
-    char *pkgPath;
+    const char *pkgPath;
     int code, largc, i;
-    char **largv;
+    const char **largv;
     Tcl_DString ds;
     
     if (access(path, R_OK | X_OK) == 0) {
@@ -115,7 +115,7 @@ FindPath(Tcl_Interp *interp, char *path, char *name, char *version)
  */
 
 static void
-FindProc(Tcl_Interp *interp, char *name, char *version)
+FindProc(Tcl_Interp *interp, char *name, const char *version)
 {
     char *token, *path;
     Tcl_DString ds;
@@ -172,7 +172,7 @@ FindProc(Tcl_Interp *interp, char *name, char *version)
 void
 TnmInitPath(Tcl_Interp *interp)
 {
-    char *path, *version;
+    const char *path, *version;
 
     path = getenv("TNM_LIBRARY");
     if (! path) {
@@ -212,7 +212,8 @@ TnmInitPath(Tcl_Interp *interp)
  *
  * TnmInitDns --
  *
- *	This procedure is called to initialize the DNS resolver.
+ *	This procedure is called to initialize the DNS resolver and to
+ *	save the domain name in the global tnm(domain) Tcl variable.
  *
  * Results:
  *	None.
@@ -226,7 +227,25 @@ TnmInitPath(Tcl_Interp *interp)
 void
 TnmInitDns(Tcl_Interp *interp)
 {
-    res_init();
+    char domain[MAXDNAME], *p;
+
+    res_state res = malloc(sizeof(struct __res_state));
+
+    memset(res, 0, sizeof(struct __res_state));
+    res_ninit(res);
+    res->options |= RES_RECURSE | RES_DNSRCH | RES_DEFNAMES | RES_AAONLY;
+
+    /*
+     * Remove any trailing dots or white spaces and save the
+     * result in tnm(domain).
+     */
+
+    strcpy(domain, res->defdname);
+    p = domain + strlen(domain) - 1;
+    while ((*p == '.' || isspace(*p)) && p > domain) {
+	*p-- = '\0';
+    }
+    Tcl_SetVar2(interp, "tnm", "domain", domain, TCL_GLOBAL_ONLY);
 }
 
 /*
