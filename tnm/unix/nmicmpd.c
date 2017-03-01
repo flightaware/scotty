@@ -1181,7 +1181,7 @@ InitSockets()
     struct protoent *proto;
     int icmp_proto = 1;			/* Capt'n Default */
     struct sockaddr_in maddr;
-#ifndef linux
+#if !defined(nec_ews) && !defined(linux) && !defined(USE_DLPI)
 #ifdef IP_HDRINCL
     int on = 1;				/* karl */
 #endif
@@ -1511,10 +1511,8 @@ LookupNextRetryTimeout(struct timeval *tv)
     jobElem *job;
     struct timeval now;
     int min_diff = -1;
-    int window;
 
     gettime(&now, return);
-    window = GetWindow(0);
 
     for (job = job_list; job; job = job->next) {
         int tdiff;
