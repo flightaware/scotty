@@ -542,7 +542,7 @@ TnmSnmpCreateNode(Tcl_Interp *interp, char *label, char *tclVarName, char *defva
 
     AddNode(soid, offset, syntax, access, varName);
     Tcl_TraceVar(interp, varName, TCL_TRACE_UNSETS | TCL_GLOBAL_ONLY, 
-		 DeleteNodeProc, (ClientData) NULL);
+		 (Tcl_VarTraceProc *) DeleteNodeProc, (ClientData) NULL);
     Tcl_ResetResult(interp);
     return TCL_OK;
 

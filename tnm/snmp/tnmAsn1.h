@@ -119,7 +119,7 @@ EXTERN char*
 TnmOidToStr		(Tnm_Oid *oid, int len);
 
 EXTERN Tnm_Oid*
-TnmStrToOid		(char *str, int *len);
+TnmStrToOid		(const char *str, int *len);
 
 /*
  *----------------------------------------------------------------

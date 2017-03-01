@@ -183,7 +183,7 @@ TnmNewUnsigned64Obj(TnmUnsigned64 u)
 void
 TnmSetUnsigned64Obj(Tcl_Obj *objPtr, TnmUnsigned64 u)
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     TnmUnsigned64 *uPtr;
 
     if (Tcl_IsShared(objPtr)) {
@@ -345,7 +345,7 @@ SetUnsigned64FromAny(interp, objPtr)
     Tcl_Interp *interp;		/* Used for error reporting if not NULL. */
     Tcl_Obj *objPtr;		/* The object to convert. */
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string, *p;
     TnmUnsigned64 u;
 
@@ -451,7 +451,7 @@ TnmNewUnsigned32Obj(TnmUnsigned32 u)
 void
 TnmSetUnsigned32Obj(Tcl_Obj *objPtr, TnmUnsigned32 u)
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
 
     if (Tcl_IsShared(objPtr)) {
 	Tcl_Panic("TnmSetUnsigned32Obj called with shared object");
@@ -579,7 +579,7 @@ SetUnsigned32FromAny(interp, objPtr)
     Tcl_Interp *interp;		/* Used for error reporting if not NULL. */
     Tcl_Obj *objPtr;		/* The object to convert. */
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string, *end, *p;
     int length;
     TnmUnsigned32 u;
@@ -703,7 +703,7 @@ TnmNewOctetStringObj(char *bytes, int length)
 void
 TnmSetOctetStringObj(Tcl_Obj *objPtr, char *bytes, int length)
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     size_t size = length;
 
     if (Tcl_IsShared(objPtr)) {
@@ -871,7 +871,7 @@ SetOctetStringFromAny(interp, objPtr)
     Tcl_Interp *interp;		/* Used for error reporting if not NULL. */
     Tcl_Obj *objPtr;		/* The object to convert. */
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string, *bytes;
     int length;
 
@@ -967,7 +967,7 @@ TnmNewIpAddressObj(struct in_addr *ipaddr)
 void
 TnmSetIpAddressObj(Tcl_Obj *objPtr, struct in_addr *ipaddr)
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
 
     if (Tcl_IsShared(objPtr)) {
 	Tcl_Panic("TnmSetIpAddressObj called with shared object");
@@ -1096,7 +1096,7 @@ SetIpAddressFromAny(interp, objPtr)
     Tcl_Interp *interp;		/* Used for error reporting if not NULL. */
     Tcl_Obj *objPtr;		/* The object to convert. */
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string;
     int length;
     struct sockaddr_in inaddr;

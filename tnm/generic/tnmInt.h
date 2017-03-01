@@ -285,7 +285,7 @@ EXTERN int
 TnmGetIntRangeFromObj	(Tcl_Interp *interp, Tcl_Obj *objPtr,
 				     int min, int max, int *intPtr);
 EXTERN int
-TnmSetIPAddress		(Tcl_Interp *interp, char *name,
+TnmSetIPAddress		(Tcl_Interp *interp, const char *name,
 				     struct sockaddr_in *addr);
 EXTERN char*
 TnmGetIPName		(Tcl_Interp *interp,
@@ -432,7 +432,7 @@ EXTERN void
 TnmHexEnc	(char *s, int n, char *d);
 
 EXTERN int
-TnmHexDec	(char *s, char *d, int *n);
+TnmHexDec	(const char *s, char *d, int *n);
 
 /*
  *----------------------------------------------------------------
@@ -465,10 +465,10 @@ EXTERN int
 TnmSocketBind		(int s, struct sockaddr *name,
 				     socklen_t namelen);
 EXTERN int
-TnmSocketSendTo		(int s, char *buf, size_t len, int flags,
+TnmSocketSendTo		(int s, unsigned char *buf, size_t len, int flags,
 				     struct sockaddr *to, socklen_t tolen);
 EXTERN int
-TnmSocketRecvFrom	(int s, char *buf, size_t len, int flags,
+TnmSocketRecvFrom	(int s, unsigned char *buf, size_t len, int flags,
 				     struct sockaddr *from, socklen_t *fromlen);
 EXTERN int
 TnmSocketClose		(int s);

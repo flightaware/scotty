@@ -146,7 +146,7 @@ TnmOidToStr(Tnm_Oid *oid, int oidLen)
  */
 
 Tnm_Oid*
-TnmStrToOid(char *str, int *len)
+TnmStrToOid(const char *str, int *len)
 {
     static Tnm_Oid oid[TNM_OID_MAX_SIZE];
 
@@ -1487,7 +1487,7 @@ TnmBerDecAny(TnmBer *ber, char **octets, int *octets_len)
     if (len > 65535 || ber->current + len > ber->end) {
 	return NULL;
     }
-    *octets = start;
+    *octets = (char *)start;
     *octets_len = len + (ber->current - start);
     ber->current += len;
     

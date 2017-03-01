@@ -500,7 +500,7 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
     struct sockaddr_in name;
     struct sockaddr_in *to;
     int msgArg, len;
-    char *bytes;
+    unsigned char *bytes;
     char *host, *port;
     char addr[INET_ADDRSTRLEN];
     char p[6];
@@ -607,7 +607,7 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 static int
 UdpReceive(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
 {
-    char msg[65535];
+    unsigned char msg[65535];
     socklen_t clen, len;
     struct sockaddr_in client;
     Tcl_Obj *objPtr;

@@ -451,7 +451,7 @@ TnmSnmpAgentInit(Tcl_Interp *interp, TnmSnmp *session)
     
     Tcl_SetObjLength(session->engineID, 12);
     {
-	u_char *p = Tcl_GetStringFromObj(session->engineID, NULL);
+        u_char *p = (unsigned char *) Tcl_GetStringFromObj(session->engineID, NULL);
 	int id = 1575;
 	*p++ = (id >> 24) & 0xff;
 	*p++ = (id >> 16) & 0xff;
@@ -516,7 +516,7 @@ TnmSnmpAgentInit(Tcl_Interp *interp, TnmSnmp *session)
 		       "tnm_system(sysUpTime)", "0");
     Tcl_TraceVar2(interp, "tnm_system", "sysUpTime", 
 		  TCL_TRACE_READS | TCL_GLOBAL_ONLY, 
-		  TraceSysUpTime, (ClientData) NULL);
+		  (Tcl_VarTraceProc *) TraceSysUpTime, (ClientData) NULL);
     TnmSnmpCreateNode(interp, "sysContact.0", 
 		       "tnm_system(sysContact)", "");
     TnmSnmpCreateNode(interp, "sysName.0", 
@@ -533,7 +533,7 @@ TnmSnmpAgentInit(Tcl_Interp *interp, TnmSnmp *session)
 	TnmSnmpCreateNode(interp, p->name, tclvar, "0");
 	Tcl_TraceVar2(interp, "tnm_snmp", p->name, 
 		      TCL_TRACE_READS | TCL_GLOBAL_ONLY,
-		      TraceUnsignedInt, (ClientData) p->value);
+		      (Tcl_VarTraceProc *) TraceUnsignedInt, (ClientData) p->value);
     }
 
     /* XXX snmpEnableAuthenTraps.0 should be implemented */

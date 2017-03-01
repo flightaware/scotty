@@ -1054,6 +1054,8 @@ TnmMapExpireMsgs(TnmMapMsg **msgListPtr, long expireTime)
 	     */
 
 	    s = Tcl_GetStringFromObj(msgPtr->tag, &len);
+	    /* unused */
+	    (void)s;
 	    if (len == 0) {
 		msgPtr->flags |= TNM_MSG_SAVED;
 	    } else if (msgPtr->itemPtr) {

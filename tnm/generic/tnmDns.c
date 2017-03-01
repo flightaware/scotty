@@ -96,19 +96,19 @@ static void
 DnsInit		(DnsControl *control);
 
 static int
-DnsGetHostName	(Tcl_Interp *interp, char *hname);
+DnsGetHostName	(Tcl_Interp *interp, const char *hname);
 
 static void
 DnsDoQuery	(char *query_string, int query_type, 
 			     a_res *query_result);
 static void
-DnsHaveQuery	(char *query_string, int query_type,
+DnsHaveQuery	(const char *query_string, int query_type,
 			     a_res *query_result, int depth);
 static int 
 DnsA		(Tcl_Interp *interp, char *hname);
 
 static int
-DnsPtr		(Tcl_Interp *interp, char *ip);
+DnsPtr		(Tcl_Interp *interp, const char *ip);
 
 static void
 DnsCleanHinfo	(char *str);
@@ -117,10 +117,10 @@ static int
 DnsHinfo	(Tcl_Interp *interp, const char *hname);
 
 static int 
-DnsMx		(Tcl_Interp *interp, char *hname);
+DnsMx		(Tcl_Interp *interp, const char *hname);
 
 static int 
-DnsSoa		(Tcl_Interp *interp, char *hname);
+DnsSoa		(Tcl_Interp *interp, const char *hname);
 
 /*
  *----------------------------------------------------------------------
@@ -196,7 +196,7 @@ DnsInit(DnsControl *control)
  */
 
 static int
-DnsGetHostName(Tcl_Interp *interp, char *hname)
+DnsGetHostName(Tcl_Interp *interp, const char *hname)
 {
     int rc;
     
@@ -234,8 +234,11 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
     querybuf query, answer;
     char buf[512], lbuf[512], auth_buf[512];
     int i, qlen, alen, llen, nscount, len, nsents;
-    short type, class, rdlen;
-    long ttl;
+    short type, rdlen;
+    /* unused
+     *  short class;
+     *  long ttl;
+     */
     querybuf *q;
     u_char *ptr;
     u_char *eom;
@@ -360,10 +363,12 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	 */
 
 	GETSHORT(type, ptr);
-	GETSHORT(class, ptr);
-	GETLONG(ttl, ptr);
+	/* unused
+	 * GETSHORT(class, ptr);
+	 * GETLONG(ttl, ptr);
+	 */
 	GETSHORT(rdlen, ptr);
-	
+
 	if (type == T_NS) {
 	    
 	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
@@ -483,7 +488,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
  */
 
 static void
-DnsHaveQuery(char *query_string, int query_type, a_res *query_result, int depth)
+DnsHaveQuery(const char *query_string, int query_type, a_res *query_result, int depth)
 {
     int i;
     a_res res;
@@ -642,7 +647,7 @@ DnsA(Tcl_Interp *interp, char *hname)
  */
 
 static int
-DnsPtr(Tcl_Interp *interp, char *ip)
+DnsPtr(Tcl_Interp *interp, const char *ip)
 {
     a_res res;
     int i, a, b, c, d;
@@ -795,7 +800,7 @@ DnsHinfo(Tcl_Interp *interp, const char *hname)
  */
 
 static int 
-DnsMx(Tcl_Interp *interp, char *hname)
+DnsMx(Tcl_Interp *interp, const char *hname)
 {
     a_res res;
     int i;
@@ -847,7 +852,7 @@ DnsMx(Tcl_Interp *interp, char *hname)
  */
 
 static int 
-DnsSoa(Tcl_Interp *interp, char *hname)
+DnsSoa(Tcl_Interp *interp, const char *hname)
 {
     a_res res;
     int i;

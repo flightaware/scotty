@@ -37,14 +37,14 @@ TnmSocketBind(int s, struct sockaddr *name, socklen_t namelen)
 }
 
 int
-TnmSocketSendTo(int s, char *buf, size_t len, int flags, struct sockaddr *to, socklen_t tolen)
+TnmSocketSendTo(int s, unsigned char *buf, size_t len, int flags, struct sockaddr *to, socklen_t tolen)
 {
     int n = sendto(s, buf, len, flags, to, tolen);
     return (n < 0) ? TNM_SOCKET_ERROR : n;
 }
 
 int
-TnmSocketRecvFrom(int s, char *buf, size_t len, int flags, struct sockaddr *from, socklen_t *fromlen)
+TnmSocketRecvFrom(int s, unsigned char *buf, size_t len, int flags, struct sockaddr *from, socklen_t *fromlen)
 {
     int n = recvfrom(s, buf, len, flags, from, fromlen);
     return (n < 0) ? TNM_SOCKET_ERROR : n;

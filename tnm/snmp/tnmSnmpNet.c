@@ -563,7 +563,7 @@ TnmSnmpSend(Tcl_Interp *interp, TnmSnmp *session, u_char *packet, int packetlen,
 	sock = syncSocket->sock;
     }
 
-    code = TnmSocketSendTo(sock, (char *) packet, (size_t) packetlen, 0, 
+    code = TnmSocketSendTo(sock, packet, (size_t) packetlen, 0, 
 			   (struct sockaddr *) to, sizeof(*to));
 
     if (code == TNM_SOCKET_ERROR) {
@@ -631,7 +631,7 @@ TnmSnmpRecv(Tcl_Interp *interp, u_char *packet, int	*packetlen, struct sockaddr_
 	sock = syncSocket->sock;
     }
 
-    *packetlen = TnmSocketRecvFrom(sock, (char *) packet, (size_t) *packetlen, 0,
+    *packetlen = TnmSocketRecvFrom(sock, packet, (size_t) *packetlen, 0,
 				   (struct sockaddr *) from, &fromlen);
 
     if (*packetlen == TNM_SOCKET_ERROR) {
@@ -687,7 +687,7 @@ AgentRecv(Tcl_Interp	*interp, TnmSnmp *session, u_char *packet, int *packetlen, 
 	return TCL_ERROR;
     }
 
-    *packetlen = TnmSocketRecvFrom(sock, (char *) packet, (size_t) *packetlen, 0,
+    *packetlen = TnmSocketRecvFrom(sock, packet, (size_t) *packetlen, 0,
 				   (struct sockaddr *) from, &fromlen);
 
     if (*packetlen == TNM_SOCKET_ERROR) {

@@ -731,7 +731,7 @@ DecodeMessage(Tcl_Interp *interp, Message *msg, TnmSnmpPdu *pdu, TnmBer *ber)
 	 * We probably have to make some mappings here according to
 	 * the coexistance specification currently being defined. (XXXX)
 	 */
-	pdu->context = msg->com;
+	pdu->context = (char *) msg->com;
 	pdu->contextLength = msg->comLen;
 #endif
     }

@@ -352,12 +352,16 @@ int
 TnmMibLoadFile(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     Tcl_DString fileBuffer, frozenFileBuffer;
-    CONST char *library, *cache, *arch;
+    CONST char *library;
     char *fileName, *frozenFileName = NULL;
     char *file = NULL, *module;
     int code = TCL_OK;
+#if 0
+    /* see 'frozen' related code below */
     Tcl_Obj *splitList;
     int splitListLen;
+    CONST char *cache, *arch;
+#endif
     Tcl_Obj *filePath = NULL;
 
     Tcl_DStringInit(&fileBuffer);
@@ -372,6 +376,10 @@ TnmMibLoadFile(Tcl_Interp *interp, Tcl_Obj *objPtr)
 
     fileName = Tcl_GetString(objPtr);	/* xxx this sucks ... */
 
+
+    library = Tcl_GetVar2(interp, "tnm", "library", TCL_GLOBAL_ONLY);
+
+#if 0
     /*
      * Split the file argument into a path and the file name. Also,
      * get the Tnm library and cache paths and the architecture string.
@@ -379,11 +387,9 @@ TnmMibLoadFile(Tcl_Interp *interp, Tcl_Obj *objPtr)
 
     splitList = Tcl_FSSplitPath(objPtr, &splitListLen);
     
-    library = Tcl_GetVar2(interp, "tnm", "library", TCL_GLOBAL_ONLY);
     cache = Tcl_GetVar2(interp, "tnm", "cache", TCL_GLOBAL_ONLY);
     arch = Tcl_GetVar2(interp, "tnm", "arch", TCL_GLOBAL_ONLY);
 
-#if 0
     /* 
      * Check if we can write a frozen file. Construct the path to the
      * directory where we keep frozen files. Create a machine specific

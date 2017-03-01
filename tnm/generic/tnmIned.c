@@ -682,7 +682,7 @@ Tnm_InedObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CON
         int largc;
 	char **largv;
         int rc = Tcl_SplitList(interp, Tcl_GetStringFromObj(objv[2], NULL),
-			       &largc, &largv);
+			       &largc, (const char ***) &largv);
 	if (rc == TCL_OK && largc > 0) {
 	    if (InedCompCmd(Tcl_GetStringFromObj(objv[1], NULL),
 			    interp, largc, largv) == TCL_OK) {

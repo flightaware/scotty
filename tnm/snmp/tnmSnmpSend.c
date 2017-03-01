@@ -317,12 +317,12 @@ EncodeMessage(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber
     switch (session->version) {
       case TNM_SNMPv1:
 	version = 0;
-	parameter = Tcl_GetStringFromObj(session->community,
+	parameter = (unsigned char *) Tcl_GetStringFromObj(session->community,
 					 &parameterLen);
 	break;
       case TNM_SNMPv2C:
 	version = 1;
-	parameter = Tcl_GetStringFromObj(session->community,
+	parameter = (unsigned char *) Tcl_GetStringFromObj(session->community,
 					 &parameterLen);
 	break;
 #ifdef TNM_SNMPv2U
@@ -351,7 +351,7 @@ EncodeMessage(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber
 
     if (version == 3) {
 	int secParamLength;
-	char *secParam;
+	unsigned char *secParam;
 	ber = EncodeHeader(interp, session, pdu, ber);
 	secParam = EncodeUsmSecParams(session, pdu, &secParamLength);
 	if (! secParam) {
@@ -398,7 +398,7 @@ static TnmBer*
 EncodeHeader(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
-    u_char flags = 0;
+    char flags = 0;
 
     /*
      * Set the reportable flag on a request-type PDU and an
@@ -801,7 +801,7 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
     u_char *pduSeqToken, *vbSeqToken, *vblSeqToken;
     
     int i, vblc, vbc;
-    char **vblv, **vbv;
+    const char **vblv, **vbv;
 
     Tnm_Oid *oid;
     int oidlen;
@@ -923,7 +923,7 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
     
     for (i = 0; i < vblc; i++) {
 	
-	char *value;
+        const char *value;
 	int asn1_type = ASN1_OTHER;
 	char string[64];
 	
@@ -1098,8 +1098,8 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 		break;
 	    }
 	    case ASN1_OCTET_STRING: {
-		char *hex = value, *scan;
-		size_t len;
+		const char *hex = value, *scan;
+		int len;
 		static char *bin = NULL;
 		static size_t binLen = 0;
 		/* quick test for empty strings ... */
@@ -1128,8 +1128,8 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 		break;
 	    }
 	    case ASN1_OPAQUE: {
-		char *hex = value;
-		size_t len;
+		const char *hex = value;
+		int len;
 		static char *bin = NULL;
 		static size_t binLen = 0;
 		if (*hex) {

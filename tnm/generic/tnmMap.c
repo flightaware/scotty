@@ -1446,7 +1446,7 @@ static int
 PasteMap(Tcl_Interp *interp, TnmMap *mapPtr, Tcl_DString *script)
 {
     int code;
-    char *value;
+    const char *value;
     CONST char *map = Tcl_GetCommandName(interp, mapPtr->token);
 
     /*

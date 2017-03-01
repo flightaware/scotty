@@ -40,14 +40,14 @@ static Tcl_HashTable *nodeHashTable = NULL;
  */
 
 static TnmMibNode*
-LookupOID		(TnmMibNode *root, char *label,
+LookupOID		(TnmMibNode *root, const char *label,
 				     int *offset, int exact);
 static TnmMibNode*
-LookupLabelOID		(TnmMibNode *root, char *label,
+LookupLabelOID		(TnmMibNode *root, const char *label,
 				     int *offset, int exact);
 static TnmMibNode*
-LookupLabel		(TnmMibNode *root, char *start, 
-				     char *label, char *moduleName,
+LookupLabel		(TnmMibNode *root, const char *start, 
+				     const char *label, char *moduleName,
 				     int *offset, int exact, int fuzzy);
 static void
 HashNode		(TnmMibNode *node);
@@ -143,12 +143,12 @@ TnmMibNodeFromOid(TnmOid *oidPtr, TnmOid *nodeOidPtr)
  */
 
 static TnmMibNode*
-LookupOID(TnmMibNode *root, char *label, int *offset, int exact)
+LookupOID(TnmMibNode *root, const char *label, int *offset, int exact)
 {
     TnmOid oid;
     int i;
     TnmMibNode *p, *q = NULL;
-    char *s = label;
+    const char *s = label;
 
     if (offset) *offset = -1;
 
@@ -231,7 +231,7 @@ LookupOID(TnmMibNode *root, char *label, int *offset, int exact)
  */
 
 static TnmMibNode*
-LookupLabelOID(TnmMibNode *root, char *label, int *offset, int exact)
+LookupLabelOID(TnmMibNode *root, const char *label, int *offset, int exact)
 {
     Tcl_HashEntry *entryPtr = NULL;
     TnmMibNode *nodePtr = NULL;
@@ -284,7 +284,7 @@ LookupLabelOID(TnmMibNode *root, char *label, int *offset, int exact)
 			 */
 
 			for (; i > 0; i--) {
-			    char *p = label + *offset;
+			    const char *p = label + *offset;
 			    if (*p && *p == '.') p++, (*offset)++;
 			    while (*p && *p != '.') p++, (*offset)++;
 			}
@@ -320,10 +320,11 @@ LookupLabelOID(TnmMibNode *root, char *label, int *offset, int exact)
  */
 
 static TnmMibNode*
-LookupLabel(TnmMibNode *root, char *start, char *label, char *moduleName, int *offset, int exact, int fuzzy)
+LookupLabel(TnmMibNode *root, const char *start, const char *label, char *moduleName, int *offset, int exact, int fuzzy)
 {
     char head[TNM_OID_MAX_SIZE * 8];
-    char *tail = label, *p = head;
+    const char *tail = label;
+    char *p = head;
     TnmMibNode *tp = NULL, *brother;
     int num = 1;
 
@@ -399,7 +400,7 @@ LookupLabel(TnmMibNode *root, char *start, char *label, char *moduleName, int *o
  */
 
 TnmMibNode*
-TnmMibFindNode(char *name, int *offset, int exact)
+TnmMibFindNode(const char *name, int *offset, int exact)
 {
     TnmMibNode *nodePtr = NULL;
     char *expanded;
@@ -564,7 +565,7 @@ TnmMibAddType(TnmMibType *typePtr)
  */
 
 TnmMibType*
-TnmMibFindType(char *name)
+TnmMibFindType(const char *name)
 {
     static TnmMibType snmpType;
     Tcl_HashEntry *entryPtr = NULL;
@@ -597,7 +598,7 @@ TnmMibFindType(char *name)
     if (syntax != -1) {
 	memset((char *) &snmpType, 0, sizeof(snmpType));
 	snmpType.syntax = syntax;
-	snmpType.name = name;
+	snmpType.name = (char *) name;
 	return &snmpType;
     }
 
@@ -610,7 +611,7 @@ TnmMibFindType(char *name)
     if (strcmp(name, "BITS") == 0) {
 	memset((char *) &snmpType, 0, sizeof(snmpType));
         snmpType.syntax = ASN1_OCTET_STRING;
-        snmpType.name = name;
+        snmpType.name = (char *) name;
         return &snmpType;
     }
 

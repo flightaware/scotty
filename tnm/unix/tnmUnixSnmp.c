@@ -78,7 +78,7 @@ static int
 ForkDaemon(Tcl_Interp *interp)
 {
     int argc = 1;
-    char *argv[2];
+    const char *argv[2];
 
     argv[0] = getenv("TNM_NMTRAPD");
     if (! argv[0]) {

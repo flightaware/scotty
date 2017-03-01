@@ -786,7 +786,7 @@ TnmPrintCounter64(u_int high, u_int low)
  */
 
 int
-TnmSetIPAddress(Tcl_Interp *interp, char *host, struct sockaddr_in *addr)
+TnmSetIPAddress(Tcl_Interp *interp, const char *host, struct sockaddr_in *addr)
 {
     static Tcl_HashTable *hostTable = NULL;
     Tcl_HashEntry *hostEntry;
@@ -1421,7 +1421,8 @@ TnmHexEnc(char *s, int n, char *d)
 
 int
 TnmHexDec(s, d, n)
-    char *s, *d;
+    const char *s;
+    char *d;
     int *n;
 {
     int v;

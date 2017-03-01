@@ -180,19 +180,19 @@ SHAPassWord2Key(u_char *pwBytes, int pwLength, u_char *engineBytes, int engineLe
 static void
 ComputeKey(Tcl_Obj **objPtrPtr, Tcl_Obj *password, Tcl_Obj *engineID, int algorithm)
 {
-    char *pwBytes, *engineBytes, *bytes;
+    unsigned char *pwBytes, *engineBytes, *bytes;
     int pwLength, engineLength, length;
     KeyCache *elemPtr;
     static KeyCache *keyList = NULL;
-    char buffer[256];	/* must be large enough to hold keys */
+    unsigned char buffer[256];	/* must be large enough to hold keys */
 
     if (*objPtrPtr) {
 	Tcl_DecrRefCount(*objPtrPtr);
 	*objPtrPtr = NULL;
     }
 
-    pwBytes = Tcl_GetStringFromObj(password, &pwLength);
-    engineBytes = TnmGetOctetStringFromObj(NULL, engineID, &engineLength);
+    pwBytes = (unsigned char *) Tcl_GetStringFromObj(password, &pwLength);
+    engineBytes = (unsigned char *) TnmGetOctetStringFromObj(NULL, engineID, &engineLength);
 
     if (! pwBytes || ! engineBytes || engineLength == 0 || pwLength == 0) {
 	return;
@@ -207,11 +207,11 @@ ComputeKey(Tcl_Obj **objPtrPtr, Tcl_Obj *password, Tcl_Obj *engineID, int algori
     for (elemPtr = keyList; elemPtr; elemPtr = elemPtr->nextPtr) {
 	if (elemPtr->algorithm != algorithm) continue;
 
-	bytes = Tcl_GetStringFromObj(elemPtr->password, &length);
+	bytes = (unsigned char *) Tcl_GetStringFromObj(elemPtr->password, &length);
 	if (length != pwLength) continue;
 	if (memcmp(pwBytes, bytes, (size_t) length) != 0) continue;
 	
-	bytes = Tcl_GetStringFromObj(elemPtr->engineID, &length);
+	bytes = (unsigned char *) Tcl_GetStringFromObj(elemPtr->engineID, &length);
 	if (length != engineLength) continue;
 	if (memcmp(engineBytes, bytes, (size_t) length) != 0) continue;
 
@@ -225,13 +225,13 @@ ComputeKey(Tcl_Obj **objPtrPtr, Tcl_Obj *password, Tcl_Obj *engineID, int algori
 
     switch (algorithm) {
     case TNM_SNMP_AUTH_MD5:
-	MD5PassWord2Key(pwBytes, pwLength, engineBytes, engineLength, buffer);
-	*objPtrPtr = TnmNewOctetStringObj(buffer, 16);
+        MD5PassWord2Key(pwBytes, pwLength, engineBytes, engineLength, buffer);
+	*objPtrPtr = TnmNewOctetStringObj((char *)buffer, 16);
 	Tcl_IncrRefCount(*objPtrPtr);
 	break;
     case TNM_SNMP_AUTH_SHA:
 	SHAPassWord2Key(pwBytes, pwLength, engineBytes, engineLength, buffer);
-	*objPtrPtr = TnmNewOctetStringObj(buffer, 20);
+	*objPtrPtr = TnmNewOctetStringObj((char *)buffer, 20);
 	Tcl_IncrRefCount(*objPtrPtr);
 	break;
     default:
@@ -310,12 +310,12 @@ TnmSnmpComputeKeys(TnmSnmp *session)
 void
 TnmSnmpLocalizeKey(int algorithm, Tcl_Obj *authKey, Tcl_Obj *engineID, Tcl_Obj *localAuthKey)
 {
-    char *engineBytes, *authKeyBytes;
+    unsigned char *engineBytes, *authKeyBytes;
     int engineLength, authKeyLength, localAuthKeyLength = 20;
-    char localAuthKeyBytes[20]; /* must be big enough for MD5 and SHA */
+    unsigned char localAuthKeyBytes[20]; /* must be big enough for MD5 and SHA */
 
-    authKeyBytes = Tcl_GetStringFromObj(authKey, &authKeyLength);
-    engineBytes = Tcl_GetStringFromObj(engineID, &engineLength);
+    authKeyBytes = (unsigned char *) Tcl_GetStringFromObj(authKey, &authKeyLength);
+    engineBytes = (unsigned char *) Tcl_GetStringFromObj(engineID, &engineLength);
 
     /*
      * Localize a key as described in section 2.6 of RFC 2274.
@@ -345,15 +345,15 @@ TnmSnmpLocalizeKey(int algorithm, Tcl_Obj *authKey, Tcl_Obj *engineID, Tcl_Obj *
 	Tcl_Panic("unknown algorithm for key localization");
     }
 
-    Tcl_SetStringObj(localAuthKey, localAuthKeyBytes, localAuthKeyLength);
+    Tcl_SetStringObj(localAuthKey, (char *) localAuthKeyBytes, localAuthKeyLength);
 }
 
 static void
 MD5AuthOutMsg(char *authKey, u_char *msg, int msgLen, u_char *msgAuthenticationParameters)
 {
     MD5_CTX MD;
-    char extendedAuthKey[64];
-    char digest[16];
+    unsigned char extendedAuthKey[64];
+    unsigned char digest[16];
     int i;
 
     memset(msgAuthenticationParameters, 0, 12);
