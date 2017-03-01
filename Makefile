@@ -3,7 +3,7 @@
 # on some platforms.
 #
 
-PLATFORMS	= jessie freebsd alpine macosx
+PLATFORMS	= jessie yakkety freebsd alpine macosx
 
 all:
 	@echo
@@ -15,12 +15,12 @@ all:
 	@echo "  make build"
 	@echo "  sudo make install"
 	@echo
-	@echo "Other targets: uninstall distclean"
+	@echo "Other targets: clean uninstall distclean"
 	@echo
 	@echo Available platform targets: $(PLATFORMS)
 	@echo
 
-jessie freebsd:
+jessie yakkety freebsd:
 	(cd tnm && autoconf && ./configure)
 	(cd tkined && autoconf && ./configure)
 

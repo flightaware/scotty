@@ -49,11 +49,11 @@ This source distribution is targetted at the current available
 (February 2017) toolchains and Tcl versions.  The default is to build
 shared libraries with Tcl stubs support.
 
-At this moment, only the _Tnm_ extension is working as expected.
-The `scotty` binary is replace by a pure Tcl emulation.
+At this moment the _Tnm_ extension is working as expected, except for
+Ubuntu 16.10. where it segfaults.
 
 `tkined` is working fine on all tested platform, except for Debian,
-where it hangs on the first invocatio of ined.
+where it hangs on the first invocation of `ined`.
 
 Note that the organisation of the source tree has been modified
 heavily, to account for current policies of extension building.  Each
@@ -89,7 +89,7 @@ Tested Operating Systems
 
 - Debian GNU/Linux 8.7 (jessie)
 - Alpine Linux
-- FreeBSD 11
+- FreeBSD 10.3 and 11
 - MacOSX 10.10.5 (Yosemite)
 
 Tested Tcl/Tk Versions
@@ -124,8 +124,9 @@ Clone the repository or download the source as zip archive and unpack
 to any destination directory of your liking.
 
 There is a convenience Makefile in the top level directory, which
-automates build, install and uninstall for the tested platforms.  See
-the file PORTS for platform specific details.
+automates build, install and uninstall for the tested platforms.  Just
+run `make` and it will help you.  See the file PORTS for platform
+specific details.
 
 The following are detailed build instructions.
 
@@ -164,7 +165,7 @@ Man files are installed in the respective system locations after
 install.  To see what is available see the respective `doc`
 subdirectory in `tnm` and `tkined`.
 
-For a starter look at Tnm(n) which gives an overview over the Tcl
+For a starter, look at Tnm(n) which gives an overview over the Tcl
 commands provided by the Tnm extension and the tkined(1) page which
 describes the Tkined network editor. A short description of the API
 which is used to write new applications for the Tkined editor is
@@ -224,7 +225,7 @@ sourceforge.  He has mainly worked on the "Front End" `tkined`.
 
 This version is a fork of the FlightAware repository, made on
 2017-02-14 by Georg Lehner <jorge@at.anteris.net>.  Find some details
-in `tnm/README.flightaware`.
+in `README.flightaware`.
 
 Ressources remaining from the founders time:
 * [Braunschweig university scotty page](https://www.ibr.cs.tu-bs.de/projects/scotty).

@@ -1,12 +1,12 @@
 This file is part of the _scotty_ Tcl extension for network
 management.  It describes how to build on different platforms.
 
-Debian
-======
+Debian, Ubuntu
+==============
 
 Needed packages to be install with `apt-get`:
 
-    build-essentials tcl8.6-dev tk8.6-dev
+    build-essentials tcl8.6-dev tk8.6-dev autoconf
 
 Configure with:
 
@@ -42,7 +42,7 @@ FreeBSD
 
 Required packages to be installed with `pkg install`:
 
-    tcl86-8.6.6_2 tk86-8.6.6
+    tcl86-8.6.6_2 tk86-8.6.6 autoconf
 
 Configure with:
 
