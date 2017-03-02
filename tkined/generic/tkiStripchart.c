@@ -121,7 +121,7 @@ static int              StripchartToPostscript (Tcl_Interp *interp,
                             Tk_Canvas canvas, Tk_Item *itemPtr, int prepass);
 static int              StripchartValues (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int argc, char **argv);
+                            int argc, const char **argv);
 static void             TranslateStripchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, double deltaX, double deltaY);
 
@@ -143,8 +143,10 @@ dummy()
 static Tk_CustomOption tagsOption = {NULL, NULL,
      (ClientData) NULL
 };
-static Tk_CustomOption valueOption = {ParseStripchartValues,
-        PrintStripchartValues, (ClientData) NULL
+static Tk_CustomOption valueOption = {
+    (Tk_OptionParseProc *) ParseStripchartValues,
+    (Tk_OptionPrintProc *) PrintStripchartValues,
+    (ClientData) NULL
 };
 
 static Tk_ConfigSpec configSpecs[] = {
@@ -386,7 +388,7 @@ StripchartCoords(interp, canvas, itemPtr, objc, objv)
     }
 
     ComputeStripchartBbox(canvas, stripPtr);   
-    StripchartValues(interp, canvas, itemPtr, 0, (char **) NULL);
+    StripchartValues(interp, canvas, itemPtr, 0, (const char **) NULL);
     return TCL_OK;
 }
 
@@ -426,6 +428,7 @@ ConfigureStripchart(interp, canvas, itemPtr, objc, objv, flags)
     Tk_Window tkwin = Tk_CanvasTkwin(canvas);
     Display *display = Tk_Display(Tk_CanvasTkwin(canvas));
 
+    /* TODO: This seem very wrong.  we get an objv array and turn it in as a string array! */
     if (Tk_ConfigureWidget(interp, tkwin, configSpecs, objc, (char **) objv,
 		   (char *) stripPtr, flags|TK_CONFIG_OBJS) != TCL_OK) {
 	return TCL_ERROR;
@@ -529,7 +532,7 @@ ConfigureStripchart(interp, canvas, itemPtr, objc, objv, flags)
 #endif
 
     ComputeStripchartBbox(canvas, stripPtr);
-    StripchartValues(interp, canvas, itemPtr, 0, (char **) NULL);
+    StripchartValues(interp, canvas, itemPtr, 0, (const char **) NULL);
     return TCL_OK;
 }
 
@@ -1030,7 +1033,7 @@ ScaleStripchart(canvas, itemPtr, originX, originY, scaleX, scaleY)
 	coordPtr[1] = originY + scaleY*(coordPtr[1] - originY);
     }
     ComputeStripchartBbox(canvas, stripPtr);
-    StripchartValues(stripPtr->interp, canvas, itemPtr, 0, (char **) NULL);
+    StripchartValues(stripPtr->interp, canvas, itemPtr, 0, (const char **) NULL);
 }
 
 /*
@@ -1109,7 +1112,7 @@ ParseStripchartValues(clientData, interp, tkwin, value, recordPtr, offset)
 {
     StripchartItem *stripPtr = (StripchartItem *) recordPtr;
     int argc;
-    char **argv = NULL;
+    const char **argv = NULL;
 
     if (Tcl_SplitList(interp, value, &argc, &argv) != TCL_OK) {
         syntaxError:
@@ -1156,7 +1159,7 @@ StripchartValues(interp, canvas, itemPtr, argc, argv)
                                          * read or modified. */
     int argc;                           /* Number of coordinates supplied in
                                          * argv. */
-    char **argv;                        /* Array of coordinates: x1, y1,
+    const char **argv;                  /* Array of coordinates: x1, y1,
                                          * x2, y2, ... */
 {    
     register StripchartItem *stripPtr = (StripchartItem *) itemPtr;

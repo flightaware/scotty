@@ -44,9 +44,9 @@ Tkined_Init		(Tcl_Interp *interp);
 static char*
 FindPath(Tcl_Interp *interp, char *path, char *name, char *version)
 {
-    char *pkgPath;
+    const char *pkgPath;
     int code, largc, i;
-    char **largv;
+    const char **largv;
     Tcl_DString ds;
     
     if (access(path, R_OK | X_OK) == 0) {

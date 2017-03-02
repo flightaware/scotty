@@ -12,6 +12,10 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tkined.h"
 #include "tkiPort.h"
 
@@ -34,7 +38,7 @@ static int ignoretrace = 0;
 
 static int 
 ObjectCommand	      (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+				   int argc, const char **argv);
 static void 
 do_debug              (Tki_Object *object, Tcl_Interp *interp,
 				   int argc, const char **argv, const char *result);
@@ -70,7 +74,7 @@ Tki_LookupObject (const char *id)
  */
 
 void
-TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, char **argv, char *result)
+TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, const char **argv, char *result)
 {
 
     /* **** start of hack **** */
@@ -102,7 +106,7 @@ TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, char **ar
 
     if (editor && result == (char *) NULL && cmd == (char *) NULL) {
 	if (!old_cmd) return;
-	TkiTrace (editor, old_object, old_cmd, old_argc, old_argv, old_result);
+	TkiTrace (editor, old_object, old_cmd, old_argc, (const char **) old_argv, old_result);
 	old_object = (Tki_Object *) NULL;
 	if (old_cmd) ckfree (old_cmd);
 	old_cmd = (char *) NULL;
@@ -282,7 +286,7 @@ Tki_CreateObject (ClientData clientData, Tcl_Interp *interp, int argc, const cha
     
     /* create a tcl command for the new object */
 
-    Tcl_CreateCommand (interp, object->id, ObjectCommand,
+    Tcl_CreateCommand (interp, object->id, (Tcl_CmdProc *) ObjectCommand,
 		       (ClientData) object, Tki_DeleteObject);
 
     if (tki_Debug) 
@@ -362,11 +366,11 @@ Tki_DeleteObject (ClientData clientData)
  */
 
 int 
-ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+ined (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     Tki_Object *object = (Tki_Object *) clientData;
     char *cmd;
-    char *tmp;
+    const char *tmp;
     int result = TCL_ERROR;
     int i;
     Tcl_HashEntry *entryPtr;
@@ -601,12 +605,18 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 		    }
 		    obj->editor = object->editor;
 		    TkiTrace (obj->editor, (Tki_Object *) NULL, 
-			    (char *) NULL, 0, (char **) NULL, (char *) NULL);
+			    (char *) NULL, 0, (const char **) NULL, (char *) NULL);
 		    if (obj->type == TKINED_GRAPH) {
 			Tki_EditorGraph (obj->editor, interp, 
 					 0, (char **) NULL);
 			Tcl_AppendResult (interp, ".blt", (char *) NULL);
 			//m_canvas (interp, obj, 1, &interp->result);
+			
+			/* TODO: the following appears to be wrong,
+			 * very wrong.  m_canvas expects char **argv,
+			 * probably with trailing NULL pointer while
+			 * we just provide a const char *.
+			 */
 			m_canvas (interp, obj, 1, Tcl_GetStringResult(interp));
 		    } else {
 			m_canvas (interp, obj, 1, &object->canvas);
@@ -638,10 +648,12 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
               /* XXX probably it should be Tcl_GetStringResult / SetResult */
 	      //for (p = interp->result; *p; p++) {
               tp = Tcl_GetStringResult(interp);
-              for (p = (char *)tp; *p; p++) {
+	      /* TODO: are we really allowed to poke around in the
+		 string returned by Tcl_GetStringResult()? */
+              for (p = tp; *p; p++) {
 		  if (*p == '\n') *p = ';';
 	      }
-              Tcl_SetResult(interp, tp, TCL_VOLATILE);
+              Tcl_SetResult(interp, (char *) tp, TCL_VOLATILE);
 
               tmp = argv[1]; argv[1] = argv[2]; argv[2] = tmp;
 
@@ -670,7 +682,7 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     if (update) {
 	tmp = ckstrdup (Tcl_GetStringResult(interp));
         Tcl_Eval (interp, "update idletask");
-	Tcl_SetResult (interp, tmp, TCL_DYNAMIC);
+	Tcl_SetResult (interp, (char *) tmp, TCL_DYNAMIC);
     }
 
     ignoretrace = 0;
@@ -721,7 +733,7 @@ receive(clientData, mask)
 
     if (count <= 0) {
 	if (object->done) {   
-	    m_delete (interp, object, 0, (char **) NULL);
+	    m_delete (interp, object, 0, (const char **) NULL);
 	    return;
 	} else {
 	    input[0] = 0;
@@ -992,7 +1004,7 @@ static Method methodTable[] = {
  */
 
 static int
-ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 {
     Tki_Object *object = (Tki_Object *) clientData;
     Method *ds;

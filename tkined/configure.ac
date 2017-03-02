@@ -26,7 +26,7 @@ TKI_VERSION=1.5.1
 
 
 # disabled config.h generation, since this inhibits stub compilation
-# AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([config.h])
 
 #--------------------------------------------------------------------
 #       Check for various system specific things.
