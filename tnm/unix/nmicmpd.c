@@ -21,7 +21,9 @@
 #define PROGNAME	"nmicmpd"			/* my name */
 static char *version =  "nmicmpd  v0.99i  Dec 1996";	/* my version */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 
 #include <stdio.h>
 #include <signal.h>

@@ -21,15 +21,16 @@ all:
 	@echo
 
 jessie yakkety freebsd:
-	(cd tnm && autoconf && ./configure)
+	(cd tnm && autoheader && autoconf && ./configure)
 	(cd tkined && autoheader && autoconf && ./configure)
 
 alpine:
-	(cd tnm && autoconf && ./configure --with-tirpc)
+	(cd tnm && autoheader && autoconf && ./configure --with-tirpc)
 	(cd tkined && autoheader && autoconf && ./configure)
 
 macosx:
-	(cd tnm && autoconf && ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl)
+	(cd tnm && autoheader && autoconf \
+	    && ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl)
 	(cd tkined && autoheader && autoconf \
 	    && ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl)
 

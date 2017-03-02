@@ -15,6 +15,10 @@
  * @(#) $Id: tnmUnixSnmp.c,v 1.1.1.1 2006/12/07 12:16:59 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 
 extern int hexdump;		/* flag that controls hexdump */

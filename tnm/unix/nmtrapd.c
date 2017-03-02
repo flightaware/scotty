@@ -24,7 +24,9 @@
  *       we do not loose traps due to socket receive buffer overruns.
  */
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>

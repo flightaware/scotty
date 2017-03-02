@@ -18,6 +18,10 @@
  * in Tcl.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <tcl.h>
 #include "tnm.h"
 

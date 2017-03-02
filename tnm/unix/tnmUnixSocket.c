@@ -11,10 +11,14 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#include <fcntl.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 #include "tnmPort.h"
-
-#include <fcntl.h>
 
 int
 TnmSocket(int domain, int type, int protocol)

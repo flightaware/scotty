@@ -12,6 +12,10 @@
  * @(#) $Id: tnmOidObj.c,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 
 #ifdef HAVE_SMI_H

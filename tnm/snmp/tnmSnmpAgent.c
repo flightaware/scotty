@@ -13,6 +13,10 @@
  * @(#) $Id: tnmSnmpAgent.c,v 1.2 2008/02/13 16:44:05 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 
