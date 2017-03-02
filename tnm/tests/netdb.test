@@ -24,6 +24,9 @@ configure -verbose {body error skip}
 testConstraint hangsMacOSX \
     [expr {!($::tcl_platform(os) eq "Darwin")}]
 
+testConstraint hangsFreeBSD \
+    [expr {!($::tcl_platform(os) eq "FreeBSD")}]
+
 package require Tnm 3.0
 catch {
     namespace import Tnm::netdb
@@ -164,12 +167,16 @@ test netdb-6.4 {check "netdb ip" command} {
 test netdb-6.5 {check "netdb ip" command} {
     netdb ip class 127.0.0.1
 } {loopback}
-test netdb-6.6 {check "netdb ip" command} hangsMacOSX {
+test netdb-6.6 {check "netdb ip" command} -constraints {
+hangsMacOSX hangsFreeBSD
+} -body {
     llength [netdb ip range 134.169.34.0 255.255.255.0]
-} {254}
-test netdb-6.7 {check "netdb ip" command} hangsMacOSX {
+} -result {254}
+test netdb-6.7 {check "netdb ip" command} -constraints {
+hangsMacOSX hangsFreeBSD
+} -body {
     netdb ip range 134.169.34.0 255.255.255.248
-} {134.169.34.1 134.169.34.2 134.169.34.3 134.169.34.4 134.169.34.5 134.169.34.6}
+} -result {134.169.34.1 134.169.34.2 134.169.34.3 134.169.34.4 134.169.34.5 134.169.34.6}
 test netdb-6.8 {check "netdb ip" command} {
     netdb ip apply 134.169.34.12 255.255.255.0
 } {134.169.34.0}

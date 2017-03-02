@@ -126,6 +126,16 @@ rewrite the tests.
 Manuals are install in /Library/Tcl/share/man, where they are not
 found by man(1).
 
+FreeBSD 10.3
+
+### Tnm::netdb
+
+Tests netdb-6.6 and netb-6.7 consume all available memory and then
+scotty gets killed. (netdb ip).  Note: tested on a 64 bit
+architecture.   However on Ubuntu 16.10 this does not occur.
+
+The same behaviour is found also on the original scotty (flightaware).
+
 
 FreeBSD 11
 ----------
