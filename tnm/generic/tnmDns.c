@@ -260,7 +260,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 		       (u_char *) &query, sizeof(query));
     if (qlen <= 0) {
 	query_result->n = -1;
-	strcpy(query_result->u.str[0], "cannot make query");
+	sprintf(query_result->u.str[0], "cannot make query '%s'", query_string);
 	return;
     }
 
@@ -272,8 +272,8 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 		    (u_char *) &answer, sizeof (answer));
     if (alen <= 0) {
 	query_result->n = -1;
-	sprintf (query_result->u.str[0], "cannot send query; error %d", 
-		 h_errno);
+	sprintf (query_result->u.str[0], "cannot send query '%s'; error %d", 
+		 query_string, alen, h_errno);
 	return;
     }
 
@@ -495,7 +495,10 @@ DnsHaveQuery(char *query_string, int query_type, a_res *query_result, int depth)
     if (depth > 1) {
 	return;
     }
-    
+
+    int len = strlen(query_string);
+    char last = len ? query_string[len - 1] : '\0';
+
     /*
      * Loop through every domain suffix:
      */
@@ -505,6 +508,8 @@ DnsHaveQuery(char *query_string, int query_type, a_res *query_result, int depth)
         if (i == -1) {
 	    strcpy(tmp, query_string);
 	} else if (! _res.dnsrch[i]) {
+	    break;
+	} else if (last == '.') {
 	    break;
 	} else {
 	    sprintf(tmp, "%s.%s", query_string, _res.dnsrch[i]);
@@ -535,6 +540,8 @@ DnsHaveQuery(char *query_string, int query_type, a_res *query_result, int depth)
 	if (i == -1) {
 	    strcpy(tmp, query_string);
 	} else if (! _res.dnsrch[i]) {
+	    break;
+	} else if (last == '.') {
 	    break;
 	} else {
 	    sprintf(tmp, "%s.%s", query_string, _res.dnsrch[i]);
