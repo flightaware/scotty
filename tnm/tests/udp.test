@@ -24,6 +24,8 @@ configure -verbose {body error skip}
 testConstraint knownBugMacOSX\
     [expr {!($::tcl_platform(os) eq "Darwin")}]
 
+testConstraint notFreeBSD [expr {$::tcl_platform(os) ne "FreeBSD"}]
+
 package require Tnm 3.0
 catch {
     namespace import Tnm::udp
@@ -153,6 +155,7 @@ test udp-7.1 {udp receive: one endpoint} knownBugMacOSX {
     catch {rename u {}}
     rename [udp create -myaddress 127.0.0.1 -myport 1234] u
     u send 127.0.0.1 1234 "nase"
+    after 1
     u receive
 } {127.0.0.1 1234 nase}
 
@@ -163,6 +166,7 @@ test udp-7.2 {udp receive: two endpoints} knownBugMacOSX {
     $s connect 127.0.0.1 1235
     $s send "nase"
     $s destroy
+    after 1
     u receive
 } {127.0.0.1 1236 nase}
 
@@ -171,6 +175,7 @@ test udp-7.3 {udp receive} knownBugMacOSX {
     rename [udp create -myaddress 127.0.0.1 -myport 1234] u
     u send 127.0.0.1 1234 \
 	[binary format "H*" "000102030405060708090a0b0c0d0e0f"]
+    after 1
     binary scan [lindex [u receive] 2] "H*" s
     set s
 } {000102030405060708090a0b0c0d0e0f}
@@ -295,8 +300,11 @@ test udp-11.2.1 {udp configure/send: send to configured, w/o connect} -constrain
     rename [udp create -address 127.0.0.1 -port $::SOME_PORT \
 		-myport $::OTHER_PORT] udp#
     udp# send "nase"
+    after 1
     $r receive
 } -result "127.0.0.1 $::OTHER_PORT nase"
+
+foreach u [udp find] { $u destroy }
 
 test udp-11.2.2 {udp configure/send: send to connected} -constraints {
 } -body {
@@ -305,10 +313,26 @@ test udp-11.2.2 {udp configure/send: send to connected} -constraints {
     udp# configure -address 127.0.0.1 -port $::OTHER_PORT
     udp# connect 127.0.0.1 $::SOME_PORT
     udp# send "nase"
+    after 1
     udp# receive
 } -result "127.0.0.1 $::SOME_PORT nase"
 
+foreach u [udp find] { $u destroy }
+
+# sending to the default address on an already connected socket.
+#
+# This may or may not work.  According to
+# http://pubs.opengroup.org/onlinepubs/9699919799/functions/sendto.html
+#
+# Either it works, or an EISCONN error is issued.
+#
+# | OS      | Distribution  | Comment |
+# | Linux   | Debian Jessie | ok      |
+# | FreeBSD | 10.3 amd64    | EISCONN |
+#
+#
 test udp-11.2.3 {udp configure/send: send to configured, connected} -constraints {
+    notFreeBSD
 } -body {
     catch {rename udp# {}}
     set r [udp create -myaddress 127.0.0.1 -myport $::SOME_PORT]
