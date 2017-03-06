@@ -273,7 +273,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
     if (alen <= 0) {
 	query_result->n = -1;
 	sprintf (query_result->u.str[0], "cannot send query '%s'; error %d", 
-		 query_string, alen, h_errno);
+		 query_string, h_errno);
 	return;
     }
 
