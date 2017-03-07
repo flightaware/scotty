@@ -37,6 +37,20 @@ _tirpc_ on any platform, where this library is available.
 [tirpc]: http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary
 
 
+Slackware Linux
+===============
+
+Required packages:
+
+	tcl/tcl-8.6.5-x86_64-2.txz
+	tcl/tk-8.6.5-x86_64-2.txz
+	d/autoconf-2.69-noarch-1.txz
+
+Configure with:
+
+	./configure
+	
+
 FreeBSD
 =======
 
@@ -47,6 +61,18 @@ Required packages to be installed with `pkg install`:
 Configure with:
 
     ./configure
+
+
+NetBSD
+======
+
+Required packages to be installed with `pkg install`:
+
+	tcl tk autoconf
+
+Configure with:
+
+	./configure --with-tcl=/usr/pkg/lib --with-tk=/usr/pkg/lib
 
 
 MacOSX

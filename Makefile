@@ -20,7 +20,7 @@ all:
 	@echo Available platform targets: $(PLATFORMS)
 	@echo
 
-jessie yakkety freebsd:
+jessie yakkety freebsd slackware:
 	(cd tnm && autoheader && autoconf && ./configure)
 	(cd tkined && autoheader && autoconf && ./configure)
 
@@ -33,6 +33,12 @@ macosx:
 	    && ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl)
 	(cd tkined && autoheader && autoconf \
 	    && ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl)
+
+netbsd:
+	(cd tnm && autoheader && autoconf \
+	    && ./configure --with-tcl=/usr/pkg/lib)
+	(cd tkined && autoheader && autoconf \
+	    && ./configure --with-tcl=/usr/pkg/lib --with-tk=/usr/pkg/lib)
 
 build:
 	(cd tnm && make)
