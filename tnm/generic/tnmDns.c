@@ -239,10 +239,10 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
     char buf[512], lbuf[512], auth_buf[512];
     int i, qlen, alen, llen, nscount, len, nsents;
     short type, rdlen;
-    /* unused
-     *  short class;
-     *  long ttl;
-     */
+    /* class and ttl are unused, they are just needed for skipping
+     *  over the respective field */
+    short class;
+    long ttl;
     querybuf *q;
     u_char *ptr;
     u_char *eom;
@@ -345,6 +345,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 
     /* fprintf(stderr, "** nscount=%d\n", nscount); */
 
+    /* TODO: there is no check, if ptr overruns the buf in between */
     for ( ; nscount; nscount--) {
 
 	/*
@@ -357,7 +358,8 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	
 	llen = dn_expand((u_char *) q, eom, ptr, lbuf, sizeof(lbuf));
 	if (llen < 0) {
-	    /* XXX: what to do ? */
+	    strcpy(query_result->u.str[0], "dn_expand() of NAME failed");
+	    query_result->n = -1;
 	    return;
 	}
 	ptr += llen;
@@ -367,20 +369,71 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	 */
 
 	GETSHORT(type, ptr);
-	/* unused
-	 * GETSHORT(class, ptr);
-	 * GETLONG(ttl, ptr);
+
+	/* TODO: This is a momentary heuristic hack.  We got type
+	 * T_SOA when a T_HINFO record was not available.  Until now
+	 * there is no check if the query and the answer type are
+	 * congruent, so we do it here.
+	 * For our case (missing hinfo) we get 'non existent domain'
+	 * upstairs, which is much more congruent then the current
+	 * behaviour (giving back the primary nameserver and failing).
 	 */
+
+	if (type != query_type) {
+	    strcpy(query_result->u.str[0], "lookup failed");
+	    query_result->n = -1;
+	    return;
+	}
+	
+	/* class and ttl are unused, we just need them to skip over the respective field */
+	GETSHORT(class, ptr);
+	(void)class;
+	GETLONG(ttl, ptr);
+	(void)ttl;
+	
 	GETSHORT(rdlen, ptr);
 
 	if (type == T_NS) {
 	    
 	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
 	    if (len < 0) {
+	        strcpy(query_result->u.str[0], "dn_expand() of T_NS RDATA failed");
+	        query_result->n = -1;
 		return;
 	    }
 	    ptr += len;
 
+	    if (query_result->type == T_NS || query_result->type == -1) {
+		query_result->type = T_NS;
+		strcpy(query_result->u.str[query_result->n++], buf);
+	    }
+
+	} else if (type == T_CNAME) {
+	    
+	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
+	    if (len < 0) {
+	        strcpy(query_result->u.str[0], "dn_expand() of T_CNAME RDATA failed");
+	        query_result->n = -1;
+		return;
+	    }
+	    ptr += len;
+
+	    if (query_result->type == T_CNAME || query_result->type == -1) {
+		query_result->type = T_CNAME;
+		strcpy(query_result->u.str[query_result->n++], buf);
+	    }
+
+	} else if (type == T_TXT) {
+	    
+	    len = *ptr++;
+		
+	    if (query_result->type == T_TXT || query_result->type == -1) {
+		query_result->type = T_TXT;
+		strncpy(query_result->u.str[query_result->n], (char *) ptr, len);
+		query_result->u.str[query_result->n++][len] = '\0';
+	    }
+	    ptr += len;
+		
 	} else if (type == T_A) {
 
 	    unsigned long x;
@@ -400,12 +453,16 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 
 	    len = dn_expand((u_char*) q, eom, ptr, auth_buf, sizeof(auth_buf));
 	    if (len < 0) {
+	        strcpy(query_result->u.str[0], "dn_expand() of T_SOA MNAME failed");
+	        query_result->n = -1;
 		return;
 	    }
 	    ptr += len;
 			
 	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
 	    if (len < 0) {
+	        strcpy(query_result->u.str[0], "dn_expand() of T_SOA RNAME failed");
+	        query_result->n = -1;
 		return;
 	    }
 	    ptr += len;
@@ -414,8 +471,10 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	     * Skip to the end of this rr:
 	     */
 
+	    /* TODO: 32/64 pointer arithmetic ok? */
 	    ptr += 5 * 4;
 
+	    /* TODO: why check for T_SOA? */
 	    if (query_result->type == T_SOA || query_result->type == -1) {
 		query_result->type = T_SOA;
 		strcpy(query_result->u.str[query_result->n++], auth_buf);
@@ -423,12 +482,34 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 
 	} else if (type == T_HINFO) {
 
-	    for (i = 0; i < 1; i++) {		/* XXX: ??? */
-		len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
-		if (len < 0) {
+	    /* two <character-string>s */
+	    for (i = 2; i; i--) {
+	        len = *ptr++;
+		
+		if (query_result->type == T_HINFO || query_result->type == -1) {
+   	            query_result->type = T_HINFO;
+		    strncpy(query_result->u.str[query_result->n], (char *) ptr, len);
+		    query_result->u.str[query_result->n++][len] = '\0';
+	        }
+		ptr += len;
+	    }
+
+#if 0
+	    /* leg20170307: ditched this.  It's not understandable
+	      TODO: why len from dn_expand() but then pointer arithmetic with rdlen?
+	     * TODO: why a for loop with exactly one iteration when we
+	     * need both: CPU and OS string?
+	     */
+	    for (i = 0; i <= 1; i++) {		/* XXX: ??? */
+	        len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
+			if (len < 0) {
+	            strcpy(query_result->u.str[0], "dn_expand() of T_HINFO failed");
+	            query_result->n = -1;
 		    return;
 		}
-		ptr += rdlen;
+		/* TODO: len/rdlen ptr += rdlen;
+		 */
+		ptr +=len;
 
 		if (query_result->type == T_HINFO 
 		    || query_result->type == -1) {
@@ -436,15 +517,21 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 		    strcpy(query_result->u.str[query_result->n++], buf);
 		}
 	    }
-
+#endif
+	    
 	} else if (type == T_PTR) {
 
 	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
 	    if (len < 0) {
+	        strcpy(query_result->u.str[0], "dn_expand() of T_PTR failed");
+	        query_result->n = -1;
 		return;
 	    }
-	    ptr += rdlen;
-
+	    /* TODO: len/rdlen
+	       ptr += rdlen;
+	    */
+	    ptr += len;
+	    
 	    if (query_result->type == T_PTR || query_result->type == -1) {
 		query_result->type = T_PTR;
 		strcpy(query_result->u.str[query_result->n++], buf);
@@ -457,6 +544,8 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	    
 	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
 	    if (len < 0) {
+	        strcpy(query_result->u.str[0], "dn_expand() of T_MX failed");
+		query_result->n = -1;
 		return;
 	    }
 	    ptr += len;
@@ -529,7 +618,7 @@ DnsHaveQuery(const char *query_string, int query_type, a_res *query_result, int 
 	 * Check ptr and soa's not recursive:
 	 */
 
-	if (query_type == T_SOA || query_type == T_PTR) {
+	if (query_type == T_SOA || query_type == T_PTR || query_type == T_TXT) {
 	    *query_result = res;
 	    return;
 	}
@@ -660,6 +749,7 @@ DnsPtr(Tcl_Interp *interp, const char *ip)
     if (TnmValidateIpAddress(interp, ip) != TCL_OK) {
 	return TCL_ERROR;
     }
+
     if (4 != sscanf(ip, "%d.%d.%d.%d", &a, &b, &c, &d)) {
 	Tcl_AppendResult(interp, "invalid IP address \"", 
 			 ip, "\"", (char *) NULL);
@@ -789,6 +879,58 @@ DnsHinfo(Tcl_Interp *interp, const char *hname)
 /*
  *----------------------------------------------------------------------
  *
+ * DnsCname --
+ *
+ *	This procedure retrieves the Cname records for
+ *	the DNS domain name given by hname.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+DnsCname(Tcl_Interp *interp, const char *hname)
+{
+    a_res res;
+    int i;
+
+    /*
+     * If we get a numerical address, convert to a name first. 
+     */
+
+    if (TnmValidateIpAddress(NULL, hname) == TCL_OK) {
+	if (DnsGetHostName(interp, hname) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	hname = Tcl_GetStringResult(interp);
+    }
+
+    if (TnmValidateIpHostName(interp, hname) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    DnsHaveQuery(hname, T_CNAME, &res, 0);
+    Tcl_ResetResult(interp);
+
+    if (res.n < 0 || res.type != T_CNAME) {
+        Tcl_SetResult(interp, res.u.str[0], TCL_VOLATILE);
+	return TCL_ERROR;
+    }
+
+    for (i = 0; i < res.n; i++) {
+        Tcl_AppendElement(interp, res.u.str[i]);
+    }
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
  * DnsMx --
  *
  *	This procedure retrieves the mail exchanger record (MX) for
@@ -828,6 +970,110 @@ DnsMx(Tcl_Interp *interp, const char *hname)
     Tcl_ResetResult(interp);
 
     if (res.n < 0 || res.type != T_MX) {
+        Tcl_SetResult(interp, res.u.str[0], TCL_VOLATILE);
+	return TCL_ERROR;
+    }
+
+    for (i = 0; i < res.n; i++) {
+        Tcl_AppendElement(interp, res.u.str[i]);
+    }
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * DnsNs --
+ *
+ *	This procedure retrieves the DNS server records (NS) for
+ *	the DNS domain name given by hname.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int 
+DnsNs(Tcl_Interp *interp, const char *hname)
+{
+    a_res res;
+    int i;
+
+    /*
+     * If we get a numerical address, convert to a name first. 
+     */
+
+    if (TnmValidateIpAddress(NULL, hname) == TCL_OK) {
+	if (DnsGetHostName(interp, hname) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	hname = Tcl_GetStringResult(interp);
+    }
+
+    if (TnmValidateIpHostName(interp, hname) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    DnsHaveQuery(hname, T_NS, &res, 0);
+    Tcl_ResetResult(interp);
+
+    if (res.n < 0 || res.type != T_NS) {
+        Tcl_SetResult(interp, res.u.str[0], TCL_VOLATILE);
+	return TCL_ERROR;
+    }
+
+    for (i = 0; i < res.n; i++) {
+        Tcl_AppendElement(interp, res.u.str[i]);
+    }
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * DnsTxt --
+ *
+ *	This procedure retrieves the TXT records for
+ *	the DNS domain name given by hname.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+DnsTxt(Tcl_Interp *interp, const char *hname)
+{
+    a_res res;
+    int i;
+
+    /*
+     * If we get a numerical address, convert to a name first. 
+     */
+
+    if (TnmValidateIpAddress(NULL, hname) == TCL_OK) {
+	if (DnsGetHostName(interp, hname) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	hname = Tcl_GetStringResult(interp);
+    }
+
+    if (TnmValidateIpHostName(interp, hname) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    DnsHaveQuery(hname, T_TXT, &res, 0);
+    Tcl_ResetResult(interp);
+
+    if (res.n < 0 || res.type != T_TXT) {
         Tcl_SetResult(interp, res.u.str[0], TCL_VOLATILE);
 	return TCL_ERROR;
     }
@@ -919,11 +1165,11 @@ Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 	Tcl_GetAssocData(interp, tnmDnsControl, NULL);
 
     enum commands {
-	cmdAddress, cmdHinfo, cmdMx, cmdName, cmdSoa
+	cmdAddress, cmdCname, cmdHinfo, cmdMx, cmdName, cmdNs, cmdSoa, cmdTxt
     } cmd;
 
     static CONST char *cmdTable[] = {
-	"address", "hinfo", "mx", "name", "soa", (char *) NULL	
+	"address", "cname", "hinfo", "mx", "name", "ns", "soa", "txt", (char *) NULL	
     };
 
     if (! control) {
@@ -1098,14 +1344,20 @@ Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
     switch (cmd) {
     case cmdAddress:
 	return DnsA(interp, arg);
+    case cmdCname:
+	return DnsCname(interp, arg);
     case cmdHinfo:
 	return DnsHinfo(interp, arg);
     case cmdMx:
 	return DnsMx(interp, arg);
+    case cmdNs:
+	return DnsNs(interp, arg);
     case cmdName:
 	return DnsPtr(interp, arg);
     case cmdSoa:
 	return DnsSoa(interp, arg);
+    case cmdTxt:
+	return DnsTxt(interp, arg);
     }
 
     return TCL_OK;
