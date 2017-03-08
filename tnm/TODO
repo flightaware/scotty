@@ -106,33 +106,19 @@ Note: upd-7.2 uses -myport 1235, then -myport 1236 and connects the
 - udp-7.2 is "flaky" - sometimes it works, sometimes it fails like the above.
   For now we disable it too.
 
-### Test
-
-### Tnm::udp
-
-Tests:
-- udp-11.2.1 udp configure/send: send to configured, w/o connect
-- udp-11.2.2 udp configure/send: send to connected
-- udp-11.2.3 udp configure/send: send to configured, connected
-
-Fail with: POSIX EADDRINUSE {address already in use}.
-
-Note: these use the same udp endpoint to send and receive.  Might just
-rewrite the tests.
-
-
 ### Build
 
 Manuals are install in /Library/Tcl/share/man, where they are not
 found by man(1).
 
 FreeBSD 10.3
+------------
 
 ### Tnm::netdb
 
 Tests netdb-6.6 and netb-6.7 consume all available memory and then
 scotty gets killed. (netdb ip).  Note: tested on a 64 bit
-architecture.   However on Ubuntu 16.10 this does not occur.
+architecture.   However on Ubuntu 16.10 this does not occur, on NetBSD it does
 
 The same behaviour is found also on the original scotty (flightaware).
 
@@ -196,29 +182,9 @@ Generic
 - We could clean up the Makefile, now that everything builds ok.
 
 
-Scotty binary
--------------
-
-With a 'standard' build (shared, stubs) we get an immediate segfault
-as soon as `Tcl_CreateInterp()` is called.
-
-If configured with `--disable-shared --disable-stubs` scotty just runs
-fine.  However it segfaults somewhere later. e.g. `./scotty
-tests/all.tcl` fails after running all tests and idling about half a
-minute.
-
-
 Tnm::dns
 --------
 
-- dns soa command does not return the whole information, example:
-
-	`$ host -t soa iana.org
-	iana.org has SOA record sns.dns.icann.org. noc.dns.icann.org. 2016111663 7200 3600 1209600 3600
-	`
-	`scotty% dns soa iana.org
-	sns.dns.icann.org
-	`
 - (obsolete) dns hinfo command returns errorCode but the error message
    is a domain name, seemingly from the soa record, example:
 
@@ -229,9 +195,18 @@ Tnm::dns
 	sns.dns.icann.org
 	`
 
+	We have already changed the code, so we get correctly "not found",
+    however it is not tested with a real hinfo record.
+
 - If a dns lookup for an Internet host in a test fails we should skip
   further tests with Internet lookups since they probably will fail
   too.
+
+- Tests for CNAME, NS, and TXT are missing.
+
+- "Real World" tests are done against fixed names/IP's, these might
+  change, disappear or be redirected.  We should test e.g. against a
+  `tinydns` or `dnsmasq` setup.
 
 
 Tnm::icmp
@@ -430,7 +405,7 @@ Functionality
 
 ### Tnm::dns
 
-- Add at least the following lookups: cname ns txt spf srv.
+- Add at least the following lookups: srv.
 - Add all currently in use lookups.
 - Add possibility to craft a lookup type.
 - Add IPv6 lookups.

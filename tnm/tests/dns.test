@@ -24,10 +24,24 @@ catch {
 }
 configure -debug 0
 set verbosity [configure -verbose] 
-configure -verbose {body error skip}
+configure -verbose {body error skip start}
 
+proc tryDnsAandCname {name} {
+    if {[catch {dns address $name} result]} {
+	if {[catch {dns cname $name} result]} {
+	    error "neither A nor CNAME: $name"
+	} else {
+	    tryDnsAandCname $result
+	}
+    } else {
+	return $result
+    }
+}
+# set constraint and variable at the same time.
 testConstraint dnsAvailable \
-    [expr {![catch {dns address www.iana.org}]}]
+    [expr {![catch {tryDnsAandCname www.iana.org} ianaIp]}]
+# Note that this makes the Tnm::dns address test superfluous.
+testConstraint testSuperfluous false
 
 testConstraint knownBugMacOSX\
     [expr {!($::tcl_platform(os) eq "Darwin")}]
@@ -45,7 +59,7 @@ test dns-1.2 {dns too many arguments} {
 } {1 {wrong # args: should be "dns ?-timeout t? ?-retries r? ?-server hosts? option arg"}}
 test dns-1.3 {dns wrong option} {
     list [catch {dns foo bar} msg] $msg
-} {1 {bad option "foo": must be address, hinfo, mx, name, or soa}}
+} {1 {bad option "foo": must be address, cname, hinfo, mx, name, ns, soa, or txt}}
 #----------------------------------------------------------
 test dns-2.1 {dns timeout option} {
     dns -timeout 11
@@ -95,7 +109,7 @@ if {[testConstraint knownBugMacOSX]} {
 # We use iana.org for tests.  If this domain should happen to go away
 # there would be no need for Tnm::dns anyway. 
 test dns-3.1 {dns address: internet host} -constraints {
-    dnsAvailable
+    testSuperfluous
 } -body {
     set ::ianaIp [lindex [dns address www.iana.org] 0]
 } -match glob -result {*.*.*.*}
@@ -129,23 +143,22 @@ test dns-5.1 {dns hinfo: not available} dnsAvailable {
 } {1 {cannot reverse lookup "192.0.2.0"}}
 # dns hinfo seems buggy, so we disable it.
 test dns-5.2 {dns hinfo: internet host} -constraints {
-    knownBug
 } -body {
-    [list catch {dns hinfo iana.org} msg] $msg
-} -result {1 {iana.org has no HINFO record}}
+    dns hinfo iana.org
+} -returnCodes 1 -result {non existent domain}
 #----------------------------------------------------------
+# dns mx
 test dns-6.1 {dns mx: internet host} -constraints {
     dnsAvailable
 } -body {
     lindex [dns mx iana.org] 0
 } -match regexp -result {.*\.org [0-9]{1,3}}
 #----------------------------------------------------------
-# dns soa is buggy, so we disable it.
+# dns soa
 test dns-7.1 {dns soa: internet host} -constraints {
-    knownBug
 } -body {
     dns soa iana.org
-} -match regexp -result {iana.org has SOA record sns.dns.icann.org. noc.dns.icann.org. 2016111663 7200 3600 1209600 3600}
+} -match regexp -result {sns.dns.icann.org}
 
 ::tcltest::cleanupTests
 
