@@ -160,6 +160,25 @@ If tests are run with: `scotty3.0.2 all.tcl` we get a segfault on exit.
 Man files are install in a place, where they cannot be seen
 (`/usr/local/share/man/mann`).
 
+NetBSD
+------
+
+sudo `make sinstall` fails with default system setup, because `/sbin`
+is not on path, `chown`, `chmod` is inside `/sbin/.
+
+
+We get errors:
+
+	_res is not supported for multi-threaded programs.
+
+when running, e.g. tkined or in the tnm dns test suite.  The test
+dumps core then.
+
+Slackware Linux
+---------------
+
+Slackware 14.2.: x86_64: similar failures as with FreeBSD amd64
+
 
 Generic
 -------
@@ -399,9 +418,12 @@ Port to
 -------
 
 - OpenIndiana (Solaris)
-- Minix
+- Minix:
+  - Note: Minix3.3 is missing rpc/rpcgen implementation.
 - Windows
-
+- NetBSD: 
+  - Usage of _res is not compatible with NetBSD.
+- Linux
 
 Functionality
 -------------
