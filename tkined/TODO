@@ -3,12 +3,23 @@
 Bugs
 ====
 
-* Generic
-    * Build
-         * Should we revamp directory tree of installed files to
-		 reflect FHS or so (`share` instead of `library` ...)?
-         * We could clean things up, and put in order, as we now
-         build everything ok.
+MacOSX
+------
+
+- Menu shortcut keys:
+  - OS X Yosemite: shortcut's to not show up in menu entries.
+  - OS X Sierra: all shortcuts show up as "Space".
+
+
+Build
+-----
+
+* Should we revamp directory tree of installed files to
+reflect FHS or so (`share` instead of `library` ...)?
+* We could clean things up, and put in order, as we now
+build everything ok.
+
+
 
 Tests
 =====

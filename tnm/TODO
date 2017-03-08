@@ -17,6 +17,11 @@ The `dns -server arg` option seems to mess up name server resolution
 on MacOSX, so we disable all tests and uses in tests/dns.test with
 knownBugMacOSX.
 
+The 'resolver' algorithm seems to mess up internally, probably when
+there is a search list with more than one entry.  Maybe that is the
+reason why this problem shows up on MacOSX.  We have to disable most
+tests with real lookups on this platform.
+
 
 ### Tnm::icmp
 

@@ -24,33 +24,52 @@ catch {
 }
 configure -debug 0
 set verbosity [configure -verbose] 
-configure -verbose {body error skip start}
+configure -verbose {body error skip}
 
-proc tryDnsAandCname {name} {
-    if {[catch {dns address $name} result]} {
-	if {[catch {dns cname $name} result]} {
-	    error "neither A nor CNAME: $name"
-	} else {
-	    tryDnsAandCname $result
-	}
-    } else {
-	return $result
-    }
-}
+
+# We use iana.org for tests.  If this domain should happen to go away
+# there would be no need for Tnm::dns anyway. 
+set testDomain iana.org
+set testHostName ianawww.vip.icann.org
+set testCname www.iana.org
+set testNsServers [lsort {
+    a.iana-servers.net
+    b.iana-servers.net
+    ns.icann.org
+    c.iana-servers.net
+}]
+
+# testIP will be set in test dns-3.1
+
+#----------------------------------------------------------
+# Constraints
+
 # set constraint and variable at the same time.
 testConstraint dnsAvailable \
-    [expr {![catch {tryDnsAandCname www.iana.org} ianaIp]}]
-# Note that this makes the Tnm::dns address test superfluous.
-testConstraint testSuperfluous false
+    [expr {![catch {dns address $testHostName} testHostIp]}]
 
-testConstraint knownBugMacOSX\
+testConstraint knownBugMacOSX \
     [expr {!($::tcl_platform(os) eq "Darwin")}]
+
+# sub commands added in 3.0.2
+proc haveSubCmd {cmd} {
+    catch {dns foo bar} subCmds
+    set subCmds [string map {: "" , ""} $subCmds]
+    return [expr {$cmd in $subCmds}]
+}
+testConstraint haveNsCmd [haveSubCmd ns]
+testConstraint haveCnameCmd [haveSubCmd cname]
+testConstraint haveTxtCmd [haveSubCmd txt]
+
+#----------------------------------------------------------
 
 # save default settings...
 set dnsServer  [dns -server]
 set dnsTimeout [dns -timeout]
 set dnsRetries [dns -retries]
 
+#----------------------------------------------------------
+# dns command arguments
 test dns-1.1 {dns no arguments} {
     list [catch {dns} msg] $msg
 } {1 {wrong # args: should be "dns ?-timeout t? ?-retries r? ?-server hosts? option arg"}}
@@ -61,6 +80,7 @@ test dns-1.3 {dns wrong option} {
     list [catch {dns foo bar} msg] $msg
 } {1 {bad option "foo": must be address, cname, hinfo, mx, name, ns, soa, or txt}}
 #----------------------------------------------------------
+# Options
 test dns-2.1 {dns timeout option} {
     dns -timeout 11
     dns -timeout
@@ -83,22 +103,33 @@ test dns-2.6 {dns retries option: negative argument} {
     list [catch {dns -retries -1} msg] $msg
 } {1 {expected unsigned integer but got "-1"}}
 #----------------------------------------------------------
-test dns-2.7 {dns server option} knownBugMacOSX {
+test dns-2.7 {dns server option} -constraints {
+} -body {
     dns -server localhost
     dns -server
-} {127.0.0.1}
-test dns-2.8 {dns server option: illegal argument} knownBugMacOSX {
-    list [catch {dns -server "no@name"} msg] $msg
-} {1 {illegal IP address or name "no@name"}}
+} -result {127.0.0.1}
+test dns-2.8 {dns server option: illegal argument} -constraints {
+} -body {
+    dns -server no@name
+} -returnCodes {
+    1
+} -result {illegal IP address or name "no@name"}
 # RFC6761/invalid domain name
-test dns-2.9 {dns server option: name does not exist} {dnsAvailable knownBugMacOSX} {
-    list [catch {dns -server "domain.invalid"} msg] $msg
-} {1 {unknown IP host name "domain.invalid"}}
+test dns-2.9 {dns server option: name does not exist} -constraints {
+    dnsAvailable
+} -body {
+    dns -server domain.invalid
+} -returnCodes {
+    1
+} -result {unknown IP host name "domain.invalid"}
+
 # Historical note: this is an IP at Braunschweig University
-test dns-2.10 {dns options: set all at once} knownBugMacOSX {
+test dns-2.10 {dns options: set all at once} -constraints {
+    knownBugMacOSX
+} -body {
     dns -server 134.169.34.1 -retries 0 -timeout 1
     concat [dns -server] [dns -timeout] [dns -retries]
-} {134.169.34.1 1 0}
+} -result {134.169.34.1 1 0}
 
 # On MacOSX we must not use the `dns -server arg` command, else name
 # resolution fails (logic values for 'knownBug' are inverse)
@@ -106,27 +137,42 @@ if {[testConstraint knownBugMacOSX]} {
     dns -server $dnsServer -retries $dnsRetries -timeout $dnsTimeout
 }
 #----------------------------------------------------------
-# We use iana.org for tests.  If this domain should happen to go away
-# there would be no need for Tnm::dns anyway. 
+# address lookup (A)
+
 test dns-3.1 {dns address: internet host} -constraints {
-    testSuperfluous
+    dnsAvailable
+    knownBugMacOSX
 } -body {
-    set ::ianaIp [lindex [dns address www.iana.org] 0]
+    set ::testIP [lindex [dns address $::testHostName] 0]
 } -match glob -result {*.*.*.*}
+
+# ::testIP is used later, guard against use, if we could not look it
+# up
+testConstraint validTestIP [info exists ::testIP]
+
 # localhost is typically in /etc/hosts, no constraint needed
 # but beware.
 # No network! Why would you need scotty then?
-test dns-3.2 {dns address: IPv4 of localhost} {
-    list [catch {dns address "127.0.0.1"} msg] $msg
-} {0 127.0.0.1}
-test dns-3.3 {dns address: invalid IPv4} dnsAvailable {
-    list [catch {dns address "1.2.3.4.5"} msg] $msg
-} {1 {non existent domain}}
+test dns-3.2 {dns address: IPv4 of localhost} -constraints {
+    knownBugMacOSx
+} -body {
+    dns address 127.0.0.1
+} -result {127.0.0.1}
+test dns-3.3 {dns address: invalid IPv4} -constraints {
+    dnsAvailable
+    knownBugMacOSX
+} -body {
+    dns address "1.2.3.4.5"
+} -returnCodes {
+    1
+} -result {non existent domain}
 #----------------------------------------------------------
+# name lookup (PTR)
 test dns-4.1 {dns name: valid IPv4} -constraints {
     dnsAvailable
+    validTestIP
 } -body {
-    dns name $::ianaIp
+    dns name $::testIP
 } -match regexp -result {.*\.iana\.org}
 test dns-4.2 {dns name: illegal IPv4 string} {
     list [catch {dns name "no name"} msg] $msg
@@ -135,30 +181,73 @@ test dns-4.3 {dns name: illegal IPv4 dotted octets} {
     list [catch {dns name "1.2.3.4.5"} msg] $msg
 } {1 {illegal IP address "1.2.3.4.5"}}
 #----------------------------------------------------------
+# hinfo
+#
 # RFC5737/invalid ip address
 # Note: hinfo is "Not in current use by any notable application"
 # according to Wikipedia
-test dns-5.1 {dns hinfo: not available} dnsAvailable {
-    list [catch {dns hinfo 192.0.2.0} msg] $msg
-} {1 {cannot reverse lookup "192.0.2.0"}}
-# dns hinfo seems buggy, so we disable it.
+test dns-5.1 {dns hinfo: not available} -constraints {
+    dnsAvailable
+} -body {
+    dns hinfo 192.0.2.0
+} -returnCodes {
+    1
+} -result {cannot reverse lookup "192.0.2.0"}
+
 test dns-5.2 {dns hinfo: internet host} -constraints {
+    knownBugMacOSX
 } -body {
     dns hinfo iana.org
-} -returnCodes 1 -result {non existent domain}
+} -returnCodes {
+    1
+} -result {non existent domain}
 #----------------------------------------------------------
 # dns mx
 test dns-6.1 {dns mx: internet host} -constraints {
     dnsAvailable
+    knownBugMacOSX
 } -body {
     lindex [dns mx iana.org] 0
 } -match regexp -result {.*\.org [0-9]{1,3}}
 #----------------------------------------------------------
 # dns soa
 test dns-7.1 {dns soa: internet host} -constraints {
+    dnsAvailable
+    knownBugMacOSX
 } -body {
     dns soa iana.org
 } -match regexp -result {sns.dns.icann.org}
+
+#----------------------------------------------------------
+# dns txt
+test dns-8.1 {dns txt} -constraints {
+    haveTxtCmd
+    dnsAvailable
+    knownBugMacOSX
+} -body {
+    dns txt $::testDomain
+} -result {v=spf1 redirect=icann.org}
+
+#----------------------------------------------------------
+# dns cname
+test dns-9.1 {dns cname} -constraints {
+    haveCnameCmd
+    dnsAvailable
+    knownBugMacOSX
+} -body {
+    dns cname $::testCname
+} -result $::testHostName
+
+#----------------------------------------------------------
+# dns ns
+test dns-10.1 {dns ns} -constraints {
+    haveNsCmd
+    dnsAvailable
+    knownBugMacOSX
+} -body {
+    lsort [dns ns $::testDomain]
+} -result $::testNsServers
+
 
 ::tcltest::cleanupTests
 

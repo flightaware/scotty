@@ -27,6 +27,8 @@ testConstraint hangsMacOSX \
 testConstraint hangsFreeBSD \
     [expr {!($::tcl_platform(os) eq "FreeBSD")}]
 
+testConstraint pre3.0.2 [expr {[package vcompare $::tnm(version) 3.0.2] == -1}]
+
 package require Tnm 3.0
 catch {
     namespace import Tnm::netdb
@@ -123,9 +125,14 @@ test netdb-3.9 {check "netdb services" command} knownBug {
 test netdb-4.1 {check for illegal IP host names} {
     list [catch {netdb hosts address ""} msg] $msg
 } {1 {illegal IP host name ""}}
-test netdb-4.2 {check for illegal IP host names} {
-    list [catch {netdb hosts address "foo."} msg] $msg
-} {1 {illegal IP host name "foo."}}
+# pre 3.0.2 did not allow a dot a the end of a host name.
+test netdb-4.2 {check for illegal IP host names} -constraints {
+    pre3.0.2
+} -body {
+    netdb hosts address "foo."
+} -returnCodes {
+    1
+} -result {illegal IP host name "foo."}
 test netdb-4.3 {check for illegal IP host names} {
     list [catch {netdb hosts address "foo-"} msg] $msg
 } {1 {illegal IP host name "foo-"}}
