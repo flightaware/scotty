@@ -38,7 +38,7 @@ set testNsServers [lsort {
     ns.icann.org
     c.iana-servers.net
 }]
-
+set testTxtRecord {{v=spf1 redirect=icann.org}}
 # testIP will be set in test dns-3.1
 
 #----------------------------------------------------------
@@ -154,7 +154,7 @@ testConstraint validTestIP [info exists ::testIP]
 # but beware.
 # No network! Why would you need scotty then?
 test dns-3.2 {dns address: IPv4 of localhost} -constraints {
-    knownBugMacOSx
+    knownBugMacOSX
 } -body {
     dns address 127.0.0.1
 } -result {127.0.0.1}
@@ -226,7 +226,7 @@ test dns-8.1 {dns txt} -constraints {
     knownBugMacOSX
 } -body {
     dns txt $::testDomain
-} -result {v=spf1 redirect=icann.org}
+} -result $::testTxtRecord
 
 #----------------------------------------------------------
 # dns cname

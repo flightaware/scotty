@@ -24,6 +24,11 @@ configure -verbose {body error skip}
 testConstraint knownBugMacOSX\
     [expr {!($::tcl_platform(os) eq "Darwin")}]
 
+testConstraint knownBug64BitArchitecture [expr {!(
+			       ($::tcl_platform(machine) == "amd64")
+			       || ($::tcl_platform(machine) == "x86_64")
+			       )}]
+
 package require Tnm 3.0
 catch {
     namespace import Tnm::snmp Tnm::mib
@@ -77,9 +82,14 @@ test snmp-2.9 {snmp alias} knownBug {
     list [catch {snmp generator -alias foo} msg] $msg
 } {1 {alias loop detected}}
 
-test snmp-X.1 {snmp Unsigned32 type} knownBugMacOSX {
+test snmp-X.1 {snmp Unsigned32 type} -constraints {
+    knownBug64BitArchitecture
+} -body {
     list [catch {snmp expand {{1.3 Unsigned32 4294967296}}} msg] $msg
-} {1 {unsigned value too large to represent}}
+} -returnCodes {
+    1
+} -result {unsigned value too large to represent}
+
 test snmp-X.2 {snmp Unsigned32 type} {
     snmp expand {{1.3 Unsigned32 4294967295}}
 } {{1.3 Unsigned32 4294967295}}
@@ -93,9 +103,14 @@ test snmp-X.5 {snmp Unsigned32 type} {
     list [catch {snmp expand {{1.3 Unsigned32 foo}}} msg ] $msg
 } {1 {expected 32 bit unsigned but got "foo"}}
 
-test snmp-X.6 {snmp Gauge32 type} knownBugMacOSX {
-    list [catch {snmp expand {{1.3 Gauge32 4294967296}}} msg] $msg
-} {1 {unsigned value too large to represent}}
+test snmp-X.6 {snmp Gauge32 type} -constraints {
+    knownBug64BitArchitecture
+} -body {
+    snmp expand {{1.3 Gauge32 4294967296}}
+} -returnCodes {
+    1
+} -result {unsigned value too large to represent}
+
 test snmp-X.7 {snmp Gauge32 type} {
     snmp expand {{1.3 Gauge32 4294967295}}
 } {{1.3 Gauge32 4294967295}}
@@ -109,9 +124,14 @@ test snmp-X.10 {snmp Gauge32 type} {
     list [catch {snmp expand {{1.3 Gauge32 foo}}} msg ] $msg
 } {1 {expected 32 bit unsigned but got "foo"}}
 
-test snmp-X.11 {snmp Counter32 type} knownBugMacOSX {
-    list [catch {snmp expand {{1.3 Counter32 4294967296}}} msg] $msg
-} {1 {unsigned value too large to represent}}
+test snmp-X.11 {snmp Counter32 type} -constraints {
+    knownBug64BitArchitecture
+} -body {
+    snmp expand {{1.3 Counter32 4294967296}}
+} -returnCodes {
+    1
+} -result {unsigned value too large to represent}
+
 test snmp-X.12 {snmp Counter32 type} {
     snmp expand {{1.3 Counter32 4294967295}}
 } {{1.3 Counter32 4294967295}}
@@ -125,9 +145,14 @@ test snmp-X.15 {snmp Counter32 type} {
     list [catch {snmp expand {{1.3 Counter32 foo}}} msg ] $msg
 } {1 {expected 32 bit unsigned but got "foo"}}
 
-test snmp-X.16 {snmp TimeTicks type} knownBugMacOSX {
-    list [catch {snmp expand {{1.3 TimeTicks 4294967296}}} msg] $msg
-} {1 {unsigned value too large to represent}}
+test snmp-X.16 {snmp TimeTicks type} -constraints {
+    knownBug64BitArchitecture
+} -body {
+    snmp expand {{1.3 TimeTicks 4294967296}}
+} -returnCodes {
+    1
+} -result {unsigned value too large to represent}
+
 test snmp-X.17 {snmp TimeTicks type} {
     snmp expand {{1.3 TimeTicks 4294967295}}
 } {{1.3 TimeTicks 4294967295}}

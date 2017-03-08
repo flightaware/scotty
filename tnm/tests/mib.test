@@ -29,6 +29,11 @@ configure -verbose {body error skip}
 testConstraint knownBugMacOSX\
     [expr {!($::tcl_platform(os) eq "Darwin")}]
 
+testConstraint knownBug64BitArchitecture [expr {!(
+			       ($::tcl_platform(machine) == "amd64")
+			       || ($::tcl_platform(machine) == "x86_64")
+			       )}]
+
 
 # The following MIB modules provide test cases and must be loaded
 # in order to run the tests below.
@@ -128,12 +133,16 @@ test mib-7.12 {mib format} {
 test mib-7.13 {mib format} {
     mib format HexValue -12345
 } {-3039}
-test mib-7.14 {mib format} knownBugMacOSX {
+test mib-7.14 {mib format} -constraints {
+    knownBug64BitArchitecture
+} -body {
     mib format BinaryValue 12345
-} {11000000111001}
-test mib-7.15 {mib format} knownBugMacOSX {
+} -result {11000000111001}
+test mib-7.15 {mib format} -constraints {
+    knownBug64BitArchitecture
+} -body {
     mib format BinaryValue -12345
-} {-11000000111001}
+} -result {-11000000111001}
 test mib-7.16 {mib format} {
     mib format Dot3Value 12345
 } {12.345}
