@@ -163,18 +163,6 @@ Generic
 - We could clean up the Makefile, now that everything builds ok.
 
 
-Scotty binary
--------------
-
-With a 'standard' build (shared, stubs) we get an immediate segfault
-as soon as `Tcl_CreateInterp()` is called.
-
-If configured with `--disable-shared --disable-stubs` scotty just runs
-fine.  However it segfaults somewhere later. e.g. `./scotty
-tests/all.tcl` fails after running all tests and idling about half a
-minute.
-
-
 Tnm::dns
 --------
 
@@ -188,9 +176,18 @@ Tnm::dns
 	sns.dns.icann.org
 	`
 
+	We have already changed the code, so we get correctly "not found",
+    however it is not tested with a real hinfo record.
+
 - If a dns lookup for an Internet host in a test fails we should skip
   further tests with Internet lookups since they probably will fail
   too.
+
+- Tests for CNAME, NS, and TXT are missing.
+
+- "Real World" tests are done against fixed names/IP's, these might
+  change, disappear or be redirected.  We should test e.g. against a
+  `tinydns` or `dnsmasq` setup.
 
 
 Tnm::icmp
