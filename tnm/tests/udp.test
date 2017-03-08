@@ -24,8 +24,10 @@ configure -verbose {body error skip}
 testConstraint knownBugMacOSX\
     [expr {!($::tcl_platform(os) eq "Darwin")}]
 
-testConstraint notFreeBSD [expr {$::tcl_platform(os) ne "FreeBSD"}]
+
 testConstraint notMacOSX [expr {$::tcl_platform(os) ne "Darwin"}]
+testConstraint notFreeBSD [expr {$::tcl_platform(os) ne "FreeBSD"}]
+testConstraint notNetBSD [expr {$::tcl_platform(os) ne "NetBSD"}]
 
 package require Tnm 3.0
 catch {
@@ -327,14 +329,16 @@ foreach u [udp find] { $u destroy }
 #
 # Either it works, or an EISCONN error is issued.
 #
-# | OS      | Distribution      | Comment |
-# | Linux   | Debian Jessie     | ok      |
-# |         | Ubuntu Yakkety    | ok      |
-# | FreeBSD | 10.3 amd64        | EISCONN |
-# | MacOSX  | Yosemite, 10.10.5 | EISCONN |
+# | OS      | Distribution          | Comment |
+# | Linux   | Debian Jessie         | ok      |
+# |         | Ubuntu Yakkety        | ok      |
+# |         | Slackware 14.2 x86_64 | ok      |
+# | FreeBSD | 10.3 amd64            | EISCONN |
+# | NetBSD  | 7.0.2 amd64           | EISCONN |
+# | MacOSX  | Yosemite, 10.10.5     | EISCONN |
 #
 test udp-11.2.3 {udp configure/send: send to configured, connected} -constraints {
-    notFreeBSD notMacOSX
+    notFreeBSD notMacOSX notNetBSD
 } -body {
     catch {rename udp# {}}
     set r [udp create -myaddress 127.0.0.1 -myport $::SOME_PORT]

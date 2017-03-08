@@ -15,12 +15,18 @@ set ::tcltest::testSingleFile false
 set ::tcltest::testsDirectory [file dir [info script]]
 
 puts stdout "Tcl $tcl_patchLevel tests running in interp:  [info nameofexecutable]"
+
 puts stdout "Tests running in working dir:  $::tcltest::testsDirectory"
 if {[llength $::tcltest::skip] > 0} {
     puts stdout "Skipping tests that match:  $::tcltest::skip"
 }
 if {[llength $::tcltest::match] > 0} {
     puts stdout "Only running tests that match:  $::tcltest::match"
+}
+
+if {$tcl_platform(os) eq "NetBSD"} {
+    puts stdout "NetBSD: skip dns.test"
+    lappend ::tcltest::skipFiles dns.test
 }
 
 if {[llength $::tcltest::skipFiles] > 0} {
