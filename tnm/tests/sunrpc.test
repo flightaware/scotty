@@ -30,6 +30,21 @@ catch {
 #set target localhost
 set target $tnm(host)
 
+# version: main version:
+# wheezy: 7
+# jessie: 8
+proc debianVersion {version} {
+    set versionFile [file join / etc debian_version]
+    if {![file exists $versionFile]} {
+	return false
+    }
+    set thisVersion [read [set fd [open $versionFile]]]
+    close $fd
+    return [string match "${version}.*" $thisVersion]
+}
+
+testConstraint WheezyCrash [expr {![debianVersion 7]}]
+
 testConstraint rpcServerAvailable \
     [expr {! [catch {sunrpc info $target}]}]
 
@@ -55,6 +70,7 @@ test sunrpc-1.1 {sunrpc command} {
     list [catch {sunrpc} msg] $msg
 } {1 {wrong # args: should be "sunrpc option host ?args?"}}
 test sunrpc-1.2 {sunrpc command} -constraints {
+    WheezyCrash
 } -body {
     catch {bad workaround}
     sunrpc foo
