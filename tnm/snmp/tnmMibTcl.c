@@ -17,6 +17,10 @@
 #include <config.h>
 #endif
 
+#if !defined(Tcl_GetErrorLine)
+#define Tcl_GetErrorLine(interp) (interp->errorLine)
+#endif
+
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 

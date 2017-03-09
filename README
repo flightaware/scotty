@@ -89,8 +89,9 @@ Tested Operating Systems
 
 - Debian GNU/Linux 8.7 (jessie) *
 - Alpine Linux (Note: temporarily unavailable)
-- Slackware Linux
-- FreeBSD 10.3 and 11 *
+- Slackware Linux 14.2
+- FreeBSD 10.3 * and 11
+- NetBSD 7.0.2
 - MacOSX 10.10.5 (Yosemite)
 
 Note: operating systems marked with an * have the best support and
@@ -102,6 +103,7 @@ Tested Tcl/Tk Versions
 ----------------------
 
 - 8.6.2 (Debian)
+- 8.5.17 (Debian)
 - 8.6.6 (FreeBSD, Alpine)
 - 8.6.6 (Slackware)
 - 8.6.4 (MacOSX)

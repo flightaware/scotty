@@ -22,12 +22,16 @@ Scotty Improvement Requirements
 - Change build system to compile under TEA 3.10.
 
 - Compile under the following operating systems:
-    - FreeBSD 10.3 and 11.0
+    + FreeBSD 
+        + 10.3
+        + 11.0
     - Debian GNU/Linux:
-        - Jessie: 8.2, 8.7
+        - Jessie:
+            -  8.2
+            +  8.7
         - Wheezy: 7.9
         - Stretch: Sid
-    - Ubuntu 16.10, Yakkety Yak
+    + Ubuntu 16.10, Yakkety Yak
     - macOS Sierra
 
 - Stub support.
