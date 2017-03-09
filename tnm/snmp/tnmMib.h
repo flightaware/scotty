@@ -53,7 +53,7 @@ EXTERN int
 TnmOidAppend		(TnmOid *oidPtr, u_int value);
 
 EXTERN int
-TnmOidFromString	(TnmOid *oidPtr, char *string);
+TnmOidFromString	(TnmOid *oidPtr, const char *string);
 
 EXTERN char*
 TnmOidToString		(TnmOid *oidPtr);
@@ -68,10 +68,10 @@ EXTERN int
 TnmOidInTree		(TnmOid *treePtr, TnmOid *oidPtr);
 
 EXTERN int
-TnmIsOid		(char *str);
+TnmIsOid		(const char *str);
 
 EXTERN char*
-TnmHexToOid		(char *str);
+TnmHexToOid		(const char *str);
 
 /*
  *----------------------------------------------------------------
@@ -277,16 +277,16 @@ EXTERN void
 TnmMibNodeToOid		(TnmMibNode *nodePtr, TnmOid *oidPtr);
 
 EXTERN char*
-TnmMibGetOid		(char *name);
+TnmMibGetOid		(const char *name);
 
 EXTERN char*
 TnmMibGetName		(char *oid,  int exact);
 
 EXTERN int
-TnmMibGetBaseSyntax	(char *name);
+TnmMibGetBaseSyntax	(const char *name);
 
 EXTERN TnmMibNode*
-TnmMibFindNode		(char *name, int *offset, int exact);
+TnmMibFindNode		(const char *name, int *offset, int exact);
 
 EXTERN TnmMibNode*
 TnmFindMibNode		(TnmOid *oidPtr, char **tailPtr);
@@ -295,7 +295,7 @@ EXTERN Tcl_Obj*
 TnmMibFormat		(char *name, int exact, char *arg);
 
 EXTERN char*
-TnmMibScan		(char *name, int exact, char *arg);
+TnmMibScan		(const char *name, int exact, const char *arg);
 
 EXTERN Tcl_Obj*
 TnmMibFormatValue	(TnmMibType *typePtr, int syntax, 
@@ -346,7 +346,7 @@ EXTERN TnmMibType*
 TnmMibAddType		(TnmMibType *typePtr);
 
 EXTERN TnmMibType*
-TnmMibFindType		(char *name);
+TnmMibFindType		(const char *name);
 
 EXTERN void
 TnmMibListTypes		(char *pattern, Tcl_Obj *listPtr);

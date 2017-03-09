@@ -1,0 +1,124 @@
+This file is part of the _scotty_ Tcl extension for network
+management.  It describes how to build on different platforms.
+
+Debian, Ubuntu
+==============
+
+Needed packages to be install with `apt-get`:
+
+    build-essentials tcl8.6-dev tk8.6-dev autoconf
+
+Configure with:
+
+    ./configure
+
+
+Alpine Linux
+============
+
+From a default install to _scotty_ on [Alpine Linux][] you need to
+install the following packages with `apk add`:
+
+    build-base linux-headers tcl-dev tk-dev libtirpc-dev
+
+Configure the build with:
+
+    ./configure --with-tirpc
+
+Alpine Linux does not build against the GNU C Library (glibc), instead
+it uses the [musl libc][].  _musl_ does not feature a complete Sun RPC
+implementation, but Alpine packages the [tirpc][] library which can be
+used instead.  It is supposed, that you can build _scotty_ against
+_tirpc_ on any platform, where this library is available.
+
+---
+[Alpine Linux]: https://alpinelinux.org/
+[musl libc]: https://www.musl-libc.org/
+[tirpc]: http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary
+
+
+Slackware Linux
+===============
+
+Required packages:
+
+	tcl/tcl-8.6.5-x86_64-2.txz
+	tcl/tk-8.6.5-x86_64-2.txz
+	d/autoconf-2.69-noarch-1.txz
+
+Configure with:
+
+	./configure
+	
+
+FreeBSD
+=======
+
+Required packages to be installed with `pkg install`:
+
+    tcl86-8.6.6_2 tk86-8.6.6 autoconf
+
+Configure with:
+
+    ./configure
+
+
+NetBSD
+======
+
+Required packages to be installed with `pkg install`:
+
+	tcl tk autoconf
+
+Configure with:
+
+	./configure --with-tcl=/usr/pkg/lib --with-tk=/usr/pkg/lib
+
+
+MacOSX
+======
+
+Install [Active State Tcl][], the community edition will do.  It will
+install the development files in `/Library/Frameworks/Tcl.framework`
+and `/Library/Frameworks/Tk.framework`.
+
+Install [Xcode][] from Apple.
+
+Configure with:
+
+    ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl
+
+
+Solaris 11.3
+============
+
+Install Tcl/Tk from sources, the installation provided by Oracle does
+not include the private header files.
+
+Download the source tarballs, unpack, enter the unix subdirectory and
+do the standard
+
+	./configure
+	make
+	sudo make install
+
+To install into `/usr/local`.
+
+Configure scotty with:
+
+	cd tnm
+	./configure --with-tcl=/usr/local/lib
+	cd ../tkined
+	./configure --with-tcl=/usr/local/lib --with-tk=/usr/local/lib
+
+
+---
+[Active State Tcl]: http://www.activestate.com/activetcl/downloads
+[Xcode]: https://developer.apple.com/xcode/
+
+
+---
+# Emacs:
+# Local Variables:
+# mode: markdown
+# End:

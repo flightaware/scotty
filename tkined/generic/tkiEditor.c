@@ -12,6 +12,10 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tkined.h"
 #include "tkiPort.h"
 
@@ -566,7 +570,7 @@ Tki_EditorPageSize (editor, interp, argc, argv)
     Tcl_Interp *interp;
     Tki_Editor *editor;
     int argc;
-    char **argv;
+    const char **argv;
 {
     typedef struct PageSize {
 	char *name;
@@ -630,7 +634,7 @@ Tki_EditorOrientation (editor, interp, argc, argv)
     Tcl_Interp *interp;
     Tki_Editor *editor;
     int argc;
-    char **argv;
+    const char **argv;
 {
     if (argc == 1) {
 	if (strcmp(argv[0], "portrait") == 0) {
@@ -922,7 +926,7 @@ static int
 do_ined (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 {
     int largc;
-    char **largv;
+    const char **largv;
     const char *p;
     int i, res;
     Tki_Object dummy;
@@ -1556,7 +1560,7 @@ DeleteEditor (editor, interp, argc, argv)
     while (entryPtr != NULL) {
 	object = (Tki_Object *) Tcl_GetHashValue (entryPtr);
 	if (object->editor == editor) {
-	    m_delete (interp, object, 0, (char **) NULL);
+	    m_delete (interp, object, 0, (const char **) NULL);
 	    entryPtr = Tcl_FirstHashEntry(&tki_ObjectTable, &search);
 	}
 	entryPtr = Tcl_NextHashEntry (&search);

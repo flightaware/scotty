@@ -14,6 +14,10 @@
  * @(#) $Id: tnmSnmpRecv.c,v 1.2 2006/12/07 12:20:58 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 
@@ -731,7 +735,7 @@ DecodeMessage(Tcl_Interp *interp, Message *msg, TnmSnmpPdu *pdu, TnmBer *ber)
 	 * We probably have to make some mappings here according to
 	 * the coexistance specification currently being defined. (XXXX)
 	 */
-	pdu->context = msg->com;
+	pdu->context = (char *) msg->com;
 	pdu->contextLength = msg->comLen;
 #endif
     }

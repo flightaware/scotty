@@ -1,0 +1,4 @@
+oncrpc.lib resolv.lib
+tnm.dll tnm.lib tnm.exp
+tkined.dll tkined.lib tkined.exp
+

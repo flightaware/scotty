@@ -16,9 +16,9 @@
 #define _TKIPORT
 
 #if defined(__WIN32__) || defined(_WIN32)
-#   include "../../win/tkiWinPort.h"
+#   include "../win/tkiWinPort.h"
 #else
-#   include "../../unix/tkiUnixPort.h"
+#   include "../unix/tkiUnixPort.h"
 #endif
 
 #endif /* _TKIPORT */

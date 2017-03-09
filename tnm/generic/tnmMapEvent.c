@@ -14,6 +14,10 @@
  * @(#) $Id: tnmMapEvent.c,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 #include "tnmPort.h"
 #include "tnmMap.h"
@@ -1054,6 +1058,8 @@ TnmMapExpireMsgs(TnmMapMsg **msgListPtr, long expireTime)
 	     */
 
 	    s = Tcl_GetStringFromObj(msgPtr->tag, &len);
+	    /* unused */
+	    (void)s;
 	    if (len == 0) {
 		msgPtr->flags |= TNM_MSG_SAVED;
 	    } else if (msgPtr->itemPtr) {

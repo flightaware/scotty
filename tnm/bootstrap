@@ -1,0 +1,17 @@
+#!/bin/sh
+# leg20170215:
+#
+# Bootstrap build system from distclean (to avoid typing) first
+# argument on commandline is used as --prefix and --exec-prefix
+# argument for ./configure.  The rest of the arguments is passed
+# directly.
+
+PREFIX=${1:-/opt/tcl}
+
+if [ -n "$1" ]; then
+    shift
+fi
+
+autoheader
+autoconf
+./configure --prefix=$PREFIX --exec-prefix=$PREFIX "$@"

@@ -1,0 +1,28 @@
+
+
+# $Id: README.FreeBSD,v 1.7 2007/04/20 05:58:11 karl Exp $
+
+#
+# just run sh README.FreeBSD to configure scotty under FreeBSD
+#
+
+# add --enable-symbols to build with debugging symbols
+
+# Need to do this in the unix subdir
+if [ ! -f configure.in ]
+then
+  if [ -d unix ]
+  then
+    cd unix
+    exec sh ./README.FreeBSD 
+  else
+    echo "Need to do this in scotty/unix"
+    exit 1
+  fi
+fi
+
+autoconf
+./configure --with-tcl=/usr/local/lib/tcl8.6 --mandir=/usr/local/man
+
+#--enable-symbols
+#--enable-symbols=mem

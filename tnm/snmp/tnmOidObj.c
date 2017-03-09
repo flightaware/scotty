@@ -12,6 +12,10 @@
  * @(#) $Id: tnmOidObj.c,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 
 #ifdef HAVE_SMI_H
@@ -69,9 +73,10 @@ Tcl_ObjType tnmOidType = {
  */
 
 int
-TnmIsOid(char *string)
+TnmIsOid(const char *string)
 {
-    char *c, isHex;
+    const char *c;
+    char isHex;
 
     for (c = string, isHex = 0; *c; c++) {
 	if (*c == '.') {
@@ -111,10 +116,11 @@ TnmIsOid(char *string)
  */
 
 char*
-TnmHexToOid(char *str)
+TnmHexToOid(const char *str)
 {
     static char expstr[TNM_OID_MAX_SIZE * 8];
-    char *p, *s;
+    const char *p;
+    char *s;
     int convert = 0;
 
     if (! str) return NULL;
@@ -319,10 +325,11 @@ TnmOidAppend(TnmOid *oidPtr, u_int value)
  */
 
 int
-TnmOidFromString(TnmOid *oidPtr, char *string)
+TnmOidFromString(TnmOid *oidPtr, const char *string)
 {
     int i, len;
-    char *c, isHex;
+    const char *c;
+    char isHex;
 
     /*
      * First handle empty strings which lead to empty object
@@ -651,7 +658,7 @@ TnmNewOidObj(TnmOid *oidPtr)
 void
 TnmSetOidObj(Tcl_Obj *objPtr, TnmOid *oidPtr)
 {
-    register Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    register const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
 
     if (Tcl_IsShared(objPtr)) {
 	Tcl_Panic("TnmSetOidObj called with shared object");
@@ -763,7 +770,7 @@ SetOidFromAny(interp, objPtr)
     Tcl_Interp *interp;		/* Used for error reporting if not NULL. */
     Tcl_Obj *objPtr;		/* The object to convert. */
 {
-    Tcl_ObjType *oldTypePtr = objPtr->typePtr;
+    const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string;
     TnmOid *oidPtr = NULL;
     int isOid = 0;

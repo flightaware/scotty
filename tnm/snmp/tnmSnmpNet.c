@@ -12,6 +12,10 @@
  * @(#) $Id: tnmSnmpNet.c,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 
 /*
@@ -563,7 +567,7 @@ TnmSnmpSend(Tcl_Interp *interp, TnmSnmp *session, u_char *packet, int packetlen,
 	sock = syncSocket->sock;
     }
 
-    code = TnmSocketSendTo(sock, (char *) packet, (size_t) packetlen, 0, 
+    code = TnmSocketSendTo(sock, packet, (size_t) packetlen, 0, 
 			   (struct sockaddr *) to, sizeof(*to));
 
     if (code == TNM_SOCKET_ERROR) {
@@ -581,7 +585,7 @@ TnmSnmpSend(Tcl_Interp *interp, TnmSnmp *session, u_char *packet, int packetlen,
 
     if (hexdump) {
 	struct sockaddr_in name, *from = NULL;
-	int namelen = sizeof(name);
+	socklen_t namelen = sizeof(name);
 
 	if (getsockname(sock, (struct sockaddr *) &name, &namelen) == 0) {
 	    from = &name;
@@ -615,7 +619,8 @@ TnmSnmpSend(Tcl_Interp *interp, TnmSnmp *session, u_char *packet, int packetlen,
 int
 TnmSnmpRecv(Tcl_Interp *interp, u_char *packet, int	*packetlen, struct sockaddr_in *from, int flags)
 {
-    int	sock, fromlen = sizeof(*from);
+    int sock;
+    socklen_t fromlen = sizeof(*from);
 
     if (! tnmSnmpSocketList) {
 	Tcl_SetResult(interp, "sendto failed: no open socket", TCL_STATIC);
@@ -630,7 +635,7 @@ TnmSnmpRecv(Tcl_Interp *interp, u_char *packet, int	*packetlen, struct sockaddr_
 	sock = syncSocket->sock;
     }
 
-    *packetlen = TnmSocketRecvFrom(sock, (char *) packet, (size_t) *packetlen, 0,
+    *packetlen = TnmSocketRecvFrom(sock, packet, (size_t) *packetlen, 0,
 				   (struct sockaddr *) from, &fromlen);
 
     if (*packetlen == TNM_SOCKET_ERROR) {
@@ -646,7 +651,7 @@ TnmSnmpRecv(Tcl_Interp *interp, u_char *packet, int	*packetlen, struct sockaddr_
 
     if (hexdump) {
 	struct sockaddr_in name, *to = NULL;
-	int namelen = sizeof(name);
+	socklen_t namelen = sizeof(name);
 
 	if (getsockname(sock, (struct sockaddr *) &name, &namelen) == 0) {
 	    to = &name;
@@ -678,14 +683,15 @@ TnmSnmpRecv(Tcl_Interp *interp, u_char *packet, int	*packetlen, struct sockaddr_
 static int
 AgentRecv(Tcl_Interp	*interp, TnmSnmp *session, u_char *packet, int *packetlen, struct sockaddr_in *from)
 {
-    int	sock = session->socket->sock, fromlen = sizeof(*from);
+    int sock = session->socket->sock;
+    socklen_t fromlen = sizeof(*from);
 
     if (! session->socket) {
 	Tcl_SetResult(interp, "recvfrom failed: no agent socket", TCL_STATIC);
 	return TCL_ERROR;
     }
 
-    *packetlen = TnmSocketRecvFrom(sock, (char *) packet, (size_t) *packetlen, 0,
+    *packetlen = TnmSocketRecvFrom(sock, packet, (size_t) *packetlen, 0,
 				   (struct sockaddr *) from, &fromlen);
 
     if (*packetlen == TNM_SOCKET_ERROR) {
@@ -696,7 +702,7 @@ AgentRecv(Tcl_Interp	*interp, TnmSnmp *session, u_char *packet, int *packetlen, 
 
     if (hexdump) {
 	struct sockaddr_in name, *to = NULL;
-	int namelen = sizeof(name);
+	socklen_t namelen = sizeof(name);
 
 	if (getsockname(sock, (struct sockaddr *) &name, &namelen) == 0) {
 	    to = &name;

@@ -15,12 +15,18 @@ set ::tcltest::testSingleFile false
 set ::tcltest::testsDirectory [file dir [info script]]
 
 puts stdout "Tcl $tcl_patchLevel tests running in interp:  [info nameofexecutable]"
+
 puts stdout "Tests running in working dir:  $::tcltest::testsDirectory"
 if {[llength $::tcltest::skip] > 0} {
     puts stdout "Skipping tests that match:  $::tcltest::skip"
 }
 if {[llength $::tcltest::match] > 0} {
     puts stdout "Only running tests that match:  $::tcltest::match"
+}
+
+if {$tcl_platform(os) eq "NetBSD"} {
+    puts stdout "NetBSD: skip dns.test"
+    lappend ::tcltest::skipFiles dns.test
 }
 
 if {[llength $::tcltest::skipFiles] > 0} {
@@ -30,8 +36,8 @@ if {[llength $::tcltest::matchFiles] > 0} {
     puts stdout "Only sourcing test files that match:  $::tcltest::matchFiles"
 }
 
-set timeCmd {clock format [clock seconds]}
-puts stdout "Tests began at [eval $timeCmd]"
+set startTime [clock seconds]
+puts stdout "Tests began at [clock format $startTime]"
 
 # source each of the specified tests
 foreach file [lsort [::tcltest::getMatchingFiles]] {
@@ -43,7 +49,10 @@ foreach file [lsort [::tcltest::getMatchingFiles]] {
 }
 
 # cleanup
-puts stdout "\nTests ended at [eval $timeCmd]"
+set endTime [clock seconds]
+puts stdout "\nTests ended at [clock format $endTime]"
+puts stdout "Elapsed: [expr {$endTime -$startTime}] seconds."
+
 ::tcltest::cleanupTests 1
 return
 

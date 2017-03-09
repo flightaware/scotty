@@ -13,6 +13,10 @@
  * @(#) $Id: tnmMibUtil.c,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 
@@ -202,7 +206,7 @@ TnmMibNodeToOid(TnmMibNode *nodePtr, TnmOid *oidPtr)
  */
 
 char*
-TnmMibGetOid(char *label)
+TnmMibGetOid(const char *label)
 {
     char *expanded = TnmHexToOid(label);
     TnmMibNode *nodePtr;
@@ -212,7 +216,7 @@ TnmMibGetOid(char *label)
     nodePtr = TnmMibFindNode(label, &offset, 0);
     if (nodePtr) {
 	if (TnmIsOid(label)) {
-	    return label;
+	  return (char *) label;
 	}
 	GetMibPath(nodePtr, oidBuffer);
 	if (offset > 0) {
@@ -378,7 +382,7 @@ TnmMibGetString(char *fileName, int fileOffset)
  */
 
 int
-TnmMibGetBaseSyntax(char *name)
+TnmMibGetBaseSyntax(const char *name)
 {
     int syntax = ASN1_OTHER;
     TnmMibNode *nodePtr = TnmMibFindNode(name, NULL, 0);
@@ -1103,7 +1107,7 @@ TnmMibScanValue(TnmMibType *typePtr, int syntax, Tcl_Obj *value)
  */
 
 char*
-TnmMibScan(char *name, int exact, char *value)
+TnmMibScan(const char *name, int exact, const char *value)
 {
     TnmMibNode *nodePtr = TnmMibFindNode(name, NULL, exact);
     static Tcl_Obj *objPtr = NULL;

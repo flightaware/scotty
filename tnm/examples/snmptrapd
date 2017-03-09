@@ -17,13 +17,13 @@ proc traphandler {ip pdu args} {
     Tnm::syslog warning $msg
 }
 
-proc try cmd {
+proc try_or_cry cmd {
     if {[catch $cmd msg]} { puts stderr "$cmd failed: $msg" }
 }
 
-try { Tnm::snmp listener -version SNMPv1 }
-try { Tnm::snmp listener -version SNMPv2c }
-try { Tnm::snmp listener -version SNMPv3 }
+try_or_cry { Tnm::snmp listener -version SNMPv1 }
+try_or_cry { Tnm::snmp listener -version SNMPv2c }
+try_or_cry { Tnm::snmp listener -version SNMPv3 }
 
 foreach s [Tnm::snmp find] {
     $s bind trap "traphandler %A %T %V"

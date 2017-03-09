@@ -16,6 +16,10 @@
  * @(#) $Id: tnmSnmpUtil.c,v 1.2 2008/02/13 16:44:05 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 #include "tnmMD5.h"
@@ -847,9 +851,9 @@ TnmSnmpMD5Digest(u_char *packet, int length, u_char *key, u_char *digest)
     MD5_CTX MD;
 
     TnmMD5Init(&MD);   /* initialize MD5 */
-    TnmMD5Update(&MD, (char *) packet, length);
+    TnmMD5Update(&MD, packet, length);
     if (key) {
-	TnmMD5Update(&MD, (char *) key, TNM_MD5_SIZE);
+	TnmMD5Update(&MD, key, TNM_MD5_SIZE);
     }
     TnmMD5Final(digest, &MD);
 

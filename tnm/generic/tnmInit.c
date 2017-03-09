@@ -13,6 +13,10 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 #include "tnmPort.h"
 
@@ -139,7 +143,7 @@ InitVars(Tcl_Interp *interp)
     if (p) *p = '\0';
     Tcl_SetVar2(interp, "tnm", "host", tmp, TCL_GLOBAL_ONLY);
     ckfree(tmp);
-
+    
     /*
      * Get the user name. We try a sequence of different environment
      * variables in the hope to find something which works on all
