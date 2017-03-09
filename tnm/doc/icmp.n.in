@@ -1,0 +1,137 @@
+'\"
+'\" Copyright (c) 1994-1996 Technical University of Braunschweig.
+'\" Copyright (c) 1996-1997 University of Twente.
+'\"
+'\" See the file "license.terms" for information on usage and redistribution
+'\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+'\" 
+.so man.macros
+.TH Tnm::icmp n "December 1997" Tnm "Tnm Tcl Extension"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+Tnm::icmp \- Send ICMP messages to hosts on the Internet.
+.BE
+
+.SH DESCRIPTION
+The Tnm::icmp command allows to send Internet Control Messages (ICMP)
+(RFC 792, RFC 1122) to a list of hosts on the Internet. ICMP messages
+can be used to check whether hosts are reachable. The Tnm::icmp
+command can also be used to trace routes to Internet hosts by sending
+UDP datagrams to unused UDP ports and interpreting the ICMP responses
+(Van Jacobsen and Steve Deering algorithm).
+
+.SH ICMP COMMAND
+The Tnm::icmp command always accepts a list of target hosts. ICMP
+messages are send to the targets in a round-robin fashion which allows
+to check entire IP address ranges or a list of core routers
+efficiently. The user of the Tnm::icmp command should be careful not
+to flood a network with ICMP requests.
+.TP
+\fBTnm::icmp\fR [\fIoptions\fR]
+Invoking the \fBTnm::icmp\fR command with options but without any
+command arguments allows to retrieve and change the default
+values. See the description of supported options below. Default values
+are bound to a Tcl interpreter which allows to have multiple Tcl
+interpreter with different defaults.
+.TP
+\fBTnm::icmp\fR [\fIoptions\fR] \fBecho\fR \fIhosts\fR
+The \fBTnm::icmp echo\fR command can be used to test the reachability
+of IP devices by sending ICMP echo requests to the \fIhosts\fR.  The
+command returns a flat list of host / round trip time pairs. The round
+trip time is returned in milliseconds. An empty round trip time value
+indicates that a host did not respond in the timeout interval.
+.TP
+\fBTnm::icmp\fR [\fIoptions\fR] \fBmask\fR \fIhosts\fR
+The \fBTnm::icmp mask\fR command sends ICMP mask requests and returns
+a flat list of host / netmask pairs. An empty list element is returned
+instead of a netmask if a host does not respond to ICMP mask requests.
+.TP
+\fBTnm::icmp\fR [\fIoptions\fR] \fBtimestamp\fR \fIhosts\fR
+The \fBTnm::icmp timestamp\fR command retrieves timestamps using the
+ICMP timestamp request. This command returns an estimate of the time
+difference between local time and the time on the hosts given in
+\fIhosts\fR. The command returns a flat list of host / time offset
+pairs. The time offset is returned in milliseconds. An empty list
+element indicates that a host did not respond in the timeout interval.
+.TP
+\fBTnm::icmp\fR [\fIoptions\fR] \fBttl\fR \fInum\fR \fIhosts\fR
+The \fBTnm::icmp ttl\fR command, which may not be supported on every
+operating system, sends a UDP packet to a presumably unused port
+number with the time to live field of the IP header set to
+\fInum\fR. The minimal value of \fInum\fR is 1 with the meaning of
+this host and the maximal value is 255. This command returns a flat
+list of host / round trip time pairs, where the host is the IP device
+being \fInum\fR hops away. The round trip time is returned in
+milliseconds. An empty list element indicates that a host did not
+respond in the timeout interval.
+.TP
+\fBTnm::icmp\fR [\fIoptions\fR] \fBtrace\fR \fInum\fR \fIhosts\fR
+The \fBTnm::icmp trace\fR command works similar to the Tnm::icmp ttl
+command but it always returns the destination address even when the
+responding host chooses another interface with a different IP address
+to send the reply. This can be used to trace a route to a host since
+the command returns the host that discards the packet if it does not
+reach the destination.
+
+.SH ICMP OPTIONS
+The following options control how ICMP requests are send and how the 
+Tnm::icmp command deals with lost ICMP packets.
+.TP
+.BI "-timeout " time
+The \fB-timeout\fR option defines the time the Tnm::icmp command will
+wait for a response. The \fItime\fR is defined in seconds with a
+default of 5 seconds.
+.TP
+.BI "-retries " number
+The \fB-retries\fR option defines how many times a request is
+retransmitted during the timeout interval. The default \fInumber\fR of
+retries is 2.
+.TP
+.BI "-delay " time
+The \fB-delay\fR option defines the minimum delay between two outgoing
+ICMP packets. The delay \fItime\fR is defined in milliseconds with a
+default delay of 0 milliseconds. Delays are useful to reduce the load
+on intermediate devices like gateways or bridges.
+The maximal delay value supported is 255.
+.TP
+.BI "-size " number
+The \fB-size\fR option allows to control the size of ICMP packets. The
+\fInumber\fR defines the size of ICMP packets in bytes with a default
+size of 64 bytes. Sizes smaller than 64 bytes are silently rounded to
+64 bytes and sizes larger than 65535 bytes are silently rounded to
+65535 bytes.
+.TP
+.BI "-window " size
+The \fB-window\fR option allows to define a window which limits the
+number of active asynchronous ICMP requests. This can be used to
+prevent scripts from flooding a network with ICMP messages. The
+\fBTnm\fR extension queues ICMP requests internally so that no more
+than \fIsize\fR ICMP requests are on the wire. Setting the size to 0
+turns the windowing mechanism off. The default window size is 10.
+The maximum window size is 65535.
+
+.SH ENVIRONMENT VARIABLES
+
+Tnm::icmp forks the nmicmpd(8) daemon to do the real work. It looks up
+the path to nmicmpd(8) in the environment variable
+.BI TNM_NMICMPD
+if it exists, otherwise a compiled in path is tried.
+
+.SH BUGS
+The Tnm::icmp command requires the setuid root program nmicmpd(8) on
+UNIX systems because sending icmp packets requires access to raw
+sockets. The Windows version of this command uses the icmp.dll which
+does not support accurate round trip time measurements. The icmp.dll
+does not allow to implement all the command options described in this
+man page. The time returned for the echo and ttl command is silently
+adjusted to 1 ms if a value less than 1 ms is received. The Windows
+implementation also requires longer time intervals to timeout icmp
+requests than the UNIX version.
+
+.SH SEE ALSO
+scotty(1), nmicmpd(8), Tnm(n), Tcl(n)
+
+.SH AUTHORS
+Juergen Schoenwaelder <schoenw@ibr.cs.tu-bs.de>
+.br

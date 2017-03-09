@@ -1,0 +1,459 @@
+# -*- mode: markdown -*-
+
+Bugs
+====
+
+Debian
+------
+
+- Installing libsmi2-dev makes build break.
+- On wheezy/amd64, sunrpc-1.2 segfaults: this just runs `sunrpc foo`.
+  Interesting detail: `tcl_platform(machine)` shows: `x86_64`.
+
+
+MacOSX
+------
+
+### Tmn::dns
+
+The `dns -server arg` option seems to mess up name server resolution
+on MacOSX, so we disable all tests and uses in tests/dns.test with
+knownBugMacOSX.
+
+The 'resolver' algorithm seems to mess up internally, probably when
+there is a search list with more than one entry.  Maybe that is the
+reason why this problem shows up on MacOSX.  We have to disable most
+tests with real lookups on this platform.
+
+
+### Tnm::icmp
+
+There seems to be a problem with `nmicmpd`/Tnm::icmp for unreachable
+IP's.  While on the other (two) platforms the command times out
+gracefully, on MacOSX an error is thrown:
+
+`nmicmpd: failed to send ICMP message`
+
+Disabled with knownBugMacOSX in 8 occurrencies in tests/icmp.test
+
+### Tnm::mib
+
+The `mib format BinaryValue` command fails strangely and is disabled
+with knownBugMacOSX.
+
+`
+==== mib-7.14 FAILED
+mib format BinaryValue 12345
+---- Result was:
+1100000011100100000000000000000011000000111001
+---- Result should have been (exact matching):
+11000000111001
+
+==== mib-7.15 mib format FAILED
+mib format BinaryValue -12345
+---- Result was:
+-1100000011100100000000000000000011000000111001
+---- Result should have been (exact matching):
+-11000000111001
+`
+
+### Tnm::snmp
+
+The `snmp expand` command fails on *32 types and on TimeTicks type for
+some values.  Respective testcases are disabled with knownBugMacOSX.
+
+`
+==== snmp-X.1 snmp Unsigned32 type FAILED
+list [catch {snmp expand {{1.3 Unsigned32 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 Unsigned32 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+
+==== snmp-X.6 snmp Gauge32 type FAILED
+list [catch {snmp expand {{1.3 Gauge32 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 Gauge32 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+
+==== snmp-X.11 snmp Counter32 type FAILED
+list [catch {snmp expand {{1.3 Counter32 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 Counter32 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+
+==== snmp-X.16 snmp TimeTicks type FAILED
+list [catch {snmp expand {{1.3 TimeTicks 4294967296}}} msg] $msg
+---- Result was:
+0 {{1.3 TimeTicks 4294967296}}
+---- Result should have been (exact matching):
+1 {unsigned value too large to represent}
+`
+
+### Tnm::udp
+
+Two of the three `udp receive` tests fail: udp-7.1, udp-7.3, with:
+
+`errorCode: POSIX EAGAIN {resource temporarily unavailable}`
+
+on the final `u receive`.  They are disabled with knownBugMacOSX.
+
+- upd-7.1:
+  `udp create -myaddress 127.0.0.1 -myport 1234`
+  `send 127.0.0.1 1234 "nase"`
+
+- upd-7.3:
+  `udp create -myaddress 127.0.0.1 -myport 1234`
+  `send 127.0.0.1 1234  [binary format "H*" "000102030405060708090a0b0c0d0e0f"]`
+
+Note: upd-7.2 uses -myport 1235, then -myport 1236 and connects the
+    latter to 1235.
+
+- udp-7.2 is "flaky" - sometimes it works, sometimes it fails like the above.
+  For now we disable it too.
+
+### Build
+
+Manuals are install in /Library/Tcl/share/man, where they are not
+found by man(1).
+
+FreeBSD 10.3
+------------
+
+### Tnm::netdb
+
+Tests netdb-6.6 and netb-6.7 consume all available memory and then
+scotty gets killed. (netdb ip).  Note: tested on a 64 bit
+architecture.
+
+The same behaviour is found also on the original scotty (flightaware).
+
+
+FreeBSD 11
+----------
+
+### Tnm::udp
+
+Tests:
+- udp-11.2.2 udp configure/send: send to connected
+- udp-11.2.3 udp configure/send: send to configured, connected
+
+Fail with: POSIX EADDRINUSE {address already in use}.
+
+Note: these use the same udp endpoint to send and receive.  Might just
+rewrite the tests.
+
+### Tests
+
+If tests are run with: `scotty3.0.2 all.tcl` we get a segfault on exit.
+
+### Build
+
+Man files are install in a place, where they cannot be seen
+(`/usr/local/share/man/mann`).
+
+NetBSD 7.0.2
+------------
+
+### Build
+
+- sudo `make sinstall` fails with default system setup, because `/sbin`
+is not on path, `chown`, `chmod` is inside `/sbin/.
+
+- manuals are not found after install
+
+### Tnm::dns
+
+We get errors:
+
+	_res is not supported for multi-threaded programs.
+
+when running, e.g. tkined or in the tnm dns test suite.  The test
+dumps core then.
+
+### Tnm::netdb
+
+Same problem as in FreeBSD and MacOX
+
+Slackware Linux
+---------------
+
+### Tnm::netdb
+
+Slackware 14.2.: x86_64: same problem as with FreeBSD amd64
+
+
+Solaris 11.3
+------------
+
+### Build
+
+Docs (man files) are not created, use `gmake` to generate them.
+
+The builds of `nmicmpd` and `nmtrapd` fail, because the required
+libraries are not included on the commandline.
+
+Man pages are installed in /usr/local/share/man, but they are not
+found there by default.
+
+
+### Test
+
+- icmp-2.1 icmp timestamp
+- snmp-X.1 snmp Unsigned32 type
+- sunrpc-4.6 sunrpc info command
+  - actually we get a result, but not the expected `portmapper`,
+    instead we get `rpcbind`
+
+Generic
+-------
+
+### Build
+- Should we revamp directory tree of installed files to reflect FHS or
+  so (`share` instead of `library` ...)?
+- shell target: does not work.  Make the SCRIPT variable load Tnm.
+- Check for missing install targets/routines.  Notably: scotty
+  invocation after installing MIBs, man pages
+- On MacOSX we get two directories which should be cleaned:
+  `nmicmpd.dSYM` and `nmtrapd.dSYM`.
+- Consider eliminating the zlib check.  zlib seems not to be used
+  at all.
+- We could clean up the Makefile, now that everything builds ok.
+
+
+Tnm::dns
+--------
+
+- (obsolete) dns hinfo command returns errorCode but the error message
+   is a domain name, seemingly from the soa record, example:
+
+	`$ host -t hinfo iana.org
+	iana.org has no HINFO record
+	`
+	`scotty% dns hinfo iana.org
+	sns.dns.icann.org
+	`
+
+	We have already changed the code, so we get correctly "not found",
+    however it is not tested with a real hinfo record.
+
+- If a dns lookup for an Internet host in a test fails we should skip
+  further tests with Internet lookups since they probably will fail
+  too.
+
+- "Real World" tests are done against fixed names/IP's, these might
+  change, disappear or be redirected.  We should test e.g. against a
+  `tinydns` or `dnsmasq` setup.
+
+
+Tnm::icmp
+---------
+
+- test/icmp.test seems to use 182.168.173.173 as invalid (never
+  reachable) IP addresses.  Maybe because 173 is a prime number.
+  Well, when configuring private networks I always use prime numbers
+  since nobobdy else does, right?  The computer where I write this
+  note has IP 192.168.173.53...
+
+  We should use invalid IP's from RFC5737: 192.0.2.0 instead.
+ 
+
+Tnm::mib
+--------
+
+- At the end of tnmOidObj.c there is a #if/else/endif where
+  inconditionally the Oid strings are glued together with '::' instead
+  of '!'.  Thus, the returned strings do not conform to the standard
+  notation and cannot be used as direct input to Tnm::mib function.
+
+  Ok: not so fast.  The following tests show, that at least some input
+  on `mib macro` is allowed to use '::'. 
+
+	`
+	scotty% mib macro SNMPv2-MIB::sysDescr
+	OBJECT-TYPE
+	scotty% mib macro SNMPv2-MIB!sysDescr
+	OBJECT-TYPE
+	scotty% mib macro SNMPv2-MIB::coldStart
+	NOTIFICATION-TYPE
+	scotty% mib macro SNMPv2-MIB!coldStart
+	NOTIFICATION-TYPE
+	scotty% mib macro SNMPv2-MIB!DisplayString
+	TYPE-ASSIGNEMENT
+	scotty% mib macro SNMPv2-MIB::DisplayString
+	unknown MIB node or type "SNMPv2-MIB::DisplayString"
+    `
+
+	Setting the "1" to "0" in tnmOidObj.c yields an error in test case
+    mit-31-23:
+
+	`UpdateStringProc for type 'tnmOid' failed to create a valid string rep`
+
+- mib parser hangs, in test cases mib-9.1, mib-9.2
+
+- mib walk hangs, test case mib-21.6
+
+- Test case mib-5.5 shows a "TEXTUAL-CONVENTION" for
+  SNMPv2-TC!DisplayString, however `mib macro` returns:
+  TYPE-ASSIGNMENT.  This might be traceable to: tnmMibParser.c:929,
+  see the surrounding text there.
+
+- Test case mib-37.3 seems to indicate, that `mib size` files on SIZE
+  specifications with one exact value.  In this case
+  'SNMPv2TC!MacAddress' with: `SYNTAX       OCTET STRING (SIZE (6))`.
+
+
+Tnm::netdb
+----------
+
+- services: check netdb-3.8 fails when ports are doubly assigned -
+  check disabled.  Should be rewritten.
+  
+  Some ports are double assigned: e.g. 'pipe-server' and 'search' to
+  port 2010.  The first check fail on these.
+
+  Some service names double as aliases: e.g.: dicom
+
+  `acr-nema              104/tcp dicom`
+
+  `dicom                 11112/tcp`
+
+  The second check fail on these.
+
+- services: check netdb-3.9 fail when protocols are doubly
+  assigned - check disabled.
+
+- networks: check netdb-7.5 fails entirely, disabled.  Looked up
+  results seem strange:
+
+	`
+	scotty% netdb networks address loopback
+	0.0.0.127
+	`
+
+- networks: check netdb-7.6 ditto (as netdb-7.5)
+
+- protcols: check netdp-8.5 disabled.  Protocols ip and hopopt have
+  the same number, check should be rewritten.
+ 
+  `
+  ip                    0 IP
+  hopopt                0 HOPOPT
+  `
+
+Tnm::ntp
+--------
+
+Seems not to work at all.  I get my time synchronized on my network
+via pool.ntp.org, but Tnm::ntp does not reach any of the hosts.
+
+
+Tnm::smx
+--------
+
+Doesn't work at all: `smx peer gone away`.
+
+Test suite disabled smx.test -> l.smx.test
+
+
+Tnm::snmp
+---------
+
+- snmp-2.8 snmp alias FAIlLED
+- snmp-2.9 snmp alias FAILED
+
+  `snmp generator -alias focal` does not return a SNMP generator
+  session handle at all.
+
+- snmp-X.21 snmp Counter64 type FAILED
+	`
+	list [catch {snmp expand {{1.3 Counter64 18446744073709551616}}} msg] $msg
+	---- Result was:
+	0 {{1.3 Counter64 18446744073709551616}}
+	---- Result should have been (exact matching):
+	1 {unsigned value too large to represent}
+	`
+
+-  snmp-X.31 snmp ObjectIdentifier type FAILED
+   list [catch {snmp expand {!@#foo!@#} msg} ] $msg
+	   `---- Result was:
+	   1 {invalid object identifier "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1"}
+	   ---- Result should have been (exact matching):
+	   1 {invalid object identifier "!@#foo!@#"}
+	   `
+   Strange: this is exactly the result expected by snmp-x30!
+
+
+- snmp-5.7 snmp varbind list expansion FAILED
+- snmp-5.8 snmp varbind list expansion FAILED
+
+	`---- Result was:
+	{1.3.6.1.2.1.2.2.1.3 Integer32 rfc877x25}
+	---- Result should have been (exact matching):
+	{1.3.6.1.2.1.2.2.1.3 Integer32 5}
+	`
+
+Should this be a MIB related problem?
+
+- snmp-8.3 snmp oid FAILED
+- snmp-8.4 snmp oid FAILED
+- snmp-9.4 snmp type FAILED
+- snmp-10.4 snmp value FAILED
+
+  Probably MIB related problems too
+
+- snmp.test file has an annex section of tests.  Merge/cleanup?
+
+
+Tnm::sunrpc
+-----------
+
+All subcommands of sunrpc segfault when called
+- with wrong arguments
+- inside a catch {} argument
+- if there are less then the required number of arguments
+- on the first run.
+
+If you catch a call with *more* then the required numbers of
+arguments, or a catch with any nonsense e.g.: `catch {bad workaround}`
+no more segfault occurs.  Hover n the test file, at any other time we
+got another segfault.  So the respective tests are disabled with the
+custom constraint: `runWithEvilCatchCrashWorkaround`
+
+This seems like some initialization (missing) issue.
+
+
+Wishlist
+========
+
+Port to
+-------
+
+- OpenIndiana (Solaris)
+  - only Tcl 8.5 available
+- Minix:
+  - Note: Minix3.3 is missing rpc/rpcgen implementation.
+- Windows
+
+Fix
+---
+
+- NetBSD: not usable because of dns/usage of _res.
+
+Functionality
+-------------
+
+### Tnm::dns
+
+- Add at least the following lookups: srv.
+- Add all currently in use lookups.
+- Add possibility to craft a lookup type.
+- Add IPv6 lookups.
+
+### New Tnm::interfaces
+
+See this example for getting interface information on Linux/BSD/MacOSX
+
+https://gist.github.com/OrangeTide/909204

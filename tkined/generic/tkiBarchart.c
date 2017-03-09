@@ -127,8 +127,10 @@ dummy()
 static Tk_CustomOption tagsOption = {NULL,
     NULL, (ClientData) NULL
 };
-static Tk_CustomOption valueOption = {ParseBarchartValues,
-    PrintBarchartValues, (ClientData) NULL
+static Tk_CustomOption valueOption = {
+    (Tk_OptionParseProc *) ParseBarchartValues,
+    (Tk_OptionPrintProc *) PrintBarchartValues,
+    (ClientData) NULL
 };
 
 static Tk_ConfigSpec configSpecs[] = {  

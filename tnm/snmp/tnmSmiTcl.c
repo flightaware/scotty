@@ -17,6 +17,10 @@
  * TODO: pack/unpack, defval
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 
 #ifdef HAVE_SMI_H

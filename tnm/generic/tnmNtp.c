@@ -13,6 +13,10 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmInt.h"
 #include "tnmPort.h"
 
@@ -273,7 +277,8 @@ NtpFetch(Tcl_Interp *interp, struct sockaddr_in *daddr, int op, int retries, int
 {
     struct ntp_control qpkt, pkt;
     struct sockaddr_in saddr;
-    int i, rc, slen = sizeof(saddr);
+    int i, rc;
+    socklen_t slen = sizeof(saddr);
     int timeout = (timeo * 1000) / (retries + 1);
 
     static unsigned short seq = 1;			/* sequence number */
@@ -288,7 +293,7 @@ NtpFetch(Tcl_Interp *interp, struct sockaddr_in *daddr, int op, int retries, int
 	NtpMakePkt(&qpkt, op, assoc, seq);		/* CTL_OP_READVAR */
 	memset((char *) &pkt, 0, sizeof(pkt));
 	
-	rc = TnmSocketSendTo(sock, (char *) &qpkt, sizeof(qpkt), 0, 
+	rc = TnmSocketSendTo(sock, (unsigned char *)&qpkt, sizeof(qpkt), 0, 
 			     (struct sockaddr *) daddr, sizeof(*daddr));
 	if (rc == TNM_SOCKET_ERROR) {
 	    Tcl_AppendResult(interp, "udp sendto failed: ",
@@ -298,7 +303,7 @@ NtpFetch(Tcl_Interp *interp, struct sockaddr_in *daddr, int op, int retries, int
 	
 	while (NtpReady(sock, timeout)) {
 	    memset((char *) &pkt, 0, sizeof(pkt));
-	    rc = TnmSocketRecvFrom(sock, (char *) &pkt, sizeof(pkt), 0, 
+	    rc = TnmSocketRecvFrom(sock, (unsigned char *) &pkt, sizeof(pkt), 0, 
 				   (struct sockaddr *) &saddr, &slen);
 	    if (rc == TNM_SOCKET_ERROR) {
 		Tcl_AppendResult(interp, "recvfrom failed: ",

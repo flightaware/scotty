@@ -10,6 +10,10 @@
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tkined.h"
 #include "tkiPort.h"
 
@@ -80,7 +84,7 @@ FixPath(char *path)
  */
 
 char* 
-findfile (Tcl_Interp *interp, char *name)
+findfile (Tcl_Interp *interp, const char *name)
 {
     int i;
     const char *library;
@@ -258,9 +262,10 @@ lappend (char **slist, char *item)
  */
 
 char*
-ckstrdupnn (char *s)
+ckstrdupnn (const char *s)
 {
-    char *p, *t, *r;
+    const char *p;
+    char *t, *r;
     size_t n = 2;
     
     for (p = s; *p != 0; p++) {

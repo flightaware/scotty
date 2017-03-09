@@ -1,0 +1,366 @@
+This file contains a collection of notes that various people have
+provided about porting the scotty package to various machines and
+operating systems. I don't have personal access to any of these
+machines, so I make no guarantees that the notes are correct,
+complete, or up-to-date. If you see the word "I" in any explanations,
+it refers to the person who contributed the information, not to me;
+this means that I probably can't answer any questions about any of
+this stuff.  In some cases, a person has volunteered to act as a
+contact point for questions about porting Tcl to a particular machine;
+in these cases the person's name and e-mail address are listed.  I'm
+interested in getting new porting information to add to the file;
+please mail updates to "schoenw@cs.utwente.nl".
+
+You should also read the porting.notes file contained in the Tcl
+distribution to find out if your problem is probably related to the
+Tcl software itself.
+
+--------------------------------------------
+SunOS4, various versions
+--------------------------------------------
+ 
+The following detailed description was provided by Doug Hughes
+(<Doug.Hughes@Eng.Auburn.EDU>):
+ 
+1. Configure and build normally. At the end you will get an error 
+linking tnm.so about mixing pic and PIC .o files.
+ 
+2. Edit the Makefile and go to the tnm$(SHLIB_SUFFIX) rule. Change the
+executed command to be:
+ 
+  $(SHLIB_LD) -assert pure-text -o tnm$(SHLIB_SUFFIX) $(TNM_OBJS)
+ 
+Also delete the "-lresolv" word from the LIBS line in the Makefile
+Go down two rules to the tkined$(SHLIB_SUFFIX) rule and change it to:
+ 
+  $(SHLIB_LD) -assert pure-text -o tkined$(SHLIB_SUFFIX) $(TKI_GENERIC_OBJS)
+ 
+3. Get the bind-4.9.4 or bind-4.9.3 source. For purposes here they
+are equivalent, but you should get the latest one anyway. It is
+available at ftp.vix.com. cd to the res directory. Edit the Makefile
+and add -DSPRINTF_CHAR -DSUNOS -DSUNSECURITY and -PIC to the CFLAGS line.
+Comment out lines 101-102 by putting a # at the beginning of the line.
+(Make sure you use the bundled SunOS C compiler, the SunPRO compilers
+will give you errors about redeclared identifiers).
+ 
+4. You now have a library in the res directory, but you need to link
+these files as a shared library with the tnm stuff. So, take all the
+.o files from the res directory and copy them into the scotty unix
+directory. Now, augment the ld command that failed in step 1 with
+these same .o files (either add them to TNM_OBJS in the Makefile, or
+execute the ld command by hand with all the tnm objects and bind
+objects). 
+
+The easiest way is to add the following lines to the Makefile between
+TNM_GENERIC_OBJS and SNMP_SRCS
+
+ 
+RES_OBJS = gethnamaddr.o getnetent.o nsap_addr.o res_init.o \
+        res_send.o getnetbyaddr.o getnetnamadr.o res_comp.o \
+        res_mkquery.o sethostent.o getnetbyname.o herror.o \
+        res_debug.o res_query.o
+
+now type make again to complete the build.
+
+5. make install
+
+6. Edit $tcl_library/init.tcl and add:
+lappend auto_path $tcl_library/../tnm2.1.5 $tcl_library/../tkined1.4.5
+
+This will get the pkgIndex.tcl files there to have access to auto-loading
+the scotty/tnm routines as needed.
+ 
+The SunOS cc compiler has a problem to handle automatic aggregate
+initializations like for example:
+
+	TnmIcmpTarget target = icmpPtr->targets[i];
+
+If you run into this problem, just split the assignement into two
+statements:
+
+	TnmIcmpTarget target;
+	target = icmpPtr->targets[i];
+
+This makes the compiler happy and has the same effect. (The scotty
+code should normally be written in a way that avoids this problem.
+However, sometimes things like this slip into a released version.)
+ 
+--------------------------------------------
+IRIX, various versions
+--------------------------------------------
+
+The make program which is part of IRIX has problems with substitutions
+on the left side of a rule. The easiest way to solve this problem is
+to use GNU make.
+
+--------------------------------------------
+Solaris 2.4
+--------------------------------------------
+
+Dynamic loading problems with the resolver can be solved by building a
+dynamically linked bind.
+
+Some people reported that the configure script does not find the
+libraries libresolv, libsocket and libnsl. If you can not link because 
+you get unresolved symbols, please edit the Makefile and add
+"LIBS=-lsocket -lnsl -lresolv" to make the linker is happy again.
+
+--------------------------------------------
+Solaris 2.5
+--------------------------------------------
+
+Some people get an error while linking with other non-shared libraries:
+
+> ld: fatal: relocations remain against allocatable but non-writable sections
+
+This problem is solved by changing the following line in 'Makefile':
+
+SHLIB_LD = /usr/ccs/bin/ld -G -z text
+ 
+to
+ 
+SHLIB_LD = /usr/ccs/bin/ld -G
+
+This turns off some sanity checks of the linker. Reported by Andre
+Heynatz <tron@informatik.uni-bremen.de>
+
+--------------------------------------------
+Ultrix
+--------------------------------------------
+
+Some (or all?) Ultrix versions get problems if <sys/socket.h> or
+<netdb.h> is included more than once. We suggest to fix the
+/usr/include/sys/socket.h header by adding
+
+#ifndef _SYS_SOCKET_H_
+#define _SYS_SOCKET_H_
+
+#endif
+
+around the header. This makes sure that you can include <sys/socket.h>
+multiple times and it does not hurt anything. The <netdb.h> header is
+fixed in a similar way by adding
+
+#ifndef _NETDB_H_
+#define _NETDB_H_
+
+#endif
+
+around the header.
+
+--------------------------------------------
+Linux
+--------------------------------------------
+
+Some Linux systems either fail to compile the tnmDns.c module or they
+report unresolved symbols errors when loading the Tnm extensions. The
+preferred solution to this type of problems is to switch to libc
+5.3.12 or libc 5.4.13 which are available from tsx-11.mit.edu in
+/pub/linux/packages/GCC. If you can't switch to one of these libc
+versions and you get unresolved symbols, try to work around the
+problem by uncommenting the -lresolv linker switch in the Makefile and
+relinking the Tnm loadable module.
+
+Some Linux systems can't find the -ldl library when linking dynamic
+loadable modules. This can usually be fixed by adding some missing
+symbolic links:
+
+	/lib/libdl.so		->	/lib/libdl.so.1
+	/lib/libdl.so.1		->	/lib/libdl.so.1.7.14
+
+The second link points to the actual version and is usually maintained
+by ldconfig(8).
+
+Some Linux systems fail to resolve symbols from the C library when
+loading the dynamic loadable module. Adding -lc to the LIBS variable
+in the Makefile can solve this problem.
+
+Some Linux systems have a version of rpcgen which generates C code that
+does not compile. If you have problems to compile any *_clnt.c or
+*_xdr.c files, you can either install a new rpcgen or you use the
+pre-compiled files from the compat directory instead of the files
+generated by your broken rpcgen.
+
+--------------------------------------------
+BSD/386
+--------------------------------------------
+
+The header file <netinet/in.h> is not properly guarded on some BSD/386
+systems. One solution around the problem is to create a replacement
+header file which does not include <netinet/in.h> a second time. In
+the unix directory, do
+
+	sed -e "s?#include <netinet/in.h>?/* & */?" \
+        	/usr/include/rpc/rpc.h >../unix/replacement.h
+
+Replace '<rpc/rpc.h>' with '"replacement.h"' in ../tnm/generic/tnmNetdb.c
+and ../tnm/generic/tnmSunRpc.c and compile.
+
+If you are allowed to fix the system header, you might want to simply
+fix the header by wrapping the following #ifndef sequence around the
+header <netinet/in.h>:
+
+	#ifndef NETINET_IN_H
+	#define NETINET_IN_H
+
+
+	#endif /* NETINET_IN_H */
+
+Reported by Cameron Laird <claird@Starbase.NeoSoft.COM>.
+
+--------------------------------------------
+BSDI
+--------------------------------------------
+
+BSDI 2.1 has limited support for dynamic loadable libraries. Eric
+Sorenson <eric@alamar-usa.com> reports that BSDI 3.0 comes with
+precomiled versions of Tkined and Scotty, plus much better shared
+library support. The suggested fix is to upgrade from BSDI 2.1 to BSDI
+3.0.
+
+--------------------------------------------
+HP-UX
+--------------------------------------------
+
+Some people experienced strange behaviour of Tkined on HP-UX
+(e.g. icons were not positioning correctly on the canvas). Mark
+Newnham <mark.n@usa.net> reported this problem with HP-UX 9.05, Tcl
+7.5, Tk 4.1 and GCC 2.7.2.1. He reports that the problem was resolved
+by switching to Tcl 7.6 and Tk 4.2.
+
+Some people have reported that scotty does not link correctly under
+HP-UX 10: The scotty executable reports an unresolved symbol error at
+startup time. Stefan Gruendel <stefan.gruendel@sap-ag.de> reports that
+this problem can be fixed by adding the library -ll to the link
+command line. He also suggests to add the -Ae or -Aa compiler option
+to force the C compiler into ANSI mode.
+
+Some people reported that they experienced runtime linker problems
+under HP 10.20 which were resolved by removing -lrpcsvc and -ll from
+the LIBS variable in the Makefile.
+
+--------------------------------------------
+AIX, various versions
+--------------------------------------------
+
+We received reports that the scotty package compiles fine on AIX but
+shows strange runtime behavior. We guess that this problem is actually
+a problem with the dynamic loader for AIX, which is part of the Tcl
+distribution. (We do not have access to AIX machines and can not prove
+this statement.) Below is a workaround or fix for the problem reported
+by Scott Danielson <danielss@uhc.com>:
+
+The following is a brief description of how I worked around these
+problems on my AIX 4.1.4 system.  I used the gcc 2.7.2.1 and is ld to
+get around the __start error, however there may also be a work around
+with the AIX ld, I just don't know what it would be.
+
+----------------------------- TCL 7.6. SECTION ------------------------------
+
+1.  Add -bnoentry option to ldAix command. 
+This corrects the "ld: 0711-327 WARNING: Entry point not found: __start" error.
+
+2. ./configure --enable-gcc --enable-shared
+
+3. make
+
+4. make install
+
+      ############ DIFF current and original tcl configure  ############
+3177c3177
+<       SHLIB_LD="$fullSrcDir/ldAix /bin/ld -bhalt:4 -bM:SRE -bE:lib.exp -H512 -
+T512 -bnoentry"
+---
+>       SHLIB_LD="$fullSrcDir/ldAix /bin/ld -bhalt:4 -bM:SRE -bE:lib.exp -H512 -
+T512"
+
+----------------------------- TK 4.2 SECTION ------------------------------
+
+1. ./configure --enable-gcc --enable-shared
+
+2. make 
+
+3. make install
+
+4. make distclean  "THIS IS VERY IMPORTANT"  
+   I don't know why but if the tk source directory is not cleaned you get
+   the biggy:  'bitmap "icon" not defined', causing tkined to hang.
+
+----------------------------- Scotty SECTION ------------------------------
+
+Scotty required extra libraries in two places tnm and tkined.  
+
+1.  I added "-lm -lld -lc" the LIBS entry in the configure script, See
+    diff below:
+
+2.  I added additional library variables to the Makefile.in; tnm
+    needed $(TCL_LIB_SPEC) added and tkined needed $(TCL_LIB_SPEC),
+    $(TK_LIB_SPEC), and -lX11added, see diff below.
+
+3.  ./configure --enable-gcc
+
+4.  make
+
+5.  make install
+
+5.  make sinstall
+
+  ############ DIFF current and original scotty Makefile.in  ############
+$diff scotty2.1.5/unix/Makefile.in working-scotty2.1.5/unix/Makefile.in
+1758c1758
+< LIBS="-lrpcsvc  $LIBS"
+---
+> LIBS="-lrpcsvc -lm -lld -lc $LIBS" # NOT AIX
+1781c1781
+<   LIBS="$LIBS -lrpcsvc"
+---
+>   LIBS="$LIBS -lrpcsvc -lm -lld -lc"
+378c378
+<       $(SHLIB_LD) $(TNM_OBJS) -o tnm$(SHLIB_SUFFIX) $(LIBS) $(OSIMIS_LIBS) $(M
+SQL_LIBS) $(GDMO_LIBS)
+---
+>       $(SHLIB_LD) $(TNM_OBJS) -o tnm$(SHLIB_SUFFIX) $(LIBS) $(TCL_LIB_SPEC) $(
+OSIMIS_LIBS) $(MSQL_LIBS) $(GDMO_LIBS)
+383c383
+<       $(SHLIB_LD) $(TKI_GENERIC_OBJS) -o tkined$(SHLIB_SUFFIX) $(LIBS)
+---
+>       $(SHLIB_LD) $(TKI_GENERIC_OBJS) -o tkined$(SHLIB_SUFFIX) $(TCL_LIB_SPEC)
+ $(TK_LIB_SPEC) $(LIBS) -lX11
+
+
+Gang Chen <gc00@gte.com> suggests the following change for using AIX
+ld on AIX 4.2:
+
+> The problem is about AIX ld, you has to set right flag for dynamic
+> linking:
+> 
+> add -brtl option whenever you need link with lib*.so
+> 
+> The bad news is that this -brtl option is for AIX4.2 or up. So,
+> maybe there is another way for AIX4.1?
+
+Joshua Krage <jkrage@access.digex.net> reports that there is a general
+problem with pipes in Tcl7.6p2 on AIX 3.2.5 (IBM cc):
+
+> Currently, Scotty/TkIned requires TCL 7.6p2 and supposedly doesn't yet
+> work with Tcl 8.0 (or 8.1).
+
+> Tcl7.6p2 fails IO tests 14.1 and I think all of 14.  These tests don't
+> complete, they just hang, in an infinite loop until killed.  14.1 is
+> the Tcl_InputBlocked on nonblocking pipe test.  Unfortunately, this is
+> the 'new' method that TkIned frontend uses to communicate with the
+> Scotty backend.
+
+> The 'Tools' menu is created by a backend script.  When TkIned starts
+> the script to create the menu, it hangs, just like the TCL tests
+> indicate.  Therefore no menu is created.
+
+> Note that the scotty example scripts will work and are useful.  Just
+> the TkIned integration is gone, and the Tools-specific scripts need to
+> be run from TkIned.
+
+> Tcl8.0 compiles fine with a minor change to the generated Makefile
+> (remove the -bnoentry argument to the SHLIB_LD line).  It passes the
+> io tests with no reported problems.  So, when TkIned/Scotty are ready
+> for Tcl8.0 (and soon 8.1), it should work on AIX.
+

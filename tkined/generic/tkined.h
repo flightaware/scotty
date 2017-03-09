@@ -77,7 +77,7 @@ typedef long LONG;
  *----------------------------------------------------------------
  */
 
-#define TKI_VERSION "1.5.0"
+#define TKI_VERSION "1.5.1"
 
 #include <tcl.h>
 #include <tk.h>
@@ -160,10 +160,10 @@ Tki_DeleteEditor	(ClientData clientData);
 
 int
 Tki_EditorPageSize	(Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv);
+				     int argc, const char **argv);
 int
 Tki_EditorOrientation	(Tki_Editor *editor, Tcl_Interp *interp,
-				     int argc, char **argv);
+				     int argc, const char **argv);
 int
 Tki_EditorPostScript	(Tki_Editor *editor, Tcl_Interp *interp,
 				     int argc, char **argv);
@@ -285,13 +285,13 @@ Tki_DumpObject		(Tcl_Interp *interp, Tki_Object *object);
  */
 
 int m_create           (Tcl_Interp *interp, Tki_Object *object,
-                                    int argc, char **argv);
+                                    int argc, const char **argv);
 int m_dump             (Tcl_Interp *interp, Tki_Object *object,
                                     int argc, char **argv);
 int m_retrieve         (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_delete           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 
 int m_id               (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
@@ -300,19 +300,19 @@ int m_type             (Tcl_Interp *interp, Tki_Object *object,
 int m_parent           (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_name             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_canvas           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_editor           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_items            (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_address          (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_oid              (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_action           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_select           (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_unselect         (Tcl_Interp *interp, Tki_Object *object,
@@ -320,27 +320,27 @@ int m_unselect         (Tcl_Interp *interp, Tki_Object *object,
 int m_selected         (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_icon             (Tcl_Interp *interp, Tki_Object *object,
-		 		    int argc, char **argv);
+		 		    int argc, const char **argv);
 int m_label            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_font             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_color            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_move             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_raise            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_lower            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_size             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_src              (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_dst              (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_text             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_append           (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_hyperlink        (Tcl_Interp *interp, Tki_Object *object,
@@ -350,29 +350,29 @@ int m_html_append      (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 #endif
 int m_clear            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_scale            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_values           (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, const char **argv);
 int m_jump             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_member           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_collapse         (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_expand           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_collapsed        (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_ungroup          (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_links            (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_postscript       (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_points           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_network_labelxy  (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, char **argv);
 int m_interpreter      (Tcl_Interp *interp, Tki_Object *object,
@@ -380,13 +380,13 @@ int m_interpreter      (Tcl_Interp *interp, Tki_Object *object,
 int m_send             (Tcl_Interp *interp, Tki_Object *object,
 				    int argc, const char **argv);
 int m_bell             (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_editor           (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_attribute        (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 int m_flash            (Tcl_Interp *interp, Tki_Object *object,
-				    int argc, char **argv);
+				    int argc, const char **argv);
 
 /*
  * More utility functions.
@@ -399,12 +399,12 @@ extern void TkiInitPath	    (Tcl_Interp *interp);
 extern void receive         (ClientData clientData, int mask);
 extern int  ined            (ClientData clientData,
 					 Tcl_Interp *interp,
-					 int argc, char **argv);
+					 int argc, const char **argv);
 
 extern void TkiFlash        (Tcl_Interp *interp,
 					 Tki_Object *object);
 
-extern char *findfile       (Tcl_Interp *interp, char *name);
+extern char *findfile       (Tcl_Interp *interp, const char *name);
 extern char *type_to_string (unsigned type);
 extern unsigned string_to_type   (const char *str);
 
@@ -433,7 +433,7 @@ extern void lappend (char **slist, char *item);
  */
 
 extern void TkiTrace (Tki_Editor *editor, Tki_Object *object,
-				  char *cmd, int argc, char **argv, 
+				  char *cmd, int argc, const char **argv, 
 				  char *result);
 
 extern int TkiNoTrace (int (*method)(), Tcl_Interp *interp, 
@@ -481,7 +481,7 @@ EXTERN int tki_Debug;
  * A ckstrdupnn that replaces all newlines with "\n" sequences.
  */
 
-extern char *ckstrdupnn (char*);
+extern char *ckstrdupnn (const char*);
 
 /*
  * A general purpose sprintf buffer of 1024 bytes. Please use it

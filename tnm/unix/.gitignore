@@ -1,0 +1,4 @@
+config.log config.h config.cache config.status Makefile
+ether* pcnfs* mount* rstat*
+scotty tkined
+nmtrapd nmicmpd

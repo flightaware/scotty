@@ -13,6 +13,10 @@
  * @(#) $Id: tnmSnmpInst.c,v 1.1.1.1 2006/12/07 12:16:58 karl Exp $
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 
@@ -542,7 +546,7 @@ TnmSnmpCreateNode(Tcl_Interp *interp, char *label, char *tclVarName, char *defva
 
     AddNode(soid, offset, syntax, access, varName);
     Tcl_TraceVar(interp, varName, TCL_TRACE_UNSETS | TCL_GLOBAL_ONLY, 
-		 DeleteNodeProc, (ClientData) NULL);
+		 (Tcl_VarTraceProc *) DeleteNodeProc, (ClientData) NULL);
     Tcl_ResetResult(interp);
     return TCL_OK;
 
