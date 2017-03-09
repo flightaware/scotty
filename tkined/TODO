@@ -11,6 +11,17 @@ MacOSX
   - OS X Sierra: all shortcuts show up as "Space".
 
 
+Solaris 11.3
+------------
+
+### Build
+
+`tkined` is not built, need `gmake tkined`.
+
+Man pages are not built, need `gmake doc`
+
+
+
 Build
 -----
 

@@ -24,10 +24,10 @@ configure -verbose {body error skip}
 testConstraint knownBugMacOSX\
     [expr {!($::tcl_platform(os) eq "Darwin")}]
 
-
-testConstraint notMacOSX [expr {$::tcl_platform(os) ne "Darwin"}]
 testConstraint notFreeBSD [expr {$::tcl_platform(os) ne "FreeBSD"}]
+testConstraint notMacOSX [expr {$::tcl_platform(os) ne "Darwin"}]
 testConstraint notNetBSD [expr {$::tcl_platform(os) ne "NetBSD"}]
+testConstraint notNetBSD [expr {$::tcl_platform(os) ne "SunOS"}]
 
 package require Tnm 3.0
 catch {
@@ -336,9 +336,10 @@ foreach u [udp find] { $u destroy }
 # | FreeBSD | 10.3 amd64            | EISCONN |
 # | NetBSD  | 7.0.2 amd64           | EISCONN |
 # | MacOSX  | Yosemite, 10.10.5     | EISCONN |
+# | Solaris | 11.3                  | EISCONN |
 #
 test udp-11.2.3 {udp configure/send: send to configured, connected} -constraints {
-    notFreeBSD notMacOSX notNetBSD
+    notFreeBSD notMacOSX notNetBSD notSunOS
 } -body {
     catch {rename udp# {}}
     set r [udp create -myaddress 127.0.0.1 -myport $::SOME_PORT]

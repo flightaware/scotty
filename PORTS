@@ -88,6 +88,30 @@ Configure with:
 
     ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl
 
+
+Solaris 11.3
+============
+
+Install Tcl/Tk from sources, the installation provided by Oracle does
+not include the private header files.
+
+Download the source tarballs, unpack, enter the unix subdirectory and
+do the standard
+
+	./configure
+	make
+	sudo make install
+
+To install into `/usr/local`.
+
+Configure scotty with:
+
+	cd tnm
+	./configure --with-tcl=/usr/local/lib
+	cd ../tkined
+	./configure --with-tcl=/usr/local/lib --with-tk=/usr/local/lib
+
+
 ---
 [Active State Tcl]: http://www.activestate.com/activetcl/downloads
 [Xcode]: https://developer.apple.com/xcode/

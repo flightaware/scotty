@@ -177,10 +177,23 @@ Same problem as in FreeBSD and MacOX
 Slackware Linux
 ---------------
 
-
 ### Tnm::netdb
 
 Slackware 14.2.: x86_64: same problem as with FreeBSD amd64
+
+
+Solaris 11.3
+------------
+
+### Build
+
+Docs (man files) are not created, use `gmake` to generate them.
+
+The builds of `nmicmpd` and `nmtrapd` fail, because the required
+libraries are not included on the commandline.
+
+Man pages are installed in /usr/local/share/man, but they are not
+found there by default.
 
 
 Generic
