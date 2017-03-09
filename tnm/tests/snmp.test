@@ -21,9 +21,6 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
 set verbosity [configure -verbose]
 configure -verbose {body error skip}
 
-testConstraint knownBugMacOSX\
-    [expr {!($::tcl_platform(os) eq "Darwin")}]
-
 testConstraint knownBug64BitArchitecture [expr {!(
 			       ($::tcl_platform(machine) == "amd64")
 			       || ($::tcl_platform(machine) == "x86_64")

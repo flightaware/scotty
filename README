@@ -98,14 +98,16 @@ Note: operating systems marked with an * have the best support and
 test coverage.  See tnm/TODO and tkined/TODO for a list of known
 problems.
 
+Scotty is currently only operating correctly on 32 bit platforms.
+There are several known bugs which surface when running on 64 bit.
+
 
 Tested Tcl/Tk Versions
 ----------------------
 
 - 8.6.2 (Debian)
 - 8.5.17 (Debian)
-- 8.6.6 (FreeBSD, Alpine)
-- 8.6.6 (Slackware)
+- 8.6.6 (FreeBSD, Ubuntu, Alpine, Slackware)
 - 8.6.4 (MacOSX)
 
 

@@ -21,17 +21,10 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
 set verbosity [configure -verbose]
 configure -verbose {body error skip}
 
-testConstraint hangsMacOSX \
-    [expr {!($::tcl_platform(os) eq "Darwin")}]
-
-testConstraint hangsFreeBSD \
-    [expr {!($::tcl_platform(os) eq "FreeBSD")}]
-
-testConstraint hangsNetBSD \
-    [expr {!($::tcl_platform(os) eq "NetBSD")}]
-
-testConstraint hangsSlackware \
-    [expr {![file exists [file join / etc slackware-version]]}]
+testConstraint knownBug64BitArchitecture [expr {!(
+			       ($::tcl_platform(machine) == "amd64")
+			       || ($::tcl_platform(machine) == "x86_64")
+			       )}]
 
 testConstraint pre3.0.2 [expr {[package vcompare $::tnm(version) 3.0.2] == -1}]
 
@@ -181,12 +174,12 @@ test netdb-6.5 {check "netdb ip" command} {
     netdb ip class 127.0.0.1
 } {loopback}
 test netdb-6.6 {check "netdb ip" command} -constraints {
-hangsMacOSX hangsFreeBSD hangsNetBSD hangsSlackware
+    knownBug64BitArchitecture
 } -body {
     llength [netdb ip range 134.169.34.0 255.255.255.0]
 } -result {254}
 test netdb-6.7 {check "netdb ip" command} -constraints {
-hangsMacOSX hangsFreeBSD hangsNetBSD hangsSlackware
+    knownBug64BitArchitecture
 } -body {
     netdb ip range 134.169.34.0 255.255.255.248
 } -result {134.169.34.1 134.169.34.2 134.169.34.3 134.169.34.4 134.169.34.5 134.169.34.6}
