@@ -7,6 +7,9 @@ Debian
 ------
 
 - Installing libsmi2-dev makes build break.
+- On wheezy/amd64, sunrpc-1.2 segfaults: this just runs `sunrpc foo`.
+  Interesting detail: `tcl_platform(machine)` shows: `x86_64`.
+
 
 MacOSX
 ------

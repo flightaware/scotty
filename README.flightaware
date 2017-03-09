@@ -19,22 +19,23 @@ The last section is a verbatim copy of the bounty rules.
 Scotty Improvement Requirements
 -------------------------------
 
-- Change build system to compile under TEA 3.10.
++ Change build system to compile under TEA 3.10.
 
-- Compile under the following operating systems:
+* Compile under the following operating systems:
     + FreeBSD 
         + 10.3
         + 11.0
-    - Debian GNU/Linux:
+    * Debian GNU/Linux:
         - Jessie:
             -  8.2
             +  8.7
-        - Wheezy: 7.9
+		- Wheezy: 7.9
+		  + 7.11
         - Stretch: Sid
     + Ubuntu 16.10, Yakkety Yak
     - macOS Sierra
 
-- Stub support.
++ Stub support.
 
 - Figure out official hosting situation.
 

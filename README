@@ -88,7 +88,7 @@ is available from: <https://github.com/jorge-leon/scotty>
 Tested Operating Systems
 ------------------------
 
-- Debian GNU/Linux 8.7 (jessie) *
+- Debian GNU/Linux 7.11 (wheezy), 8.7 (jessie) *
 - Ubuntu 16.10 (yakkety) *
 - Alpine Linux (Note: temporarily unavailable)
 - Slackware Linux 14.2
@@ -105,8 +105,9 @@ problems.
 Tested Tcl/Tk Versions
 ----------------------
 
-- 8.5.17 (Debian)
-- 8.6.2 (Debian)
+- 8.5.11 (Debian wheezy)
+- 8.5.17 (Debian jessie)
+- 8.6.2 (Debian jessie)
 - 8.6.4 (MacOSX)
 - 8.6.5 (Slackware)
 - 8.6.6 (FreeBSD, Ubuntu, Alpine, Solaris)
