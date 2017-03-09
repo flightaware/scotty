@@ -17,12 +17,12 @@
 #include <config.h>
 #endif
 
+#include "tnmSnmp.h"
+#include "tnmMib.h"
+
 #if !defined(Tcl_GetErrorLine)
 #define Tcl_GetErrorLine(interp) (interp->errorLine)
 #endif
-
-#include "tnmSnmp.h"
-#include "tnmMib.h"
 
 /*
  * A Tcl list variable which keeps the list of the MIB files loaded
