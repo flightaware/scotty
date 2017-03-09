@@ -27,7 +27,7 @@ testConstraint knownBugMacOSX\
 testConstraint notFreeBSD [expr {$::tcl_platform(os) ne "FreeBSD"}]
 testConstraint notMacOSX [expr {$::tcl_platform(os) ne "Darwin"}]
 testConstraint notNetBSD [expr {$::tcl_platform(os) ne "NetBSD"}]
-testConstraint notNetBSD [expr {$::tcl_platform(os) ne "SunOS"}]
+testConstraint notSunOS [expr {$::tcl_platform(os) ne "SunOS"}]
 
 package require Tnm 3.0
 catch {

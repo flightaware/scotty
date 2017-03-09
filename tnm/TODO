@@ -196,6 +196,14 @@ Man pages are installed in /usr/local/share/man, but they are not
 found there by default.
 
 
+### Test
+
+- icmp-2.1 icmp timestamp
+- snmp-X.1 snmp Unsigned32 type
+- sunrpc-4.6 sunrpc info command
+  - actually we get a result, but not the expected `portmapper`,
+    instead we get `rpcbind`
+
 Generic
 -------
 
