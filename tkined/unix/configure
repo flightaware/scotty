@@ -2359,8 +2359,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_headers="$ac_config_headers config.h"
 
 
-TNM_VERSION=3.0.1
-TKI_VERSION=1.5.0
+TNM_VERSION=3.0.2
+TKI_VERSION=1.5.1
 TCL_VERSION=8.6
 TK_VERSION=8.6
 

@@ -13,7 +13,7 @@
 # @(#) $Id: TnmDialog.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
 package require Tnm 3.0
-package provide TnmDialog 3.0.1
+package provide TnmDialog 3.0.2
 
 namespace eval TnmDialog {
     namespace export Confirm
