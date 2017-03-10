@@ -36,7 +36,7 @@
  * is available. This is only a fall through definition here.
  */
 
-#define TKI_VERSION "1.5.0"
+#define TKI_VERSION "1.5.1"
 
 #ifndef TNMLIB
 #define TNMLIB "c:/tcl/lib/tnm3.0.2"
