@@ -1,0 +1,154 @@
+# -*- mode: markdown -*-
+
+Note: all instructions are to be carried out as user root, unless
+explicitely specified otherwise.
+
+
+Requisites
+==========
+
+Scotty will not work with the stable release 3.3.0.  You need
+to start from a recent snapshot and recompile the system.
+
+The procedure is easy and is described in [Tracking Current][]
+
+We used the [R3.4.0rc5][] CD for development and installed MINIX3
+inside a VirtualBox.
+
+After installation and reboot we installed the basic development
+packages with:
+
+	pkgin_sets
+
+And then the following packages:
+
+	pkgin install autoconf mozilla-rootcerts-openssl tcl tk
+
+rpcgen Kernel
+=============
+
+Clone the minix repository of sambuc into `/usr/src` and checkout the
+`rpcgen2` branch.
+
+	cd /usr/src
+	git clone https://github.com/sambuc/minix
+	git checkout rpcgen2
+
+To rebuild the system a workaround has to be used, please follow the
+instructions provided by sambuc:
+
+> Hello,
+> 
+> 
+> There is a bit of a chicken-and-egg issue there, here are a couple of steps to go around that:
+> 1. cp -r /usr/src/include/rcp /usr/include/rpc
+> 2. cd /usr/src/usr.bin/rpcgen
+> 3. make all install
+> 4. rm -f /usr/include/rpc/* # Keep the folder, but empty it!
+> 5. cd /usr/src
+> 6. make build # if you already have build the sources, you can speed up things with
+>    -or-
+>    make build MKUPDATE=yes
+>
+> From there on, rpcgen will be installed, and it might work, provided that the current pollts implementation has some limitations.
+> 
+> I might have some time to try and imrpove the pollts implementation a bit, but as long as it is not merged upstream, it comes with no promises.
+> 
+> 
+> Kind regards,
+> 
+> Lionel
+
+Now reboot into your newly built system (a simple `reboot` is enough,
+lean back and wait for the prompt).
+
+Scotty compilation
+==================
+
+As a normal user:
+
+Clone the scotty repository, enter the cloned directory and issue the
+standard:
+
+	make minix build
+	su
+	make install
+
+Or step by step:
+
+	cd tnm
+	autoheader
+	autoconf
+	./configure --with-tcl=/usr/pgk/lib
+	make
+	su
+	make install sinstall
+
+	cd ../tkined
+	autoheader
+	autoconf
+	./configure --with-tcl=/usr/pkg/lib --with-tk=/usr/pkg/lib
+	make
+	su
+	make install
+
+Loopback device
+===============
+
+MINIX does not provide a loopback device, but most tests require one.
+Here are steps to create one.  We suppose, that you have just one real
+Ethernet interface which uses network 0, so your `/etc/inet.conf`
+might look like:
+
+	eth0 lance 0 { default; }
+
+Add a line:
+
+	psip1;
+
+The reboot.  This adds a pseudo IP interface for network 1 (eth0 is
+network 0).  As root run:
+
+	ifconfig -I /dev/psip1 -h 127.0.0.1 -n 255.0.0.0 -m 40000
+
+To see the loopback device run:
+
+	ifonfig -a
+
+You must repeat the `ifconfig` line everytime you reboot the system,
+or arrange this to be done for you in the system startup scripts.
+
+Optionally add a `/etc/hosts` file with the contents:
+
+	127.0.0.1	localhost
+
+
+Status
+======
+
+Tnm::icmp(n) seems not to work at all.  Note that we needed to change the code
+in `nmicmpd.c` (look out for `__minix`) in order to get `nmicmpd` to
+start at all, since the 'old' minix stack does not support most socket
+options, in this case you can not set `SO_SNDBUF`.
+
+Tnm::sunrpc(n) runs all available tests, that is, just the surface of
+the `sunrpc` commandline interface.  Somebody would have to enable rpc
+services and then test again and give feedback to sambuc about how rpc
+is behaving.
+
+Tnm::udp(n):
+
+- all tests fail, because they want to use 127.0.0.1.  `udp` itself
+seems to work ok.
+
+- creating an udp endpoint assigns the IP number of the default network
+interface (eth0) instead of the "all interfaces" 0.0.0.0
+
+In sum: what fails are the tests.
+
+Tkined starts and shows the Tools menu.  Since icmp does not work,
+discovery and monitoring is hindered.
+
+
+[Tracking Current]: http://wiki.minix3.org/doku.php?id=developersguide:trackingcurrent
+[R3.4.0rc5]: http://download.minix3.org/iso/snapshot/minix_R3.4.0rc5-1d9650c.iso.bz2

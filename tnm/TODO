@@ -207,6 +207,11 @@ found there by default.
   - actually we get a result, but not the expected `portmapper`,
     instead we get `rpcbind`
 
+Minix
+-----
+
+See the ../README.minix file.
+
 Generic
 -------
 

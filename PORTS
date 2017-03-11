@@ -89,6 +89,18 @@ Configure with:
     ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl
 
 
+MINIX3
+======
+
+There is highly experimental support for MINIX3.  At the moment of
+writing this (20170311) minix does not have official support for
+sunrpc.  However the community member sambuc has kindly imported the
+sunrpc implementation of NetBSD into minix.
+
+Please read the file README.minix if you are interested in scotty on
+MINIX3.
+
+
 Solaris 11.3
 ============
 

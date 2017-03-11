@@ -3,7 +3,7 @@
 # on some platforms.
 #
 
-PLATFORMS	= jessie yakkety freebsd alpine macosx
+PLATFORMS	= wheezy jessie yakkety freebsd alpine macosx sunos
 
 all:
 	@echo
@@ -20,7 +20,7 @@ all:
 	@echo Available platform targets: $(PLATFORMS)
 	@echo
 
-jessie yakkety freebsd slackware:
+wheezy jessie yakkety freebsd slackware:
 	(cd tnm && autoheader && autoconf && ./configure)
 	(cd tkined && autoheader && autoconf && ./configure)
 
@@ -35,6 +35,18 @@ macosx:
 	    && ./configure --bindir=/usr/local/bin/ --libdir=/Library/Tcl)
 
 netbsd:
+	(cd tnm && autoheader && autoconf \
+	    && ./configure --with-tcl=/usr/pkg/lib)
+	(cd tkined && autoheader && autoconf \
+	    && ./configure --with-tcl=/usr/pkg/lib --with-tk=/usr/pkg/lib)
+
+sunos:
+	(cd tnm && autoheader && autoconf \
+	    && ./configure --with-tcl=/usr/local/lib)
+	(cd tkined && autoheader && autoconf \
+	    && ./configure --with-tcl=/usr/local/lib --with-tk=/usr/local/lib)
+
+minix:
 	(cd tnm && autoheader && autoconf \
 	    && ./configure --with-tcl=/usr/pkg/lib)
 	(cd tkined && autoheader && autoconf \

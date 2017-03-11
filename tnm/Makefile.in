@@ -207,20 +207,32 @@ all: binaries libraries doc
 
 # SunRpc needs headers and stubs to be generated
 #--------------------------------------------------------------------
-TNM_DIR 	= $(top_builddir)/tnm
-TNM_GENERIC_DIR	= $(TNM_DIR)/generic
+TNM_GENERIC_DIR	= $(top_builddir)/generic
 RPCGEN		= @RPCGEN@
 PKG_LIBS	= @PKG_LIBS@
 
-.SUFFIXES:	.x
-.x.h:
-	-cp $< .
+# I could not tell some makes (SunOS, Minix3) how to do the following
+# with a .SUFFIX rule.
+# rpcgen does not behave consistently over different platforms with
+# respect to its output files.  The only portable way seem to be,
+# building output from input in the same directory.
+ether.h:	$(TNM_GENERIC_DIR)/ether.x
+	cp $(TNM_GENERIC_DIR)/${@:.h=.x}  .
+	$(RPCGEN) ${@:.h=.x}
+mount.h:	$(TNM_GENERIC_DIR)/mount.x
+	cp $(TNM_GENERIC_DIR)/${@:.h=.x}  .
+	$(RPCGEN) ${@:.h=.x}
+pcnfsd.h:	$(TNM_GENERIC_DIR)/pcnfsd.x
+	cp $(TNM_GENERIC_DIR)/${@:.h=.x}  .
+	$(RPCGEN) ${@:.h=.x}
+rstat.h:	$(TNM_GENERIC_DIR)/rstat.x
+	cp $(TNM_GENERIC_DIR)/${@:.h=.x}  .
 	$(RPCGEN) ${@:.h=.x}
 
-ether_clnt.c ether_xdr.c: ether.h
-mount_clnt.c mount_xdr.c: mount.h
-pcnfsd_clnt.c pcnfsd_xdr.c: pcnfsd.h
-rstat_clnt.c rstat_xdr.c: rstat.h
+ether_clnt.c ether_xdr.c	: ether.h
+mount_clnt.c mount_xdr.c	: mount.h
+pcnfsd_clnt.c pcnfsd_xdr.c	: pcnfsd.h
+rstat_clnt.c rstat_xdr.c	: rstat.h
 
 tnmSunRpc.o: tnmSunRpc.c mount.h ether.h rstat.h pcnfsd.h
 
