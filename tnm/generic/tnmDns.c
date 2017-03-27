@@ -119,8 +119,10 @@ DnsA		(Tcl_Interp *interp, char *hname);
 static int
 DnsPtr		(Tcl_Interp *interp, const char *ip);
 
+#if 0
 static void
 DnsCleanHinfo	(char *str);
+#endif
 
 static int
 DnsHinfo	(Tcl_Interp *interp, const char *hname);
@@ -388,6 +390,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
      * In fact we run into the authority section in some cases,
      * e.g. HINFO w/o result.
      */
+    strcpy(query_result->u.str[0], "no answer");
     for ( ; nscount; nscount--) {
 
 	/*
@@ -513,17 +516,15 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	    
 	} else if (type == T_HINFO) {
 	    /* two <character-string>s */
-	    for (i = 2; i; i--) {
-	        len = *ptr++;
-		
-		if (query_result->type == T_HINFO || query_result->type == -1) {
-   	            query_result->type = T_HINFO;
+	    if (query_result->type == T_HINFO || query_result->type == -1) {		
+		query_result->type = T_HINFO;
+		for (i = 2; i; i--) {
+		    len = *ptr++;
 		    strncpy(query_result->u.str[query_result->n], (char *) ptr, len);
 		    query_result->u.str[query_result->n++][len] = '\0';
+		    ptr += len;
 	        }
-		ptr += len;
 	    }
-
 #if 0
 	    /* leg20170307: ditched this.  It's not understandable
 	      TODO: why len from dn_expand() but then pointer arithmetic with rdlen?
@@ -816,6 +817,7 @@ DnsPtr(Tcl_Interp *interp, const char *ip)
     return TCL_OK;
 }
 
+#if 0
 /*
  *----------------------------------------------------------------------
  *
@@ -846,6 +848,7 @@ DnsCleanHinfo(char *str)
 	str++;
     }
 }
+#endif
 
 /*
  *----------------------------------------------------------------------
@@ -868,7 +871,6 @@ static int
 DnsHinfo(Tcl_Interp *interp, const char *hname)
 {
     a_res res;
-    char *start, *ptr;
 
     /*
      * If we get a numerical address, convert to a name first. 
@@ -892,33 +894,13 @@ DnsHinfo(Tcl_Interp *interp, const char *hname)
         Tcl_SetResult(interp, res.u.str[0], TCL_VOLATILE);
 	return TCL_ERROR;
     }
-    
-    /*
-     * The HINFO fields are separated by dots and real dots are 
-     * quoted by a backslash. Start by extracting the CPU record.
-     */
-    
-    start = ptr = res.u.str[0];
-    while (*ptr && *ptr != '.') {
-        if (*ptr == '\\' && *(ptr+1)) ptr++;
-	ptr++;
+    if (res.n < 2) {
+        Tcl_SetResult(interp, "not enough strings in HINFO record", TCL_STATIC);
+	return TCL_ERROR;
     }
-    if (*ptr == '.') *ptr++ = '\0';
-    DnsCleanHinfo(start);
-    Tcl_AppendElement(interp, start);
 
-    /*
-     * Now the same procedure for the OS record.
-     */
-    
-    start = ptr;
-    while (*ptr && *ptr != '.') {
-        if (*ptr == '\\' && *(ptr+1))  ptr++;
-	ptr++;
-    }
-    if (*ptr == '.') *ptr++ = '\0';
-    DnsCleanHinfo(start);
-    Tcl_AppendElement(interp, start);
+    Tcl_AppendElement(interp, res.u.str[0]);
+    Tcl_AppendElement(interp, res.u.str[1]);
     return TCL_OK;
 }
 
