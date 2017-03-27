@@ -5,11 +5,11 @@
 # and is derived from the example provided by Sun Microsystems.
 #
 
-TNM_VERSION = 3.0.1
-TNM_DLL_VERSION = 300
+TNM_VERSION = 3.0.2
+TNM_DLL_VERSION = 302
 
-TKI_VERSION = 1.5.0
-TKI_DLL_VERSION = 150
+TKI_VERSION = 1.5.1
+TKI_DLL_VERSION = 151
 
 TCL_DLL_VERSION = 84
 TK_DLL_VERSION = 84

@@ -241,9 +241,8 @@ small commits every one to two years on this repository.
 Mark Newnham imported _scotty_ to GitHub and then in 2015-03-14 to
 sourceforge.  He has mainly worked on the "Front End" `tkined`.
 
-This version is a fork of the FlightAware repository, made on
-2017-02-14 by Georg Lehner <jorge@at.anteris.net>.  Find some details
-in `README.flightaware`.
+Upgraded to the latest TEA version and improvements in UDP and DNS
+2017-02-14 by Georg Lehner <jorge@at.anteris.net>.
 
 Ressources remaining from the founders time:
 * [Braunschweig university scotty page](https://www.ibr.cs.tu-bs.de/projects/scotty).
