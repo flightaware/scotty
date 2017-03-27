@@ -144,7 +144,7 @@ test dns-3.1 {dns address: internet host} -constraints {
     knownBugMacOSX
 } -body {
     set ::testIP [lindex [dns address $::testHostName] 0]
-} -match glob -result {*.*.*.*}
+} -match regexp -result {^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$}
 
 # ::testIP is used later, guard against use, if we could not look it
 # up
@@ -200,7 +200,7 @@ test dns-5.2 {dns hinfo: internet host} -constraints {
     dns hinfo iana.org
 } -returnCodes {
     1
-} -result {non existent domain}
+} -result {no HINFO record}
 #----------------------------------------------------------
 # dns mx
 test dns-6.1 {dns mx: internet host} -constraints {

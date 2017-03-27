@@ -221,6 +221,9 @@ Credits
 Jürgen has listed meticulously all contributors and benefactors at
 the end of the original `tnm/README.md` file.
 
+Lionel Sambuc has provided all needed bits to compile scotty on
+MINIX3.
+
 
 History
 =======

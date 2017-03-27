@@ -145,10 +145,6 @@ Fail with: POSIX EADDRINUSE {address already in use}.
 Note: these use the same udp endpoint to send and receive.  Might just
 rewrite the tests.
 
-### Tests
-
-If tests are run with: `scotty3.0.2 all.tcl` we get a segfault on exit.
-
 ### Build
 
 Man files are install in a place, where they cannot be seen
@@ -206,6 +202,11 @@ found there by default.
 - sunrpc-4.6 sunrpc info command
   - actually we get a result, but not the expected `portmapper`,
     instead we get `rpcbind`
+
+Minix
+-----
+
+See the ../README.minix file.
 
 Generic
 -------
@@ -431,10 +432,7 @@ Wishlist
 Port to
 -------
 
-- OpenIndiana (Solaris)
-  - only Tcl 8.5 available
-- Minix:
-  - Note: Minix3.3 is missing rpc/rpcgen implementation.
+- OpenIndiana
 - Windows
 
 Fix

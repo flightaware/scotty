@@ -26,6 +26,11 @@
 #include <resolv.h>
 
 /*
+ * enable debug output of resover routine DnsDoQuery(), DnsHaveQuery()
+ * with #define DEBUG_RESOLV
+ */
+
+/*
  * Max # of returned hostnames or IP addresses:
  */
 
@@ -237,7 +242,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 {
     querybuf query, answer;
     char buf[512], lbuf[512], auth_buf[512];
-    int i, qlen, alen, llen, nscount, len, nsents;
+    int i, qlen, alen, llen, nscount, len, nsents, ancount;
     short type, rdlen;
     /* class and ttl are unused, they are just needed for skipping
      *  over the respective field */
@@ -251,6 +256,11 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
      * Initialize the query_result. Note, query_result->u.str[0]
      * contains an error-description if we had an error.
      */
+
+#ifdef DEBUG_RESOLV
+    fprintf(stderr, "DnsDoQuery: query_type=%d %s\n",
+	    query_type, query_string);
+#endif
 
     query_result->type = -1;
     query_result->n = 0;
@@ -290,8 +300,11 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
      */
     
     q = &answer;
+    /* TODO: nsents is never used, later we look up q->qb1.nscount again
+     *  and store it in nscount, eventually
+     */
     nsents = ntohs((unsigned short) q->qb1.nscount);
-    
+
     if (q->qb1.rcode != 0) {
 	if (q->qb1.rcode == 1)
 	    strcpy(query_result->u.str[0], "format error");
@@ -310,12 +323,38 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	return;
     }
 
-    nscount = ntohs((unsigned short) q->qb1.ancount);
+#ifdef DEBUG_RESOLV
+    fprintf(stderr, "ancount=%d, nscount=%d, arcount=%d\n",
+	    ntohs((unsigned short)q->qb1.ancount),
+	    ntohs((unsigned short)q->qb1.nscount),
+	    ntohs((unsigned short)q->qb1.arcount));
+#endif
+    
+    ancount = nscount = ntohs((unsigned short) q->qb1.ancount);
     if (! nscount) {
 	nscount = ntohs((unsigned short) q->qb1.nscount);
     }
     if (! nscount) {
 	nscount = ntohs((unsigned short) q->qb1.arcount);
+    }
+
+    /* prevent falling through to authoritative section in some
+     *  cases */
+    if (!ancount) {
+	switch (query_type) {
+	case T_CNAME:
+	    strcpy(query_result->u.str[0], "no CNAME record");
+	    query_result->n = -1;
+	    return;
+	case T_HINFO:
+	    strcpy(query_result->u.str[0], "no HINFO record");
+	    query_result->n = -1;
+	    return;
+	case T_TXT:
+	    strcpy(query_result->u.str[0], "no TXT record");
+	    query_result->n = -1;
+	    return;
+	}
     }
     
     /*
@@ -345,7 +384,10 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 
     /* fprintf(stderr, "** nscount=%d\n", nscount); */
 
-    /* TODO: there is no check, if ptr overruns the buf in between */
+    /* TODO: there is no check, if ptr overruns the buf in between.
+     * In fact we run into the authority section in some cases,
+     * e.g. HINFO w/o result.
+     */
     for ( ; nscount; nscount--) {
 
 	/*
@@ -370,21 +412,10 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 
 	GETSHORT(type, ptr);
 
-	/* TODO: This is a momentary heuristic hack.  We got type
-	 * T_SOA when a T_HINFO record was not available.  Until now
-	 * there is no check if the query and the answer type are
-	 * congruent, so we do it here.
-	 * For our case (missing hinfo) we get 'non existent domain'
-	 * upstairs, which is much more congruent then the current
-	 * behaviour (giving back the primary nameserver and failing).
-	 */
-
-	if (type != query_type) {
-	    strcpy(query_result->u.str[0], "lookup failed");
-	    query_result->n = -1;
-	    return;
-	}
-	
+#ifdef DEBUG_RESOLV
+	fprintf(stderr, "nscount=%d, type=%d\n", nscount, type);
+#endif
+	  
 	/* class and ttl are unused, we just need them to skip over the respective field */
 	GETSHORT(class, ptr);
 	(void)class;
@@ -408,7 +439,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 		strcpy(query_result->u.str[query_result->n++], buf);
 	    }
 
-	} else if (type == T_CNAME) {
+	} else if (query_type == T_CNAME && type == T_CNAME) {
 	    
 	    len = dn_expand((u_char *) q, eom, ptr, buf, sizeof(buf));
 	    if (len < 0) {
@@ -479,9 +510,8 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 		query_result->type = T_SOA;
 		strcpy(query_result->u.str[query_result->n++], auth_buf);
 	    }
-
+	    
 	} else if (type == T_HINFO) {
-
 	    /* two <character-string>s */
 	    for (i = 2; i; i--) {
 	        len = *ptr++;
@@ -557,6 +587,7 @@ DnsDoQuery(char *query_string, int query_type, a_res *query_result)
 	    }
 
 	} else {
+	    /* don't use this record, skip it */
 	    ptr += rdlen;
 	}
     }
@@ -614,6 +645,9 @@ DnsHaveQuery(const char *query_string, int query_type, a_res *query_result, int 
 	}
 	
 	DnsDoQuery(tmp, query_type, &res);
+#ifdef DEBUG_RESOLV
+	fprintf(stderr, "DnsDoQuery1: res.type=%d, res.n=%d\n", res.type, res.n);
+#endif
 	if (res.type == query_type && res.n > 0) {
 	    *query_result = res;
 	    return;
@@ -623,7 +657,9 @@ DnsHaveQuery(const char *query_string, int query_type, a_res *query_result, int 
 	 * Check ptr and soa's not recursive:
 	 */
 
-	if (query_type == T_SOA || query_type == T_PTR || query_type == T_TXT) {
+	if (query_type == T_SOA || query_type == T_PTR
+	    || query_type == T_TXT || query_type == T_HINFO
+	    || query_type == T_CNAME) {
 	    *query_result = res;
 	    return;
 	}
@@ -646,6 +682,9 @@ DnsHaveQuery(const char *query_string, int query_type, a_res *query_result, int 
 	}
 	
 	DnsDoQuery(tmp, query_type, &res);
+#ifdef DEBUG_RESOLV
+	fprintf(stderr, "DnsDoQuery2: res.type=%d, res.n=%d\n", res.type, res.n);
+#endif
 
 	if (res.n > 0) {
 	    *query_result = res;

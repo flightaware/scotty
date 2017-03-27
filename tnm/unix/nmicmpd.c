@@ -1247,12 +1247,24 @@ InitSockets()
 	}
 	max_data_len = max_data_len / 2;
     }
-    
     if (max_data_len <= 128) {
 	PosixError("SO_SNDBUF error");
+#if !defined(__minix)
 	return 0;
+#else
+	/* On old Minix3 network stack SO_SNDBUF is not implemented but
+	 * it is defined.  IP_HDRINCLUDE the same.  The latter would be
+	 * achieved only with a Minix specific ioctl. Source irc #minix,
+	 * Saturn.
+	 *
+	 * The max_data_len is set to a conservative MAX_POSSIBLE_DATALEN
+	 * minus IP header size.
+	 *
+	 * Note that MAX_POSSIBLE_DATALEN is +1 off.
+	 */
+	max_data_len = 65535-20;
+#endif /* minix */
     }
-
 #endif /* SO_SNDBUF */
 
     dsyslog(LOG_DEBUG, "using max_data_len of %d", max_data_len);
