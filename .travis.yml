@@ -5,15 +5,10 @@ sudo: true
 os:
   - linux
   - osx
-
-compiler:
-  - gcc
-  - clang
   
 script:
   - cd tnm
   - autoreconf -vi
   - if [ -f /usr/local/opt/tcl-tk/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/opt/tcl-tk/lib --prefix=/usr/local; else ./configure; fi
   - make
-  - sudo make install
-  - sudo make sinstall
+  - if [ -f /usr/local/opt/tcl-tk/lib/tclConfig.sh ]; then sudo make -e DESTDIR=/usr/local install sinstall; else sudo make install sinstall fi
