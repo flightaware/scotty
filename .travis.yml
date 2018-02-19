@@ -11,6 +11,7 @@ compiler:
   - clang
   
 script:
+  - cd tnm
   - autoreconf -vi
   - if [ -f /usr/local/opt/tcl-tk/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/opt/tcl-tk/lib --prefix=/usr/local; else ./configure; fi
   - make
