@@ -1,0 +1,11 @@
+language: c
+
+sudo: required
+
+script:
+  - cd tnm
+  - autoreconf -vi
+  - ./configure
+  - make
+  - sudo make install
+  - sudo make sinstall
