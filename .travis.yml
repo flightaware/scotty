@@ -9,6 +9,7 @@ os:
 script:
   - cd tnm
   - autoreconf -vi
-  - if [ -f /usr/local/opt/tcl-tk/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/opt/tcl-tk/lib --prefix=/usr/local; else ./configure; fi
+  - if [ -f /usr/local/opt/tcl-tk/lib/tclConfig.sh ]; then ./configure --prefix=/usr/local --with-tcl=/usr/local/opt/tcl-tk/lib; else ./configure; fi
   - make
-  - if [ -f /usr/local/opt/tcl-tk/lib/tclConfig.sh ]; then sudo make -e DESTDIR=/usr/local install sinstall; else sudo make install sinstall; fi
+  - sudo make install
+  - sudo make sinstall
