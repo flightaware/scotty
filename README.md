@@ -162,6 +162,12 @@ After this, you should be able to start `scotty` via `scotty.3.0.x`
 where 'x' is the respective sub sub version number and tkined as
 `tkined`.
 
+OS X Install
+------------
+The OS X configure commands most likely require --prefix=/usr/local and --exec-prefix=/usr/local options.
+OS X now prevents installation in /usr/lib and /usr/bin in the System Integrity Protection implementation.
+TEA trys to figure out the install paths from the TCL install. If you are using the OS X TCL, then these
+directories will not be writable.
 
 Uninstall
 ---------
