@@ -15,7 +15,7 @@
 
 package require Tnm 3.0
 package require TnmInet 3.0
-package provide TnmMap 3.0.2
+package provide TnmMap 3.0.4
 
 namespace eval TnmMap {
     namespace export GetIpAddress GetIpName GetSnmpSession

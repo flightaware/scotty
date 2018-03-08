@@ -78,7 +78,7 @@ typedef long LONG;
  *----------------------------------------------------------------
  */
 
-#define TNM_VERSION "3.0.2"
+#define TNM_VERSION "3.0.4"
 #ifndef TKI_VERSION
 #define TKI_VERSION "1.5.1"
 #endif

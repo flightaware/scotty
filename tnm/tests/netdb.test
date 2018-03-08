@@ -26,7 +26,7 @@ testConstraint knownBug64BitArchitecture [expr {!(
 			       || ($::tcl_platform(machine) == "x86_64")
 			       )}]
 
-testConstraint pre3.0.2 [expr {[package vcompare $::tnm(version) 3.0.2] == -1}]
+testConstraint pre3.0.4 [expr {[package vcompare $::tnm(version) 3.0.4] == -1}]
 
 package require Tnm 3.0
 catch {

@@ -9,7 +9,7 @@
 
 package require Tnm 3.0
 
-package provide TnmSmxProfiles 3.0.2
+package provide TnmSmxProfiles 3.0.4
 
 namespace eval TnmSmxProfiles {
     namespace export safe tnm snmp snmp-134.169

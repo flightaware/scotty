@@ -5,8 +5,8 @@
 # and is derived from the example provided by Sun Microsystems.
 #
 
-TNM_VERSION = 3.0.2
-TNM_DLL_VERSION = 302
+TNM_VERSION = 3.0.4
+TNM_DLL_VERSION = 304
 
 TKI_VERSION = 1.5.0
 TKI_DLL_VERSION = 150
