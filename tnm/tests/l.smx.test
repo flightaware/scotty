@@ -63,7 +63,7 @@ proc startengine {} {
 	package require TnmSmxProfiles 3.0
 	namespace import TnmSmxProfiles::*
     } $file
-    exec scotty3.0.4 $file &
+    exec scotty3.1.0 $file &
     vwait smx(channel)
 }
 

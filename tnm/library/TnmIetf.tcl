@@ -13,8 +13,8 @@
 #
 # @(#) $Id: TnmIetf.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
-package require Tnm 3.0
-package provide TnmIetf 3.0.4
+package require Tnm 3.1
+package provide TnmIetf 3.1.0
 
 namespace eval TnmMap {
     namespace export GetRfcUrl GetMibModuleUrl

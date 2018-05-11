@@ -11,10 +11,10 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
-package require Tnm 3.0
-package require TnmDialog 3.0
-package require TnmInet 3.0
-package provide TnmSnmp 3.0.4
+package require Tnm 3.1
+package require TnmDialog 3.1
+package require TnmInet 3.1
+package provide TnmSnmp 3.1.0
 
 namespace eval TnmSnmp {
     namespace export Walk

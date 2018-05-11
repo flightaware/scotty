@@ -10,9 +10,9 @@
 #
 # @(#) $Id: TnmScriptMib.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
-package require Tnm 3.0
-package require TnmSnmp 3.0
-package provide TnmScriptMib 3.0.4
+package require Tnm 3.1
+package require TnmSnmp 3.1
+package provide TnmScriptMib 3.1.0
 
 namespace eval TnmScriptMib {
     namespace export GetLanguages GetExtensions

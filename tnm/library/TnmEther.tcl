@@ -15,8 +15,8 @@
 #
 # @(#) $Id: TnmEther.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
-package require Tnm 3.0
-package provide TnmEther 3.0.4
+package require Tnm 3.1
+package provide TnmEther 3.1.0
 
 namespace eval TnmEther {
     namespace export GetVendor GetEthers

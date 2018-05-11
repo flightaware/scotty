@@ -13,9 +13,9 @@
 #
 # @(#) $Id: TnmMap.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
-package require Tnm 3.0
-package require TnmInet 3.0
-package provide TnmMap 3.0.4
+package require Tnm 3.1
+package require TnmInet 3.1
+package provide TnmMap 3.1.0
 
 namespace eval TnmMap {
     namespace export GetIpAddress GetIpName GetSnmpSession

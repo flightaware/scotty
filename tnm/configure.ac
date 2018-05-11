@@ -20,14 +20,14 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([Tnm], [3.0.4])
+AC_INIT([Tnm], [3.1.0])
 
 #-----------------------------------------------------------------------
 # Scotty specific definitions and checks
 #-----------------------------------------------------------------------
 
-TNM_VERSION=3.0.4
-TKI_VERSION=1.5.1
+TNM_VERSION=3.1.0
+TKI_VERSION=1.6.0
 
 # disabled config.h generation, since this inhibits stub compilation
 AC_CONFIG_HEADER([config.h])

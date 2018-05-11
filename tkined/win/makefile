@@ -5,16 +5,16 @@
 # and is derived from the example provided by Sun Microsystems.
 #
 
-TNM_VERSION = 3.0.4
-TNM_DLL_VERSION = 304
+TNM_VERSION = 3.1.0
+TNM_DLL_VERSION = 310
 
-TKI_VERSION = 1.5.1
-TKI_DLL_VERSION = 151
+TKI_VERSION = 1.6.0
+TKI_DLL_VERSION = 160
 
-TCL_DLL_VERSION = 84
-TK_DLL_VERSION = 84
+TCL_DLL_VERSION = 86
+TK_DLL_VERSION = 86
 
-TCL_SH_VERSION = 84
+TCL_SH_VERSION = 86
 
 #
 # Project directories -- these may need to be customized for your site
@@ -30,9 +30,9 @@ TCL_SH_VERSION = 84
 ROOT	= .\..
 TMPDIR	= .
 TOOLS32	= C:\Progra~1\Micros~4\VC98
-TCLSRC = D:\develop\src\tcl8.4.9
-TCL	= D:\develop\tcl8.4.9
-TCLP	= D:/develop/tcl8.4.9
+TCLSRC = D:\develop\src\tcl8.6.8
+TCL	= D:\develop\tcl8.6.8
+TCLP	= D:/develop/tcl8.6.8
 TNM	= $(TCL)\lib\tnm$(TNM_VERSION)
 TNMP	= $(TCLP)/lib/tnm$(TNM_VERSION)
 TKI	= $(TCL)\lib\tkined$(TKI_VERSION)

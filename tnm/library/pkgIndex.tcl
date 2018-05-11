@@ -7,6 +7,6 @@ foreach pkg {
     TnmDialog TnmTerm TnmInet TnmMap TnmIetf TnmEther TnmMonitor
     TnmSnmp TnmMib TnmScriptMib TnmSmxProfiles
 } {
-    package ifneeded $pkg 3.0.4 [list source [file join $dir $pkg.tcl]]
+    package ifneeded $pkg 3.1.0 [list source [file join $dir $pkg.tcl]]
 }
 
