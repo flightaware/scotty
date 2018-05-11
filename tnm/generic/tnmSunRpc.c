@@ -1234,7 +1234,7 @@ PcnfsStatus(Tcl_Interp *interp, char *host, char *printer, char *array)
  */
 
 int
-Tnm_SunrpcObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_SunrpcObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int code, program, version, protocol;
     char *host;
@@ -1249,7 +1249,7 @@ Tnm_SunrpcObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *C
 	cmdEther, cmdExports, cmdInfo, cmdMount, cmdPcnfs, cmdProbe, cmdStat
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"ether", "exports", "info", "mount", "pcnfs", "probe", "stat", 
 	(char *) NULL
     };
@@ -1258,7 +1258,7 @@ Tnm_SunrpcObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *C
 	cmdEtherOpen, cmdEtherClose, cmdEtherStat
     } etherCmd;
 
-    static CONST char *etherCmdTable[] = {
+    static const char *etherCmdTable[] = {
 	"open", "close", "stat", (char *) NULL
     };
 
@@ -1266,7 +1266,7 @@ Tnm_SunrpcObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *C
 	cmdPcnfsInfo, cmdPcnfsList, cmdPcnfsQueue, cmdPcnfsStatus
     } pcnfsCmd;
 
-    static CONST char *pcnfsCmdTable[] = {
+    static const char *pcnfsCmdTable[] = {
 	"info", "list", "queue", "status", (char *) NULL
     };
 

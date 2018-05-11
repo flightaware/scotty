@@ -136,7 +136,7 @@ Schedule	(Tcl_Interp *interp, JobControl *control);
 
 static int
 CreateJob	(Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static Tcl_Obj*
 GetOption	(Tcl_Interp *interp, ClientData object, 
 			     int option);
@@ -145,10 +145,10 @@ SetOption	(Tcl_Interp *interp, ClientData object,
 			     int option, Tcl_Obj *objPtr);
 static int
 JobObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 FindJobs	(Tcl_Interp *interp, JobControl *control,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The options used to configure job objects.
@@ -532,7 +532,7 @@ Schedule(Tcl_Interp *interp, JobControl *control)
 		if (len > 0) {
 		    Tcl_GlobalEvalObj(interp, jobPtr->errorCmd);
 		} else {
-		    CONST char *name;
+		    const char *name;
 		    name = Tcl_GetCommandName(interp, jobPtr->token);
 		    Tcl_AddErrorInfo(interp, "\n    (script bound to job - ");
 		    Tcl_AddErrorInfo(interp, name);
@@ -613,7 +613,7 @@ Schedule(Tcl_Interp *interp, JobControl *control)
  */
 
 static int
-CreateJob(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+CreateJob(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     static unsigned nextId = 0;
     Job *jobPtr, *p;
@@ -888,7 +888,7 @@ SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
  */
 
 static int
-JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int result;
     Job *jobPtr = (Job *) clientData;
@@ -899,7 +899,7 @@ JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 	cmdAttribute, cmdCget, cmdConfigure, cmdDestroy, cmdWait
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"attribute", "cget", "configure", "destroy", "wait", (char *) NULL
     };
 
@@ -999,7 +999,7 @@ JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
  */
 
 static int
-FindJobs(Tcl_Interp *interp, JobControl *control, int objc, Tcl_Obj *CONST objv[])
+FindJobs(Tcl_Interp *interp, JobControl *control, int objc, Tcl_Obj *const objv[])
 {
     int i, result, status = -1;
     Job *jobPtr;
@@ -1007,7 +1007,7 @@ FindJobs(Tcl_Interp *interp, JobControl *control, int objc, Tcl_Obj *CONST objv[
 
     enum options { optStatus, optTags } option;
 
-    static CONST char *optionTable[] = {
+    static const char *optionTable[] = {
         "-status", "-tags", (char *) NULL
     };
 
@@ -1047,7 +1047,7 @@ FindJobs(Tcl_Interp *interp, JobControl *control, int objc, Tcl_Obj *CONST objv[
 	    if (! match) continue;
 	}
 	{
-	    CONST char *name = Tcl_GetCommandName(interp, jobPtr->token);
+	    const char *name = Tcl_GetCommandName(interp, jobPtr->token);
 	    Tcl_Obj *elemObjPtr = Tcl_NewStringObj(name, -1);
 	    Tcl_ListObjAppendElement(interp, listPtr, elemObjPtr);
 	}
@@ -1074,7 +1074,7 @@ FindJobs(Tcl_Interp *interp, JobControl *control, int objc, Tcl_Obj *CONST objv[
  */
 
 int
-Tnm_JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     Job *jobPtr;
     int result;
@@ -1085,7 +1085,7 @@ Tnm_JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 	cmdCreate, cmdCurrent, cmdFind, cmdSchedule, cmdWait
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"create", "current", "find", "schedule", "wait", (char *) NULL
     };
 
@@ -1120,7 +1120,7 @@ Tnm_JobObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 	    break;
 	}
 	if (control->currentJob && control->currentJob->interp == interp) {
-	    CONST char *name;
+	    const char *name;
 	    name = Tcl_GetCommandName(interp, control->currentJob->token);
 	    Tcl_SetResult(interp, (char *) name, TCL_STATIC);
 	}

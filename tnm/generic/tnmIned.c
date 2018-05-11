@@ -198,8 +198,8 @@ InedInitialize(Tcl_Interp *interp)
 {
     Tcl_Channel channel;
     char *path = NULL, *tmp, *p;
-    CONST char *tkiPath;
-    CONST char *autoPath;
+    const char *tkiPath;
+    const char *autoPath;
 
     tmp = getenv("TNM_INED_TCPPORT");
     if (tmp) {
@@ -655,7 +655,7 @@ InedCompCmd(char *cmd, Tcl_Interp *interp, int argc, char **argv)
  */
 
 int
-Tnm_InedObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_InedObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     Tcl_Channel channel;
     int i;

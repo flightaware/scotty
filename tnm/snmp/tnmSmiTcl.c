@@ -287,7 +287,7 @@ GetSmiList(Tcl_Interp *interp, SmiNode *smiNode, Tcl_Obj *objPtr)
     }
     if (objPtr) {
 	if (Tcl_ObjSetVar2(interp, objPtr, NULL, listPtr,
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 	    Tcl_DecrRefCount(listPtr);
 	    return TCL_ERROR;
 	}
@@ -392,7 +392,7 @@ WalkTree(Tcl_Interp *interp, Tcl_Obj *varName, Tcl_Obj *body, SmiNode* smiNode, 
 	TnmOidSet(oidPtr, length-1, childNode->oid[childNode->oidlen-1]);
 	
 	if (!Tcl_ObjSetVar2(interp, varName, NULL, TnmNewOidObj(oidPtr), 
-			    TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1)) {
+			    TCL_LEAVE_ERR_MSG)) {
 	    result = TCL_ERROR;
 	    goto loopDone;
 	}
@@ -449,7 +449,7 @@ WalkTree(Tcl_Interp *interp, Tcl_Obj *varName, Tcl_Obj *body, SmiNode* smiNode, 
  */
 
 int
-Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
+Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *const objv[])
 {
     SmiNode *smiNode;
     SmiType *smiType;
@@ -470,7 +470,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	cmdType, cmdUnits, cmdUnpack, cmdVariables, cmdWalk
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"access", "children", "compare", "defval", "description", 
 	"displayhint", "enums", "exists", "file", "format",
 	"index", "info", "label", "length", "load",
@@ -485,7 +485,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	infoAccess, infoMacros, infoModules, infoStatus, infoTypes
     } info;
 
-    static CONST char *infoTable[] = {
+    static const char *infoTable[] = {
 	"access", "macros", "modules", "status", "types",
 	(char *) NULL
     };
@@ -628,7 +628,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -672,7 +672,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	}
 	if (objc == 4) {
 	    if (Tcl_ObjSetVar2(interp, objv[3], NULL, listPtr,
-			       TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			       TCL_LEAVE_ERR_MSG) == NULL) {
 		return TCL_ERROR;
 	    }
 	    Tcl_ListObjLength(NULL, listPtr, &len);
@@ -705,7 +705,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -734,7 +734,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -759,7 +759,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (smiType->format) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(smiType->format, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 		
@@ -797,7 +797,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	}
 	if (objc == 4) {
 	    if (Tcl_ObjSetVar2(interp, objv[3], NULL, listPtr,
-			       TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			       TCL_LEAVE_ERR_MSG) == NULL) {
 		return TCL_ERROR;
 	    }
 	    Tcl_SetBooleanObj(Tcl_GetObjResult(interp), n > 0);
@@ -1100,7 +1100,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -1329,7 +1329,7 @@ Tnm_SmiObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }

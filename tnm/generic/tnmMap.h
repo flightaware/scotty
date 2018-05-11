@@ -235,7 +235,7 @@ typedef struct TnmMapMsg {
 } TnmMapMsg;
 
 EXTERN TnmMapMsg* TnmMapCreateMsg (TnmMap *mapPtr, TnmMapItem *itemPtr, Tcl_Obj *tag, Tcl_Obj *message);
-EXTERN int TnmMapMsgCmd	(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, int objc, Tcl_Obj *CONST objv[]);
+EXTERN int TnmMapMsgCmd	(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, int objc, Tcl_Obj *const objv[]);
 EXTERN void TnmMapExpireMsgs	(TnmMapMsg **msgListPtr, long expireTime);
 
 /*
@@ -276,7 +276,7 @@ EXTERN void TnmMapExpireMsgs	(TnmMapMsg **msgListPtr, long expireTime);
 
 EXTERN int
 TnmMapItemObjCmd	(TnmMapItem *itemPtr, Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 EXTERN void
 TnmMapItemCmdList	(TnmMapItem *itemPtr, Tcl_Interp *interp);
 
@@ -285,7 +285,7 @@ TnmMapItemDump		(TnmMapItem *itemPtr, Tcl_Interp *interp);
 
 EXTERN int
 TnmMapItemConfigure	(TnmMapItem *itemPtr, Tcl_Interp *interp,
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 EXTERN TnmMapItem*
 TnmMapFindItem		(Tcl_Interp *interp, TnmMap *mapPtr, char *name);
 

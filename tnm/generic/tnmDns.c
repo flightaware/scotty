@@ -1183,7 +1183,7 @@ DnsSoa(Tcl_Interp *interp, const char *hname)
  */
 
 int
-Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int x, i, code;
     char *arg;
@@ -1196,7 +1196,7 @@ Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 	cmdAddress, cmdCname, cmdHinfo, cmdMx, cmdName, cmdNs, cmdSoa, cmdTxt
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"address", "cname", "hinfo", "mx", "name", "ns", "soa", "txt", (char *) NULL	
     };
 

@@ -41,7 +41,7 @@ LinkCreateProc	(Tcl_Interp *interp, TnmMap *mapPtr,
 			     TnmMapItem *itemPtr);
 static int
 LinkCmd		(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The configuration options understood by a link item.
@@ -150,7 +150,7 @@ LinkCreateProc(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr)
  */
 
 static int
-LinkCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+LinkCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);

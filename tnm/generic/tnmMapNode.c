@@ -39,7 +39,7 @@ NodeDeleteProc	(TnmMapItem *itemPtr);
 
 static int
 NodeCmd		(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The configuration options understood by a node item.
@@ -144,7 +144,7 @@ repeat:
  */
 
 static int
-NodeCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NodeCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);

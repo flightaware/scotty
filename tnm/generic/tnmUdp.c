@@ -71,26 +71,26 @@ UdpEventProc	(ClientData clientData, int mask);
 
 static int
 UdpCreate	(Tcl_Interp *interp, int objc,
-			     Tcl_Obj *CONST objv[]);
+			     Tcl_Obj *const objv[]);
 static int
 UdpConnect	(Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]);
+			     Tcl_Obj *const objv[]);
 static int
 UdpSend		(Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]);
+			     Tcl_Obj *const objv[]);
 static int
 UdpReceive	(Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]);
+			     Tcl_Obj *const objv[]);
 #ifdef HAVE_MULTICAST
 static int
 UdpJoin		(Tcl_Interp *interp, Udp *udpPtr, int objc,
-			     Tcl_Obj *CONST objv[]);
+			     Tcl_Obj *const objv[]);
 #endif
 
 #if 0
 static int
 UdpMulticast	(Tcl_Interp *interp, int objc,
-			     Tcl_Obj *CONST objv[]));
+			     Tcl_Obj *const objv[]));
 #endif
 
 static Tcl_Obj*
@@ -101,10 +101,10 @@ SetOption	(Tcl_Interp *interp, ClientData object,
 			     int option, Tcl_Obj *objPtr);
 static int
 UdpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 UdpFind		(Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The options used to configure udp socket objects.
@@ -344,7 +344,7 @@ UdpEventProc(ClientData clientData, int mask)
  */
 
 static int
-UdpCreate(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+UdpCreate(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     static unsigned nextId = 0;
     int code;
@@ -444,7 +444,7 @@ UdpCreate(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-UdpConnect(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
+UdpConnect(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in name;
     char *host, *port;
@@ -499,7 +499,7 @@ UdpConnect(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
+UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in name;
     struct sockaddr_in *to;
@@ -609,7 +609,7 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-UdpReceive(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
+UdpReceive(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *const objv[])
 {
     unsigned char msg[65535];
     socklen_t clen, len;
@@ -662,7 +662,7 @@ UdpReceive(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-UdpJoin(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
+UdpJoin(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in name;
     struct ip_mreq mreq;
@@ -907,7 +907,7 @@ SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
  */
 
 static int
-UdpInfo(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
+UdpInfo(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *const objv[])
 {
     Tcl_Obj *objPtr;
 
@@ -955,7 +955,7 @@ UdpInfo(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int code, result;
     Udp *udpPtr = (Udp *) clientData;
@@ -967,7 +967,7 @@ UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 #endif
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"cget", "configure", "connect", "destroy", "info", "receive", "send",
 #ifdef HAVE_MULTICAST
 	"join",
@@ -1066,7 +1066,7 @@ UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
  */
 
 static int
-UdpFind(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+UdpFind(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int i, result;
     Udp *udpPtr;
@@ -1076,7 +1076,7 @@ UdpFind(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 
     enum options { optTags } option;
 
-    static CONST char *optionTable[] = {
+    static const char *optionTable[] = {
         "-tags", (char *) NULL
     };
 
@@ -1108,7 +1108,7 @@ UdpFind(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 	    if (! match) continue;
 	}
 	{
-	    CONST char *name = Tcl_GetCommandName(interp, udpPtr->token);
+	    const char *name = Tcl_GetCommandName(interp, udpPtr->token);
 	    Tcl_Obj *elemObjPtr = Tcl_NewStringObj(name, -1);
 	    Tcl_ListObjAppendElement(interp, listPtr, elemObjPtr);
 	}
@@ -1135,7 +1135,7 @@ UdpFind(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 int
-Tnm_UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int cmd, result = TCL_OK;
     UdpControl *control = (UdpControl *) 
@@ -1145,7 +1145,7 @@ Tnm_UdpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 	cmdCreate, cmdFind
     };
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"create", "find",
 	(char *) NULL
     };

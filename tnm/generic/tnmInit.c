@@ -96,7 +96,7 @@ static CmdInfo tnmCmds[] = {
 static void
 InitVars(Tcl_Interp *interp)
 {
-    CONST char *machine, *os, *vers, *user;
+    const char *machine, *os, *vers, *user;
     char *tmp, *p;
     char buffer[20];
     Tcl_DString arch;
@@ -317,7 +317,7 @@ static int
 SourceInitFiles(Tcl_Interp *interp)
 {
     char *fileName;
-    CONST char *library;
+    const char *library;
     Tcl_DString dst;
 
     library = Tcl_GetVar2(interp, "tnm", "library", TCL_GLOBAL_ONLY);

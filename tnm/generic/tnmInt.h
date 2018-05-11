@@ -131,11 +131,11 @@ typedef struct TnmConfig {
 EXTERN int
 TnmSetConfig		(Tcl_Interp *interp, TnmConfig *config,
 				     ClientData obj, int objc, 
-				     Tcl_Obj *CONST objv[]);
+				     Tcl_Obj *const objv[]);
 EXTERN int
 TnmGetConfig		(Tcl_Interp *interp, TnmConfig *config,
 				     ClientData obj, int objc, 
-				     Tcl_Obj *CONST objv[]);
+				     Tcl_Obj *const objv[]);
 /*
  *----------------------------------------------------------------
  * The following typedefs and functions are used to implement
@@ -350,7 +350,7 @@ EXTERN int
 TnmWriteLogMessage	(char *ident, int level, int facility,
 				     char *message);
 EXTERN void
-TnmWriteMessage		(CONST84 char *msg);
+TnmWriteMessage		(const char *msg);
 
 /*
  *----------------------------------------------------------------

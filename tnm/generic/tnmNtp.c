@@ -437,7 +437,7 @@ NtpGetPeer(char *data, int *assoc)
  */
 
 int
-Tnm_NtpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_NtpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in daddr;
     int x, code, assoc;

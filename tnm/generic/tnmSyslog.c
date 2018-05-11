@@ -145,7 +145,7 @@ AssocDeleteProc(ClientData clientData, Tcl_Interp *interp)
  */
 
 int
-Tnm_SyslogObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_SyslogObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int x, level, code;
     char *ident = NULL;

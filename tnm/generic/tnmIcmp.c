@@ -226,7 +226,7 @@ IcmpRequest(Tcl_Interp *interp, Tcl_Obj *hosts, TnmIcmpRequest *icmpPtr)
  */
 
 int
-Tnm_IcmpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_IcmpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int actTimeout = -1;	/* actually used timeout */
     int actRetries = -1;	/* actually used retries */
@@ -243,7 +243,7 @@ Tnm_IcmpObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 	cmdEcho, cmdMask, cmdTimestamp, cmdTrace, cmdTtl
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"echo", "mask", "timestamp", "trace", "ttl", (char *) NULL
     };
 

@@ -65,19 +65,19 @@ GetItemType	(Tcl_Interp *interp, char *name);
 
 static int
 CreateItem	(Tcl_Interp *interp, TnmMap *mapPtr,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static void
 ItemDeleteProc	(ClientData clientData);
 
 static int
-SortProc	(CONST VOID *first, CONST VOID *second);
+SortProc	(const VOID *first, const VOID *second);
 
 static int
 FindItems	(Tcl_Interp *interp, TnmMap *mapPtr,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 CreateMap	(Tcl_Interp *interp, int objc,
-			     Tcl_Obj *CONST objv[]);
+			     Tcl_Obj *const objv[]);
 static void
 MapDeleteProc	(ClientData clientData);
 
@@ -107,16 +107,16 @@ SaveMap		(Tcl_Interp *interp, TnmMap *mapPtr,
 			     char *channelName);
 static int
 CopyMap		(Tcl_Interp *interp, TnmMap *mapPtr,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 PasteMap	(Tcl_Interp *interp, TnmMap *mapPtr,
 			     Tcl_DString *script);
 static int
 MapObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 FindMaps	(Tcl_Interp *interp, MapControl *control,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The options used to configure map objects.
@@ -337,7 +337,7 @@ GetItemType(Tcl_Interp *interp, char *name)
  */
 
 static int
-CreateItem(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
+CreateItem(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *const objv[])
 {
     TnmMapItemType *typePtr;
     TnmMapItem *itemPtr;
@@ -545,7 +545,7 @@ repeat:
  */
 
 static int
-SortProc(CONST VOID *first, CONST VOID *second)
+SortProc(const VOID *first, const VOID *second)
 {
     TnmMapItem *firstItem = *((TnmMapItem **) first);
     TnmMapItem *secondItem = *((TnmMapItem **) second);
@@ -602,7 +602,7 @@ SortProc(CONST VOID *first, CONST VOID *second)
  */
 
 static int
-FindItems(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
+FindItems(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *const objv[])
 {
     TnmMapItem *itemPtr, **itemVector;
     TnmMapItemType *typePtr = NULL;
@@ -615,7 +615,7 @@ FindItems(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
 	optAddress, optName, optOrder, optSort, optTags, optType
     } option;
 
-    static CONST char *optionTable[] = {
+    static const char *optionTable[] = {
 	"-address", "-name", "-order", "-sort", "-tags", "-type",
 	(char *) NULL
     };
@@ -722,7 +722,7 @@ FindItems(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
 
     listPtr = Tcl_GetObjResult(interp);
     for (i = 0; i < (int) itemCnt; i++) {
-	CONST char *cmdName = Tcl_GetCommandName(interp, itemVector[i]->token);
+	const char *cmdName = Tcl_GetCommandName(interp, itemVector[i]->token);
 	Tcl_Obj *elemObjPtr = Tcl_NewStringObj(cmdName, -1);
 	Tcl_ListObjAppendElement(interp, listPtr, elemObjPtr);
     }
@@ -747,7 +747,7 @@ FindItems(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-CreateMap(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+CreateMap(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMap *mapPtr, *p;
     static unsigned nextid = 0;
@@ -1045,7 +1045,7 @@ static void
 DumpMapProc(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, Tcl_DString *dsPtr)
 {
     char *tok, *val;
-    CONST char *str;
+    const char *str;
 
     if (! itemPtr || itemPtr->dumped) {
 	return;
@@ -1287,7 +1287,7 @@ SaveMap(Tcl_Interp *interp, TnmMap *mapPtr, char *channelName)
 {
     Tcl_Channel channel;
     Tcl_DString ds;
-    CONST char *value;
+    const char *value;
     int mode, num;
 
     channel = Tcl_GetChannel(interp, channelName, &mode);
@@ -1367,7 +1367,7 @@ SaveMap(Tcl_Interp *interp, TnmMap *mapPtr, char *channelName)
  */
 
 static int
-CopyMap(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *CONST objv[])
+CopyMap(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *const objv[])
 {
     TnmMapItem *itemPtr, **itemv;
     Tcl_CmdInfo info;
@@ -1451,7 +1451,7 @@ PasteMap(Tcl_Interp *interp, TnmMap *mapPtr, Tcl_DString *script)
 {
     int code;
     const char *value;
-    CONST char *map = Tcl_GetCommandName(interp, mapPtr->token);
+    const char *map = Tcl_GetCommandName(interp, mapPtr->token);
 
     /*
      * Map scripts expect the name of the map which is modified in
@@ -1495,7 +1495,7 @@ PasteMap(Tcl_Interp *interp, TnmMap *mapPtr, Tcl_DString *script)
  */
 
 static int
-MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMap *mapPtr = (TnmMap *) clientData;
     int result;
@@ -1511,7 +1511,7 @@ MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 	cmdMsg, cmdPaste, cmdRaise, cmdSave, cmdUpdate
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"attribute", "bind", "clear", "cget", "configure", "copy",
 	"create", "destroy", "dump", "find", "info", "load",
 	"message", "paste", "raise", "save", "update", (char *) NULL
@@ -1519,7 +1519,7 @@ MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 
     enum infos { infoBindings, infoEvents, infoMsgs } info;
 
-    static CONST char *infoTable[] = {
+    static const char *infoTable[] = {
 	"bindings", "events", "messages", (char *) NULL
     };
 
@@ -1646,7 +1646,7 @@ MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 		    continue;
 		}
 		if (msgPtr->token) {
-		    CONST char *cmdName;
+		    const char *cmdName;
 		    cmdName = Tcl_GetCommandName(interp, msgPtr->token);
 		    Tcl_ListObjAppendElement(interp, listPtr, 
 					     Tcl_NewStringObj(cmdName, -1));
@@ -1661,7 +1661,7 @@ MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 		    continue;
 		}
 		if (eventPtr->token) {
-		    CONST char *cmdName;
+		    const char *cmdName;
 		    cmdName = Tcl_GetCommandName(interp, eventPtr->token);
 		    Tcl_ListObjAppendElement(interp, listPtr, 
 					     Tcl_NewStringObj(cmdName, -1));
@@ -1675,7 +1675,7 @@ MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 		    continue;
 		}
 		if (bindPtr->type == TNM_MAP_USER_EVENT) {
-		    CONST char *cmdName;
+		    const char *cmdName;
 		    cmdName = Tcl_GetCommandName(interp, bindPtr->token);
 		    Tcl_ListObjAppendElement(interp, listPtr, 
 					     Tcl_NewStringObj(cmdName, -1));
@@ -1774,7 +1774,7 @@ MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
  */
 
 static int
-FindMaps(Tcl_Interp *interp, MapControl *control, int objc, Tcl_Obj *CONST objv[])
+FindMaps(Tcl_Interp *interp, MapControl *control, int objc, Tcl_Obj *const objv[])
 {
     int i, result;
     TnmMap *mapPtr;
@@ -1782,7 +1782,7 @@ FindMaps(Tcl_Interp *interp, MapControl *control, int objc, Tcl_Obj *CONST objv[
 
     enum options { optTags } option;
 
-    static CONST char *optionTable[] = {
+    static const char *optionTable[] = {
         "-tags", (char *) NULL
     };
 
@@ -1814,7 +1814,7 @@ FindMaps(Tcl_Interp *interp, MapControl *control, int objc, Tcl_Obj *CONST objv[
 	    if (! match) continue;
 	}
 	{
-	    CONST char *cmdName = Tcl_GetCommandName(interp, mapPtr->token);
+	    const char *cmdName = Tcl_GetCommandName(interp, mapPtr->token);
 	    Tcl_Obj *elemObjPtr = Tcl_NewStringObj(cmdName, -1);
 	    Tcl_ListObjAppendElement(interp, listPtr, elemObjPtr);
 	}
@@ -1841,7 +1841,7 @@ FindMaps(Tcl_Interp *interp, MapControl *control, int objc, Tcl_Obj *CONST objv[
  */
 
 int
-Tnm_MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMap *mapPtr;
     TnmMapItemType *typePtr;
@@ -1853,13 +1853,13 @@ Tnm_MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 
     enum commands { cmdCreate, cmdFind, cmdInfo } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"create", "find", "info", (char *) NULL
     };
 
     enum infos { infoMaps, infoTypes } info;
 
-    static CONST char *infoTable[] = {
+    static const char *infoTable[] = {
 	"maps", "types", (char *) NULL
     };
 
@@ -1920,7 +1920,7 @@ Tnm_MapObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 		listPtr = Tcl_GetObjResult(interp);
 		for (mapPtr = control->mapList; 
 		     mapPtr; mapPtr = mapPtr->nextPtr) {
-		    CONST char *mapName;
+		    const char *mapName;
 		    mapName = Tcl_GetCommandName(interp, mapPtr->token);
 		    if (pattern && !Tcl_StringMatch(mapName, pattern)) {
 			continue;

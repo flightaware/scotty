@@ -360,7 +360,7 @@ int
 TnmMibLoadFile(Tcl_Interp *interp, Tcl_Obj *objPtr)
 {
     Tcl_DString fileBuffer, frozenFileBuffer;
-    CONST char *library;
+    const char *library;
     char *fileName, *frozenFileName = NULL;
     char *file = NULL, *module;
     int code = TCL_OK;
@@ -368,7 +368,7 @@ TnmMibLoadFile(Tcl_Interp *interp, Tcl_Obj *objPtr)
     /* see 'frozen' related code below */
     Tcl_Obj *splitList;
     int splitListLen;
-    CONST char *cache, *arch;
+    const char *cache, *arch;
 #endif
     Tcl_Obj *filePath = NULL;
 
@@ -672,7 +672,7 @@ WalkTree(Tcl_Interp *interp, Tcl_Obj *varName, Tcl_Obj *body, TnmMibNode* nodePt
 	if (! TnmOidInTree(rootPtr, oidPtr)) break;
 
 	if (!Tcl_ObjSetVar2(interp, varName, NULL, TnmNewOidObj(oidPtr), 
-			    TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1)) {
+			    TCL_LEAVE_ERR_MSG)) {
 	    result = TCL_ERROR;
 	    goto loopDone;
 	}
@@ -728,7 +728,7 @@ WalkTree(Tcl_Interp *interp, Tcl_Obj *varName, Tcl_Obj *body, TnmMibNode* nodePt
  */
 
 int
-Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
+Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *const objv[])
 {
     TnmMibNode *nodePtr;
     TnmMibType *typePtr;
@@ -747,7 +747,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	cmdSyntax, cmdType, cmdUnpack, cmdVariables, cmdWalk
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"access", "children", "compare", "defval", "description", 
 	"displayhint", "enums", "exists", "file", "format", "index",
 	"info", "label", "length", "load", "macro", 
@@ -761,7 +761,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	infoAccess, infoFiles, infoMacros, infoModules, infoStatus, infoTypes
     } info;
 
-    static CONST char *infoTable[] = {
+    static const char *infoTable[] = {
 	"access", "files", "macros", "modules", "status", "types",
 	(char *) NULL
     };
@@ -906,7 +906,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -947,7 +947,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	}
 	if (objc == 4) {
 	    if (Tcl_ObjSetVar2(interp, objv[3], NULL, listPtr,
-			       TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			       TCL_LEAVE_ERR_MSG) == NULL) {
 		return TCL_ERROR;
 	    }
 	    Tcl_ListObjLength(NULL, listPtr, &len);
@@ -976,7 +976,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -1008,7 +1008,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (result) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(result, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 	    }
@@ -1035,7 +1035,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	    if (typePtr->displayHint) {
 		if (Tcl_ObjSetVar2(interp, objv[3], NULL,
 			   Tcl_NewStringObj(typePtr->displayHint, -1),
-			   TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			   TCL_LEAVE_ERR_MSG) == NULL) {
 		    return TCL_ERROR;
 		}
 		
@@ -1072,7 +1072,7 @@ Tnm_MibObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONS
 	}
 	if (objc == 4) {
 	    if (Tcl_ObjSetVar2(interp, objv[3], NULL, listPtr,
-			       TCL_LEAVE_ERR_MSG | TCL_PARSE_PART1) == NULL) {
+			       TCL_LEAVE_ERR_MSG) == NULL) {
 		return TCL_ERROR;
 	    }
 	    Tcl_SetBooleanObj(Tcl_GetObjResult(interp),

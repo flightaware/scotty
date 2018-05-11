@@ -51,22 +51,22 @@ GetIpMask		(Tcl_Interp *interp, Tcl_Obj *objPtr,
 				     unsigned long *mask);
 static int
 NetdbHosts		(Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 static int
 NetdbIp			(Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 static int
 NetdbNetworks		(Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 static int
 NetdbProtocols		(Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 static int
 NetdbServices		(Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 static int
 NetdbSunrpcs		(Tcl_Interp *interp, 
-				     int objc, Tcl_Obj *CONST objv[]);
+				     int objc, Tcl_Obj *const objv[]);
 
 
 /*
@@ -194,7 +194,7 @@ GetIpMask(Tcl_Interp *interp, Tcl_Obj *objPtr, unsigned long *mask)
  */
 
 static int
-NetdbHosts(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetdbHosts(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in addr;
     char *name;
@@ -202,7 +202,7 @@ NetdbHosts(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 
     enum commands { cmdAddress, cmdAliases, cmdName } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"address", "aliases", "name", (char *) NULL
     };
 
@@ -318,7 +318,7 @@ NetdbHosts(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-NetdbIp(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetdbIp(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int result;
 
@@ -326,7 +326,7 @@ NetdbIp(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 	cmdApply, cmdBroadcast, cmdClass, cmdCompare, cmdRange
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"apply", "broadcast", "class", "compare", "range", (char *) NULL
     };
 
@@ -473,7 +473,7 @@ NetdbIp(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-NetdbNetworks(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetdbNetworks(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     struct netent *net;
     unsigned long addr;
@@ -482,7 +482,7 @@ NetdbNetworks(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 
     enum commands { cmdAddress, cmdAliases, cmdName } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"address", "aliases", "name", (char *) NULL
     };
 
@@ -593,14 +593,14 @@ NetdbNetworks(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-NetdbProtocols(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetdbProtocols(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     struct protoent *proto;
     int result, num;
 
     enum commands { cmdAliases, cmdName, cmdNumber } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"aliases", "name", "number", (char *) NULL
     };
 
@@ -697,7 +697,7 @@ NetdbProtocols(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-NetdbServices(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetdbServices(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in addr;
     int result, port;
@@ -705,7 +705,7 @@ NetdbServices(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 
     enum commands { cmdAliases, cmdName, cmdNumber } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"aliases", "name", "number", (char *) NULL
     };
 
@@ -828,14 +828,14 @@ NetdbServices(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 static int
-NetdbSunrpcs(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetdbSunrpcs(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     struct rpcent *rpc;
     int num, result;
 
     enum commands { cmdAliases, cmdName, cmdNumber } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"aliases", "name", "number", (char *) NULL
     };
 
@@ -934,7 +934,7 @@ NetdbSunrpcs(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 int
-Tnm_NetdbObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_NetdbObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int result;
 
@@ -942,7 +942,7 @@ Tnm_NetdbObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CO
 	cmdHosts, cmdIp, cmdNetworks, cmdProtocols, cmdServices, cmdSunrpcs
     } cmd;
 
-    static CONST char* cmdTable[] = {
+    static const char* cmdTable[] = {
 	"hosts", "ip", "networks", "protocols", "services", "sunrpcs",
 	(char *) NULL
     };

@@ -76,10 +76,10 @@ static void             ComputeBarchartBbox (
                             Tk_Canvas canvas, BarchartItem *barPtr);
 static int              ConfigureBarchart (Tcl_Interp *interp,
                             Tk_Canvas canvas, Tk_Item *itemPtr, int objc,
-                            Tcl_Obj *CONST objv[], int flags);
+                            Tcl_Obj *const objv[], int flags);
 static int              CreateBarchart (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int objc, Tcl_Obj *CONST objv[]);
+                            int objc, Tcl_Obj *const objv[]);
 static void             DeleteBarchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, Display *display);
 static void             DisplayBarchart (Tk_Canvas canvas,
@@ -87,7 +87,7 @@ static void             DisplayBarchart (Tk_Canvas canvas,
 			    int x, int y, int width, int height);
 static int              BarchartCoords (Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr,
-                            int objc, Tcl_Obj *CONST objv[]);
+                            int objc, Tcl_Obj *const objv[]);
 static int              BarchartToArea (Tk_Canvas canvas,
                             Tk_Item *itemPtr, double *rectPtr);
 static double           BarchartToPoint (Tk_Canvas canvas,
@@ -230,7 +230,7 @@ CreateBarchart(interp, canvas, itemPtr, objc, objv)
     Tk_Item *itemPtr;			/* Record to hold new item;  header
 					 * has been initialized by caller. */
     int objc;				/* Number of arguments in objv. */
-    Tcl_Obj *CONST objv[];		/* Arguments describing barchart. */
+    Tcl_Obj *const objv[];		/* Arguments describing barchart. */
 {
     register BarchartItem *barPtr = (BarchartItem *) itemPtr;
     int i;
@@ -323,7 +323,7 @@ BarchartCoords(interp, canvas, itemPtr, objc, objv)
 					 * read or modified. */
     int objc;				/* Number of coordinates supplied in
 					 * objv. */
-    Tcl_Obj *CONST objv[];		/* Array of coordinates: x1, y1,
+    Tcl_Obj *const objv[];		/* Array of coordinates: x1, y1,
 					 * x2, y2, ... */
 {
     register BarchartItem *barPtr = (BarchartItem *) itemPtr;
@@ -385,7 +385,7 @@ ConfigureBarchart(interp, canvas, itemPtr, objc, objv, flags)
     Tk_Canvas canvas;		/* Canvas containing itemPtr. */
     Tk_Item *itemPtr;           /* Barchart item to reconfigure. */
     int objc;                   /* Number of elements in objv.  */
-    Tcl_Obj *CONST objv[];      /* Arguments describing things to configure. */
+    Tcl_Obj *const objv[];      /* Arguments describing things to configure. */
     int flags;                  /* Flags to pass to Tk_ConfigureWidget. */
 {
     register BarchartItem *barPtr = (BarchartItem *) itemPtr;

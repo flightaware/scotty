@@ -77,7 +77,7 @@ static TnmConfig config = {
  */
 
 int
-TnmMapItemConfigure(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+TnmMapItemConfigure(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     config.optionTable = itemPtr->typePtr->configTable;
     return TnmSetConfig(interp, &config, (ClientData) itemPtr, objc, objv);
@@ -105,7 +105,7 @@ TnmMapItemConfigure(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *
  */
 
 int
-TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int i, cmd, result = TCL_OK;
     char *pattern = NULL;
@@ -119,7 +119,7 @@ TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 	infoBindings, infoEvents, infoLinks, infoMember, infoMsgs 
     } info;
 
-    static CONST char *infoTable[] = {
+    static const char *infoTable[] = {
 	"bindings", "events", "links", "member", "messages", (char *) NULL
     };
 
@@ -297,7 +297,7 @@ TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 		    continue;
 		}
 		if (msgPtr->token) {
-		    CONST char *cmdName;
+		    const char *cmdName;
 		    cmdName = Tcl_GetCommandName(interp, msgPtr->token);
 		    Tcl_ListObjAppendElement(interp, listPtr, 
 					     Tcl_NewStringObj(cmdName, -1));
@@ -312,7 +312,7 @@ TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 		    continue;
 		}
 		if (eventPtr->token) {
-		    CONST char *cmdName;
+		    const char *cmdName;
 		    cmdName = Tcl_GetCommandName(interp, eventPtr->token);
 		    Tcl_ListObjAppendElement(interp, listPtr, 
 					     Tcl_NewStringObj(cmdName, -1));
@@ -326,7 +326,7 @@ TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 		    continue;
 		}
 		if (bindPtr->type == TNM_MAP_USER_EVENT) {
-		    CONST char *cmdName;
+		    const char *cmdName;
 		    cmdName = Tcl_GetCommandName(interp, bindPtr->token);
 		    Tcl_ListObjAppendElement(interp, listPtr, 
 					     Tcl_NewStringObj(cmdName, -1));
@@ -337,7 +337,7 @@ TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 	    elementPtr = TnmVectorElements(&itemPtr->linkedItems);
 	    for (i = 0; elementPtr[i]; i++) {
 		TnmMapItem *elemPtr = (TnmMapItem *) elementPtr[i];
-		CONST char *cmdName;
+		const char *cmdName;
 		cmdName = Tcl_GetCommandName(interp, elemPtr->token);
 		Tcl_ListObjAppendElement(interp, listPtr, 
 					 Tcl_NewStringObj(cmdName, -1));
@@ -347,7 +347,7 @@ TnmMapItemObjCmd(TnmMapItem *itemPtr, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 	    elementPtr = TnmVectorElements(&itemPtr->memberItems);
 	    for (i = 0; elementPtr[i]; i++) {
                 TnmMapItem *elemPtr = (TnmMapItem *) elementPtr[i];
-		CONST char *cmdName;
+		const char *cmdName;
 		cmdName = Tcl_GetCommandName(interp, elemPtr->token);
 		Tcl_ListObjAppendElement(interp, listPtr, 
 					 Tcl_NewStringObj(cmdName, -1));
@@ -750,7 +750,7 @@ TnmMapItemDump(TnmMapItem *itemPtr, Tcl_Interp *interp)
     Tcl_DString ds;
     TnmTable *elemPtr;
     char *varName, buf[256];
-    CONST char *name = Tcl_GetCommandName(interp, itemPtr->token);
+    const char *name = Tcl_GetCommandName(interp, itemPtr->token);
     config.optionTable = itemPtr->typePtr->configTable;
 
     Tcl_DStringInit(&ds);

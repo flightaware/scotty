@@ -36,7 +36,7 @@ typedef struct TnmNetwork {
 
 static int
 NetworkCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The configuration options understood by a node item.
@@ -107,7 +107,7 @@ TnmMapItemType tnmNetworkType = {
  */
 
 static int
-NetworkCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+NetworkCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMapItem *itemPtr = (TnmMapItem *) clientData;
     int result = TnmMapItemObjCmd(itemPtr, interp, objc, objv);

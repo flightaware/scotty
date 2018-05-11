@@ -296,7 +296,7 @@ TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
  */
 
 int
-TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *CONST objv[])
+TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *const objv[])
 {
     int i, option, code;
     TnmTable *elemPtr;
@@ -373,7 +373,7 @@ TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc,
  */
 
 int
-TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *CONST objv[])
+TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *const objv[])
 {
     int option;
     Tcl_Obj *objPtr;
@@ -1200,7 +1200,7 @@ TnmValidateIpAddress(Tcl_Interp *interp, const char *address)
  */
 
 void
-TnmWriteMessage(CONST char *msg)
+TnmWriteMessage(const char *msg)
 {
     Tcl_Channel channel;
 

@@ -75,19 +75,19 @@ BindEvent	(Tcl_Interp *interp, TnmSnmp *session,
 			     Tcl_Obj *eventPtr, Tcl_Obj *script);
 static int
 FindSessions	(Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 GeneratorCmd	(ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 ListenerCmd	(ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 NotifierCmd	(ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 ResponderCmd	(ClientData	clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int 
 WaitSession	(Tcl_Interp *interp, TnmSnmp *session, int id);
 
@@ -955,7 +955,7 @@ BindEvent(Tcl_Interp *interp, TnmSnmp *session, Tcl_Obj *eventObjPtr, Tcl_Obj *s
  */
 
 static int
-FindSessions(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+FindSessions(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     int i, result, type = 0, version = 0;
     TnmSnmp *session;
@@ -966,7 +966,7 @@ FindSessions(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 	optAddress, optPort, optTags, optType, optVersion
     } option;
 
-    static CONST char *optionTable[] = {
+    static const char *optionTable[] = {
 	"-address", "-port", "-tags", "-type", "-version", (char *) NULL
     };
 
@@ -1028,7 +1028,7 @@ FindSessions(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
 	    if (! match) continue;
 	}
 	if (session->interp == interp) {
-	    CONST char *cmdName = Tcl_GetCommandName(interp, session->token);
+	    const char *cmdName = Tcl_GetCommandName(interp, session->token);
 	    Tcl_Obj *elemObjPtr = Tcl_NewStringObj(cmdName, -1);
 	    Tcl_ListObjAppendElement(interp, listPtr, elemObjPtr);
 	}
@@ -1054,7 +1054,7 @@ FindSessions(Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
  */
 
 int
-Tnm_SnmpObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
+Tnm_SnmpObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *const objv[])
 {
     static int initialized = 0;
     static unsigned nextId = 0;
@@ -1077,7 +1077,7 @@ Tnm_SnmpObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CON
 	cmdType, cmdValue, cmdWait, cmdWatch 
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"alias",
 #if 0
 	"array",
@@ -1093,7 +1093,7 @@ Tnm_SnmpObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CON
 	infoTypes, infoVersions 
     } info;
 
-    static CONST char *infoTable[] = {
+    static const char *infoTable[] = {
 	"domains", "errors", "exceptions", "pdus", "security",
 	"types", "versions", (char *) NULL
     };
@@ -1523,7 +1523,7 @@ Tnm_SnmpObjCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CON
  */
 
 static int
-GeneratorCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+GeneratorCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code, nonReps, maxReps;
@@ -1536,7 +1536,7 @@ GeneratorCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST
 	cmdSet, cmdWait, cmdWalk
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"bind", "cget", "configure", "destroy", "get", "getbulk", "getnext",
 #ifdef ASN1_SNMP_GETRANGE
  	"getrange", 
@@ -1751,7 +1751,7 @@ GeneratorCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST
  */
 
 static int
-ListenerCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
+ListenerCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *const objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code;
@@ -1760,7 +1760,7 @@ ListenerCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST 
 	cmdBind, cmdCget, cmdConfigure, cmdDestroy, cmdWait
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"bind", "cget", "configure", "destroy", "wait",
 	(char *) NULL
     };
@@ -1857,7 +1857,7 @@ ListenerCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST 
  */
 
 static int
-NotifierCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
+NotifierCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *const objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code;
@@ -1866,7 +1866,7 @@ NotifierCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST 
 	cmdBind, cmdCget, cmdConfigure, cmdDestroy, cmdInform, cmdTrap, cmdWait
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"bind", "cget", "configure", "destroy", "inform", "trap", "wait", 
 	(char *) NULL
     };
@@ -1980,7 +1980,7 @@ NotifierCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST 
  */
 
 static int
-ResponderCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST objv[])
+ResponderCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *const objv[])
 {
     TnmSnmp *session = (TnmSnmp *) clientData;
     int code;
@@ -1989,7 +1989,7 @@ ResponderCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST
 	cmdBind, cmdCget, cmdConfigure, cmdDestroy, cmdInstance
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"bind", "cget", "configure", "destroy", "instance",
 	(char *) NULL
     };
@@ -2094,7 +2094,7 @@ ResponderCmd(ClientData clientData, Tcl_Interp *interp, int	objc, Tcl_Obj *CONST
 static int
 WaitSession(Tcl_Interp *interp, TnmSnmp *session, int request)
 {
-    CONST char *cmdName;
+    const char *cmdName;
     char *name;
 
     cmdName = Tcl_GetCommandName(interp, session->token);
@@ -2111,7 +2111,7 @@ WaitSession(Tcl_Interp *interp, TnmSnmp *session, int request)
     name = ckstrdup(cmdName);
   repeat:
     for (session = tnmSnmpList; session; session = session->nextPtr) {
-	CONST char *thisName = Tcl_GetCommandName(interp, session->token);
+	const char *thisName = Tcl_GetCommandName(interp, session->token);
 	if (strcmp(thisName, name) != 0) continue;
 	if (! request) {
 	    if (TnmSnmpQueueRequest(session, NULL)) {

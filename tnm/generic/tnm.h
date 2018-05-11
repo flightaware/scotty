@@ -112,45 +112,45 @@ typedef long LONG;
 
 EXTERN int
 Tnm_MapObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_JobObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_MibObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_NetdbObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_SnmpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_IcmpObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_SyslogObjCmd (ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_UdpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_DnsObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_NtpObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_SunrpcObjCmd (ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_InedObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_SmxObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 EXTERN int
 Tnm_SmiObjCmd	(ClientData clientData, Tcl_Interp *interp, 
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 #endif /* _TNM */

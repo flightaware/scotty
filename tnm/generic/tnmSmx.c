@@ -173,18 +173,18 @@ static void
 SmxStatus		(Tcl_Interp *interp,
 				     int id, unsigned runid);
 static void
-SmxAppendHexString	(char *dst, CONST char *src, int len);
+SmxAppendHexString	(char *dst, const char *src, int len);
 
 static void
-SmxAppendQuotedString	(char *dst, CONST char *src, int len);
+SmxAppendQuotedString	(char *dst, const char *src, int len);
 
 static void
-SmxAppendHexOrQuotedString (char *dst, CONST char *src, int len);
+SmxAppendHexOrQuotedString (char *dst, const char *src, int len);
 
 static void
 SmxReply		(SmxControl *control,
 				     int reply, int id, Run *run,
-				     CONST char *msg, int msglen);
+				     const char *msg, int msglen);
 static char*
 SmxParseRunId		(char *line, int id, unsigned *runid);
 
@@ -378,7 +378,7 @@ SmxDeleteRun(SmxControl *control, unsigned runid)
 static void
 SmxAbortRun(Tcl_Interp *interp, SmxControl *control, Run *runPtr)
 {
-    CONST char *msg;
+    const char *msg;
     int i;
 
     /*
@@ -482,7 +482,7 @@ static void SmxStart(Tcl_Interp *interp, int id, unsigned runid, char *script, c
     int i, code, objc, argc;
     Tcl_Obj **objv;
     char buffer[80], slaveName[80];
-    CONST char **argv;
+    const char **argv;
     SmxControl *control = (SmxControl *)
 	Tcl_GetAssocData(interp, tnmSmxControl, NULL);
 
@@ -769,7 +769,7 @@ static void SmxStatus(Tcl_Interp *interp, int id, unsigned runid)
  */
 
 static void
-SmxAppendHexString(char *dst, CONST char *src, int len)
+SmxAppendHexString(char *dst, const char *src, int len)
 {
     char *p;
     int i;
@@ -802,7 +802,7 @@ SmxAppendHexString(char *dst, CONST char *src, int len)
  */
 
 static void
-SmxAppendQuotedString(char *dst, CONST char *src, int len)
+SmxAppendQuotedString(char *dst, const char *src, int len)
 {
     char *p;
     int i;
@@ -868,7 +868,7 @@ SmxAppendQuotedString(char *dst, CONST char *src, int len)
  */
 
 static void
-SmxAppendHexOrQuotedString(char *dst, CONST char *src, int len)
+SmxAppendHexOrQuotedString(char *dst, const char *src, int len)
 {
     int i;
 
@@ -911,7 +911,7 @@ SmxAppendHexOrQuotedString(char *dst, CONST char *src, int len)
  *----------------------------------------------------------------------
  */
 
-static void SmxReply(SmxControl *control, int reply, int id, Run *runPtr, CONST char *msg, int msglen)
+static void SmxReply(SmxControl *control, int reply, int id, Run *runPtr, const char *msg, int msglen)
 {
     char *line;
     int n;
@@ -1511,7 +1511,7 @@ TnmSmxInit(Tcl_Interp *interp)
  */
 
 int
-Tnm_SmxObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+Tnm_SmxObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     char *msg;
     int msglen, result, code;
@@ -1523,7 +1523,7 @@ Tnm_SmxObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONS
 	cmdError, cmdExit, cmdLog, cmdProfiles, cmdResult
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"error", "exit", "log", "profiles", "result", (char *) NULL
     };
 

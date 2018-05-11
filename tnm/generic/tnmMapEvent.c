@@ -43,10 +43,10 @@ MsgDeleteProc	(ClientData clientData);
 
 static int 
 EventObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int 
 BindObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 static int
 EvalBinding	(TnmMapEvent *eventPtr, TnmMapBind *bindList);
 
@@ -55,7 +55,7 @@ SaveMsg		(TnmMapMsg *msgPtr);
 
 static int 
 MsgObjCmd	(ClientData clientData, Tcl_Interp *interp,
-			     int objc, Tcl_Obj *CONST objv[]);
+			     int objc, Tcl_Obj *const objv[]);
 
 /*
  * The following table maps internal events to strings.
@@ -339,7 +339,7 @@ nextEvent:
  */
 
 static int
-EventObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+EventObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMapEvent *eventPtr = (TnmMapEvent *) clientData;
     char buffer[20];
@@ -349,7 +349,7 @@ EventObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST 
 	cmdArgs, cmdDestroy, cmdItem, cmdMap, cmdTag, cmdTime, cmdType
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"args",	"destroy", "item", "map", "tag", "time", "type", (char *) NULL
     };
 
@@ -692,7 +692,7 @@ EvalBinding(TnmMapEvent *eventPtr, TnmMapBind *bindList)
  */
 
 static int
-BindObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+BindObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMapBind *bindPtr = (TnmMapBind *) clientData;
     int result;
@@ -701,7 +701,7 @@ BindObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST o
 	cmdDestroy, cmdItem, cmdMap, cmdPattern, cmdScript, cmdType
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"destroy", "item", "map", "pattern", "script", "type", (char *) NULL
     };
 
@@ -883,14 +883,14 @@ TnmMapCreateMsg(TnmMap *mapPtr, TnmMapItem *itemPtr, Tcl_Obj *tag, Tcl_Obj *mess
  */
 
 int
-TnmMapMsgCmd(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, int objc, Tcl_Obj *CONST objv[])
+TnmMapMsgCmd(Tcl_Interp *interp, TnmMap *mapPtr, TnmMapItem *itemPtr, int objc, Tcl_Obj *const objv[])
 {
     int result, optHealth = 0, optInterval = 0;
     TnmMapMsg *msgPtr;
 
     enum msgOpts { msgOptHealth, msgOptInterval } opt;
 
-    static CONST char *msgOptTable[] = {
+    static const char *msgOptTable[] = {
 	"-health", "-interval", (char *) NULL
     };
 
@@ -1117,7 +1117,7 @@ nextMsg:
  */
 
 static int
-MsgObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+MsgObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     TnmMapMsg *msgPtr = (TnmMapMsg *) clientData;
     char buffer[20];
@@ -1128,7 +1128,7 @@ MsgObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST ob
 	cmdTag, cmdText, cmdTime, cmdType
     } cmd;
 
-    static CONST char *cmdTable[] = {
+    static const char *cmdTable[] = {
 	"destroy", "health", "interval", "item", "map",
 	"tag", "text", "time", "type", (char *) NULL
     };
