@@ -16,5 +16,5 @@ script:
   - autoreconf -vi
   - if [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; else ./configure; fi
   - make
-  - sudo make install
-  - sudo make sinstall
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then make install; else sudo make install; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then make sinstall; else sudo make sinstall; fi
