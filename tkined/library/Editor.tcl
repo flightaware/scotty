@@ -25,6 +25,7 @@ package provide TkinedEditor 1.5.1
 event add <<TkiClear>>	<Alt-c> <Alt-C> <Meta-c> <Meta-C>
 event add <<TkiOpen>>	<Alt-o> <Alt-O> <Meta-o> <Meta-O>
 event add <<TkiMerge>>	<Alt-m> <Alt-M> <Meta-m> <Meta-M>
+event add <<TkiSave>>	<Alt-s> <Alt-S> <Meta-s> <Meta-S>
 event add <<TkiSaveAs>>	<Alt-a> <Alt-A> <Meta-a> <Meta-A>
 event add <<TkiPrint>>	<Alt-p> <Alt-P> <Meta-p> <Meta-P>
 event add <<TkiTnmMap>>	<Alt-t> <Alt-T> <Meta-t> <Meta-T>
@@ -218,6 +219,10 @@ proc Editor__toplevel { editor } {
 	-accelerator "  Alt+M" \
 	-command "Command__Merge $editor"
     bind $w <<TkiMerge>> "$w.menu.file invoke Merge..."
+    $w.menu.file add command -label "Save..." \
+	-accelerator "  Alt+S" \
+	-command "Command__Save $editor"
+    bind $w <<TkiSave>> "$w.menu.file invoke {Save...}"
     $w.menu.file add command -label "Save As..." \
 	-accelerator "  Alt+A" \
 	-command "Command__SaveAs $editor"
