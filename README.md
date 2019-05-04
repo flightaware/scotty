@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/flightaware/scotty.svg?branch=master)](https://travis-ci.org/flightaware/scotty)
+
 Welcome to the _scotty_ Tcl extension for network management
 
 by Juergen Schoenwaelder and many contributors.  Maintained by FlightAware LLC
