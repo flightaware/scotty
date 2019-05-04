@@ -125,6 +125,37 @@ proc Command__Open { editor {fname {}} } {
 }
 
 ##
+## Save the current map. The filename is found in the attribute
+## named filename.
+##
+
+proc Command__Save { editor } {
+
+    set w [$editor toplevel]
+    set fname "[$editor dirname]/[$editor filename]"
+    if {[file exists $fname]} {
+	if {![file writable $fname]} {
+	    Dialog__acknowledge $w.canvas "Sorry, $fname is not writable."
+	    return
+	}
+	set res [Dialog__confirm $w.canvas "Replace file $fname?" \
+		 [list replace cancel]]
+	if {$res == "cancel"} return
+    }
+
+    if {[catch {$editor save $fname} err]} {
+	if {$err == ""} {
+	    Dialog__acknowledge $w.canvas \
+		"Can not write to file [file tail $fname]."
+	} else {
+	    Dialog__acknowledge $w.canvas \
+		"Can not write to file [file tail $fname]:" "" $err
+	}
+	return
+    }
+}
+
+##
 ## Save the map under a new filename. Get a new filename
 ## and call Command__Save to do the job.
 ##
