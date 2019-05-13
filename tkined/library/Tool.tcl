@@ -97,6 +97,10 @@ proc Tool__MakePopup { popup id } {
 	$popup.attr add command -label "Edit..." \
 		-command "Tool__EditAttribute $id"
     }
+    if {[$id type] != "LINK" || [$id attribute] != ""} {
+	$popup add command -label "Edit..." \
+		-command "Tool__EditAttribute $id"
+    }
     if {[$id type] != "LINK"} {
 	$popup add command -label "Set Label..." \
 		-command "Tool__LabelAttribute $id"
