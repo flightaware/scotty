@@ -20,7 +20,7 @@ all:
 	@echo Available platform targets: $(PLATFORMS)
 	@echo
 
-wheezy jessie yakkety slackware:
+ubuntu wheezy jessie yakkety slackware:
 	(cd tnm && autoheader && autoconf && ./configure)
 	(cd tkined && autoheader && autoconf && ./configure)
 

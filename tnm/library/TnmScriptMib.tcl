@@ -12,7 +12,7 @@
 
 package require Tnm 3.1
 package require TnmSnmp 3.1
-package provide TnmScriptMib 3.1.0
+package provide TnmScriptMib 3.1.3
 
 namespace eval TnmScriptMib {
     namespace export GetLanguages GetExtensions

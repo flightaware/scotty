@@ -20,7 +20,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedEditor 1.5.1
+package provide TkinedEditor 1.6.0
 
 event add <<TkiClear>>	<Alt-c> <Alt-C> <Meta-c> <Meta-C>
 event add <<TkiOpen>>	<Alt-o> <Alt-O> <Meta-o> <Meta-O>

@@ -77,7 +77,7 @@ typedef long LONG;
  *----------------------------------------------------------------
  */
 
-#define TKI_VERSION "1.5.1"
+#define TKI_VERSION "1.6.0"
 
 #include <tcl.h>
 #include <tk.h>

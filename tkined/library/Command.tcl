@@ -23,7 +23,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedCommand 1.5.1
+package provide TkinedCommand 1.6.0
 
 ##
 ## Reinitialise the editor. Retrieve all objects of the canvas

@@ -11,7 +11,7 @@
 # @(#) $Id: TnmMib.tcl,v 1.1.1.1 2006/12/07 12:16:57 karl Exp $
 
 package require Tnm 3.1
-package provide TnmMib 3.1.0
+package provide TnmMib 3.1.3
 
 namespace eval TnmMib {
     namespace export DescribeType DescribeNode GetVendor

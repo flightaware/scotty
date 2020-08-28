@@ -20,7 +20,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedDialog 1.5.1
+package provide TkinedDialog 1.6.0
 
 ##
 ## Compute the geometry of a dialog window w based on the geometry

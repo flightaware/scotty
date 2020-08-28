@@ -19,7 +19,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedDiagram 1.5.1
+package provide TkinedDiagram 1.6.0
 
 proc Diagram__create { editor } {
     set w [$editor toplevel].diagram

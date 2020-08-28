@@ -18,7 +18,7 @@
 ## express or implied warranty.
 ##
 
-package provide TkinedHelp 1.5.1
+package provide TkinedHelp 1.6.0
 
 proc Help__general { editor } {
     set w [$editor toplevel]
