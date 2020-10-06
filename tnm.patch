@@ -1,38 +1,109 @@
-./tkined/unix/configure.in:TNM_VERSION=3.1.3
-./tkined/win/makefile:TNM_VERSION = 3.1.3
-./tnm/unix/configure.in:TNM_VERSION=3.1.3
-./tnm/tests/l.smx.test:    exec scotty3.1.0 $file &
-./tnm/tests/netdb.test:package require Tnm 3.1
-./tnm/configure.ac:AC_INIT([Tnm], [3.1.3])
-./tnm/configure.ac:TNM_VERSION=3.1.3
-./tnm/generic/tnm.h:#define TNM_VERSION "3.1.3"
-./tnm/library/TnmSmxProfiles.tcl:package provide TnmSmxProfiles 3.1.3
-./tnm/library/TnmMonitor.tcl:package require Tnm 3.1
-./tnm/library/TnmMonitor.tcl:package require TnmMap 3.1
-./tnm/library/TnmMonitor.tcl:package provide TnmMonitor 3.1.3
-./tnm/library/TnmEther.tcl:package require Tnm 3.1
-./tnm/library/TnmEther.tcl:package provide TnmEther 3.1.3
-./tnm/library/TnmSnmp.tcl:package require Tnm 3.1
-./tnm/library/TnmSnmp.tcl:package require TnmDialog 3.1
-./tnm/library/TnmSnmp.tcl:package require TnmInet 3.1
-./tnm/library/TnmSnmp.tcl:package provide TnmSnmp 3.1.3
-./tnm/library/TnmDialog.tcl:package require Tnm 3.1
-./tnm/library/TnmDialog.tcl:package provide TnmDialog 3.1.3
-./tnm/library/TnmTerm.tcl:package require Tnm 3.1
-./tnm/library/TnmTerm.tcl:package require TnmInet 3.1
-./tnm/library/TnmTerm.tcl:package require TnmDialog 3.1
-./tnm/library/TnmTerm.tcl:package provide TnmTerm 3.1.3
-./tnm/library/TnmInet.tcl:package require Tnm 3.1
-./tnm/library/TnmInet.tcl:package provide TnmInet 3.1.3
-./tnm/library/TnmIetf.tcl:package require Tnm 3.1
-./tnm/library/TnmIetf.tcl:package provide TnmIetf 3.1.3
-./tnm/library/TnmScriptMib.tcl:package require Tnm 3.1
-./tnm/library/TnmScriptMib.tcl:package require TnmSnmp 3.1
-./tnm/library/TnmScriptMib.tcl:package provide TnmScriptMib 3.1.3
-./tnm/library/TnmMib.tcl:package require Tnm 3.1
-./tnm/library/TnmMib.tcl:package provide TnmMib 3.1.3
-./tnm/library/TnmMap.tcl:package require Tnm 3.1
-./tnm/library/TnmMap.tcl:package require TnmInet 3.1
-./tnm/library/TnmMap.tcl:package provide TnmMap 3.1.3
-./tnm/win/makefile:TNM_VERSION = 3.1.3
-./tnm/win/tnmWinPort.h:#define TNMLIB "c:/tcl/lib/tnm3.1.3"
+#!/bin/sh
+
+TNM_VERSION="$1"
+TNM_MAJMIN="`echo $TNM_VERSION | sed 's/\.[^.]*$//'
+set -x
+
+ed -n ./tkined/unix/configure.in << !
+/^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
+w
+q
+!
+
+ed -n ./tkined/win/makefile << !
+/^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
+w
+q
+!
+
+ed -n ./tnm/unix/configure.in << !
+/^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
+w
+q
+!
+
+ed -n ./tnm/tests/l.smx.test << !
+/exec scotty[^ ]* /s/scotty[^ ]* /scotty$TNM_VERSION /
+w
+q
+!
+
+ed -n ./tnm/tests/netdb.test << !
+/package require Tnm /s/.*/package require Tnm $TNM_MAJMIN/
+w
+q
+!
+
+ed -n ./tnm/configure.ac << !
+/AC_INIT(\[Tnm],/s/\[.*])$/[$TNM_VERSION])/
+/^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
+w
+q
+!
+
+ed -n ./tnm/generic/tnm.h << !
+/#define TNM_VERSION /s/.*/#define TNM_VERSION "$TNM_VERSION"/
+w
+q
+!
+
+ed -n ./tnm/library/TnmSmxProfiles.tcl << !
+package provide TnmSmxProfiles 3.1.3
+ed -n ./tnm/library/TnmMonitor.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmMonitor.tcl << !
+package require TnmMap 3.1
+ed -n ./tnm/library/TnmMonitor.tcl << !
+package provide TnmMonitor 3.1.3
+ed -n ./tnm/library/TnmEther.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmEther.tcl << !
+package provide TnmEther 3.1.3
+ed -n ./tnm/library/TnmSnmp.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmSnmp.tcl << !
+package require TnmDialog 3.1
+ed -n ./tnm/library/TnmSnmp.tcl << !
+package require TnmInet 3.1
+ed -n ./tnm/library/TnmSnmp.tcl << !
+package provide TnmSnmp 3.1.3
+ed -n ./tnm/library/TnmDialog.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmDialog.tcl << !
+package provide TnmDialog 3.1.3
+ed -n ./tnm/library/TnmTerm.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmTerm.tcl << !
+package require TnmInet 3.1
+ed -n ./tnm/library/TnmTerm.tcl << !
+package require TnmDialog 3.1
+ed -n ./tnm/library/TnmTerm.tcl << !
+package provide TnmTerm 3.1.3
+ed -n ./tnm/library/TnmInet.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmInet.tcl << !
+package provide TnmInet 3.1.3
+ed -n ./tnm/library/TnmIetf.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmIetf.tcl << !
+package provide TnmIetf 3.1.3
+ed -n ./tnm/library/TnmScriptMib.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmScriptMib.tcl << !
+package require TnmSnmp 3.1
+ed -n ./tnm/library/TnmScriptMib.tcl << !
+package provide TnmScriptMib 3.1.3
+ed -n ./tnm/library/TnmMib.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmMib.tcl << !
+package provide TnmMib 3.1.3
+ed -n ./tnm/library/TnmMap.tcl << !
+package require Tnm 3.1
+ed -n ./tnm/library/TnmMap.tcl << !
+package require TnmInet 3.1
+ed -n ./tnm/library/TnmMap.tcl << !
+package provide TnmMap 3.1.3
+ed -n ./tnm/win/makefile << !
+TNM_VERSION = 3.1.3
+ed -n ./tnm/win/tnmWinPort.h << !
+#define TNMLIB "c:/tcl/lib/tnm3.1.3"
