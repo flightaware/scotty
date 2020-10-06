@@ -1,0 +1,104 @@
+#!/bin/sh
+
+TKI_VERSION="$1"
+TKI_DLL_VERSION="`echo $TKI_VERSION | sed 's/\.//g'`"
+set -x
+
+ed -s ./tkined/unix/configure.in << !
+/TKI_VERSION=1.6.0/s/=.*/=$TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/configure.ac << !
+/AC_INIT(\[Tkined],/s/ \[[0-9.+]/ [$TKI_VERSION]/
+/TKI_VERSION=1.6.0/s/=.*/=$TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Objects.tcl << !
+/package provide TkinedObjects/s/.*/package provide TkinedObjects $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Editor.tcl << !
+/package provide TkinedEditor /s/.*/package provide TkinedEditor $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Command.tcl << !
+/package provide TkinedCommand /s/.*/package provide TkinedCommand $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Help.tcl << !
+/package provide TkinedHelp /s/.*/package provide TkinedHelp $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Misc.tcl << !
+/package provide TkinedMisc /s/.*/package provide TkinedMisc $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Tool.tcl << !
+/package provide TkinedTool /s/.*/package provide TkinedTool $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Dialog.tcl << !
+/package provide TkinedDialog /s/.*/package provide TkinedDialog $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Diagram.tcl << !
+/package provide TkinedDiagram /s/.*/package provide TkinedDiagram $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/library/Event.tcl << !
+/package provide TkinedEvent /s/.*/package provide TkinedEvent $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tkined/win/makefile << !
+/TKI_VERSION =/s/.*/TKI_VERSION = $TKI_VERSION/
+w
+q
+!
+
+ed -s ./tnm/configure.ac << !
+/TKI_VERSION=/s/.*/TKI_VERSION=$TKI_VERSION/
+w
+q
+!
+
+ed -s ./tnm/generic/tnm.h << !
+/#define TKI_VERSION/s/.*/#define TKI_VERSION "$TKI_VERSION"/
+w
+q
+!
+
+ed -s ./tnm/win/makefile << !
+/TKI_VERSION =/s/.*/TKI_VERSION = $TKI_VERSION/
+/TKI_DLL_VERSION =/s/.*/TKI_DLL_VERSION = $TKI_DLL_VERSION/
+w
+q
+!
+
+ed -s ./tnm/win/tnmWinPort.h << !
+/#define TKINEDLIB /s/.*/#define TKINEDLIB "c:/tcl/lib/tkined$TKI_VERSION"
+w
+q
+!
+
