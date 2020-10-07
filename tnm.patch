@@ -1,59 +1,59 @@
 #!/bin/sh
 
 TNM_VERSION="$1"
-TNM_MAJMIN="`echo $TNM_VERSION | sed 's/\.[^.]*$//'
+TNM_MAJMIN="`echo $TNM_VERSION | sed 's/\.[^.]*$//'`"
 set -x
 
-ed -n ./tkined/unix/configure.in << !
+ed -s ./tkined/unix/configure.in << !
 /^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
 w
 q
 !
 
-ed -n ./tkined/win/makefile << !
+ed -s ./tkined/win/makefile << !
 /^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/unix/configure.in << !
+ed -s ./tnm/unix/configure.in << !
 /^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/tests/l.smx.test << !
+ed -s ./tnm/tests/l.smx.test << !
 /exec scotty[^ ]* /s/scotty[^ ]* /scotty$TNM_VERSION /
 w
 q
 !
 
-ed -n ./tnm/tests/netdb.test << !
+ed -s ./tnm/tests/netdb.test << !
 /package require Tnm /s/.*/package require Tnm $TNM_MAJMIN/
 w
 q
 !
 
-ed -n ./tnm/configure.ac << !
+ed -s ./tnm/configure.ac << !
 /AC_INIT(\[Tnm],/s/\[.*])$/[$TNM_VERSION])/
 /^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/generic/tnm.h << !
+ed -s ./tnm/generic/tnm.h << !
 /#define TNM_VERSION /s/.*/#define TNM_VERSION "$TNM_VERSION"/
 w
 q
 !
 
-ed -n ./tnm/library/TnmSmxProfiles.tcl << !
+ed -s ./tnm/library/TnmSmxProfiles.tcl << !
 /package provide TnmSmxProfiles/s/.*/package provide TnmSmxProfiles $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/library/TnmMonitor.tcl << !
+ed -s ./tnm/library/TnmMonitor.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package require TnmMap/s/.*/package require TnmMap $TNM_MAJMIN/
 /package provide TnmMonitor/s/.*/package provide TnmMonitor $TNM_VERSION/
@@ -61,14 +61,14 @@ w
 q
 !
 
-ed -n ./tnm/library/TnmEther.tcl << !
+ed -s ./tnm/library/TnmEther.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package provide TnmEther/s/.*/package provide TnmEther $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/library/TnmSnmp.tcl << !
+ed -s ./tnm/library/TnmSnmp.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package require TnmDialog/s/.*/package require TnmDialog $TNM_MAJMIN/
 /package require TnmInet/s/.*/package require TnmInet $TNM_MAJMIN/
@@ -77,14 +77,14 @@ w
 q
 !
 
-ed -n ./tnm/library/TnmDialog.tcl << !
+ed -s ./tnm/library/TnmDialog.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package provide TnmDialog/s/.*/package provide TnmDialog $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/library/TnmTerm.tcl << !
+ed -s ./tnm/library/TnmTerm.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package require TnmInet/s/.*/package require TnmInet $TNM_MAJMIN/
 /package require TnmDialog/s/.*/package require TnmDialog $TNM_MAJMIN/
@@ -93,21 +93,21 @@ w
 q
 !
 
-ed -n ./tnm/library/TnmInet.tcl << !
+ed -s ./tnm/library/TnmInet.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package provide TnmInet/s/.*/package provide TnmInet $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/library/TnmIetf.tcl << !
+ed -s ./tnm/library/TnmIetf.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package provide TnmIetf/s/.*/package provide TnmIetf $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/library/TnmScriptMib.tcl << !
+ed -s ./tnm/library/TnmScriptMib.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package require TnmSnmp/s/.*/package require TnmSnmp $TNM_MAJMIN/
 /package provide TnmScriptMib/s/.*/package provide TnmScriptMib $TNM_VERSION/
@@ -115,14 +115,14 @@ w
 q
 !
 
-ed -n ./tnm/library/TnmMib.tcl << !
+ed -s ./tnm/library/TnmMib.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package provide TnmMib/s/.*/package provide TnmMib $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/library/TnmMap.tcl << !
+ed -s ./tnm/library/TnmMap.tcl << !
 /package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
 /package require TnmInet/s/.*/package require TnmInet $TNM_MAJMIN/
 /package provide TnmMap/s/.*/package provide TnmMap $TNM_VERSION/
@@ -130,13 +130,13 @@ w
 q
 !
 
-ed -n ./tnm/win/makefile << !
+ed -s ./tnm/win/makefile << !
 /^TNM_VERSION = /s/= .*/= $TNM_VERSION/
 w
 q
 !
 
-ed -n ./tnm/win/tnmWinPort.h << !
+ed -s ./tnm/win/tnmWinPort.h << !
 /#define TNMLIB /s/tnm[0-9.]*"/tnm$TNM_VERSION"/
 w
 q
