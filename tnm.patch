@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ ".$1" = "." ]
+then
+  echo "Usage $0 TNM_VERSION"
+  exit 1
+fi
+
 TNM_VERSION="$1"
 TNM_MAJMIN="`echo $TNM_VERSION | sed 's/\.[^.]*$//'`"
 set -x

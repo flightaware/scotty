@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ ".$1" = "." ]
+then
+  echo "Usage $0 TKI_VERSION"
+  exit 1
+fi
+
 TKI_VERSION="$1"
 TKI_DLL_VERSION="`echo $TKI_VERSION | sed 's/\.//g'`"
 set -x
