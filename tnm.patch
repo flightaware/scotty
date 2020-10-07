@@ -48,62 +48,97 @@ q
 !
 
 ed -n ./tnm/library/TnmSmxProfiles.tcl << !
-package provide TnmSmxProfiles 3.1.3
+/package provide TnmSmxProfiles/s/.*/package provide TnmSmxProfiles $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmMonitor.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmMonitor.tcl << !
-package require TnmMap 3.1
-ed -n ./tnm/library/TnmMonitor.tcl << !
-package provide TnmMonitor 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package require TnmMap/s/.*/package require TnmMap $TNM_MAJMIN/
+/package provide TnmMonitor/s/.*/package provide TnmMonitor $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmEther.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmEther.tcl << !
-package provide TnmEther 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package provide TnmEther/s/.*/package provide TnmEther $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmSnmp.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmSnmp.tcl << !
-package require TnmDialog 3.1
-ed -n ./tnm/library/TnmSnmp.tcl << !
-package require TnmInet 3.1
-ed -n ./tnm/library/TnmSnmp.tcl << !
-package provide TnmSnmp 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package require TnmDialog/s/.*/package require TnmDialog $TNM_MAJMIN/
+/package require TnmInet/s/.*/package require TnmInet $TNM_MAJMIN/
+/package provide TnmSnmp/s/.*/package provide TnmSnmp $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmDialog.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmDialog.tcl << !
-package provide TnmDialog 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package provide TnmDialog/s/.*/package provide TnmDialog $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmTerm.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmTerm.tcl << !
-package require TnmInet 3.1
-ed -n ./tnm/library/TnmTerm.tcl << !
-package require TnmDialog 3.1
-ed -n ./tnm/library/TnmTerm.tcl << !
-package provide TnmTerm 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package require TnmInet/s/.*/package require TnmInet $TNM_MAJMIN/
+/package require TnmDialog/s/.*/package require TnmDialog $TNM_MAJMIN/
+/package provide TnmTerm/s/.*/package provide TnmTerm $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmInet.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmInet.tcl << !
-package provide TnmInet 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package provide TnmInet/s/.*/package provide TnmInet $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmIetf.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmIetf.tcl << !
-package provide TnmIetf 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package provide TnmIetf/s/.*/package provide TnmIetf $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmScriptMib.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmScriptMib.tcl << !
-package require TnmSnmp 3.1
-ed -n ./tnm/library/TnmScriptMib.tcl << !
-package provide TnmScriptMib 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package require TnmSnmp/s/.*/package require TnmSnmp $TNM_MAJMIN/
+/package provide TnmScriptMib/s/.*/package provide TnmScriptMib $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmMib.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmMib.tcl << !
-package provide TnmMib 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package provide TnmMib/s/.*/package provide TnmMib $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/library/TnmMap.tcl << !
-package require Tnm 3.1
-ed -n ./tnm/library/TnmMap.tcl << !
-package require TnmInet 3.1
-ed -n ./tnm/library/TnmMap.tcl << !
-package provide TnmMap 3.1.3
+/package require Tnm/s/.*/package require Tnm $TNM_MAJMIN/
+/package require TnmInet/s/.*/package require TnmInet $TNM_MAJMIN/
+/package provide TnmMap/s/.*/package provide TnmMap $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/win/makefile << !
-TNM_VERSION = 3.1.3
+/^TNM_VERSION = /s/= .*/= $TNM_VERSION/
+w
+q
+!
+
 ed -n ./tnm/win/tnmWinPort.h << !
-#define TNMLIB "c:/tcl/lib/tnm3.1.3"
+/#define TNMLIB /s/tnm[0-9.]*"/tnm$TNM_VERSION"/
+w
+q
+!
+
