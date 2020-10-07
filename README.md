@@ -68,10 +68,11 @@ in the `tnm/TODO` file.  Running `make test` should succeed without
 failures, except DNS tests which depend on specific network setup and
 availability and might fail on your site.
 
-To distinguish this distribution clearly from others, the version
-numbers have been bumped to: _Tnm_ 3.0.2 and _Tkined_ 1.5.1, although
-(almost) no changes have been made to the individual software
-components.
+The current versions are _Tnm_ 3.1.3 and _Tkined_ 1.6.0. Due to the
+large number of files that need to be updated to a new version, there
+are helper scripts tnm.patch and tki.patch in the root directory that
+perform the heavy lifting for you. If you change any file containing
+the version numbers check whether these files need updating.
 
 
 Obtaining and Installing scotty
