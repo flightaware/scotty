@@ -4,3 +4,4 @@ configure
 *.n
 *.so
 tnm/scotty
+*.dylib
