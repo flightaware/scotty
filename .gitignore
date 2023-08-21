@@ -5,3 +5,4 @@ configure
 *.so
 tnm/scotty
 *.dylib
+.env.local
