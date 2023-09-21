@@ -1,0 +1,39 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.70])
+AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_CONFIG_SRCDIR([rstat_xdr.c])
+AC_CONFIG_HEADERS([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+# Checks for libraries.
+# FIXME: Replace 'main' with a function in '-load':
+AC_CHECK_LIB([oad], [main])
+
+# Checks for header files.
+AC_HEADER_RESOLV
+AC_CHECK_HEADERS([fcntl.h malloc.h netdb.h netinet/in.h sys/ioctl.h sys/param.h sys/socket.h sys/time.h syslog.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_INT8_T
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MKTIME
+AC_CHECK_FUNCS([alarm bzero dup2 floor gethostbyaddr gethostbyname inet_ntoa isascii memset select socket strcasecmp strchr strrchr strstr strtol strtoul])
+
+AC_CONFIG_FILES([Makefile
+                 win/makefile])
+AC_CONFIG_SUBDIRS([unix])
+AC_OUTPUT

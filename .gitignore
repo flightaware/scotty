@@ -6,3 +6,4 @@ configure
 tnm/scotty
 *.dylib
 .env.local
+autoscan.log

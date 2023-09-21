@@ -20,7 +20,7 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([Tnm], [3.1.3])
+AC_INIT([Tnm],[3.1.3])
 
 #-----------------------------------------------------------------------
 # Scotty specific definitions and checks
@@ -30,12 +30,16 @@ TNM_VERSION=3.1.3
 TKI_VERSION=1.6.0
 
 # disabled config.h generation, since this inhibits stub compilation
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 #--------------------------------------------------------------------
 #       Check for various system specific things.
 #--------------------------------------------------------------------
 
+AC_TYPE_INT8_T
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
 AC_TYPE_SIZE_T
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([unsigned int])
@@ -49,9 +53,9 @@ AC_CHECK_SIZEOF([unsigned long long])
 #	$srcdir/../compat/.
 #----------------------------------------------------------------------------
 
-AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen,echo)
+AC_CHECK_PROG([RPCGEN],[rpcgen],[rpcgen],[echo])
 if test "$RPCGEN" = "echo" ; then
-    AC_WARN(couldn\'t find rpcgen. Will use precompiled files)
+    AC_MSG_WARN([Failed to find rpcgen. Will use precompiled files.])
     cp $srcdir/../compat/ether* .
     cp $srcdir/../compat/mount* .
     cp $srcdir/../compat/pcnfsd* .
@@ -81,12 +85,11 @@ AC_CHECK_LIB([resolv], [res_mkquery], [], [
     AC_MSG_CHECKING([if res_mkquery is provided by libresolv with mangled symbols])
     save_LIBS="$LIBS"
     LIBS="-lresolv $LIBS"
-    AC_TRY_LINK([#include <resolv.h>],
-                [res_mkquery(0,NULL,0,0,NULL,0,NULL,NULL,0);], [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_mkquery(0,NULL,0,0,NULL,0,NULL,NULL,0);]])],[
                     AC_DEFINE(HAVE_LIBRESOLV, [1], [Define if your libresolv provides res_mkquery.])
 		    AC_MSG_RESULT(yes)
 		    NM_LIBS="$NM_LIBS -lresolv"
-		], [
+		],[
 		    LIBS="$save_LIBS"
 		    AC_MSG_RESULT(no)])])
 
@@ -107,9 +110,8 @@ AC_CHECK_TYPE(socklen_t,AC_DEFINE([HAVE_SOCKLEN_T], 1, [socklen_t available]),, 
 ])
 
 AC_CACHE_CHECK([for 'sa_len' in 'struct sockaddr'], ac_cv_struct_sa_len, 
-[AC_TRY_COMPILE([#include <sys/types.h> 
-#include <sys/socket.h>], [struct sockaddr sa; sa.sa_len = 0; ], 
-        ac_cv_struct_sa_len=yes, ac_cv_struct_sa_len=no)]) 
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h> 
+#include <sys/socket.h>]], [[struct sockaddr sa; sa.sa_len = 0; ]])],[ac_cv_struct_sa_len=yes],[ac_cv_struct_sa_len=no])]) 
 if test "$ac_cv_struct_sa_len" = yes; then 
   AC_DEFINE([HAVE_SA_LEN], 1, [sa_len present]) 
 fi 
@@ -118,18 +120,26 @@ fi
 #	Checks for various IPv6 related functions.
 #----------------------------------------------------------------------------
 
-AC_CHECK_FUNCS(inet_pton inet_ntop getaddrinfo getnameinfo)
+AC_CHECK_FUNCS([alarm bzero dup2 floor getaddrinfo gethostbyaddr gethostbyname \
+                getnameinfo inet_ntoa inet_ntop inet_pton isascii memset select \
+                socket strcasecmp strchr strrchr strstr strtol strtoul])
 
 #----------------------------------------------------------------------------
 #	Checks for various include files missing on some machines.
 #----------------------------------------------------------------------------
 
-AC_CHECK_HEADERS(stdlib.h unistd.h malloc.h sys/select.h zlib.h)
+AC_HEADER_RESOLV
+AC_CHECK_HEADERS([arpa/nameser.h fcntl.h malloc.h malloc/malloc.h netdb.h \
+                  netinet/in.h sys/ioctl.h sys/select.h sys/time.h syslog.h \
+                  zlib.h])
 
 #----------------------------------------------------------------------------
 #       Check for various Unix library functions that can be used.
 #----------------------------------------------------------------------------
 
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MKTIME
 AC_CHECK_FUNC(strerror, AC_DEFINE([HAVE_STRERROR], 1, [strerror function available]))
 # TODO gethostent is deprecated by POSIX, instead use getaddrinfo et.al.
 AC_CHECK_FUNC(gethostent, AC_DEFINE([HAVE_GETHOSTENT], 1, [gethostent function available]))
@@ -175,10 +185,9 @@ AC_ARG_ENABLE(multicast,
 	[mcast_ok=$enableval], [mcast_ok=no])
 if test "$mcast_ok" = "yes"; then
     AC_MSG_CHECKING(for multicast support)
-    AC_TRY_COMPILE([#include <sys/types.h>
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
 #include <netinet/in.h>
-#include <sys/socket.h>], [int i=IP_MULTICAST_TTL, j=IP_ADD_MEMBERSHIP;],
-    AC_MSG_RESULT(yes); AC_DEFINE([HAVE_MULTICAST], 1, [multicast enabled]), AC_MSG_RESULT(no))
+#include <sys/socket.h>]], [[int i=IP_MULTICAST_TTL, j=IP_ADD_MEMBERSHIP;]])],[AC_MSG_RESULT(yes); AC_DEFINE(HAVE_MULTICAST, 1, multicast enabled)],[AC_MSG_RESULT(no)])
 fi
 
 #----------------------------------------------------------------------------
@@ -188,9 +197,9 @@ fi
 AC_CHECK_HEADERS(smi.h)
 AC_CHECK_LIB(smi, smiInit, [LIBS="$LIBS -lsmi"])
 AC_MSG_CHECKING([whether to enable libsmi])
-        AC_TRY_RUN([ /* libsmi available check */
+        AC_RUN_IFELSE([AC_LANG_SOURCE([[ /* libsmi available check */
 #include <smi.h>
-main()
+int main(void)
 {
   int current, revision, age, n;
   const int required = 2;
@@ -205,16 +214,13 @@ main()
     exit(4);
   exit(0);
 }
-],
-[ AC_MSG_RESULT(yes)
+]])],[ AC_MSG_RESULT(yes)
   AC_DEFINE(HAVE_SMI_H)
   AC_DEFINE([LIBSMI], 1, [libsmi available])
-  libsmi=yes],
-[ AC_MSG_RESULT(no)
-  libsmi=no],
-[ AC_MSG_RESULT(not when cross-compiling)
-  libsmi=no]
-)
+  libsmi=yes],[ AC_MSG_RESULT(no)
+  libsmi=no],[ AC_MSG_RESULT(not when cross-compiling)
+  libsmi=no
+])
 
 #----------------------------------------------------------------------------
 #       Some more libraries for OSes that want your attention.
@@ -225,6 +231,8 @@ AC_FUNC_GETMNTENT
 #----------------------------------------------------------------------------
 #       Required programs
 #----------------------------------------------------------------------------
+
+AC_PROG_INSTALL
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -242,13 +250,6 @@ AC_CONFIG_AUX_DIR(tclconfig)
 
 TEA_PATH_TCLCONFIG
 TEA_LOAD_TCLCONFIG
-
-#--------------------------------------------------------------------
-# Load the tkConfig.sh file if necessary (Tk extension)
-#--------------------------------------------------------------------
-
-#TEA_PATH_TKCONFIG
-#TEA_LOAD_TKCONFIG
 
 #-----------------------------------------------------------------------
 # Handle the --prefix=... option by defaulting to what Tcl gave.
@@ -385,11 +386,6 @@ fi
 #--------------------------------------------------------------------
 
 TEA_PUBLIC_TCL_HEADERS
-#TEA_PRIVATE_TCL_HEADERS
-
-#TEA_PUBLIC_TK_HEADERS
-#TEA_PRIVATE_TK_HEADERS
-#TEA_PATH_X
 
 #--------------------------------------------------------------------
 # Check whether --enable-threads or --disable-threads was given.
@@ -436,22 +432,19 @@ TEA_MAKE_LIB
 #--------------------------------------------------------------------
 
 TEA_PROG_TCLSH
-#TEA_PROG_WISH
 
 #----------------------------------------------------------------------------
 #       The list of symbols to substitute.
 #----------------------------------------------------------------------------
 
-AC_SUBST(TNM_VERSION)
-AC_SUBST(TKI_VERSION)
+AC_SUBST([TNM_VERSION])dnl
+AC_SUBST([TKI_VERSION])dnl
 
+AC_SUBST([RPCGEN])dnl
+AC_SUBST([NM_LIBS])dnl
 
-
-AC_SUBST(RPCGEN)
-AC_SUBST(NM_LIBS)
-
-AC_SUBST(THREADS_LIBS)
-AC_SUBST(LD_SEARCH_FLAGS)
+AC_SUBST([THREADS_LIBS])dnl
+AC_SUBST([LD_SEARCH_FLAGS])dnl
 
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
@@ -461,4 +454,5 @@ AC_SUBST(LD_SEARCH_FLAGS)
 
 # For now we have a Tcl only scotty.  Remove from where when it
 # gets built from scotty.c
-AC_OUTPUT([Makefile pkgIndex.tcl])
+AC_CONFIG_FILES([Makefile pkgIndex.tcl])
+AC_OUTPUT
