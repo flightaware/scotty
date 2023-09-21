@@ -1,6 +1,5 @@
 language: c
-
-sudo: true
+dist: xenial
 
 os:
   - linux
