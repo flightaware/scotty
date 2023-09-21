@@ -16,7 +16,7 @@ jobs:
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; fi
     - run: cd tnm && autoreconf -vi
     - run: cd tnm && if [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; else locate tclConfig.sh && ./configure; fi
-    - run: cd tnm && make
+    - run: cd tnm && make CFLAGS="-Wno-error=implicit-function-declaration"
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make install; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make sinstall; fi
     strategy:
