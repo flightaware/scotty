@@ -12,11 +12,11 @@ jobs:
       uses: actions/checkout@v3.5.0
 #     # 'sudo' was not transformed because there is no suitable equivalent in GitHub Actions
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl pkg-config findutils libtirpc-dev mingw-w64; fi
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; fi
+    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl pkg-config findutils libtirpc-dev mingw-w64 mlocate; fi
+    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
     - run: cd tnm && autoreconf -vi
     - run: cd tnm && if [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; elif [ -f /usr/share/miniconda/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/share/miniconda/lib; else ./configure; fi
-    - run: cd tnm && make CFLAGS="-Wno-error=implicit-function-declaration"
+    - run: cd tnm && make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make install; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make sinstall; fi
     strategy:
