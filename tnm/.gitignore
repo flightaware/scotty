@@ -24,3 +24,4 @@ rstat.x
 rstat_clnt.c
 rstat_svc.c
 rstat_xdr.c
+!tclconfig/install-sh

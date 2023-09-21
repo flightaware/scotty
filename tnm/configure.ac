@@ -232,8 +232,6 @@ AC_FUNC_GETMNTENT
 #       Required programs
 #----------------------------------------------------------------------------
 
-AC_PROG_INSTALL
-
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
 # This will define a ${TEA_PLATFORM} variable == "unix" or "windows"
@@ -242,7 +240,8 @@ AC_PROG_INSTALL
 
 TEA_INIT([3.10])
 
-AC_CONFIG_AUX_DIR(tclconfig)
+AC_CONFIG_AUX_DIR([tclconfig])
+AC_PROG_INSTALL
 
 #--------------------------------------------------------------------
 # Load the tclConfig.sh file
