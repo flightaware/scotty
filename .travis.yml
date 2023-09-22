@@ -6,7 +6,9 @@ os:
   - osx
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which -a brew && brew update; fi
+  - export HOMEBREW_NO_EMOJI=1 HOMEBREW_BOOTSNAP=1 HOMEBREW_CURL_VERBOSE=1 HOMEBREW_VERBOSE=1 HOMEBREW_VERBOSE_USING_DOTS=1
+  - export GIT_CURL_VERBOSE=1 && env | sort | uniq
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which -a brew && brew update -v --auto-update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install tcl-tk; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force --overwrite tcl-tk; fi
 
