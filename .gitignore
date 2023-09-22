@@ -7,3 +7,4 @@ tnm/scotty
 *.dylib
 .env.local
 autoscan.log
+log/valet-*.log
