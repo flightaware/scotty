@@ -16,7 +16,7 @@ jobs:
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
     - run: cd tnm && autoreconf -vi
     - run: cd tnm && if [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; elif [ -f /usr/share/miniconda/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/share/miniconda/lib; else ./configure; fi
-    - run: cd tnm && make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"
+    - run: cd tnm && if test -d compat; then make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -Icompat"; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make install; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make sinstall; fi
     strategy:

@@ -33,7 +33,14 @@ TKI_VERSION=1.6.0
 # but we do kinda need it though?
 AC_CHECK_HEADERS([config.h])
 AS_IF([test "x${ac_cv_header_config_h}" != "xyes"],[
-  AC_CONFIG_HEADERS([config.h])dnl
+  AC_CONFIG_HEADERS([config.h])
+  AH_TOP([
+#ifndef __TNM_CONFIG_H__
+# define __TNM_CONFIG_H__ 1
+])
+  AH_BOTTOM([
+#endif /* !__TNM_CONFIG_H__ */
+])
 ],[
   AC_MSG_NOTICE([using discovered <config.h> instead of generating one.])
 ])dnl
@@ -436,6 +443,7 @@ if test "x${CPPFLAGS}" = "x"; then
 else
   echo "CPPFLAGS are ${CPPFLAGS}"
 fi
+AC_SUBST([CPPFLAGS])dnl
 
 #--------------------------------------------------------------------
 # Check whether --enable-threads or --disable-threads was given.

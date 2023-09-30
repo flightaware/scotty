@@ -122,7 +122,7 @@ SHLIB_CFLAGS	= @SHLIB_CFLAGS@
 SHLIB_LD	= @SHLIB_LD@
 SHLIB_LD_LIBS	= @SHLIB_LD_LIBS@
 STLIB_LD	= @STLIB_LD@
-#TCL_DEFS	= @TCL_DEFS@
+TCL_DEFS	= @TCL_DEFS@
 TCL_BIN_DIR	= @TCL_BIN_DIR@
 TCL_SRC_DIR	= @TCL_SRC_DIR@
 TCL_LIB_SPEC	= @TCL_LIB_SPEC@
@@ -139,7 +139,7 @@ LD_SEARCH_FLAGS	= @LD_SEARCH_FLAGS@
 LIB_RUNTIME_DIR     = $(libdir)
 
 # Not used, but retained for reference of what libs Tcl required
-#TCL_LIBS	= @TCL_LIBS@
+OLD_TCL_LIBS	= @TCL_LIBS@
 
 #========================================================================
 # TCLLIBPATH seeds the auto_path in Tcl's init.tcl so we can test our
@@ -149,7 +149,7 @@ LIB_RUNTIME_DIR     = $(libdir)
 #========================================================================
 
 EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR)
-#EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR):$(TK_BIN_DIR)
+EXTRA_EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR):$(TK_BIN_DIR)
 TCLLIBPATH	= $(top_builddir)
 TCLSH_ENV	= TCL_LIBRARY=`@CYGPATH@ $(TCL_SRC_DIR)/library`
 PKG_ENV		= @LD_LIBRARY_PATH_VAR@="$(EXTRA_PATH):$(@LD_LIBRARY_PATH_VAR@)" \
@@ -159,14 +159,14 @@ PKG_ENV		= @LD_LIBRARY_PATH_VAR@="$(EXTRA_PATH):$(@LD_LIBRARY_PATH_VAR@)" \
 TCLSH_PROG	= @TCLSH_PROG@
 TCLSH		= $(PKG_ENV) $(TCLSH_ENV) $(TCLSH_PROG)
 
-#WISH_ENV	= TK_LIBRARY=`@CYGPATH@ $(TK_SRC_DIR)/library`
+OLD_WISH_ENV	= TK_LIBRARY=`@CYGPATH@ $(TK_SRC_DIR)/library`
 #WISH_PROG	= @WISH_PROG@
-#WISH		= $(PKG_ENV) $(TCLSH_ENV) $(WISH_ENV) $(WISH_PROG)
+OLD_WISH		= $(PKG_ENV) $(TCLSH_ENV) $(WISH_ENV) $(WISH_PROG)
 
 SHARED_BUILD	= @SHARED_BUILD@
 
-INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@
-#INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@ @TK_INCLUDES@ @TK_XINCLUDES@
+INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@ @CPPFLAGS@
+OLD_INCLUDES	= @PKG_INCLUDES@ @TCL_INCLUDES@ @TK_INCLUDES@ @TK_XINCLUDES@
 
 PKG_CFLAGS	= @PKG_CFLAGS@
 
@@ -175,7 +175,7 @@ PKG_CFLAGS	= @PKG_CFLAGS@
 # that your library may use.  TCL_DEFS can actually be a problem if
 # you do not compile with a similar machine setup as the Tcl core was
 # compiled with.
-#DEFS		= $(TCL_DEFS) @DEFS@ $(PKG_CFLAGS)
+OLD_DEFS		= $(TCL_DEFS) @DEFS@ $(PKG_CFLAGS)
 DEFS		= @DEFS@ $(PKG_CFLAGS)
 
 # Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
