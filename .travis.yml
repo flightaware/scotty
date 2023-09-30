@@ -6,7 +6,7 @@ cache:
     - /usr/local
 
 env:
-  osx:
+  global:
     - MAKEFLAGS="-j2"
 
 os:
