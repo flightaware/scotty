@@ -30,7 +30,9 @@ TNM_VERSION=3.1.3
 TKI_VERSION=1.6.0
 
 # disabled config.h generation, since this inhibits stub compilation
-AC_CONFIG_HEADERS([config.h])dnl
+AS_IF([test "x${FIGURED_OUT_STUB_COMPILATION}" = "xYES"],[
+  AC_CONFIG_HEADERS([config.h])dnl
+])dnl
 
 #--------------------------------------------------------------------
 #       Check for various system specific things.
@@ -144,7 +146,11 @@ if test "x${ac_cv_header_arpa_nameser_h}" != "xyes"; then
     fi
   elif test -x "`which locate`"; then
     locate arpa/nameser.h
+  else
+    AC_MSG_WARN([unsure how to find <arpa/nameser.h>])
   fi
+else
+  AC_MSG_NOTICE([assuming <arpa/nameser.h> is fine])
 fi
 
 #----------------------------------------------------------------------------
@@ -373,17 +379,21 @@ TEA_ADD_TCL_SOURCES([])
 # TEA_ADD_* any platform specific compiler/build info here.
 #--------------------------------------------------------------------
 
-CLEANFILES="$CLEANFILES nmicmpd nmtrapd"
-CLEANFILES="$CLEANFILES ether_* ether.h"
-CLEANFILES="$CLEANFILES mount_* mount.h"
-CLEANFILES="$CLEANFILES pcnfsd_* pcnfsd.h"
-CLEANFILES="$CLEANFILES rstat_* rstat.h"
+CLEANFILES="${CLEANFILES} nmicmpd nmtrapd"
+CLEANFILES="${CLEANFILES} ether_* ether.h"
+CLEANFILES="${CLEANFILES} mount_* mount.h"
+CLEANFILES="${CLEANFILES} pcnfsd_* pcnfsd.h"
+CLEANFILES="${CLEANFILES} rstat_* rstat.h"
 
-if test "${TEA_PLATFORM}" = "windows" ; then
+if test "x${TEA_PLATFORM}" = "xwindows"; then
     # Ensure no empty if clauses
     :
-    #TEA_ADD_SOURCES([win/winFile.c])
-    #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    if test -e win/winFile.c; then
+        TEA_ADD_SOURCES([win/winFile.c])
+    fi
+    if test -d "$(${CYGPATH} ${srcdir}/win)"; then
+        TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    fi
 else
     # Ensure no empty else clauses
     :
@@ -407,6 +417,16 @@ fi
 #--------------------------------------------------------------------
 
 TEA_PUBLIC_TCL_HEADERS
+
+if test "x${CPPFLAGS}" = "x"; then
+  if test -d compat; then
+    test -z "${CPPFLAGS}" && export CPPFLAGS="-Icompat"
+  else
+    AC_MSG_WARN([compat directory missing])
+  fi
+else
+  echo "CPPFLAGS are ${CPPFLAGS}"
+fi
 
 #--------------------------------------------------------------------
 # Check whether --enable-threads or --disable-threads was given.
