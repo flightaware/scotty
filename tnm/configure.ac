@@ -394,9 +394,13 @@ if test "x${TEA_PLATFORM}" = "xwindows"; then
     :
     if test -e win/winFile.c; then
         TEA_ADD_SOURCES([win/winFile.c])
+    else
+        AC_MSG_NOTICE([missing wanted sourcefile win/winFile.c])
     fi
     if test -d "$(${CYGPATH} ${srcdir}/win)"; then
         TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    else
+        AC_MSG_NOTICE([missing wanted include directory ${srcdir}/win])
     fi
 else
     # Ensure no empty else clauses
@@ -424,6 +428,7 @@ TEA_PUBLIC_TCL_HEADERS
 
 if test "x${CPPFLAGS}" = "x"; then
   if test -d compat; then
+    echo "making sure to include the compat directory..."
     test -z "${CPPFLAGS}" && export CPPFLAGS="-Icompat"
   else
     AC_MSG_WARN([compat directory missing])
