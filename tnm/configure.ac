@@ -29,9 +29,13 @@ AC_INIT([Tnm],[3.1.3])dnl
 TNM_VERSION=3.1.3
 TKI_VERSION=1.6.0
 
-# disabled config.h generation, since this inhibits stub compilation
-AS_IF([test "x${FIGURED_OUT_STUB_COMPILATION}" = "xYES"],[
+# disabled config.h generation, since this inhibits stub compilation...
+# but we do kinda need it though?
+AC_CHECK_HEADERS([config.h])
+AS_IF([test "x${ac_cv_header_config_h}" != "xyes"],[
   AC_CONFIG_HEADERS([config.h])dnl
+],[
+  AC_MSG_NOTICE([using discovered <config.h> instead of generating one.])
 ])dnl
 
 #--------------------------------------------------------------------
