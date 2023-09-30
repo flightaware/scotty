@@ -20,7 +20,7 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([Tnm],[3.1.3])
+AC_INIT([Tnm],[3.1.3])dnl
 
 #-----------------------------------------------------------------------
 # Scotty specific definitions and checks
@@ -30,7 +30,7 @@ TNM_VERSION=3.1.3
 TKI_VERSION=1.6.0
 
 # disabled config.h generation, since this inhibits stub compilation
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.h])dnl
 
 #--------------------------------------------------------------------
 #       Check for various system specific things.
@@ -45,7 +45,7 @@ AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([unsigned int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([unsigned long])
-AC_CHECK_SIZEOF([unsigned long long])
+AC_CHECK_SIZEOF([unsigned long long])dnl
 
 
 #----------------------------------------------------------------------------
@@ -54,12 +54,12 @@ AC_CHECK_SIZEOF([unsigned long long])
 #----------------------------------------------------------------------------
 
 AC_CHECK_PROG([RPCGEN],[rpcgen],[rpcgen],[echo])
-if test "$RPCGEN" = "echo" ; then
+if test "x${RPCGEN}" = "xecho"; then
     AC_MSG_WARN([Failed to find rpcgen. Will use precompiled files.])
-    cp $srcdir/../compat/ether* .
-    cp $srcdir/../compat/mount* .
-    cp $srcdir/../compat/pcnfsd* .
-    cp $srcdir/../compat/rstat* .
+    cp ${srcdir}/../compat/ether* .
+    cp ${srcdir}/../compat/mount* .
+    cp ${srcdir}/../compat/pcnfsd* .
+    cp ${srcdir}/../compat/rstat* .
 fi
 
 #----------------------------------------------------------------------------
@@ -75,54 +75,56 @@ TEA_TCL_LINK_LIBS
 #----------------------------------------------------------------------------
 
 
-AX_CHECK_ZLIB([LIBS="$LIBS -lz"],no)
+AX_CHECK_ZLIB([LIBS="${LIBS} -lz"],[no])dnl
 
 # See Alex Chernyakhovsky's article:
 # http://blog.achernya.com/2013/03/os-x-has-silly-libsystem.html
 # We have taken his solution from here:
 # https://github.com/achernya/hesiod/blob/master/configure.ac
-AC_CHECK_LIB([resolv], [res_mkquery], [], [
+AC_CHECK_LIB([resolv],[res_mkquery],[],[
     AC_MSG_CHECKING([if res_mkquery is provided by libresolv with mangled symbols])
-    save_LIBS="$LIBS"
-    LIBS="-lresolv $LIBS"
+    save_LIBS="${LIBS}"
+    LIBS="-lresolv ${LIBS}"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_mkquery(0,NULL,0,0,NULL,0,NULL,NULL,0);]])],[
-                    AC_DEFINE(HAVE_LIBRESOLV, [1], [Define if your libresolv provides res_mkquery.])
-		    AC_MSG_RESULT(yes)
-		    NM_LIBS="$NM_LIBS -lresolv"
+                    AC_DEFINE([HAVE_LIBRESOLV],[1],[Define if your libresolv provides res_mkquery.])
+		    AC_MSG_RESULT([yes])
+		    NM_LIBS="${NM_LIBS} -lresolv"
 		],[
-		    LIBS="$save_LIBS"
-		    AC_MSG_RESULT(no)])])
+		    LIBS="${save_LIBS}"
+		    AC_MSG_RESULT([no])])])dnl
 
 #----------------------------------------------------------------------------
 #	Check for new socklen_t type which is not yet universally available.
 #	Check for sin_len field in struct sockaddr (BSD-ish).
 #----------------------------------------------------------------------------
 
-AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([sys/socket.h])dnl
 
-AC_CHECK_TYPE(socklen_t,AC_DEFINE([HAVE_SOCKLEN_T], 1, [socklen_t available]),, [
+AC_CHECK_TYPE([socklen_t],
+              [AC_DEFINE([HAVE_SOCKLEN_T],[1],[socklen_t available])],[],
+[
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
+# include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
 #ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
-#endif
-])
+# include <sys/socket.h>
+#endif /* HAVE_SYS_SOCKET_H */
+])dnl
 
-AC_CACHE_CHECK([for 'sa_len' in 'struct sockaddr'], ac_cv_struct_sa_len, 
+AC_CACHE_CHECK([for 'sa_len' in 'struct sockaddr'],[ac_cv_struct_sa_len], 
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h> 
 #include <sys/socket.h>]], [[struct sockaddr sa; sa.sa_len = 0; ]])],[ac_cv_struct_sa_len=yes],[ac_cv_struct_sa_len=no])]) 
-if test "$ac_cv_struct_sa_len" = yes; then 
-  AC_DEFINE([HAVE_SA_LEN], 1, [sa_len present]) 
+if test "x${ac_cv_struct_sa_len}" = "xyes"; then 
+  AC_DEFINE([HAVE_SA_LEN],[1],[sa_len present]) 
 fi 
 
 #----------------------------------------------------------------------------
-#	Checks for various IPv6 related functions.
+#	Checks for various IPv6 related functions (and other functions).
 #----------------------------------------------------------------------------
 
 AC_CHECK_FUNCS([alarm bzero dup2 floor getaddrinfo gethostbyaddr gethostbyname \
                 getnameinfo inet_ntoa inet_ntop inet_pton isascii memset select \
-                socket strcasecmp strchr strrchr strstr strtol strtoul])
+                socket strcasecmp strchr strrchr strstr strtol strtoul])dnl
 
 #----------------------------------------------------------------------------
 #	Checks for various include files missing on some machines.
@@ -131,7 +133,19 @@ AC_CHECK_FUNCS([alarm bzero dup2 floor getaddrinfo gethostbyaddr gethostbyname \
 AC_HEADER_RESOLV
 AC_CHECK_HEADERS([arpa/nameser.h fcntl.h malloc.h malloc/malloc.h netdb.h \
                   netinet/in.h sys/ioctl.h sys/select.h sys/time.h syslog.h \
-                  zlib.h])
+                  zlib.h])dnl
+
+if test "x${ac_cv_header_arpa_nameser_h}" != "xyes"; then
+  if test -e compat/arpa/nameser.h; then
+    if test "x${CPPFLAGS}" != "x"; then
+      test -n "${CPPFLAGS}" && export CPPFLAGS="${CPPFLAGS} -Icompat"
+    else
+      test -z "${CPPFLAGS}" && export CPPFLAGS="-Icompat"
+    fi
+  elif test -x "`which locate`"; then
+    locate arpa/nameser.h
+  fi
+fi
 
 #----------------------------------------------------------------------------
 #       Check for various Unix library functions that can be used.
@@ -140,62 +154,70 @@ AC_CHECK_HEADERS([arpa/nameser.h fcntl.h malloc.h malloc/malloc.h netdb.h \
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_MKTIME
-AC_CHECK_FUNC(strerror, AC_DEFINE([HAVE_STRERROR], 1, [strerror function available]))
+AC_CHECK_FUNC([strerror],
+              [AC_DEFINE([HAVE_STRERROR],[1],[strerror function available])])
 # TODO gethostent is deprecated by POSIX, instead use getaddrinfo et.al.
-AC_CHECK_FUNC(gethostent, AC_DEFINE([HAVE_GETHOSTENT], 1, [gethostent function available]))
-AC_CHECK_FUNC(getnetent, AC_DEFINE([HAVE_GETNETENT], 1, [getnetent function available]))
-AC_CHECK_FUNC(getprotoent, AC_DEFINE([HAVE_GETPROTOENT], 1, [getprotoent function available] ))
-AC_CHECK_FUNC(getservent, AC_DEFINE([HAVE_GETSERVENT], 1, [getservent function available]))
-AC_CHECK_FUNC(getrpcent, AC_DEFINE([HAVE_GETRPCENT], 1, [getrpcent function available]))
+AC_CHECK_FUNC([gethostent],
+              [AC_DEFINE([HAVE_GETHOSTENT],[1],[gethostent function available])])
+AC_CHECK_FUNC([getnetent],
+              [AC_DEFINE([HAVE_GETNETENT],[1],[getnetent function available])])
+AC_CHECK_FUNC([getprotoent],
+              [AC_DEFINE([HAVE_GETPROTOENT],[1],[getprotoent function available])])
+AC_CHECK_FUNC([getservent],
+              [AC_DEFINE([HAVE_GETSERVENT],[1],[getservent function available])])
+AC_CHECK_FUNC([getrpcent],
+              [AC_DEFINE([HAVE_GETRPCENT],[1],[getrpcent function available])])
 
 #----------------------------------------------------------------------------
 #       Check if we want/need to use the libtirpc alternative rpc
 #       implementation.
 #----------------------------------------------------------------------------
 
-AC_ARG_WITH([tirpc], AS_HELP_STRING([--with-tirpc], [Build with the tirpc rpc implementation]))
+AC_ARG_WITH([tirpc],
+            [AS_HELP_STRING([--with-tirpc],
+                            [Build with the tirpc rpc implementation])])dnl
 
-AS_IF([test "x$with_tirpc" = "xyes"], [
+AS_IF([test "x${with_tirpc}" = "xyes"],[
 	  if pkg-config libtirpc; then
 	      TIRPC_CFLAGS=`pkg-config --cflags libtirpc`
 	      TIRPC_LIBS=`pkg-config --libs libtirpc`
-	      CPPFLAGS="$TIRPC_CFLAGS $CPPFLAGS"
+	      CPPFLAGS="${TIRPC_CFLAGS} ${CPPFLAGS}"
 	  else
-	      AC_MSG_ERROR(could not determine how to configure tirpc)
+	      AC_MSG_ERROR([could not determine how to configure tirpc])
 	  fi
-      ])
+      ])dnl
 
 #----------------------------------------------------------------------------
 #       Some older SUN RPC implementations are really ugly.
 #----------------------------------------------------------------------------
 
-AC_MSG_CHECKING(for struct rpcent)
+AC_MSG_CHECKING([for struct rpcent])
 AC_EGREP_CPP([^struct * rpcent],[
 #include <netdb.h>
 #include <rpc/rpc.h>
-], AC_MSG_RESULT(yes); AC_DEFINE([HAVE_RPCENT], 1, [rpcent structure defined in system libraries]), AC_MSG_RESULT(no))
+],[AC_MSG_RESULT([yes]); AC_DEFINE([HAVE_RPCENT],[1],[rpcent structure defined in system libraries])],[AC_MSG_RESULT([no])])dnl
 
 
 #----------------------------------------------------------------------------
 #       Checking for multicast options.
 #----------------------------------------------------------------------------
 
-AC_ARG_ENABLE(multicast, 
-	[  --enable-multicast      enable support for multicasts],
+AC_ARG_ENABLE([multicast], 
+	[AS_HELP_STRING([--enable-multicast],[enable support for multicasts])],
 	[mcast_ok=$enableval], [mcast_ok=no])
-if test "$mcast_ok" = "yes"; then
-    AC_MSG_CHECKING(for multicast support)
+if test "x${mcast_ok}" = "xyes"; then
+    AC_MSG_CHECKING([for multicast support])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
 #include <netinet/in.h>
-#include <sys/socket.h>]], [[int i=IP_MULTICAST_TTL, j=IP_ADD_MEMBERSHIP;]])],[AC_MSG_RESULT(yes); AC_DEFINE(HAVE_MULTICAST, 1, multicast enabled)],[AC_MSG_RESULT(no)])
+#include <sys/socket.h>]], [[int i=IP_MULTICAST_TTL, j=IP_ADD_MEMBERSHIP;]])],[AC_MSG_RESULT([yes]); AC_DEFINE([HAVE_MULTICAST],[1],[multicast enabled])],[AC_MSG_RESULT([no])])
 fi
 
 #----------------------------------------------------------------------------
 #       Checking for the libsmi library.
 #----------------------------------------------------------------------------
 
-AC_CHECK_HEADERS(smi.h)
-AC_CHECK_LIB(smi, smiInit, [LIBS="$LIBS -lsmi"])
+AC_CHECK_HEADERS([smi.h])
+AC_CHECK_LIB([smi],[smiInit],[LIBS="${LIBS} -lsmi"])
 AC_MSG_CHECKING([whether to enable libsmi])
         AC_RUN_IFELSE([AC_LANG_SOURCE([[ /* libsmi available check */
 #include <smi.h>
@@ -214,13 +236,13 @@ int main(void)
     exit(4);
   exit(0);
 }
-]])],[ AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_SMI_H)
-  AC_DEFINE([LIBSMI], 1, [libsmi available])
-  libsmi=yes],[ AC_MSG_RESULT(no)
-  libsmi=no],[ AC_MSG_RESULT(not when cross-compiling)
+]])],[ AC_MSG_RESULT([yes])
+  AC_DEFINE([HAVE_SMI_H])
+  AC_DEFINE([LIBSMI],[1],[libsmi available])
+  libsmi=yes],[ AC_MSG_RESULT([no])
+  libsmi=no],[ AC_MSG_RESULT([not when cross-compiling])
   libsmi=no
-])
+])dnl
 
 #----------------------------------------------------------------------------
 #       Some more libraries for OSes that want your attention.
