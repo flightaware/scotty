@@ -15,7 +15,7 @@ jobs:
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl pkg-config findutils libtirpc-dev mingw-w64 mlocate; fi
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
     - run: cd tnm && autoreconf -vi
-    - run: if [[ "${{ runner.os }}" == "Linux" ]]; then locate tclConfig.sh;  fi
+    - run: if [[ "${{ runner.os }}" == "Linux" ]]; then if test -x "$(which updatedb)"; then updatedb; elif test -x "$(which gupdatedb)"; then gupdatedb; fi; locate tclConfig.sh;  fi
     - run: cd tnm && if [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; elif [ -f /usr/share/miniconda/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/share/miniconda/lib; else ./configure; fi
     - run: cd tnm && if [[ "${{ runner.os }}" == "Linux" ]]; then stat compat && make -ki CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -Icompat -D__TNM_CONFIG_H__ -DINET_ADDRSTRLEN=16"; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make install; fi
