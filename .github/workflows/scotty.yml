@@ -20,7 +20,7 @@ jobs:
     - run: cd tnm && if [[ "${{ runner.os }}" == "Linux" ]]; then stat compat && make -ki CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -Icompat -D__TNM_CONFIG_H__ -DINET_ADDRSTRLEN=16"; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make -ki install; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make sinstall; fi
-    - run: ls -AR; sleep 1; if test -x "$(which clear)" -a -n "${TERM}"; then echo "clear is $(which clear) and TERM is ${TERM}"; clear; else echo "(end of file listing output)"; fi; echo "whoami? $(whoami)"; sleep 1
+    - run: ls -AR; sleep 1; if test -x "$(which clear)" -a -n "${TERM}" -a "${TERM}" != "dumb"; then echo "clear is $(which clear) and TERM is ${TERM}"; clear; else echo "(end of file listing output)"; fi; echo "whoami? $(whoami)"; sleep 1
       if: "${{ failure() }}"
     strategy:
       matrix:
