@@ -280,17 +280,17 @@ scotty: scotty.o
 
 # tclscotty is a pure Tcl implementation of the scotty program.  It
 # does however not feature a fileevent prioritzed eventloop.
-#install-bin: tclscotty
-#	chmod 755 tclscotty
-#	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
+install-tclbin: tclscotty
+	chmod 755 tclscotty
+	$(INSTALL_PROGRAM) tclscotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
 install-bin: scotty
 	$(INSTALL_PROGRAM) scotty $(DESTDIR)$(bindir)/scotty$(TNM_VERSION)
 
-sinstall:
-	@for i in $(bin_BINARIES) ; \
+sinstall: install
+	for i in $(bin_BINARIES); \
 	    do \
-	        chown root $(DESTDIR)$(bindir)/$$i ; \
-	        chmod 4755 $(DESTDIR)$(bindir)/$$i ; \
+	        chown root $(DESTDIR)$(bindir)/$${i}; \
+	        chmod 4755 $(DESTDIR)$(bindir)/$${i}; \
 	    done
 
 # install tnm accesories
