@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: checkout
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v4.1.0
 #     # 'sudo' was not transformed because there is no suitable equivalent in GitHub Actions
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl pkg-config findutils libtirpc-dev mingw-w64 mlocate; fi
