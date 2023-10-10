@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v4.1.0
 #     # 'sudo' was not transformed because there is no suitable equivalent in GitHub Actions
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl pkg-config findutils libtirpc-dev mingw-w64 mlocate; fi
+    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl pkg-config findutils libtirpc-dev mingw-w64 mlocate wine wine64; fi
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
     - run: cd tnm && autoreconf -vi
     - run: if [[ "${{ runner.os }}" == "Linux" ]]; then if test -x "$(which updatedb)" -a -w /var/lib/plocate; then updatedb; elif test -x "$(which gupdatedb)" -a -w /var/lib/plocate; then gupdatedb; fi; locate tclConfig.sh;  fi
@@ -20,7 +20,7 @@ jobs:
     - run: cd tnm && if [[ "${{ runner.os }}" == "Linux" ]]; then stat compat && make -ki CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -Icompat -D__TNM_CONFIG_H__ -DINET_ADDRSTRLEN=16"; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make -ki install; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make sinstall; fi
-    - run: ls -AR; sleep 1; echo "whoami? $(whoami)"; sleep 1
+    - run: ls -AR; sleep 1; if test -x "$(which clear)"; then clear; else echo "(end of file listing output)"; fi; echo "whoami? $(whoami)"; sleep 1
       if: "${{ failure() }}"
     strategy:
       matrix:
