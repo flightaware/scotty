@@ -11,14 +11,14 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4.1.1
 #     # 'sudo' was not transformed because there is no suitable equivalent in GitHub Actions
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk rpcgen; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl libtcl-perl pkg-config findutils libtirpc-common libtirpc-dev mingw-w64 mlocate wine wine64 rpcsvc-proto libc-dev; fi
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
+    - run: if [[ "${{ runner.os }}" == "macos" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
+    - run: if [[ "${{ runner.os }}" == "macos" ]]; then brew install tcl-tk rpcgen; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl libtcl-perl pkg-config findutils libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 mlocate wine wine64 rpcsvc-proto libc-dev; fi
+    - run: if [[ "${{ runner.os }}" == "macos" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
     - run: if test -x /home/linuxbrew/.linuxbrew/bin/brew; then eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install --verbose tcl-tk libtirpc; fi
     - run: cd tnm && autoreconf -vi
     - run: if [[ "${{ runner.os }}" == "Linux" ]]; then if test -x "$(which updatedb)" -a -w /var/lib/plocate; then updatedb; elif test -x "$(which gupdatedb)" -a -w /var/locatedb; then gupdatedb; fi; (locate /tclConfig.sh || sudo find / -name tclConfig.sh);  fi
     - run: cd tnm && if [ -f /usr/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/lib; elif [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; elif [ -f /home/linuxbrew/.linuxbrew/lib/tclConfig.sh ]; then ./configure --with-tcl=/home/linuxbrew/.linuxbrew/lib; elif [ -f /usr/share/miniconda/lib/tclConfig.sh ]; then touch miniconda_build.txt && ./configure --with-tcl=/usr/share/miniconda/lib; else ./configure; fi
-    - run: cd tnm && if [[ "${{ runner.os }}" == "Linux" ]]; then if test -e miniconda_build.txt; then stat compat && make -ki CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -Icompat -D__TNM_CONFIG_H__ -DINET_ADDRSTRLEN=16"; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi
+    - run: cd tnm && if [[ "${{ runner.os }}" == "Linux" ]]; then if test -e miniconda_build.txt; then stat compat && make -ki CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -Icompat -D__TNM_CONFIG_H__ -DINET_ADDRSTRLEN=16"; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes -I/usr/include/tirpc"; fi; else make CFLAGS="-Wno-error=implicit-function-declaration -Wno-attributes"; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then if test -e miniconda_build.txt; then sudo make -ki install; else sudo make install; fi; fi
     - run: cd tnm && if [[ $(uname -s) == "Linux" ]]; then sudo make sinstall; fi
     - run: ls -AR; sleep 1; if test -x "$(which clear)" -a -n "${TERM}" -a "${TERM}" != "dumb"; then echo "clear is $(which clear) and TERM is ${TERM}"; clear; else echo "(end of file listing output)"; fi; echo "whoami? $(whoami)"; sleep 1
