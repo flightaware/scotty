@@ -12,9 +12,9 @@ jobs:
       uses: actions/checkout@v4.1.1
 #     # 'sudo' was not transformed because there is no suitable equivalent in GitHub Actions
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
-    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl libtcl-perl pkg-config findutils libtirpc-dev mingw-w64 mlocate wine wine64; fi
+    - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew install tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl libtcl-perl pkg-config findutils libtirpc1 libtirpc-dev mingw-w64 mlocate wine wine64 xmlrpc-c rpcsvc-proto libc-dev; fi
     - run: if [[ "${{ runner.os }}" == "osx" ]]; then brew link --force --overwrite tcl-tk; elif [[ "${{ runner.os }}" == "Linux" ]]; then locate arpa/nameser.h; fi
-    - run: if test -x /home/linuxbrew/.linuxbrew/bin/brew; then eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install --verbose tcl-tk; fi
+    - run: if test -x /home/linuxbrew/.linuxbrew/bin/brew; then eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install --verbose tcl-tk libtirpc rpcgen xmlrpc-c; fi
     - run: cd tnm && autoreconf -vi
     - run: if [[ "${{ runner.os }}" == "Linux" ]]; then if test -x "$(which updatedb)" -a -w /var/lib/plocate; then updatedb; elif test -x "$(which gupdatedb)" -a -w /var/locatedb; then gupdatedb; fi; (locate /tclConfig.sh || sudo find / -name tclConfig.sh);  fi
     - run: cd tnm && if [ -f /usr/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/lib; elif [ -f /usr/local/lib/tclConfig.sh ]; then ./configure --with-tcl=/usr/local/lib; elif [ -f /home/linuxbrew/.linuxbrew/lib/tclConfig.sh ]; then ./configure --with-tcl=/home/linuxbrew/.linuxbrew/lib; elif [ -f /usr/share/miniconda/lib/tclConfig.sh ]; then touch miniconda_build.txt && ./configure --with-tcl=/usr/share/miniconda/lib; else ./configure; fi
