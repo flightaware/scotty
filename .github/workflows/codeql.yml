@@ -74,7 +74,7 @@ jobs:
     - name: Dependencies
       run: |
         sudo apt-get -qq update
-        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine32 wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox
+        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox
         if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc; \
