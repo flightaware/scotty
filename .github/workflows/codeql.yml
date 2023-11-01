@@ -111,16 +111,16 @@ jobs:
     - name: Actually build
       run: |
         if [[ "${{ runner.os }}" == "Linux" ]]; then \
-          make ubuntu CFLAGS="-Wno-error -I/usr/include/tirpc"; \
+          make ubuntu CFLAGS="-Wno-error -I/usr/include/tirpc -fPIC"; \
         elif [[ "${{ runner.os }}" == "macOS" ]]; then \
           make macosx CFLAGS="-Wno-error"; \
         fi
         if test -d /usr/include/tirpc; then \
-          make -ki build CFLAGS="-Wno-error -I/usr/include/tirpc"; \
+          make -ki build CFLAGS="-Wno-error -I/usr/include/tirpc -fPIC"; \
         else \
-          make -ki build CFLAGS="-Wno-error"; \
+          make -ki build CFLAGS="-Wno-error -fPIC"; \
         fi
-        sudo make install CFLAGS="-Wno-error"
+        sudo make -ki install CFLAGS="-Wno-error -fPIC"
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
