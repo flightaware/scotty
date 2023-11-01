@@ -74,7 +74,7 @@ jobs:
     - name: Dependencies
       run: |
         sudo apt-get -qq update
-        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox libnss-winbind libpam-winbind traceroute libnet-traceroute-perl
+        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox libnss-winbind libpam-winbind traceroute libnet-traceroute-perl net-snmp
         if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc sqlite-analyzer; \
@@ -121,6 +121,31 @@ jobs:
           make -ki build CFLAGS="-Wno-error -fPIC"; \
         fi
         sudo make -ki install CFLAGS="-Wno-error -fPIC"
+
+    - name: Extra coverage build (C)
+      if: success()
+      run: |
+        # shellcheck disable=SC2001
+        for subdir in tkined/generic tkined/unix tkined/win tnm tnm/compat tnm/generic tnm/snmp tnm/unix tnm/win; do \
+          pushd "${subdir}"; \
+          for srcfile in *.c; do \
+            echo "attempting to use $(which make) to compile ${srcfile} in ${subdir}"; \
+            make "$(echo "${srcfile}" | sed "s/\.c/.o/g")" CFLAGS="-w -Wno-error -Wfatal-errors -I/usr/include/tirpc" || stat -t "${srcfile}"; \
+          done; \
+          popd; \
+        done
+        find . -name '*.o' -exec cp -v {} . ";" || echo "failed copying an object file"
+        # shellcheck disable=SC2001,SC2044
+        for cfile in $(find . -name '*.c' -type f); do \
+          cobjfile="$(echo "${cfile}" | sed "s/\.c/.o/g")"; \
+          if test ! -e "${cobjfile}"; then \
+            echo "One last attempt at compiling ${cfile}..."; \
+            gcc -c -I. -I.. "${cfile}" || stat "${cfile}" || echo "cfile is ${cfile}"; \
+          else \
+            echo "object file ${cobjfile} already exists for ${cfile}."; \
+            cp -v "${cobjfile}" "$(dirname "${cfile}")" || cp -v "${cobjfile}" . || cp -v "${cobjfile}" ..; \
+          fi; \
+        done
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
