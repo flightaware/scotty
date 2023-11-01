@@ -74,7 +74,7 @@ jobs:
     - name: Dependencies
       run: |
         sudo apt-get -qq update
-        sudo apt-get -q install tcl libtcl-perl pkg-config findutils libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 rpcsvc-proto libc-dev
+        sudo apt-get -q install tcl libtcl-perl tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl pkg-config findutils libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 rpcsvc-proto libc-dev libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev
         if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc; \
@@ -95,13 +95,13 @@ jobs:
           echo "giving $(which vcpkg) a try..."; \
           vcpkg install tcl; \
         fi
-        if test -x "$(which gem)"; then \
-          echo "using $(which gem) to install some more things..."; \
-          sudo gem install tcl cucumber-tcl ruby-tcl; \
-        fi
         if test -x "$(which cpan)"; then \
           echo "using $(which cpan) to install some things..."; \
           sudo cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tk::Trace Tkx::TclTk::Bind; \
+        fi
+        if test -x "$(which gem)"; then \
+          echo "using $(which gem) to install some more things..."; \
+          sudo gem install tcl cucumber-tcl ruby-tcl; \
         fi
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
