@@ -80,7 +80,7 @@ jobs:
           brew install --verbose tcl-tk libtirpc; \
         fi
         if test -x "$(which cpan)"; then \
-          (sudo cpan i Log::Log4perl Test::Pod::Coverage Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tkx::TclTk::Bind Tk::Trace) || (cpan i local::lib Log::Log4perl Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tk::Trace 2>&1); \
+          sudo cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tk::Trace; \
         fi
         if test -x "$(which gem)"; then \
           gem install tcl tcl-msgcat cucumber-tcl ruby-tcl tcl-ruby; \
