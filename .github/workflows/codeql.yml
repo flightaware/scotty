@@ -80,18 +80,23 @@ jobs:
           brew install --verbose tcl-tk libtirpc; \
         fi
         if test -x "$(which cpan)"; then \
-          sudo cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tk::Trace; \
+          echo "using $(which cpan) to install some things..."; \
+          sudo cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl; \
         fi
         if test -x "$(which gem)"; then \
+          echo "using $(which gem) to install some things..."; \
           gem install tcl tcl-msgcat cucumber-tcl ruby-tcl tcl-ruby; \
         fi
         if test -x "$(which npm)"; then \
+          echo "using $(which gem) to install some things..."; \
           npm install tcl tcl-js; \
         fi
         if test -x "$(which conda)"; then \
+          echo "using $(which conda) to install something..."; \
           conda install r-tcltk2; \
         fi
         if test -x "$(which vcpkg)"; then \
+          echo "giving $(which vcpkg) a try..."; \
           vcpkg install tcl; \
         fi
 
