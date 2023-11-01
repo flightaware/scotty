@@ -3,7 +3,8 @@
 # on some platforms.
 #
 
-PLATFORMS	= wheezy jessie yakkety freebsd alpine macosx sunos
+PLATFORMS = ubuntu wheezy jessie yakkety slackware freebsd alpine macosx netbsd \
+  sunos minix
 
 all:
 	@echo ""
