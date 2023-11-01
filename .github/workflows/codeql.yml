@@ -81,7 +81,7 @@ jobs:
         fi
         if test -x "$(which gem)"; then \
           echo "using $(which gem) to install some things..."; \
-          sudo gem install tcl tcl-msgcat cucumber-tcl ruby-tcl tcl-ruby; \
+          sudo gem install tcl-msgcat tcl-ruby; \
         fi
         if test -x "$(which npm)"; then \
           echo "using $(which gem) to install some things..."; \
