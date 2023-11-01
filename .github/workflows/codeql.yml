@@ -116,9 +116,9 @@ jobs:
           make macosx CFLAGS="-Wno-error"; \
         fi
         if test -d /usr/include/tirpc; then \
-          make build CFLAGS="-Wno-error -I/usr/include/tirpc"; \
+          make -ki build CFLAGS="-Wno-error -I/usr/include/tirpc"; \
         else \
-          make build CFLAGS="-Wno-error"; \
+          make -ki build CFLAGS="-Wno-error"; \
         fi
         sudo make install CFLAGS="-Wno-error"
 
