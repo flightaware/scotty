@@ -115,7 +115,11 @@ jobs:
         elif [[ "${{ runner.os }}" == "macOS" ]]; then \
           make macosx CFLAGS="-Wno-error"; \
         fi
-        make build CFLAGS="-Wno-error"
+        if test -d /usr/include/tirpc; then \
+          make build CFLAGS="-Wno-error -I/usr/include/tirpc"; \
+        else \
+          make build CFLAGS="-Wno-error"; \
+        fi
         sudo make install CFLAGS="-Wno-error"
 
     - name: Perform CodeQL Analysis
