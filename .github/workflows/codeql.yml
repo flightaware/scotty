@@ -79,10 +79,6 @@ jobs:
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc; \
         fi
-        if test -x "$(which cpan)"; then \
-          echo "using $(which cpan) to install some things..."; \
-          sudo cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl; \
-        fi
         if test -x "$(which gem)"; then \
           echo "using $(which gem) to install some things..."; \
           gem install tcl tcl-msgcat cucumber-tcl ruby-tcl tcl-ruby; \
