@@ -74,7 +74,7 @@ jobs:
     - name: Dependencies
       run: |
         sudo apt-get -qq update
-        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox libnss-winbind libpam-winbind traceroute libnet-traceroute-perl snmp libsnmp-dev
+        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox libnss-winbind libpam-winbind traceroute libnet-traceroute-perl snmp libsnmp-dev libnetsnmptrapd40 libntirpc3.5 libsnmp-perl smistrip
         if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc sqlite-analyzer; \
@@ -130,7 +130,7 @@ jobs:
           pushd "${subdir}"; \
           for srcfile in *.c; do \
             echo "attempting to use $(which make) to compile ${srcfile} in ${subdir}"; \
-            make "$(echo "${srcfile}" | sed "s/\.c/.o/g")" CFLAGS="-w -Wno-error -Wfatal-errors -I/usr/include/tirpc" || stat -t "${srcfile}"; \
+            make "$(echo "${srcfile}" | sed "s/\.c/.o/g")" CFLAGS="-w -Wno-error -Wfatal-errors -I. -I.. -I../generic -I/usr/include/tirpc" || stat -t "${srcfile}"; \
           done; \
           popd; \
         done
