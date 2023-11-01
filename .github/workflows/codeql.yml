@@ -111,7 +111,7 @@ jobs:
     - name: Actually build
       run: |
         if [[ "${{ runner.os }}" == "Linux" ]]; then \
-          make ubuntu CFLAGS="-Wno-error"; \
+          make ubuntu CFLAGS="-Wno-error -I/usr/include/tirpc"; \
         elif [[ "${{ runner.os }}" == "macOS" ]]; then \
           make macosx CFLAGS="-Wno-error"; \
         fi
