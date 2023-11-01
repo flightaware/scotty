@@ -101,7 +101,7 @@ jobs:
         fi
         if test -x "$(which cpan)"; then \
           echo "using $(which cpan) to install some things..."; \
-          sudo cpan i Tcl Tcl::Tk Tcl::pTk Tk::Trace; \
+          sudo cpan i Tcl Tcl::Tk Tk::Trace; \
         fi
         if test -x "$(which gem)"; then \
           echo "using $(which gem) to install some more things..."; \
