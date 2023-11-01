@@ -111,12 +111,12 @@ jobs:
     - name: Actually build
       run: |
         if [[ "${{ runner.os }}" == "Linux" ]]; then \
-          make ubuntu; \
+          make ubuntu CFLAGS="-Wno-error"; \
         elif [[ "${{ runner.os }}" == "macOS" ]]; then \
-          make macosx; \
+          make macosx CFLAGS="-Wno-error"; \
         fi
-        make build
-        sudo make install
+        make build CFLAGS="-Wno-error"
+        sudo make install CFLAGS="-Wno-error"
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
