@@ -74,7 +74,7 @@ jobs:
     - name: Dependencies
       run: |
         sudo apt-get -qq update
-        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox
+        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox libnss-winbind libpam-winbind
         if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc sqlite-analyzer; \
@@ -89,7 +89,7 @@ jobs:
         fi
         if test -x "$(which conda)"; then \
           echo "using $(which conda) to install something..."; \
-          conda -v install r-tcltk2; \
+          conda -v -v install r-tcltk2; \
         fi
         if test -x "$(which vcpkg)"; then \
           echo "giving $(which vcpkg) a try..."; \
@@ -97,7 +97,7 @@ jobs:
         fi
         if test -x "$(which yarn)"; then \
           echo "using $(which yarn) to install some things..."; \
-          yarn install tcl tcl-js nodetcltk; \
+          yarn add tcl tcl-js nodetcltk; \
         fi
         if test -x "$(which cpan)"; then \
           echo "using $(which cpan) to install some things..."; \
