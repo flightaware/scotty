@@ -73,14 +73,14 @@ jobs:
 
     - name: Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install tcl libtcl-perl pkg-config findutils libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 rpcsvc-proto libc-dev
+        sudo apt-get -qq update
+        sudo apt-get -q install tcl libtcl-perl pkg-config findutils libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 rpcsvc-proto libc-dev
         if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
           brew install --verbose tcl-tk libtirpc; \
         fi
         if test -x "$(which cpan)"; then \
-          cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tkx::TclTk::Bind Tk::Trace; \
+          sudo cpan i Log::Log4perl Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tkx::TclTk::Bind Tk::Trace; \
         fi
         if test -x "$(which gem)"; then \
           gem install tcl tcl-msgcat cucumber-tcl ruby-tcl tcl-ruby; \
