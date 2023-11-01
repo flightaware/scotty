@@ -84,7 +84,7 @@ jobs:
           sudo gem install tcl-msgcat tcl-ruby; \
         fi
         if test -x "$(which npm)"; then \
-          echo "using $(which gem) to install some things..."; \
+          echo "using $(which npm) to install some things..."; \
           npm install tcl tcl-js; \
         fi
         if test -x "$(which conda)"; then \
@@ -94,6 +94,14 @@ jobs:
         if test -x "$(which vcpkg)"; then \
           echo "giving $(which vcpkg) a try..."; \
           vcpkg install tcl; \
+        fi
+        if test -x "$(which gem)"; then \
+          echo "using $(which gem) to install some more things..."; \
+          sudo gem install tcl cucumber-tcl ruby-tcl; \
+        fi
+        if test -x "$(which cpan)"; then \
+          echo "using $(which cpan) to install some things..."; \
+          sudo cpan i Tcl Tcl::Tk Tcl::pTk Inline::Tcl Tk::Trace Tkx::TclTk::Bind; \
         fi
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
