@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: checkout
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v4
 #     # 'sudo' was not transformed because there is no suitable equivalent in GitHub Actions
     - run: if [[ "${{ runner.os }}" == "macOS" ]]; then brew update; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get update; fi
     - run: if [[ "${{ runner.os }}" == "macOS" ]]; then brew install tcl-tk rpcgen; elif [[ "${{ runner.os }}" == "Linux" ]]; then sudo apt-get install tcl libtcl-perl pkg-config findutils libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 rpcsvc-proto libc-dev; fi
