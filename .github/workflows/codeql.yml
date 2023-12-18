@@ -1,0 +1,153 @@
+# scotty/.github/workflows/codeql.yml: GitHub Actions codeql workflow for scotty
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build logic.
+#
+# ******** NOTE ********
+# We have attempted to detect the languages in your repository. Please check
+# the `language` matrix defined below to confirm you have the correct set of
+# supported CodeQL languages.
+#
+name: "CodeQL"
+
+on:
+  push:
+    branches:
+      - master
+      - multicast
+      - base
+      - dependabot/*
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches:
+      - master
+      - multicast
+      - base
+      - dependabot/*
+  schedule:
+    - cron: '42 11 * * 5'
+
+jobs:
+  analyze:
+    name: Analyze
+    # Runner size impacts CodeQL analysis time. To learn more, please see:
+    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
+    #   - https://gh.io/supported-runners-and-hardware-resources
+    #   - https://gh.io/using-larger-runners
+    # Consider using larger runners for possible analysis time improvements.
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'c-cpp' ]
+        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift' ]
+        # Use only 'java-kotlin' to analyze code written in Java, Kotlin or both
+        # Use only 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
+        # Learn more about CodeQL language support at:
+        # https://aka.ms/codeql-docs/language-support
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+
+        # For more details on CodeQL's query packs, refer to:
+        # https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # queries: security-extended,security-and-quality
+
+    - name: Dependencies
+      run: |
+        sudo apt-get -qq update
+        sudo apt-get -q install tcl-dev tcl8.6-dev libtcl-perl tk-dev tk8.6-dev perl-tk libtk-img libtk-img-dev libtk-filedialog-perl libtk-tablematrix-perl libtirpc-common libtirpc-dev libntirpc-dev mingw-w64 wine wine64 wine64-preloader rpcsvc-proto libsmi2ldbl libsmi2-dev libieee1284-3 libieee1284-3-dev snmp-mibs-downloader libwine winbind winetricks wine-binfmt dosbox libnss-winbind libpam-winbind traceroute libnet-traceroute-perl snmp libsnmp-dev libnetsnmptrapd40 libntirpc3.5 libsnmp-perl smistrip
+        if test -x /home/linuxbrew/.linuxbrew/bin/brew; then \
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
+          brew install --verbose tcl-tk libtirpc sqlite-analyzer; \
+        fi
+        if test -x "$(which gem)"; then \
+          echo "using $(which gem) to install some things..."; \
+          sudo gem install tcl-msgcat tcl-ruby; \
+        fi
+        if test -x "$(which npm)"; then \
+          echo "using $(which npm) to install some things..."; \
+          npm install tcl tcl-js; \
+        fi
+        if test -x "$(which conda)"; then \
+          echo "using $(which conda) to install something..."; \
+          conda -v install r-tcltk2; \
+        fi
+        if test -x "$(which vcpkg)"; then \
+          echo "giving $(which vcpkg) a try..."; \
+          vcpkg install tcl; \
+        fi
+        if test -x "$(which yarn)"; then \
+          echo "using $(which yarn) to install some things..."; \
+          yarn add tcl tcl-js; \
+        fi
+        if test -x "$(which cpan)"; then \
+          echo "using $(which cpan) to install some things..."; \
+          sudo cpan i Tcl Test::Tk Tk::Tree Tk::Trace Tk::FileTree; \
+        fi
+
+    # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Actually build
+      run: |
+        if [[ "${{ runner.os }}" == "Linux" ]]; then \
+          make ubuntu CFLAGS="-Wno-error -I/usr/include/tirpc -fPIC"; \
+        elif [[ "${{ runner.os }}" == "macOS" ]]; then \
+          make macosx CFLAGS="-Wno-error"; \
+        fi
+        if test -d /usr/include/tirpc; then \
+          make -ki build CFLAGS="-Wno-error -I/usr/include/tirpc -fPIC"; \
+        else \
+          make -ki build CFLAGS="-Wno-error -fPIC"; \
+        fi
+        sudo make -ki install CFLAGS="-Wno-error -fPIC"
+
+    - name: Extra coverage build (C)
+      if: success()
+      run: |
+        # shellcheck disable=SC2001
+        for subdir in tkined/generic tkined/unix tkined/win tnm tnm/compat tnm/generic tnm/snmp tnm/unix tnm/win; do \
+          pushd "${subdir}"; \
+          for srcfile in *.c; do \
+            echo "attempting to use $(which make) to compile ${srcfile} in ${subdir}"; \
+            make "$(echo "${srcfile}" | sed "s/\.c/.o/g")" CFLAGS="-w -Wno-error -Wfatal-errors -I. -I.. -I../generic -I/usr/include/tirpc" || stat -t "${srcfile}"; \
+          done; \
+          popd; \
+        done
+        find . -name '*.o' -exec cp -v {} . ";" || echo "failed copying an object file"
+        # shellcheck disable=SC2001,SC2044
+        for cfile in $(find . -name '*.c' -type f); do \
+          cobjfile="$(echo "${cfile}" | sed "s/\.c/.o/g")"; \
+          if test ! -e "${cobjfile}"; then \
+            echo "One last attempt at compiling ${cfile}..."; \
+            gcc -c -I. -I.. "${cfile}" || stat "${cfile}" || echo "cfile is ${cfile}"; \
+          else \
+            echo "object file ${cobjfile} already exists for ${cfile}."; \
+            cp -v "${cobjfile}" "$(dirname "${cfile}")" || cp -v "${cobjfile}" . || cp -v "${cobjfile}" ..; \
+          fi; \
+        done
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"

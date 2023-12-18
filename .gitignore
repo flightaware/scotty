@@ -1,6 +1,13 @@
 autom4te.cache/
 configure
+confdefs.h
+conftest*
 *.o
+*.o.tmp
 *.n
 *.so
 tnm/scotty
+*.dylib
+.env.local
+autoscan.log
+log/valet-*.log

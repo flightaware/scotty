@@ -1,14 +1,26 @@
 language: c
+dist: xenial
 
-sudo: true
+cache:
+  directories:
+    - /usr/local
+
+env:
+  global:
+    - MAKEFLAGS="-j2"
 
 os:
   - linux
   - osx
 
+osx_image: xcode10.1
+
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install tcl-tk; fi
+  - export HOMEBREW_NO_EMOJI=1 HOMEBREW_BOOTSNAP=1 HOMEBREW_CURL_VERBOSE=1 HOMEBREW_VERBOSE=1 HOMEBREW_VERBOSE_USING_DOTS=1
+  - export GIT_CURL_VERBOSE=1 && env | uniq | sort | uniq
+  - if test -x "`which xcode-select`" && test "x`whoami`" = "xroot" && test "x${TERM_PROGRAM}" = "xApple_Terminal"; then xcode-select --install; else echo "nope (`whoami`)"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then which -a brew && brew update -v --auto-update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ca-certificates && brew install -v --display-times tcl-tk; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force --overwrite tcl-tk; fi
 
 script:
