@@ -250,9 +250,7 @@ PoolSave(FILE *fp)
  */
 
 static void
-CollectData(numEnums, numTcs, numNodes, nodePtr)
-    int *numEnums, *numTcs, *numNodes;
-    TnmMibNode *nodePtr;
+CollectData(int *numEnums, int *numTcs, int *numNodes, TnmMibNode *nodePtr)
 {
     TnmMibNode *ptr;
     TnmMibRest *restPtr;
@@ -323,9 +321,7 @@ CollectData(numEnums, numTcs, numNodes, nodePtr)
  */
 
 static void
-SaveRest(restPtr, restKind, fp)
-    TnmMibRest *restPtr;
-    FILE *fp;
+SaveRest(TnmMibRest *restPtr, int restKind, FILE *fp)
 {
     TnmMibRest rest;
 

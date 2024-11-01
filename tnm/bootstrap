@@ -6,12 +6,16 @@
 # argument for ./configure.  The rest of the arguments is passed
 # directly.
 
+echo "You may wish to just run 'autoreconf' with your favorite flags instead of running this script."
+
 PREFIX=${1:-/opt/tcl}
 
 if [ -n "$1" ]; then
     shift
 fi
 
-autoheader
-autoconf
-./configure --prefix=$PREFIX --exec-prefix=$PREFIX "$@"
+set -ex;
+
+autoheader -Wno-obsolete
+autoconf -Wno-obsolete
+./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" "$@"

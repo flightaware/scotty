@@ -922,12 +922,8 @@ CalcIcmpCksum(unsigned short *buf, int n)
  */
 
 static int
-SendPacket(job, sock, buf, size, addr, addrLen)
-    jobElem *job;
-    char *buf;
-    size_t size;
-    struct sockaddr *addr;
-    socklen_t addrLen;
+SendPacket(jobElem *job, int sock, char *buf, size_t size,
+           struct sockaddr *addr, socklen_t addrLen)
 {
     int rc;
 

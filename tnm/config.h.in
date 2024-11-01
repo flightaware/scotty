@@ -1,0 +1,410 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+
+#ifndef __TNM_CONFIG_H__
+# define __TNM_CONFIG_H__ 1
+
+
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
+
+/* Defined when cygwin/mingw does not support EXCEPTION DISPOSITION */
+#undef EXCEPTION_DISPOSITION
+
+/* Define to 1 if you have the 'alarm' function. */
+#undef HAVE_ALARM
+
+/* Define to 1 if you have the <arpa/nameser.h> header file. */
+#undef HAVE_ARPA_NAMESER_H
+
+/* Define to 1 if you have the 'bzero' function. */
+#undef HAVE_BZERO
+
+/* Defined when compiler supports casting to union type. */
+#undef HAVE_CAST_TO_UNION
+
+/* Define to 1 if you have the <config.h> header file. */
+#undef HAVE_CONFIG_H
+
+/* Define to 1 if you have the 'dup2' function. */
+#undef HAVE_DUP2
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#undef HAVE_FCNTL_H
+
+/* Define to 1 if you have the 'floor' function. */
+#undef HAVE_FLOOR
+
+/* Define to 1 if you have the 'fork' function. */
+#undef HAVE_FORK
+
+/* Define to 1 if you have the 'getaddrinfo' function. */
+#undef HAVE_GETADDRINFO
+
+/* Define to 1 if you have the 'gethostbyaddr' function. */
+#undef HAVE_GETHOSTBYADDR
+
+/* Define to 1 if you have the 'gethostbyname' function. */
+#undef HAVE_GETHOSTBYNAME
+
+/* gethostent function available */
+#undef HAVE_GETHOSTENT
+
+/* Define to 1 if you have the 'getmntent' function. */
+#undef HAVE_GETMNTENT
+
+/* Define to 1 if you have the 'getnameinfo' function. */
+#undef HAVE_GETNAMEINFO
+
+/* getnetent function available */
+#undef HAVE_GETNETENT
+
+/* getprotoent function available */
+#undef HAVE_GETPROTOENT
+
+/* getrpcent function available */
+#undef HAVE_GETRPCENT
+
+/* getservent function available */
+#undef HAVE_GETSERVENT
+
+/* Compiler support for module scope symbols */
+#undef HAVE_HIDDEN
+
+/* Define to 1 if you have the 'inet_ntoa' function. */
+#undef HAVE_INET_NTOA
+
+/* Define to 1 if you have the 'inet_ntop' function. */
+#undef HAVE_INET_NTOP
+
+/* Define to 1 if you have the 'inet_pton' function. */
+#undef HAVE_INET_PTON
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the 'isascii' function. */
+#undef HAVE_ISASCII
+
+/* Define if your libresolv provides res_mkquery. */
+#undef HAVE_LIBRESOLV
+
+/* Do we have <limits.h>? */
+#undef HAVE_LIMITS_H
+
+/* Define to 1 if you have the 'lseek64' function. */
+#undef HAVE_LSEEK64
+
+/* Define to 1 if your system has a GNU libc compatible 'malloc' function, and
+   to 0 otherwise. */
+#undef HAVE_MALLOC
+
+/* Define to 1 if you have the <malloc.h> header file. */
+#undef HAVE_MALLOC_H
+
+/* Define to 1 if you have the <malloc/malloc.h> header file. */
+#undef HAVE_MALLOC_MALLOC_H
+
+/* Define to 1 if you have the 'memset' function. */
+#undef HAVE_MEMSET
+
+/* multicast enabled */
+#undef HAVE_MULTICAST
+
+/* Define to 1 if you have the <netdb.h> header file. */
+#undef HAVE_NETDB_H
+
+/* Define to 1 if you have the <netinet/in.h> header file. */
+#undef HAVE_NETINET_IN_H
+
+/* Do we have <net/errno.h>? */
+#undef HAVE_NET_ERRNO_H
+
+/* Defined when mingw does not support SEH */
+#undef HAVE_NO_SEH
+
+/* Define to 1 if you have the 'open64' function. */
+#undef HAVE_OPEN64
+
+/* Define to 1 if you have the <resolv.h> header file. */
+#undef HAVE_RESOLV_H
+
+/* rpcent structure defined in system libraries */
+#undef HAVE_RPCENT
+
+/* sa_len present */
+#undef HAVE_SA_LEN
+
+/* Define to 1 if you have the 'select' function. */
+#undef HAVE_SELECT
+
+/* Define to 1 if you have the <smi.h> header file. */
+#undef HAVE_SMI_H
+
+/* Define to 1 if you have the 'socket' function. */
+#undef HAVE_SOCKET
+
+/* socklen_t available */
+#undef HAVE_SOCKLEN_T
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the 'strcasecmp' function. */
+#undef HAVE_STRCASECMP
+
+/* Define to 1 if you have the 'strchr' function. */
+#undef HAVE_STRCHR
+
+/* strerror function available */
+#undef HAVE_STRERROR
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the 'strrchr' function. */
+#undef HAVE_STRRCHR
+
+/* Define to 1 if you have the 'strstr' function. */
+#undef HAVE_STRSTR
+
+/* Define to 1 if you have the 'strtol' function. */
+#undef HAVE_STRTOL
+
+/* Define to 1 if you have the 'strtoul' function. */
+#undef HAVE_STRTOUL
+
+/* Is 'struct dirent64' in <sys/types.h>? */
+#undef HAVE_STRUCT_DIRENT64
+
+/* Is 'struct stat64' in <sys/stat.h>? */
+#undef HAVE_STRUCT_STAT64
+
+/* Define to 1 if you have the <syslog.h> header file. */
+#undef HAVE_SYSLOG_H
+
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/param.h> header file. */
+#undef HAVE_SYS_PARAM_H
+
+/* Define to 1 if you have the <sys/select.h> header file. */
+#undef HAVE_SYS_SELECT_H
+
+/* Define to 1 if you have the <sys/socket.h> header file. */
+#undef HAVE_SYS_SOCKET_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Is off64_t in <sys/types.h>? */
+#undef HAVE_TYPE_OFF64_T
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the 'vfork' function. */
+#undef HAVE_VFORK
+
+/* Define to 1 if you have the <vfork.h> header file. */
+#undef HAVE_VFORK_H
+
+/* Defined when cygwin/mingw ignores VOID define in winnt.h */
+#undef HAVE_WINNT_IGNORE_VOID
+
+/* Define to 1 if 'fork' works. */
+#undef HAVE_WORKING_FORK
+
+/* Define to 1 if 'vfork' works. */
+#undef HAVE_WORKING_VFORK
+
+/* Define to 1 if you have the <zlib.h> header file. */
+#undef HAVE_ZLIB_H
+
+/* libsmi available */
+#undef LIBSMI
+
+/* No Compiler support for module scope symbols */
+#undef MODULE_SCOPE
+
+/* Do we have <dirent.h>? */
+#undef NO_DIRENT_H
+
+/* Do we have <dlfcn.h>? */
+#undef NO_DLFCN_H
+
+/* Do we have <errno.h>? */
+#undef NO_ERRNO_H
+
+/* Do we have <float.h>? */
+#undef NO_FLOAT_H
+
+/* Do we have <limits.h>? */
+#undef NO_LIMITS_H
+
+/* Do we have <stdlib.h>? */
+#undef NO_STDLIB_H
+
+/* Do we have <string.h>? */
+#undef NO_STRING_H
+
+/* Do we have <sys/wait.h>? */
+#undef NO_SYS_WAIT_H
+
+/* Do we have <values.h>? */
+#undef NO_VALUES_H
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* The size of 'int', as computed by sizeof. */
+#undef SIZEOF_INT
+
+/* The size of 'long', as computed by sizeof. */
+#undef SIZEOF_LONG
+
+/* The size of 'unsigned int', as computed by sizeof. */
+#undef SIZEOF_UNSIGNED_INT
+
+/* The size of 'unsigned long', as computed by sizeof. */
+#undef SIZEOF_UNSIGNED_LONG
+
+/* The size of 'unsigned long long', as computed by sizeof. */
+#undef SIZEOF_UNSIGNED_LONG_LONG
+
+/* This a static build */
+#undef STATIC_BUILD
+
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#undef STDC_HEADERS
+
+/* Is memory debugging enabled? */
+#undef TCL_MEM_DEBUG
+
+/* Are we building with threads enabled? */
+#undef TCL_THREADS
+
+/* Are wide integers to be implemented with C 'long's? */
+#undef TCL_WIDE_INT_IS_LONG
+
+/* What type should be used to define wide integers? */
+#undef TCL_WIDE_INT_TYPE
+
+/* UNDER_CE version */
+#undef UNDER_CE
+
+/* Use TclOO stubs */
+#undef USE_TCLOO_STUBS
+
+/* Use Tcl stubs */
+#undef USE_TCL_STUBS
+
+/* Do we want to use the threaded memory allocator? */
+#undef USE_THREAD_ALLOC
+
+/* Use Tk stubs */
+#undef USE_TK_STUBS
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
+
+/* Add the _ISOC99_SOURCE flag when building */
+#undef _ISOC99_SOURCE
+
+/* Add the _LARGEFILE64_SOURCE flag when building */
+#undef _LARGEFILE64_SOURCE
+
+/* Add the _LARGEFILE_SOURCE64 flag when building */
+#undef _LARGEFILE_SOURCE64
+
+/* # needed in sys/socket.h Should OS/390 do the right thing with sockets? */
+#undef _OE_SOCKETS
+
+/* Do we really want to follow the standard? Yes we do! */
+#undef _POSIX_PTHREAD_SEMANTICS
+
+/* Do we want the reentrant OS API? */
+#undef _REENTRANT
+
+/* Do we want the thread-safe OS API? */
+#undef _THREAD_SAFE
+
+/* _WIN32_WCE version */
+#undef _WIN32_WCE
+
+/* Do we want to use the XOPEN network library? */
+#undef _XOPEN_SOURCE_EXTENDED
+
+/* Define to the type of a signed integer type of width exactly 16 bits if
+   such a type exists and the standard includes do not define it. */
+#undef int16_t
+
+/* Define to the type of a signed integer type of width exactly 32 bits if
+   such a type exists and the standard includes do not define it. */
+#undef int32_t
+
+/* Define to the type of a signed integer type of width exactly 64 bits if
+   such a type exists and the standard includes do not define it. */
+#undef int64_t
+
+/* Define to the type of a signed integer type of width exactly 8 bits if such
+   a type exists and the standard includes do not define it. */
+#undef int8_t
+
+/* Define to rpl_malloc if the replacement function should be used. */
+#undef malloc
+
+/* Define as a signed integer type capable of holding a process identifier. */
+#undef pid_t
+
+/* Define as 'unsigned int' if <stddef.h> doesn't define. */
+#undef size_t
+
+/* Define as 'fork' if 'vfork' does not work. */
+#undef vfork
+
+
+#endif /* !__TNM_CONFIG_H__ */
+

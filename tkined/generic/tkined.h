@@ -201,7 +201,7 @@ typedef struct Tki_Object {
     char *color;        /* The color of the object (if any)                  */
     char *label;        /* The label of the object (if any)                  */
     char *text;         /* The text of a label or a text object              */
-    char *canvas;       /* The widget name of the canvas we belong to        */
+    const char *canvas; /* The widget name of the canvas we belong to        */
     char *items;        /* Items on the canvas belonging to this object.     */
 
     struct Tki_Object *parent;	/* The parent group object of an object.     */

@@ -591,7 +591,9 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 	    if ((argv[2][0] == 'c') && (strcmp(argv[2], "create") == 0)) {
 
 		cmd = Tcl_Merge (argc-1, argv+1);
-                //fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, cmd);
+#if defined(DEBUG) && defined(stderr) && defined(__FILE__) && defined(__LINE__)
+                fprintf(stderr, "file: %s +%d cmd: %s\n", __FILE__, __LINE__, cmd);
+#endif /* DEBUG && stderr && __FILE__ && __LINE__ */
 		result = Tcl_Eval (interp, cmd);
 		ckfree (cmd);
 
@@ -610,12 +612,14 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, const char **argv)
 			Tki_EditorGraph (obj->editor, interp, 
 					 0, (char **) NULL);
 			Tcl_AppendResult (interp, ".blt", (char *) NULL);
-			//m_canvas (interp, obj, 1, &interp->result);
+#if 0
+			m_canvas (interp, obj, 1, &interp->result);
+#endif /* 0 */
 			
-			/* TODO: the following appears to be wrong,
-			 * very wrong.  m_canvas expects char **argv,
-			 * probably with trailing NULL pointer while
-			 * we just provide a const char *.
+			/* FIXME: the following appears to be wrong, very wrong.
+			 * m_canvas expects char **argv, probably with trailing
+			 * NULL pointer while we just provide a const char *,
+			 * which sets off -Wincompatible-pointer-types
 			 */
 			m_canvas (interp, obj, 1, Tcl_GetStringResult(interp));
 		    } else {

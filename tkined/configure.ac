@@ -20,25 +20,45 @@ dnl	to configure the system for the local environment.
 # so that we create the export library with the dll.
 #-----------------------------------------------------------------------
 
-AC_INIT([Tkined], [1.6.0])
+AC_INIT([Tkined],[1.6.0])dnl
 
 TKI_VERSION=1.6.0
 
 
-# disabled config.h generation, since this inhibits stub compilation
-AC_CONFIG_HEADER([config.h])
+# disabled config.h generation, since this inhibits stub compilation...
+# but we do kinda need it though?
+AC_CHECK_HEADERS([config.h])
+AS_IF([test "x${ac_cv_header_config_h}" != "xyes"],[
+  AC_CONFIG_HEADERS([config.h])
+  AH_TOP([
+#ifndef __TKINED_CONFIG_H__
+# define __TKINED_CONFIG_H__ 1
+])
+  AH_BOTTOM([
+#endif /* !__TKINED_CONFIG_H__ */
+])
+],[
+  AC_MSG_NOTICE([using discovered <config.h> instead of generating one.])
+])dnl
 
 #--------------------------------------------------------------------
 #       Check for various system specific things.
 #--------------------------------------------------------------------
 
-AC_CHECK_HEADERS(stdlib.h unistd.h malloc.h sys/select.h zlib.h)
+AC_PROG_INSTALL
+
+AC_CHECK_HEADERS([malloc.h sys/select.h zlib.h])dnl
+
+AC_TYPE_SIZE_T
 
 #----------------------------------------------------------------------------
 #       Check for various Unix library functions that can be used.
 #----------------------------------------------------------------------------
 
-AC_CHECK_FUNC(strerror, AC_DEFINE([HAVE_STRERROR], 1, [strerror function available]))
+AC_CHECK_FUNC([strerror],
+              [AC_DEFINE([HAVE_STRERROR],[1],[strerror function available])])dnl
+
+AC_CHECK_FUNCS([getcwd memset mkdir strcasecmp strrchr])dnl
 
 #--------------------------------------------------------------------
 # Call TEA_INIT as the first TEA_ macro to set up initial vars.
@@ -46,9 +66,9 @@ AC_CHECK_FUNC(strerror, AC_DEFINE([HAVE_STRERROR], 1, [strerror function availab
 # as well as PKG_LIB_FILE and PKG_STUB_LIB_FILE.
 #--------------------------------------------------------------------
 
-TEA_INIT([3.10])
+TEA_INIT([3.10])dnl
 
-AC_CONFIG_AUX_DIR(tclconfig)
+AC_CONFIG_AUX_DIR([tclconfig])dnl
 
 #--------------------------------------------------------------------
 # Load the tclConfig.sh file
@@ -109,7 +129,7 @@ TEA_ADD_CFLAGS([])
 TEA_ADD_STUB_SOURCES([])
 # This would be nice to use, but the current setup hardcodes related
 # Tcl files to reside under $(pkglibdir)/library.
-TEA_ADD_TCL_SOURCES([])
+TEA_ADD_TCL_SOURCES([])dnl
 
 #--------------------------------------------------------------------
 # __CHANGE__
@@ -123,18 +143,16 @@ TEA_ADD_TCL_SOURCES([])
 # TEA_ADD_* any platform specific compiler/build info here.
 #--------------------------------------------------------------------
 
-if test "${TEA_PLATFORM}" = "windows" ; then
+if test "x${TEA_PLATFORM}" = "xwindows"; then
     # Ensure no empty if clauses
     :
-    #TEA_ADD_SOURCES([win/winFile.c])
-    #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    AC_MSG_NOTICE([TODO: need to get sources working for windows])
 else
     # Ensure no empty else clauses
     :
     TEA_ADD_SOURCES([
 		       tkiUnixInit.c
 		   ])
-    #TEA_ADD_LIBS([-lsuperfly])
 fi
 
 #--------------------------------------------------------------------
@@ -150,7 +168,6 @@ TEA_PUBLIC_TCL_HEADERS
 TEA_PRIVATE_TCL_HEADERS
 
 TEA_PUBLIC_TK_HEADERS
-#TEA_PRIVATE_TK_HEADERS
 TEA_PATH_X
 
 #--------------------------------------------------------------------
@@ -204,8 +221,8 @@ TEA_PROG_WISH
 #       The list of symbols to substitute.
 #----------------------------------------------------------------------------
 
-AC_SUBST(TNM_VERSION)
-AC_SUBST(TKI_VERSION)
+AC_SUBST([TNM_VERSION])dnl
+AC_SUBST([TKI_VERSION])dnl
 
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.
@@ -213,5 +230,6 @@ AC_SUBST(TKI_VERSION)
 # which require substituting th AC variables in.  Include these here.
 #--------------------------------------------------------------------
 
-AC_OUTPUT([Makefile pkgIndex.tcl])
+AC_CONFIG_FILES([Makefile pkgIndex.tcl])
+AC_OUTPUT
 

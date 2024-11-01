@@ -3,22 +3,23 @@
 # on some platforms.
 #
 
-PLATFORMS	= wheezy jessie yakkety freebsd alpine macosx sunos
+PLATFORMS = ubuntu wheezy jessie yakkety slackware freebsd alpine macosx netbsd \
+  sunos minix
 
 all:
-	@echo
+	@echo ""
 	@echo "This is a Makefile for convenient building and installing"
 	@echo "of scotty with standard configuration."
-	@echo
+	@echo ""
 	@echo "Typical invocation:"
 	@echo "  make _platform_"
 	@echo "  make build"
 	@echo "  sudo make install"
-	@echo
+	@echo ""
 	@echo "Other targets: clean uninstall distclean"
-	@echo
-	@echo Available platform targets: $(PLATFORMS)
-	@echo
+	@echo ""
+	@echo "Available platform targets: $(PLATFORMS)"
+	@echo ""
 
 ubuntu wheezy jessie yakkety slackware:
 	(cd tnm && autoheader && autoconf && ./configure)

@@ -1,0 +1,237 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+
+#ifndef __TKINED_CONFIG_H__
+# define __TKINED_CONFIG_H__ 1
+
+
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
+
+/* Defined when cygwin/mingw does not support EXCEPTION DISPOSITION */
+#undef EXCEPTION_DISPOSITION
+
+/* Defined when compiler supports casting to union type. */
+#undef HAVE_CAST_TO_UNION
+
+/* Define to 1 if you have the <config.h> header file. */
+#undef HAVE_CONFIG_H
+
+/* Define to 1 if you have the 'getcwd' function. */
+#undef HAVE_GETCWD
+
+/* Compiler support for module scope symbols */
+#undef HAVE_HIDDEN
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Do we have <limits.h>? */
+#undef HAVE_LIMITS_H
+
+/* Define to 1 if you have the 'lseek64' function. */
+#undef HAVE_LSEEK64
+
+/* Define to 1 if you have the <malloc.h> header file. */
+#undef HAVE_MALLOC_H
+
+/* Define to 1 if you have the 'memset' function. */
+#undef HAVE_MEMSET
+
+/* Define to 1 if you have the 'mkdir' function. */
+#undef HAVE_MKDIR
+
+/* Do we have <net/errno.h>? */
+#undef HAVE_NET_ERRNO_H
+
+/* Defined when mingw does not support SEH */
+#undef HAVE_NO_SEH
+
+/* Define to 1 if you have the 'open64' function. */
+#undef HAVE_OPEN64
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the 'strcasecmp' function. */
+#undef HAVE_STRCASECMP
+
+/* strerror function available */
+#undef HAVE_STRERROR
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the 'strrchr' function. */
+#undef HAVE_STRRCHR
+
+/* Is 'struct dirent64' in <sys/types.h>? */
+#undef HAVE_STRUCT_DIRENT64
+
+/* Is 'struct stat64' in <sys/stat.h>? */
+#undef HAVE_STRUCT_STAT64
+
+/* Define to 1 if you have the <sys/param.h> header file. */
+#undef HAVE_SYS_PARAM_H
+
+/* Define to 1 if you have the <sys/select.h> header file. */
+#undef HAVE_SYS_SELECT_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Is off64_t in <sys/types.h>? */
+#undef HAVE_TYPE_OFF64_T
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Defined when cygwin/mingw ignores VOID define in winnt.h */
+#undef HAVE_WINNT_IGNORE_VOID
+
+/* Define to 1 if you have the <zlib.h> header file. */
+#undef HAVE_ZLIB_H
+
+/* Are we building against Mac OS X TkAqua? */
+#undef MAC_OSX_TK
+
+/* No Compiler support for module scope symbols */
+#undef MODULE_SCOPE
+
+/* Do we have <dirent.h>? */
+#undef NO_DIRENT_H
+
+/* Do we have <dlfcn.h>? */
+#undef NO_DLFCN_H
+
+/* Do we have <errno.h>? */
+#undef NO_ERRNO_H
+
+/* Do we have <float.h>? */
+#undef NO_FLOAT_H
+
+/* Do we have <limits.h>? */
+#undef NO_LIMITS_H
+
+/* Do we have <stdlib.h>? */
+#undef NO_STDLIB_H
+
+/* Do we have <string.h>? */
+#undef NO_STRING_H
+
+/* Do we have <sys/wait.h>? */
+#undef NO_SYS_WAIT_H
+
+/* Do we have <values.h>? */
+#undef NO_VALUES_H
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* This a static build */
+#undef STATIC_BUILD
+
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#undef STDC_HEADERS
+
+/* Is memory debugging enabled? */
+#undef TCL_MEM_DEBUG
+
+/* Are we building with threads enabled? */
+#undef TCL_THREADS
+
+/* Are wide integers to be implemented with C 'long's? */
+#undef TCL_WIDE_INT_IS_LONG
+
+/* What type should be used to define wide integers? */
+#undef TCL_WIDE_INT_TYPE
+
+/* UNDER_CE version */
+#undef UNDER_CE
+
+/* Use TclOO stubs */
+#undef USE_TCLOO_STUBS
+
+/* Use Tcl stubs */
+#undef USE_TCL_STUBS
+
+/* Do we want to use the threaded memory allocator? */
+#undef USE_THREAD_ALLOC
+
+/* Use Tk stubs */
+#undef USE_TK_STUBS
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
+
+/* Add the _ISOC99_SOURCE flag when building */
+#undef _ISOC99_SOURCE
+
+/* Add the _LARGEFILE64_SOURCE flag when building */
+#undef _LARGEFILE64_SOURCE
+
+/* Add the _LARGEFILE_SOURCE64 flag when building */
+#undef _LARGEFILE_SOURCE64
+
+/* # needed in sys/socket.h Should OS/390 do the right thing with sockets? */
+#undef _OE_SOCKETS
+
+/* Do we really want to follow the standard? Yes we do! */
+#undef _POSIX_PTHREAD_SEMANTICS
+
+/* Do we want the reentrant OS API? */
+#undef _REENTRANT
+
+/* Do we want the thread-safe OS API? */
+#undef _THREAD_SAFE
+
+/* _WIN32_WCE version */
+#undef _WIN32_WCE
+
+/* Do we want to use the XOPEN network library? */
+#undef _XOPEN_SOURCE_EXTENDED
+
+/* Define as 'unsigned int' if <stddef.h> doesn't define. */
+#undef size_t
+
+
+#endif /* !__TKINED_CONFIG_H__ */
+
