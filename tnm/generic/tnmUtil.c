@@ -262,7 +262,8 @@ TnmGetTableKeyFromObj(Tcl_Interp *interp, TnmTable *table, Tcl_Obj *objPtr, char
 void
 TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
 {
-    int i, objc, code;
+    int i, code;
+    Tcl_Size objc
     Tcl_Obj **objv;
 
     code = Tcl_ListObjGetElements(NULL, objPtr, &objc, &objv);
@@ -296,7 +297,7 @@ TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
  */
 
 int
-TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *const objv[])
+TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, Tcl_Size objc, Tcl_Obj *const objv[])
 {
     int i, option, code;
     TnmTable *elemPtr;
@@ -373,7 +374,7 @@ TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc,
  */
 
 int
-TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *const objv[])
+TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, Tcl_Size objc, Tcl_Obj *const objv[])
 {
     int option;
     Tcl_Obj *objPtr;
@@ -1559,7 +1560,8 @@ TnmMatchTags(Tcl_Interp *interp, Tcl_Obj *tagListObj, Tcl_Obj *patternListObj)
 int
 TnmMkDir(Tcl_Interp *interp, Tcl_Obj *obj)
 {
-    int result = TCL_OK, j, pobjc;
+    int result = TCL_OK, j;
+    Tcl_Size pobjc;
     Tcl_Obj *split = NULL;
     Tcl_Obj *target = NULL;
     Tcl_Obj *errfile = NULL;

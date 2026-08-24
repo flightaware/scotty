@@ -114,7 +114,12 @@ InitVars(Tcl_Interp *interp)
     if (! tnmStartTime.sec && ! tnmStartTime.usec) {
 	Tcl_GetTime(&tnmStartTime);
     }
+
+#if TCL_VERSON < 9
     sprintf(buffer, "%ld", tnmStartTime.sec);
+#else
+    sprintf(buffer, "%lld", tnmStartTime.sec);
+#endif
     Tcl_SetVar2(interp, "tnm", "start", buffer, TCL_GLOBAL_ONLY);
 
     /*
