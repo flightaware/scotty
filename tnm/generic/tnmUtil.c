@@ -933,13 +933,13 @@ TnmGetIPName(Tcl_Interp *interp, struct sockaddr_in *addr)
 	Tcl_InitHashTable(hostTable, TCL_ONE_WORD_KEYS);
     }
 
-    hostEntry = Tcl_FindHashEntry(hostTable, (char *) addr->sin_addr.s_addr);
+    hostEntry = Tcl_FindHashEntry(hostTable, (unsigned char *) addr->sin_addr.s_addr);
     if (hostEntry) {
 	Tcl_MutexUnlock(&utilMutex);
 	return (char *) Tcl_GetHashValue(hostEntry);
     }
     
-    host = gethostbyaddr((char *) &addr->sin_addr, 4, AF_INET);
+    host = gethostbyaddr((unsigned char *) &addr->sin_addr, 4, AF_INET);
     if (host) {
 	int isnew;
 	char *name = ckstrdup(host->h_name);
@@ -1513,8 +1513,8 @@ TnmGetHandle(Tcl_Interp *interp, char *prefix, unsigned *id)
 int
 TnmMatchTags(Tcl_Interp *interp, Tcl_Obj *tagListObj, Tcl_Obj *patternListObj)
 {
-    int i, j, code, patLen;
-    Tcl_Size tagLen;
+    int i, j, code;
+    Tcl_Size tagLen, patLen;
     Tcl_Obj **tagPtrs, **patPtrs;
     int match = 0;
 
