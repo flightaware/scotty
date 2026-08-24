@@ -64,7 +64,7 @@ static void
 DeleteProc	(ClientData clientData);
 
 static void
-DestroyProc	(char *memPtr);
+DestroyProc	(void *memPtr);
 
 static void
 UdpEventProc	(ClientData clientData, int mask);
@@ -231,7 +231,7 @@ DeleteProc(ClientData clientData)
  */
 
 static void
-DestroyProc(char *memPtr)
+DestroyProc(void *memPtr)
 {
     Udp *udpPtr = (Udp *) memPtr;
 
@@ -272,7 +272,8 @@ UdpEventProc(ClientData clientData, int mask)
     Udp *udpPtr = (Udp *) clientData;
     Tcl_Interp *interp = udpPtr->interp;
     Tcl_Obj *cmd = NULL;
-    int length, code;
+    Tcl_Size length;
+    int code;
     Tcl_DString tclCmd;
     char *startPtr, *scanPtr;
     char buf[20];

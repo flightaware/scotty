@@ -1285,7 +1285,7 @@ Tnm_DnsObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *cons
 	    }
 	    break;
 	case optServer: {
-	    int elemc;
+	    Tcl_Size elemc;
 	    Tcl_Obj **elemv;
 	    if (x == objc-1) {
 		for (i = 0; i < control->nscount; i++) {
