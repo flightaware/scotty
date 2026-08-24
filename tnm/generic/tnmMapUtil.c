@@ -516,7 +516,8 @@ SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     TnmMapItem *itemPtr = (TnmMapItem *) object;
     TnmMapItem *linkPtr, *iPtr;
-    int code, intValue, len;
+    int code, intValue;
+    Tcl_Size len;
     char *val;
 
     switch (option) {

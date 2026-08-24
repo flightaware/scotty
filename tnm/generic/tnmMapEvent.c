@@ -260,7 +260,6 @@ void
 TnmMapRaiseEvent(TnmMapEvent *eventPtr)
 {
     TnmMapItem *itemPtr;
-    TnmMap *mapPtr;
     int code;
 
     if (eventPtr->type & TNM_MAP_EVENT_QUEUE) {
@@ -279,7 +278,6 @@ TnmMapRaiseEvent(TnmMapEvent *eventPtr)
     if ((eventPtr->type & TNM_MAP_EVENT_MASK) == TNM_MAP_USER_EVENT) {
 
 	for (itemPtr = eventPtr->itemPtr; itemPtr; itemPtr = itemPtr->parent) {
-	    mapPtr = itemPtr->mapPtr;
 	    code = EvalBinding(eventPtr, itemPtr->bindList);
 	    if (code == TCL_BREAK) {
 		return;
@@ -395,7 +393,7 @@ EventObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const 
 	}
 	break;
     case cmdTime:
-	sprintf(buffer, "%lu", eventPtr->eventTime.sec);
+	sprintf(buffer, "%llu", (long long)eventPtr->eventTime.sec);
 	Tcl_SetResult(interp, buffer, TCL_VOLATILE);
 	break;
     case cmdType:
@@ -965,7 +963,7 @@ SaveMsg(TnmMapMsg *msgPtr)
     char buffer[80];
     Tcl_Obj *obj;
     char *str;
-    int len;
+    Tcl_Size len;
 
     if (! path && msgPtr->itemPtr) {
 	path = msgPtr->itemPtr->path;
@@ -995,7 +993,7 @@ SaveMsg(TnmMapMsg *msgPtr)
 	}
 
 	str = Tcl_GetStringFromObj(msgPtr->msg, &len);
-	sprintf(buffer, "%lu\t%u\t", msgPtr->msgTime.sec, msgPtr->interval);
+	sprintf(buffer, "%llu\t%u\t", (long long)msgPtr->msgTime.sec, msgPtr->interval);
 	Tcl_Write(c, buffer, (int) strlen(buffer));
 	Tcl_Write(c, str, len);
 	Tcl_Write(c, "\n", 1);
@@ -1008,7 +1006,8 @@ SaveMsg(TnmMapMsg *msgPtr)
 int
 MatchMsg(TnmMapMsg *msgPtr, Tcl_Obj *storeList)
 {
-    int i, code, objc;
+    int i, code;
+    Tcl_Size objc;
     Tcl_Obj **objv;
 
     if (Tcl_ListObjGetElements(NULL, storeList, &objc, &objv) == TCL_OK) {
@@ -1045,7 +1044,7 @@ TnmMapExpireMsgs(TnmMapMsg **msgListPtr, long expireTime)
 {
     TnmMapMsg *msgPtr;
     char *s;
-    int len;
+    Tcl_Size len;
 
     for (msgPtr = *msgListPtr; msgPtr; msgPtr = msgPtr->nextPtr) {
         if (msgPtr->token && msgPtr->interp) {
@@ -1178,7 +1177,7 @@ MsgObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const ob
 	Tcl_SetObjResult(interp, msgPtr->msg);
 	break;
     case cmdTime:
-	sprintf(buffer, "%lu", msgPtr->msgTime.sec);
+	sprintf(buffer, "%llu", (long long)msgPtr->msgTime.sec);
 	Tcl_SetResult(interp, buffer, TCL_VOLATILE);
 	break;
     case cmdType:

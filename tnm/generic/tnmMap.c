@@ -1372,7 +1372,8 @@ CopyMap(Tcl_Interp *interp, TnmMap *mapPtr, int objc, Tcl_Obj *const objv[])
     TnmMapItem *itemPtr, **itemv;
     Tcl_CmdInfo info;
     Tcl_Obj **elemPtrs;
-    int i, listLen, result;
+    int i, result;
+    Tcl_Size listLen;
 
     if (objc != 3) {
 	Tcl_WrongNumArgs(interp, 2, objv, "items");
