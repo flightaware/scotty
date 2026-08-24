@@ -130,11 +130,11 @@ typedef struct TnmConfig {
 
 EXTERN int
 TnmSetConfig		(Tcl_Interp *interp, TnmConfig *config,
-				     ClientData obj, int objc, 
+				     ClientData obj, Tcl_Size objc,
 				     Tcl_Obj *const objv[]);
 EXTERN int
 TnmGetConfig		(Tcl_Interp *interp, TnmConfig *config,
-				     ClientData obj, int objc, 
+				     ClientData obj, Tcl_Size objc,
 				     Tcl_Obj *const objv[]);
 /*
  *----------------------------------------------------------------

@@ -1513,7 +1513,8 @@ TnmGetHandle(Tcl_Interp *interp, char *prefix, unsigned *id)
 int
 TnmMatchTags(Tcl_Interp *interp, Tcl_Obj *tagListObj, Tcl_Obj *patternListObj)
 {
-    int i, j, code, tagLen, patLen;
+    int i, j, code, patLen;
+    Tcl_Size tagLen;
     Tcl_Obj **tagPtrs, **patPtrs;
     int match = 0;
 
