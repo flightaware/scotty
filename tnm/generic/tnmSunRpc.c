@@ -20,9 +20,9 @@
 #include "tnmInt.h"
 #include "tnmPort.h"
 
-#include <tirpc/rpc/rpc.h>
-#include <tirpc/rpc/pmap_prot.h>
-#include <tirpc/rpc/pmap_clnt.h>
+#include <rpc/rpc.h>
+#include <rpc/pmap_prot.h>
+#include <rpc/pmap_clnt.h>
 
 #include "rstat.h"
 #include "pcnfsd.h"
