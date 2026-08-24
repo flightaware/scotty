@@ -565,7 +565,7 @@ FormatIntTC(Tcl_Obj *val, char *fmt)
     Tcl_Obj *objPtr = NULL;
     int i = 0, j = 0, dpt = -1, sign = 0;
     char *s, *d;
-    int slen;
+    Tcl_Size slen;
     char buffer[80];
 
     /* 
@@ -674,7 +674,8 @@ FormatIntTC(Tcl_Obj *val, char *fmt)
 static Tcl_Obj*
 ScanOctetTC(Tcl_Obj *val, char *fmt)
 {
-    int i = 0, valid = 0, len, pfx, have_pfx;		/* counter prefix */
+    int i = 0, valid = 0, pfx, have_pfx;		/* counter prefix */
+    Tcl_Size len;
     char *last_fmt;			/* save ptr to last seen fmt */
     char *string;
     Tcl_Obj *objPtr;
