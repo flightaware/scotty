@@ -263,7 +263,7 @@ void
 TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
 {
     int i, code;
-    Tcl_Size objc
+    Tcl_Size objc;
     Tcl_Obj **objv;
 
     code = Tcl_ListObjGetElements(NULL, objPtr, &objc, &objv);
