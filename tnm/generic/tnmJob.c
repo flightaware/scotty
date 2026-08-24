@@ -120,7 +120,7 @@ static void
 DeleteProc	(ClientData clientData);
 
 static void
-DestroyProc	(char *memPtr);
+DestroyProc	(void *memPtr);
 
 static void
 ScheduleProc	(ClientData clientData);
@@ -284,7 +284,7 @@ DeleteProc(ClientData clientData)
  */
 
 static void
-DestroyProc(char *memPtr)
+DestroyProc(void *memPtr)
 {
     Job *jobPtr = (Job *) memPtr;
 
@@ -496,7 +496,8 @@ static void
 Schedule(Tcl_Interp *interp, JobControl *control)
 {
     Job *jobPtr;
-    int code, len;
+    int code;
+    Tcl_Size len;
 
     /*
      * Refresh the remaining time of all active jobs.
