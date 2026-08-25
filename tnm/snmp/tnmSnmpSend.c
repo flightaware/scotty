@@ -550,8 +550,7 @@ EncodeScopedPDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *b
 {
     u_char *seqToken;
     char *context, *engineID;
-    Tcl_Size contextLength;
-    int engineIDLength;
+    Tcl_Size contextLength, engineIDLength;
 
     ber = TnmBerEncSequenceStart(ber, ASN1_SEQUENCE, &seqToken);
 

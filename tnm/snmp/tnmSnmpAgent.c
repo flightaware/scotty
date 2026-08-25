@@ -632,7 +632,7 @@ GetRequest(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *request, TnmSnmpPdu
     int i, code;
     TnmSnmpNode *inst;
     Tcl_Obj *vbList, **vbListElems;
-    int vbListLen;
+    Tcl_Size vbListLen;
 
     vbList = Tcl_NewStringObj(Tcl_DStringValue(&request->varbind), -1);
     code = Tcl_ListObjGetElements((Tcl_Interp *) NULL, vbList,

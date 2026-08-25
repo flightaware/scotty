@@ -419,7 +419,8 @@ TnmMibGetBaseSyntax(const char *name)
 static Tcl_Obj*
 FormatOctetTC(Tcl_Obj *val, char *fmt)
 {
-    int i = 0, len, pfx, have_pfx;			/* counter prefix */
+    int i = 0, pfx, have_pfx;			/* counter prefix */
+    Tcl_Size len;
     char *last_fmt;			/* save ptr to last seen fmt */
     char *bytes;
     Tcl_Obj *objPtr;
@@ -1319,7 +1320,8 @@ TnmMibUnpack(Tcl_Interp *interp, TnmOid *oidPtr, int offset, int implied, TnmMib
 int
 TnmMibPack(Tcl_Interp *interp, TnmOid *oidPtr, int objc, Tcl_Obj **objv, int implied, TnmMibNode **indexNodeList)
 {
-    int i, j, len, syntax, code;
+    int i, j, syntax, code;
+    Tcl_Size len;
     long int32Value;
     TnmUnsigned32 u32Value;
     struct in_addr* ipValue;
