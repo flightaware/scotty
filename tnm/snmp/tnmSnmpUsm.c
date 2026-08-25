@@ -185,8 +185,7 @@ static void
 ComputeKey(Tcl_Obj **objPtrPtr, Tcl_Obj *password, Tcl_Obj *engineID, int algorithm)
 {
     unsigned char *pwBytes, *engineBytes, *bytes;
-    Tcl_Size pwLength;
-    int engineLength;
+    Tcl_Size pwLength, engineLength;
     Tcl_Size length;
     KeyCache *elemPtr;
     static KeyCache *keyList = NULL;

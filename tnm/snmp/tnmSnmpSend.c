@@ -472,8 +472,7 @@ EncodeUsmSecParams(TnmSnmp *session, TnmSnmpPdu *pdu, int *lengthPtr)
 {
     u_char *seqToken;
     char *user, *engineID;
-    Tnm_Size userLength;
-    int engineIDLength;
+    Tcl_Size userLength, engineIDLength;
     static u_char buffer[TNM_SNMP_MAXSIZE];
     TnmBer *ber;
 
@@ -807,7 +806,9 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {    
     u_char *pduSeqToken, *vbSeqToken, *vblSeqToken;
     
-    int i, vblc, vbc;
+    int i;
+    Tcl_Size vblc, vbc;
+
     const char **vblv, **vbv;
 
     Tnm_Oid *oid;
