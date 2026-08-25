@@ -310,8 +310,8 @@ TnmBerSetError(TnmBer *ber, char *msg)
 void
 TnmBerWrongValue(TnmBer *ber, u_char tag)
 {
-    sprintf(ber->error, "invalid value for tag 0x%.2x at byte %d",
-	    tag, ber->current - ber->start);
+    sprintf(ber->error, "invalid value for tag 0x%.2x at byte %ld",
+	    tag, (long)(ber->current - ber->start));
 }
 
 /*
@@ -334,8 +334,8 @@ TnmBerWrongValue(TnmBer *ber, u_char tag)
 void
 TnmBerWrongLength(TnmBer *ber, u_char tag, int length)
 {
-    sprintf(ber->error, "invalid length %d for tag 0x%.2x at byte %d", 
-	    length, tag, ber->current - ber->start);
+    sprintf(ber->error, "invalid length %d for tag 0x%.2x at byte %ld", 
+	    length, tag, (long)(ber->current - ber->start));
 }
 
 /*
@@ -359,11 +359,11 @@ void
 TnmBerWrongTag(TnmBer *ber, u_char tag, u_char expected)
 {
     if (expected) {
-	sprintf(ber->error, "invalid tag 0x%.2x at byte %d (expected 0x%.2x)",
-		tag, ber->current - ber->start, expected);
+	sprintf(ber->error, "invalid tag 0x%.2x at byte %ld (expected 0x%.2x)",
+		tag, (long)(ber->current - ber->start), expected);
     } else {
-	sprintf(ber->error, "invalid tag 0x%.2x at byte %d", tag,
-		ber->current - ber->start);
+	sprintf(ber->error, "invalid tag 0x%.2x at byte %ld", tag,
+		(long)(ber->current - ber->start));
     }
 }
 
@@ -800,9 +800,9 @@ TnmBerDecSequenceEnd(TnmBer *ber, u_char *token, int length)
 
     len = ber->current - token;
     if (length != len) {
-	sprintf(ber->error, "sequence %s at byte %d (%d bytes missing)",
+	sprintf(ber->error, "sequence %s at byte %ld (%d bytes missing)",
 		(length > len) ? "underflow" : "overflow",
-		ber->current - ber->start,
+		(long)(ber->current - ber->start),
 		(length > len) ? length - len : len - length);
 	return NULL;
     }

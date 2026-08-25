@@ -304,7 +304,8 @@ static int
 EncodeMessage(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 {
     u_char *seqToken;
-    int version = 0, parameterLen = 0;
+    int version = 0;
+    Tcl_Size parameterLen = 0;
     u_char *parameter = NULL;
 #ifdef TNM_SNMPv2U
 #define PARAM_MAX_LENGTH 340
@@ -471,7 +472,8 @@ EncodeUsmSecParams(TnmSnmp *session, TnmSnmpPdu *pdu, int *lengthPtr)
 {
     u_char *seqToken;
     char *user, *engineID;
-    int userLength, engineIDLength;
+    Tnm_Size userLength;
+    int engineIDLength;
     static u_char buffer[TNM_SNMP_MAXSIZE];
     TnmBer *ber;
 
@@ -495,7 +497,7 @@ EncodeUsmSecParams(TnmSnmp *session, TnmSnmpPdu *pdu, int *lengthPtr)
 	ber = TnmBerEncInt(ber, ASN1_INTEGER, 0);
 	ber = TnmBerEncInt(ber, ASN1_INTEGER, 0);
     }
-        
+
     user = Tcl_GetStringFromObj(session->user, &userLength);
     ber = TnmBerEncOctetString(ber, ASN1_OCTET_STRING,
 			       user, userLength);
@@ -549,7 +551,8 @@ EncodeScopedPDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *b
 {
     u_char *seqToken;
     char *context, *engineID;
-    int contextLength, engineIDLength;
+    Tcl_Size contextLength;
+    int engineIDLength;
 
     ber = TnmBerEncSequenceStart(ber, ASN1_SEQUENCE, &seqToken);
 

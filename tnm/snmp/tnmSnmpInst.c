@@ -20,6 +20,8 @@
 #include "tnmSnmp.h"
 #include "tnmMib.h"
 
+#define DUMPTREE_DEBUG 0
+
 /*
  * The root of the tree containing all MIB instances.
  */
@@ -30,8 +32,10 @@ static TnmSnmpNode *instTree = NULL;
  * Forward declarations for procedures defined later in this file:
  */
 
+#if DUMPTREE_DEBUG
 static void
 DumpTree                (TnmSnmpNode *instPtr);
+#endif
 
 static void
 FreeNode		(TnmSnmpNode *inst);
@@ -52,6 +56,7 @@ static char*
 DeleteNodeProc		(ClientData clientData, Tcl_Interp *interp,
 				     char *name1, char *name2, int flags);
 
+#if DUMPTREE_DEBUG
 
 /*
  *----------------------------------------------------------------------
@@ -86,6 +91,8 @@ DumpTree(TnmSnmpNode *instPtr)
         }
     }
 }
+#endif
+
 
 /*
  *----------------------------------------------------------------------
@@ -598,7 +605,7 @@ TnmSnmpFindNode(TnmSnmp *session, TnmOid *oidPtr)
 TnmSnmpNode*
 TnmSnmpFindNextNode(TnmSnmp *session, TnmOid *oidPtr)
 {
-#if 0
+#if DUMPTREE_DEBUG
     DumpTree(instTree);
 #endif
     return FindNextNode(instTree, TnmOidGetElements(oidPtr), 

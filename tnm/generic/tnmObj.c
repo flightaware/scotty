@@ -555,7 +555,7 @@ UpdateStringOfUnsigned32(Tcl_Obj *objPtr)
     TnmUnsigned32 u = (TnmUnsigned32) objPtr->internalRep.longValue;
 
     objPtr->bytes = Tcl_Alloc(30);
-    objPtr->length = sprintf(objPtr->bytes, "%lu", u);
+    objPtr->length = sprintf(objPtr->bytes, "%lu", (long)u);
 }
 
 /*
@@ -585,7 +585,7 @@ SetUnsigned32FromAny(interp, objPtr)
 {
     const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string, *end, *p;
-    int length;
+    Tcl_Size length;
     TnmUnsigned32 u;
 
     /*
@@ -747,7 +747,7 @@ TnmSetOctetStringObj(Tcl_Obj *objPtr, char *bytes, int length)
  */
 
 char*
-TnmGetOctetStringFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int *lengthPtr)
+TnmGetOctetStringFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, Tcl_Size *lengthPtr)
 {
     int result;
 
@@ -758,7 +758,7 @@ TnmGetOctetStringFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int *lengthPtr)
 	}
     }
 
-    *lengthPtr = (int) objPtr->internalRep.twoPtrValue.ptr2;
+    *lengthPtr = (Tcl_Size) objPtr->internalRep.twoPtrValue.ptr2;
     return (char *) objPtr->internalRep.twoPtrValue.ptr1;
 }
 
@@ -877,7 +877,7 @@ SetOctetStringFromAny(interp, objPtr)
 {
     const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string, *bytes;
-    int length;
+    Tcl_Size length;
 
     /*
      * Get the string representation. Make it up-to-date if necessary.
@@ -1102,7 +1102,7 @@ SetIpAddressFromAny(interp, objPtr)
 {
     const Tcl_ObjType *oldTypePtr = objPtr->typePtr;
     char *string;
-    int length;
+    Tcl_Size length;
     struct sockaddr_in inaddr;
 
     /*

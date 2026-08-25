@@ -216,7 +216,7 @@ TnmSetOctetStringObj	(Tcl_Obj *objPtr, char *bytes,
 				     int length);
 EXTERN char*
 TnmGetOctetStringFromObj (Tcl_Interp *interp, Tcl_Obj *objPtr,
-				     int *lengthPtr);
+				     Tcl_Size *lengthPtr);
 
 EXTERN Tcl_ObjType tnmIpAddressType;
 
