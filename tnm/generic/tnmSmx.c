@@ -539,7 +539,7 @@ static void SmxStart(Tcl_Interp *interp, int id, unsigned runid, char *script, c
 	SmxReply(control, TNM_SMX_REPL_WRONG_ARGUMENT, id, NULL, NULL, 0);
 	return;
     }
-    sprintf(buffer, "%d", argc);
+    sprintf(buffer, "%ld", (long)argc);
     ckfree((char *) argv);
 
     /*

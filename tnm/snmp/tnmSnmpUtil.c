@@ -1284,7 +1284,7 @@ int
 Tnm_SnmpSplitVBList(Tcl_Interp *interp, char *list, int *varBindSizePtr, SNMP_VarBind **varBindPtrPtr)
 {
     int code, i;
-    Tcl_Size vlbc;
+    Tcl_Size vblc;
     const char **vblv;
     int varBindSize;
     SNMP_VarBind *varBindPtr;
@@ -1661,7 +1661,7 @@ TnmSnmpNorm(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
 	    Tcl_InvalidateStringRep(valueObjPtr);
 	    break;
 	case ASN1_OCTET_STRING: {
-	    int len;
+	    Tcl_Size len;
 	    if (! nodePtr) {
 		nodePtr = TnmMibNodeFromOid(oidPtr, NULL);
 	    }

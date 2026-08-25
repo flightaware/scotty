@@ -812,7 +812,7 @@ DupOctetStringInternalRep(srcPtr, copyPtr)
     Tcl_Obj *srcPtr;		/* Object with internal rep to copy. */
     Tcl_Obj *copyPtr;		/* Object with internal rep to set. */
 {
-    size_t size = (int) srcPtr->internalRep.twoPtrValue.ptr2;
+    size_t size = (size_t) srcPtr->internalRep.twoPtrValue.ptr2;
     char *bytes;
     
     bytes = Tcl_Alloc(size);
@@ -845,7 +845,7 @@ UpdateStringOfOctetString(Tcl_Obj *objPtr)
     objPtr->bytes = Tcl_Alloc(
 			(size_t) objPtr->internalRep.twoPtrValue.ptr2 * 3);
     TnmHexEnc(objPtr->internalRep.twoPtrValue.ptr1,
-	      (int) objPtr->internalRep.twoPtrValue.ptr2,
+	      (Tcl_Size) objPtr->internalRep.twoPtrValue.ptr2,
 	      objPtr->bytes);
     objPtr->length = strlen(objPtr->bytes);
 }

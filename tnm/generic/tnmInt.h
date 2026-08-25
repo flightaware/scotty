@@ -432,7 +432,7 @@ EXTERN void
 TnmHexEnc	(char *s, int n, char *d);
 
 EXTERN int
-TnmHexDec	(const char *s, char *d, int *n);
+TnmHexDec	(const char *s, char *d, Tcl_Size *n);
 
 /*
  *----------------------------------------------------------------

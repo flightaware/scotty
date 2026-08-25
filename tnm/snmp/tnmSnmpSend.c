@@ -1106,7 +1106,7 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 	    }
 	    case ASN1_OCTET_STRING: {
 		const char *hex = value, *scan;
-		int len;
+		Tcl_Size len;
 		static char *bin = NULL;
 		static size_t binLen = 0;
 		/* quick test for empty strings ... */
@@ -1136,7 +1136,7 @@ EncodePDU(Tcl_Interp *interp, TnmSnmp *session, TnmSnmpPdu *pdu, TnmBer *ber)
 	    }
 	    case ASN1_OPAQUE: {
 		const char *hex = value;
-		int len;
+		Tcl_Size len;
 		static char *bin = NULL;
 		static size_t binLen = 0;
 		if (*hex) {

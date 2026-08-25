@@ -1431,7 +1431,7 @@ int
 TnmHexDec(s, d, n)
     const char *s;
     char *d;
-    int *n;
+    Tcl_Size *n;
 {
     int v;
     char c;
