@@ -152,9 +152,13 @@ q
 !
 
 ed -s tnm/tests/l.smx.test << !
-/exec scotty[0-9.]* $file/s/scotty[0-9.]*/scotty$TNM_VERSION/
+/exec scotty[0-9.]* \$file/s/scotty[0-9.]*/scotty$TNM_VERSION/
 w
 q
 !
 
-
+ed - tnm/library/pkgIndex.tcl << \!
+/package ifneeded \$pkg [0-9.]* /s//package ifneeded \$pkg $TNM_VERSION /    package ifneeded $pkg 3.1.4 [list source [file join $dir $pkg.tcl]]
+w
+q
+!
