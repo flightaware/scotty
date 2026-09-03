@@ -157,8 +157,8 @@ w
 q
 !
 
-ed - tnm/library/pkgIndex.tcl << \!
-/package ifneeded \$pkg [0-9.]* /s//package ifneeded \$pkg $TNM_VERSION /    package ifneeded $pkg 3.1.4 [list source [file join $dir $pkg.tcl]]
+ed - tnm/library/pkgIndex.tcl << !
+/package ifneeded \$pkg [0-9.]* /s//package ifneeded \$pkg $TNM_VERSION /
 w
 q
 !
