@@ -59,7 +59,8 @@ static char*
 FindPath(Tcl_Interp *interp, char *path, char *name, char *version)
 {
     const char *pkgPath;
-    int code, largc, i;
+    int code, i;
+    Tcl_Size largc;
     const char **largv;
     Tcl_DString ds;
     

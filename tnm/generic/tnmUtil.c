@@ -262,7 +262,8 @@ TnmGetTableKeyFromObj(Tcl_Interp *interp, TnmTable *table, Tcl_Obj *objPtr, char
 void
 TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
 {
-    int i, objc, code;
+    int i, code;
+    Tcl_Size objc;
     Tcl_Obj **objv;
 
     code = Tcl_ListObjGetElements(NULL, objPtr, &objc, &objv);
@@ -296,7 +297,7 @@ TnmListFromList(Tcl_Obj *objPtr, Tcl_Obj *listPtr, char *pattern)
  */
 
 int
-TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *const objv[])
+TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, Tcl_Size objc, Tcl_Obj *const objv[])
 {
     int i, option, code;
     TnmTable *elemPtr;
@@ -373,7 +374,7 @@ TnmSetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc,
  */
 
 int
-TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, int objc, Tcl_Obj *const objv[])
+TnmGetConfig(Tcl_Interp *interp, TnmConfig *config, ClientData object, Tcl_Size objc, Tcl_Obj *const objv[])
 {
     int option;
     Tcl_Obj *objPtr;
@@ -932,13 +933,13 @@ TnmGetIPName(Tcl_Interp *interp, struct sockaddr_in *addr)
 	Tcl_InitHashTable(hostTable, TCL_ONE_WORD_KEYS);
     }
 
-    hostEntry = Tcl_FindHashEntry(hostTable, (char *) addr->sin_addr.s_addr);
+    hostEntry = Tcl_FindHashEntry(hostTable, (unsigned char *) addr->sin_addr.s_addr);
     if (hostEntry) {
 	Tcl_MutexUnlock(&utilMutex);
 	return (char *) Tcl_GetHashValue(hostEntry);
     }
     
-    host = gethostbyaddr((char *) &addr->sin_addr, 4, AF_INET);
+    host = gethostbyaddr((unsigned char *) &addr->sin_addr, 4, AF_INET);
     if (host) {
 	int isnew;
 	char *name = ckstrdup(host->h_name);
@@ -1430,7 +1431,7 @@ int
 TnmHexDec(s, d, n)
     const char *s;
     char *d;
-    int *n;
+    Tcl_Size *n;
 {
     int v;
     char c;
@@ -1512,7 +1513,8 @@ TnmGetHandle(Tcl_Interp *interp, char *prefix, unsigned *id)
 int
 TnmMatchTags(Tcl_Interp *interp, Tcl_Obj *tagListObj, Tcl_Obj *patternListObj)
 {
-    int i, j, code, tagLen, patLen;
+    int i, j, code;
+    Tcl_Size tagLen, patLen;
     Tcl_Obj **tagPtrs, **patPtrs;
     int match = 0;
 
@@ -1559,7 +1561,8 @@ TnmMatchTags(Tcl_Interp *interp, Tcl_Obj *tagListObj, Tcl_Obj *patternListObj)
 int
 TnmMkDir(Tcl_Interp *interp, Tcl_Obj *obj)
 {
-    int result = TCL_OK, j, pobjc;
+    int result = TCL_OK, j;
+    Tcl_Size pobjc;
     Tcl_Obj *split = NULL;
     Tcl_Obj *target = NULL;
     Tcl_Obj *errfile = NULL;

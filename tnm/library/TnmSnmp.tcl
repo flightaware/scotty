@@ -14,7 +14,7 @@
 package require Tnm 3.1
 package require TnmDialog 3.1
 package require TnmInet 3.1
-package provide TnmSnmp 3.1.3
+package provide TnmSnmp 3.1.4
 
 namespace eval TnmSnmp {
     namespace export Walk

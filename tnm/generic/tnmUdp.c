@@ -64,7 +64,7 @@ static void
 DeleteProc	(ClientData clientData);
 
 static void
-DestroyProc	(char *memPtr);
+DestroyProc	(void *memPtr);
 
 static void
 UdpEventProc	(ClientData clientData, int mask);
@@ -231,7 +231,7 @@ DeleteProc(ClientData clientData)
  */
 
 static void
-DestroyProc(char *memPtr)
+DestroyProc(void *memPtr)
 {
     Udp *udpPtr = (Udp *) memPtr;
 
@@ -272,7 +272,8 @@ UdpEventProc(ClientData clientData, int mask)
     Udp *udpPtr = (Udp *) clientData;
     Tcl_Interp *interp = udpPtr->interp;
     Tcl_Obj *cmd = NULL;
-    int length, code;
+    Tcl_Size length;
+    int code;
     Tcl_DString tclCmd;
     char *startPtr, *scanPtr;
     char buf[20];
@@ -503,7 +504,8 @@ UdpSend(Tcl_Interp *interp, Udp *udpPtr, int objc, Tcl_Obj *const objv[])
 {
     struct sockaddr_in name;
     struct sockaddr_in *to;
-    int msgArg, len;
+    int msgArg;
+    Tcl_Size len;
     unsigned char *bytes;
     char *host, *port;
     char addr[INET_ADDRSTRLEN];
@@ -788,7 +790,8 @@ GetOption(Tcl_Interp *interp, ClientData object, int option)
 static int
 SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
-    int mask, length;
+    int mask;
+    Tcl_Size length;
     Udp *udpPtr = (Udp *) object;
 #ifdef HAVE_MULTICAST
     int value;

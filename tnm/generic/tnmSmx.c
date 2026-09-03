@@ -479,7 +479,8 @@ static void SmxHello(Tcl_Interp *interp, int id)
 static void SmxStart(Tcl_Interp *interp, int id, unsigned runid, char *script, char *profile, char *argument)
 {
     Run *runPtr;
-    int i, code, objc, argc;
+    int i, code;
+    Tcl_Size objc, argc;
     Tcl_Obj **objv;
     char buffer[80], slaveName[80];
     const char **argv;
@@ -538,7 +539,7 @@ static void SmxStart(Tcl_Interp *interp, int id, unsigned runid, char *script, c
 	SmxReply(control, TNM_SMX_REPL_WRONG_ARGUMENT, id, NULL, NULL, 0);
 	return;
     }
-    sprintf(buffer, "%d", argc);
+    sprintf(buffer, "%ld", (long)argc);
     ckfree((char *) argv);
 
     /*
@@ -1514,7 +1515,8 @@ int
 Tnm_SmxObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     char *msg;
-    int msglen, result, code;
+    Tcl_Size msglen;
+    int result, code;
     Run *runPtr = NULL;
     SmxControl *control = (SmxControl *)
 	Tcl_GetAssocData(interp, tnmSmxControl, NULL);
@@ -1622,7 +1624,7 @@ Tnm_SmxObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *cons
 	 */
 
 	if (objc == 3) {
-	    int len;
+	    Tcl_Size len;
 	    if (Tcl_ListObjLength(interp, objv[2], &len) != TCL_OK) {
 		return TCL_ERROR;
 	    }

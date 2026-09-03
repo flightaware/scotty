@@ -601,7 +601,8 @@ static int
 SetOption(Tcl_Interp *interp, ClientData object, int option, Tcl_Obj *objPtr)
 {
     TnmSnmp *session = (TnmSnmp *) object;
-    int num, len;
+    int num;
+    Tcl_Size len;
 #ifdef TNM_SNMPv2U
     char *val;
 #endif
@@ -2345,7 +2346,7 @@ AsyncWalkProc(TnmSnmp *session, TnmSnmpPdu *pdu, ClientData clientData)
     AsyncToken *atPtr = (AsyncToken *) clientData;
     Tcl_Interp *interp = atPtr->interp;
     Tcl_Obj *vbList, *newList, **vbListElems, **oidListElems;
-    int vbListLen, oidListLen;
+    Tcl_Size vbListLen, oidListLen;
 
 #if 0
     if (pdu->errorStatus == TNM_SNMP_NOSUCHNAME) {
@@ -2431,7 +2432,7 @@ AsyncWalk(Tcl_Interp *interp, TnmSnmp *session, Tcl_Obj *oidList, Tcl_Obj *tclCm
     int i, result;
     AsyncToken *atPtr;
 
-    int oidListLen;
+    Tcl_Size oidListLen;
     Tcl_Obj **oidListElems;
     
     /*
@@ -2507,7 +2508,7 @@ SyncWalk(Tcl_Interp *interp, TnmSnmp *session, Tcl_Obj *varName, Tcl_Obj *oidLis
     int i, j, result;
     TnmSnmpPdu pdu;
     int numRepeaters = 0;
-    int oidListLen, vbListLen;
+    Tcl_Size oidListLen, vbListLen;
     Tcl_Obj **oidListElems, **vbListElems, *vbList;
 
     /* 
@@ -2694,7 +2695,8 @@ Delta(interp, obj1Ptr, obj2Ptr)
     Tcl_Obj *obj2Ptr;
 {
     Tcl_Obj *vbl1Ptr = NULL, *vbl2Ptr = NULL;
-    int i, objc1, objc2;
+    int i;
+    Tcl_Size objc1, objc2;
     Tcl_Obj **objv1, **objv2;
     
     /*
@@ -2753,7 +2755,8 @@ Delta(interp, obj1Ptr, obj2Ptr)
     }
 
     for (i = 0; i < objc1; i++) {
-	int dummy, type1, type2;
+	Tcl_Size dummy;
+	int type1, type2;
 	Tcl_Obj **vbv1, **vbv2, *listPtr;
 	TnmOid *oid1Ptr, *oid2Ptr;
 	
@@ -2847,7 +2850,8 @@ Extract(Tcl_Interp *interp, int what, Tcl_Obj *objPtr, Tcl_Obj *indexObjPtr)
 {
     Tcl_Obj *listPtr;
     Tcl_Obj **objv, **vbv;
-    int i, objc, vbc, index = -1;
+    int i, index = -1;
+    Tcl_Size objc, vbc;
 
     if (what < 0 || what > 2) {
 	Tcl_Panic("illegal selection value passed to Extract()");

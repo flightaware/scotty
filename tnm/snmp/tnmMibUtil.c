@@ -419,7 +419,8 @@ TnmMibGetBaseSyntax(const char *name)
 static Tcl_Obj*
 FormatOctetTC(Tcl_Obj *val, char *fmt)
 {
-    int i = 0, len, pfx, have_pfx;			/* counter prefix */
+    int i = 0, pfx, have_pfx;			/* counter prefix */
+    Tcl_Size len;
     char *last_fmt;			/* save ptr to last seen fmt */
     char *bytes;
     Tcl_Obj *objPtr;
@@ -565,7 +566,7 @@ FormatIntTC(Tcl_Obj *val, char *fmt)
     Tcl_Obj *objPtr = NULL;
     int i = 0, j = 0, dpt = -1, sign = 0;
     char *s, *d;
-    int slen;
+    Tcl_Size slen;
     char buffer[80];
 
     /* 
@@ -674,7 +675,8 @@ FormatIntTC(Tcl_Obj *val, char *fmt)
 static Tcl_Obj*
 ScanOctetTC(Tcl_Obj *val, char *fmt)
 {
-    int i = 0, valid = 0, len, pfx, have_pfx;		/* counter prefix */
+    int i = 0, valid = 0, pfx, have_pfx;		/* counter prefix */
+    Tcl_Size len;
     char *last_fmt;			/* save ptr to last seen fmt */
     char *string;
     Tcl_Obj *objPtr;
@@ -1318,7 +1320,8 @@ TnmMibUnpack(Tcl_Interp *interp, TnmOid *oidPtr, int offset, int implied, TnmMib
 int
 TnmMibPack(Tcl_Interp *interp, TnmOid *oidPtr, int objc, Tcl_Obj **objv, int implied, TnmMibNode **indexNodeList)
 {
-    int i, j, len, syntax, code;
+    int i, j, syntax, code;
+    Tcl_Size len;
     long int32Value;
     TnmUnsigned32 u32Value;
     struct in_addr* ipValue;

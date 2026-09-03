@@ -114,7 +114,8 @@ InitVars(Tcl_Interp *interp)
     if (! tnmStartTime.sec && ! tnmStartTime.usec) {
 	Tcl_GetTime(&tnmStartTime);
     }
-    sprintf(buffer, "%ld", tnmStartTime.sec);
+
+    sprintf(buffer, "%lld", (long long)tnmStartTime.sec);
     Tcl_SetVar2(interp, "tnm", "start", buffer, TCL_GLOBAL_ONLY);
 
     /*

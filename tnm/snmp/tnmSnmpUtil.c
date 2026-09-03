@@ -771,7 +771,8 @@ TnmSnmpDumpPDU(Tcl_Interp *interp, TnmSnmpPdu *pdu)
 {
     if (hexdump) {
 
-        int i, code, argc;
+        int i, code;
+	Tcl_Size argc;
 	const char **argv;
 	char *name, *status;
 	char buffer[80];
@@ -1282,7 +1283,8 @@ TnmSnmpGetRequestId()
 int
 Tnm_SnmpSplitVBList(Tcl_Interp *interp, char *list, int *varBindSizePtr, SNMP_VarBind **varBindPtrPtr)
 {
-    int code, vblc, i;
+    int code, i;
+    Tcl_Size vblc;
     const char **vblv;
     int varBindSize;
     SNMP_VarBind *varBindPtr;
@@ -1303,7 +1305,7 @@ Tnm_SnmpSplitVBList(Tcl_Interp *interp, char *list, int *varBindSizePtr, SNMP_Va
     memset((char *) varBindPtr, 0, varBindSize * sizeof(SNMP_VarBind));
 
     for (i = 0; i < varBindSize; i++) {
-        int vbc;
+        Tcl_Size vbc;
         char **vbv;
 
         code = Tcl_SplitList(interp, vblv[i], &vbc, (const char ***)&vbv);
@@ -1422,7 +1424,8 @@ Tnm_SnmpFreeVBList(int varBindSize, SNMP_VarBind *varBindPtr)
 Tcl_Obj*
 TnmSnmpNorm(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
 {
-    int i, code, objc;
+    int i, code;
+    Tcl_Size objc;
     Tcl_Obj **objv;
     Tcl_Obj *vbListPtr = NULL;
 
@@ -1462,7 +1465,8 @@ TnmSnmpNorm(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
     vbListPtr = Tcl_NewListObj(0, NULL);
 
     for (i = 0; i < objc; i++) {
-	int vbc, type;
+	Tcl_Size vbc;
+	int type;
 	Tcl_Obj **vbv, *vbPtr;
 	TnmOid* oidPtr;
 	Tcl_Obj *oidObjPtr, *typeObjPtr, *valueObjPtr;
@@ -1657,7 +1661,7 @@ TnmSnmpNorm(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
 	    Tcl_InvalidateStringRep(valueObjPtr);
 	    break;
 	case ASN1_OCTET_STRING: {
-	    int len;
+	    Tcl_Size len;
 	    if (! nodePtr) {
 		nodePtr = TnmMibNodeFromOid(oidPtr, NULL);
 	    }

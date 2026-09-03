@@ -130,11 +130,11 @@ typedef struct TnmConfig {
 
 EXTERN int
 TnmSetConfig		(Tcl_Interp *interp, TnmConfig *config,
-				     ClientData obj, int objc, 
+				     ClientData obj, Tcl_Size objc,
 				     Tcl_Obj *const objv[]);
 EXTERN int
 TnmGetConfig		(Tcl_Interp *interp, TnmConfig *config,
-				     ClientData obj, int objc, 
+				     ClientData obj, Tcl_Size objc,
 				     Tcl_Obj *const objv[]);
 /*
  *----------------------------------------------------------------
@@ -216,7 +216,7 @@ TnmSetOctetStringObj	(Tcl_Obj *objPtr, char *bytes,
 				     int length);
 EXTERN char*
 TnmGetOctetStringFromObj (Tcl_Interp *interp, Tcl_Obj *objPtr,
-				     int *lengthPtr);
+				     Tcl_Size *lengthPtr);
 
 EXTERN Tcl_ObjType tnmIpAddressType;
 
@@ -432,7 +432,7 @@ EXTERN void
 TnmHexEnc	(char *s, int n, char *d);
 
 EXTERN int
-TnmHexDec	(const char *s, char *d, int *n);
+TnmHexDec	(const char *s, char *d, Tcl_Size *n);
 
 /*
  *----------------------------------------------------------------

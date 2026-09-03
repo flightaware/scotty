@@ -17,7 +17,7 @@
 
 package require Tnm 3.1
 package require TnmMap 3.1
-package provide TnmMonitor 3.1.3
+package provide TnmMonitor 3.1.4
 
 #########################################################################
 

@@ -185,7 +185,8 @@ static void
 ComputeKey(Tcl_Obj **objPtrPtr, Tcl_Obj *password, Tcl_Obj *engineID, int algorithm)
 {
     unsigned char *pwBytes, *engineBytes, *bytes;
-    int pwLength, engineLength, length;
+    Tcl_Size pwLength, engineLength;
+    Tcl_Size length;
     KeyCache *elemPtr;
     static KeyCache *keyList = NULL;
     unsigned char buffer[256];	/* must be large enough to hold keys */
@@ -315,7 +316,7 @@ void
 TnmSnmpLocalizeKey(int algorithm, Tcl_Obj *authKey, Tcl_Obj *engineID, Tcl_Obj *localAuthKey)
 {
     unsigned char *engineBytes, *authKeyBytes;
-    int engineLength, authKeyLength, localAuthKeyLength = 20;
+    Tcl_Size engineLength, authKeyLength, localAuthKeyLength = 20;
     unsigned char localAuthKeyBytes[20]; /* must be big enough for MD5 and SHA */
 
     authKeyBytes = (unsigned char *) Tcl_GetStringFromObj(authKey, &authKeyLength);
@@ -388,7 +389,7 @@ void
 TnmSnmpAuthOutMsg(int algorithm, Tcl_Obj *authKey, u_char *msg, int msgLen, u_char *msgAuthenticationParameters)
 {
     char *keyBytes;
-    int keyLen;
+    Tcl_Size keyLen;
     
     keyBytes = Tcl_GetStringFromObj(authKey, &keyLen);
 

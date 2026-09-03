@@ -477,7 +477,7 @@ static int
 Authentic(TnmSnmp *session, Message *msg, TnmSnmpPdu *pdu, u_char *packet, int packetlen, u_int **snmpStatPtr)
 {
     int authentic = 0;
-    int communityLength;
+    Tcl_Size communityLength;
     char *community;
 #ifdef TNM_SNMPv2U
     char *context, *user;
@@ -633,7 +633,7 @@ Authentic(TnmSnmp *session, Message *msg, TnmSnmpPdu *pdu, u_char *packet, int p
 	if (! (*msg->msgFlags & TNM_SNMP_FLAG_AUTH) 
 	    && ! (*msg->msgFlags & TNM_SNMP_FLAG_PRIV)) {
 	    char *user;
-	    int userLength;
+	    Tcl_Size userLength;
 	    user = Tcl_GetStringFromObj(session->user, &userLength);
 
 	    authentic = (userLength == msg->userLength)

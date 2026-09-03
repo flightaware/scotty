@@ -683,7 +683,7 @@ Tnm_InedObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *con
      */
 
     if (objc == 3) {
-        int largc;
+        Tcl_Size largc;
 	char **largv;
         int rc = Tcl_SplitList(interp, Tcl_GetStringFromObj(objv[2], NULL),
 			       &largc, (const char ***) &largv);
