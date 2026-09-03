@@ -68,7 +68,7 @@ in the `tnm/TODO` file.  Running `make test` should succeed without
 failures, except DNS tests which depend on specific network setup and
 availability and might fail on your site.
 
-The current versions are _Tnm_ 3.1.3 and _Tkined_ 1.6.0. Due to the
+The current versions are _Tnm_ 3.1.4 and _Tkined_ 1.6.0. Due to the
 large number of files that need to be updated to a new version, there
 are helper scripts tnm.patch and tki.patch in the root directory that
 perform the heavy lifting for you. If you change any file containing

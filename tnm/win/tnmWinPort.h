@@ -39,7 +39,7 @@
 #define TKI_VERSION "1.5.1"
 
 #ifndef TNMLIB
-#define TNMLIB "c:/tcl/lib/tnm3.1.3"
+#define TNMLIB "c:/tcl/lib/tnm3.1.4"
 #endif
 
 #ifndef TKINEDLIB
