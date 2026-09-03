@@ -8,6 +8,7 @@ fi
 
 TNM_VERSION="$1"
 TNM_MAJMIN="`echo $TNM_VERSION | sed 's/\.[^.]*$//'`"
+TNM_DLL="`echo $TNM_VERSION | sed 's/\.//g'`"
 set -x
 
 ed -s ./tkined/unix/configure.in << !
@@ -17,7 +18,8 @@ q
 !
 
 ed -s ./tkined/win/makefile << !
-/^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
+/^TNM_VERSION *=/s/.*/TNM_VERSION = $TNM_VERSION/
+/^TNM_DLL_VERSION *=/s/.*/TNM_DLL_VERSION = $TNM_DLL/
 w
 q
 !
@@ -41,7 +43,7 @@ q
 !
 
 ed -s ./tnm/configure.ac << !
-/AC_INIT(\[Tnm],/s/\[.*])$/[$TNM_VERSION])/
+/AC_INIT(\[Tnm],/s/\[[0-9].*])$/[$TNM_VERSION])/
 /^TNM_VERSION *=/s/.*/TNM_VERSION=$TNM_VERSION/
 w
 q
@@ -138,6 +140,7 @@ q
 
 ed -s ./tnm/win/makefile << !
 /^TNM_VERSION = /s/= .*/= $TNM_VERSION/
+/^TNM_DLL_VERSION *=/s/= .*/= $TNM_DLL/
 w
 q
 !
@@ -147,4 +150,11 @@ ed -s ./tnm/win/tnmWinPort.h << !
 w
 q
 !
+
+ed -s tnm/tests/l.smx.test << !
+/exec scotty[0-9.]* $file/s/scotty[0-9.]*/scotty$TNM_VERSION/
+w
+q
+!
+
 
